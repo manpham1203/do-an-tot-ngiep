@@ -1,12 +1,14 @@
-﻿using System;
+﻿using BOL.ViewModels.Brand;
+using BOL.ViewModels.Category_Product;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BOL.Entities
+namespace BOL.ViewModels.Product
 {
-    public class Product
+    public class ProductVM
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -21,7 +23,7 @@ namespace BOL.Entities
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public Brand Brand { get; set; }
-        public IList<Category_Product> Category_Product { get; set; }
+        public BrandVM Brand { get; set; }
+        public IList<CategoryVM_ProductVM> CategoryVM_ProductVMs { get; set; }
     }
 }

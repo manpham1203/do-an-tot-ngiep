@@ -32,7 +32,7 @@ namespace BOL
                 entity.ToTable("Category_Product");
                 entity.HasKey(cp => new { cp.ProductId, cp.CategoryId });
                 entity.HasOne<Product>(cp => cp.Product)
-                    .WithMany(p=>p.Category_Products)
+                    .WithMany(p=>p.Category_Product)
                     .HasForeignKey(cp=>cp.ProductId)
                     .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne<Category>(cp => cp.Category)
