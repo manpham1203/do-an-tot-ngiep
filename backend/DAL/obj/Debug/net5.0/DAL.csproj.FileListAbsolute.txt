@@ -1,0 +1,15 @@
+D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.deps.json
+D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.dll
+D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.pdb
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.AssemblyReference.cache
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.AssemblyInfoInputs.cache
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.AssemblyInfo.cs
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.CoreCompileInputs.cache
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.dll
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\refint\DAL.dll
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.pdb
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\ref\DAL.dll
+D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BOL.dll
+D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BOL.pdb
+D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.CopyComplete
