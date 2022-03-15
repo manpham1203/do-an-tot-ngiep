@@ -1,5 +1,4 @@
-﻿using BOL.ViewModels.Category_Product;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +17,6 @@ namespace BOL.ViewModels.Category
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int? Order { get; set; }
-        public IList<CategoryVM_ProductVM> Category_Product { get; set; }
+        public int? Ordinal { get; set; }
     }
 }

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BOL.Entities
+namespace BOL.ViewModels.ProductCategoryMapping
 {
-    public class Category_Product
+    public class ProductCategoryMappingVM
     {
         public string CategoryId { get; set; }
-        public Category Category { get; set; }
         public string ProductId { get; set; }
-        public Product Product { get; set; }
     }
 }

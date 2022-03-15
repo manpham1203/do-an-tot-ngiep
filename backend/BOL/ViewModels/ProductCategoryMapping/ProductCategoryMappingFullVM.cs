@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BOL.ViewModels.Category_Product
+namespace BOL.ViewModels.ProductCategoryMapping
 {
-    public class CategoryVM_ProductVM
+    public class ProductCategoryMappingFullVM
     {
         public string CategoryId { get; set; }
-        public CategoryVM CategoryVM { get; set; }
+        public CategoryFullVM CategoryFullVM { get; set; }
         public string ProductId { get; set; }
-        public ProductVM ProductVM { get; set; }
+        public ProductFullVM ProductFullVM { get; set; }
     }
 }

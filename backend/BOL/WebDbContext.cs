@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BOL
 {
-    public class WebDbContext:DbContext
+    public class WebDbContext : DbContext
     {
         public WebDbContext() { }
         public WebDbContext(DbContextOptions<WebDbContext> options) : base(options) { }
@@ -20,23 +20,24 @@ namespace BOL
         public DbSet<Product> Products { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Category_Product> Category_Product { get; set; }
+        public DbSet<Product_Category_Mapping> Product_Category_Mappings { get; set; }
+        //public DbSet<Product_Brand_Mapping> Product_Brand_Mappings { get; set; }
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Category_Product
-            modelBuilder.Entity<Category_Product>(entity =>
+            #region Product_Category_Mapping
+            modelBuilder.Entity<Product_Category_Mapping>(entity =>
             {
                 //1 dong product => nhieu dong category_product
                 //1 dong category => nhieu dong category_product
-                entity.ToTable("Category_Product");
+                entity.ToTable("Product_Category_Mapping");
                 entity.HasKey(cp => new { cp.ProductId, cp.CategoryId });
                 entity.HasOne<Product>(cp => cp.Product)
-                    .WithMany(p=>p.Category_Product)
-                    .HasForeignKey(cp=>cp.ProductId)
+                    .WithMany(p => p.Product_Category_Mapping)
+                    .HasForeignKey(cp => cp.ProductId)
                     .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne<Category>(cp => cp.Category)
-                    .WithMany(c => c.Category_Product)
+                    .WithMany(c => c.Product_Category_Mapping)
                     .HasForeignKey(cp => cp.CategoryId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
@@ -46,7 +47,7 @@ namespace BOL
             {
                 entity.ToTable("Product");
                 entity.HasKey(e => e.Id);
-                entity.Property(e=>e.Id)
+                entity.Property(e => e.Id)
                     .HasColumnType("char")
                     .HasMaxLength(12)
                     .IsRequired(true)
@@ -80,11 +81,6 @@ namespace BOL
                     .HasMaxLength(1000)
                     .IsRequired(false)
                     .IsUnicode(true);
-                entity.Property(e => e.BrandId)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
-                    .IsUnicode(false);
                 entity.Property(e => e.Quantity)
                     .HasColumnType("int")
                     .IsRequired(false)
@@ -100,11 +96,24 @@ namespace BOL
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(true)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasPrecision(3);
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(false)
+                    .IsUnicode(false)
+                    .HasPrecision(3);
+                entity.Property(e => e.BrandId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
                     .IsUnicode(false);
+
+
+                //foreignkey
+                entity.HasOne<Brand>(s => s.Brand)
+                    .WithMany(b => b.Products)
+                    .HasForeignKey(s => s.BrandId);
             });
             #endregion
             #region Category
@@ -147,12 +156,14 @@ namespace BOL
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(true)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasPrecision(3);
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(false)
-                    .IsUnicode(false);
-                entity.Property(e => e.Order)
+                    .IsUnicode(false)
+                    .HasPrecision(3);
+                entity.Property(e => e.Ordinal)
                     .HasColumnType("int")
                     .IsRequired(false)
                     .IsUnicode(false);
@@ -163,10 +174,6 @@ namespace BOL
             {
                 entity.ToTable("Brand");
                 entity.HasKey(e => e.Id);
-                entity.HasMany<Product>(b => b.Products)
-                    .WithOne(p => p.Brand)
-                    .HasForeignKey(p => p.BrandId)
-                    .OnDelete(DeleteBehavior.Restrict);
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
                     .HasMaxLength(12)
@@ -202,16 +209,35 @@ namespace BOL
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(true)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasPrecision(3);
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime2")
                     .IsRequired(false)
-                    .IsUnicode(false);
-                entity.Property(e => e.Order)
+                    .IsUnicode(false)
+                    .HasPrecision(3);
+                entity.Property(e => e.Ordinal)
                     .HasColumnType("int")
                     .IsRequired(false)
                     .IsUnicode(false);
             });
+            #endregion
+            #region Product_Brand_Mapping
+            //modelBuilder.Entity<Product_Brand_Mapping>(entity =>
+            //{
+            //    //1 dong product => nhieu 1 dong mapping
+            //    //1 dong brand => nhieu dong mapping
+            //    entity.ToTable("Product_Brand_Mapping");
+            //    entity.HasKey(pbm => new { pbm.ProductId, pbm.BrandId });
+            //    entity.HasOne<Product>(pbm => pbm.Product)
+            //        .WithOne(p => p.Product_Brand_Mapping)
+            //        .HasForeignKey<Product_Brand_Mapping>(pbm => pbm.ProductId)
+            //        .OnDelete(DeleteBehavior.Restrict);
+            //    entity.HasOne<Brand>(pbm => pbm.Brand)
+            //        .WithMany(b => b.Product_Brand_Mapping)
+            //        .HasForeignKey(pbm => pbm.BrandId)
+            //        .OnDelete(DeleteBehavior.Restrict);
+            //});
             #endregion
         }
     }

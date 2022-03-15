@@ -17,7 +17,7 @@ namespace BOL.Entities
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int? Order { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public int? Ordinal { get; set; }
+        public IList<Product> Products { get; set; }
     }
 }
