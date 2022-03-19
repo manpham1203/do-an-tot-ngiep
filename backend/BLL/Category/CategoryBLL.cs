@@ -1,5 +1,5 @@
 ﻿using BLL.ProductCategoryMapping;
-using BOL.ViewModels.Category;
+using BO.ViewModels.Category;
 using DAL.Category;
 using System;
 using System.Collections.Generic;

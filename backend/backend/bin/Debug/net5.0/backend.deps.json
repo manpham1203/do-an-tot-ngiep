@@ -34,7 +34,7 @@
       "backend/1.0.0": {
         "dependencies": {
           "BLL": "1.0.0",
-          "BOL": "1.0.0",
+          "BO": "1.0.0",
           "Microsoft.EntityFrameworkCore.Design": "5.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.12",
           "Microsoft.EntityFrameworkCore.Tools": "5.0.12",
@@ -1879,7 +1879,7 @@
       },
       "BLL/1.0.0": {
         "dependencies": {
-          "BOL": "1.0.0",
+          "BO": "1.0.0",
           "DAL": "1.0.0"
         },
         "runtime": {
@@ -1889,22 +1889,22 @@
           "BLL.dll": {}
         }
       },
-      "BOL/1.0.0": {
+      "BO/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "5.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.12"
         },
         "runtime": {
-          "BOL.dll": {}
+          "BO.dll": {}
         },
         "compile": {
-          "BOL.dll": {}
+          "BO.dll": {}
         }
       },
       "DAL/1.0.0": {
         "dependencies": {
           "AutoMapper": "11.0.1",
-          "BOL": "1.0.0"
+          "BO": "1.0.0"
         },
         "runtime": {
           "DAL.dll": {}
@@ -4529,7 +4529,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "BOL/1.0.0": {
+    "BO/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

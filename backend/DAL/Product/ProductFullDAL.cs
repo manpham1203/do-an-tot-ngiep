@@ -1,5 +1,4 @@
-﻿using BOL;
-using BOL.ViewModels.Product;
+﻿
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,16 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BO;
+using BO.ViewModels.Product;
 
 namespace DAL.Product
 {
     public class ProductFullDAL
     {
-        private WebDbContext db;
+        private AppDbContext db;
         //private Mapper mapper;
         public ProductFullDAL()
         {
-            db = new WebDbContext();
+            db = new AppDbContext();
 
             //var configMapper = new MapperConfiguration(config =>
             //  {

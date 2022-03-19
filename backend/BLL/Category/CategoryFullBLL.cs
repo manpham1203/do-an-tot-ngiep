@@ -1,7 +1,7 @@
 ﻿using BLL.Product;
 using BLL.ProductCategoryMapping;
-using BOL.ViewModels.Category;
-using BOL.ViewModels.Product;
+using BO.ViewModels.Category;
+using BO.ViewModels.Product;
 using DAL.Category;
 using System;
 using System.Collections.Generic;

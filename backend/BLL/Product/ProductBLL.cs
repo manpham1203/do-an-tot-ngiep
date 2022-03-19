@@ -1,6 +1,4 @@
 ﻿using BLL.ProductCategoryMapping;
-using BOL.ViewModels.ProductCategoryMapping;
-using BOL.ViewModels.Product;
 using DAL.Product;
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using BO.ViewModels.Product;
+using BO.ViewModels.ProductCategoryMapping;
+using BLL.Category;
 
 namespace BLL.Product
 {
@@ -56,6 +57,27 @@ namespace BLL.Product
         }
         public async Task<bool> Create(CreateProductVM createProductVM)
         {
+            var brandBLL = new BrandBLL();
+            var brandId = await brandBLL.GetById(createProductVM.BrandId);
+            if (brandId == null)
+            {
+                return false;
+            }
+
+            if (createProductVM.ListCategoryId != null)
+            {
+                var categoryBLL = new CategoryBLL();
+                for (int i = 0; i < createProductVM.ListCategoryId.Count; i++)
+                {
+                    var categories = await categoryBLL.GetById(createProductVM.ListCategoryId[i]);
+                    if (categories == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+
             cm = new Common();
             var productId = cm.RandomString(12);
             var checkIdExists = await GetById(productId);
@@ -88,8 +110,17 @@ namespace BLL.Product
 
 
             #endregion
+            var productCreate = await productDAL.Create(productVM);
+            if (!productCreate)
+            {
+                return false;
+            }
+
+
 
             #region Product_Category_Mapping
+
+
             if (createProductVM.ListCategoryId != null)
             {
                 for (int i = 0; i < createProductVM.ListCategoryId.Count; i++)
@@ -108,18 +139,32 @@ namespace BLL.Product
                 }
             }
 
-            #endregion
-
-            var productCreate = await productDAL.Create(productVM);
-            if (!productCreate)
-            {
-                return false;
-            }
+            #endregion            
 
             return true;
         }
         public async Task<bool> Update(string id, UpdateProductVM updateProductVM)
         {
+            var brandBLL = new BrandBLL();
+            var brandId = await brandBLL.GetById(updateProductVM.BrandId);
+            if (brandId == null)
+            {
+                return false;
+            }
+            if (updateProductVM.ListCategoryId != null)
+            {
+                var categoryBLL = new CategoryBLL();
+                for (int i = 0; i < updateProductVM.ListCategoryId.Count; i++)
+                {
+                    var categories = await categoryBLL.GetById(updateProductVM.ListCategoryId[i]);
+                    if (categories == null)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+
             cm = new Common();
             var checkProduct = await GetById(id);
             if (checkProduct == null)

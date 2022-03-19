@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "h4PgTiFRtJ3jeIOxfPy1wHZlS6l05Nr00E1AYE0/YGFHUHCMjHhlQmVm8bLYZ2bQjMfB2/7JMyoXdTrLjcqZkQ==",
+  "dgSpecHash": "nfSxOV7Zd6B8TCfCfFafcBTx/UCwfU9UAo67nyvmMQ4IxElhgYkEVjIud4auiMSjFec51gGjl0DC34BBFwUa9Q==",
   "success": true,
-  "projectFilePath": "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
+  "projectFilePath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pmman\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
     "C:\\Users\\pmman\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

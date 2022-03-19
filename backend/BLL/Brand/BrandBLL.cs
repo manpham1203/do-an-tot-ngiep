@@ -1,4 +1,4 @@
-﻿using BOL.ViewModels.Brand;
+﻿using BO.ViewModels.Brand;
 using DAL.Brand;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,6 @@
-﻿using BOL;
-using BOL.ViewModels.ProductCategoryMapping;
+﻿
+using BO;
+using BO.ViewModels.ProductCategoryMapping;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace DAL.ProductCategoryMapping
 {
     public class ProductCategoryMappingDAL
     {
-        private readonly WebDbContext db;
+        private readonly AppDbContext db;
         public ProductCategoryMappingDAL()
         {
-            db = new WebDbContext();
+            db = new AppDbContext();
         }
         public async Task<List<ProductCategoryMappingVM>> GetAll()
         {
@@ -76,7 +77,7 @@ namespace DAL.ProductCategoryMapping
         {
             try
             {
-                var ProductCategory = new BOL.Entities.Product_Category_Mapping
+                var ProductCategory = new BO.Entities.Product_Category_Mapping
                 {
                     ProductId = model.ProductId,
                     CategoryId = model.CategoryId,

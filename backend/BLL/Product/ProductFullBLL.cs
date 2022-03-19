@@ -1,8 +1,8 @@
 ﻿using BLL.Category;
 using BLL.ProductCategoryMapping;
-using BOL.ViewModels.Brand;
-using BOL.ViewModels.Category;
-using BOL.ViewModels.Product;
+using BO.ViewModels.Brand;
+using BO.ViewModels.Category;
+using BO.ViewModels.Product;
 using DAL.Product;
 using System;
 using System.Collections.Generic;

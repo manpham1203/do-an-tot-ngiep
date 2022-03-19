@@ -1,5 +1,6 @@
-﻿using BLL.Product;
-using BOL.ViewModels.Product;
+﻿
+using BLL.Product;
+using BO.ViewModels.Product;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

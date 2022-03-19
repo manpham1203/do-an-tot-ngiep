@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v5.0": {
       "BLL/1.0.0": {
         "dependencies": {
-          "BOL": "1.0.0",
+          "BO": "1.0.0",
           "DAL": "1.0.0"
         },
         "runtime": {
@@ -1051,19 +1051,19 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "BOL/1.0.0": {
+      "BO/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "5.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.12"
         },
         "runtime": {
-          "BOL.dll": {}
+          "BO.dll": {}
         }
       },
       "DAL/1.0.0": {
         "dependencies": {
           "AutoMapper": "11.0.1",
-          "BOL": "1.0.0"
+          "BO": "1.0.0"
         },
         "runtime": {
           "DAL.dll": {}
@@ -1742,7 +1742,7 @@
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
-    "BOL/1.0.0": {
+    "BO/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

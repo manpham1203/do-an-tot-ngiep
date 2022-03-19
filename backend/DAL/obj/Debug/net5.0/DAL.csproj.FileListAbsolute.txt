@@ -13,3 +13,18 @@ D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\ref\DAL.dll
 D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BOL.dll
 D:\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BOL.pdb
 D:\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.CopyComplete
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.deps.json
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\DAL.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.AssemblyReference.cache
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.AssemblyInfoInputs.cache
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.AssemblyInfo.cs
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.CoreCompileInputs.cache
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.csproj.CopyComplete
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\refint\DAL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\DAL.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Debug\net5.0\ref\DAL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BO.dll
+D:\New folder\PhamMinhMan_2119110081\backend\DAL\bin\Debug\net5.0\BO.pdb

@@ -1,5 +1,6 @@
-﻿using BOL;
-using BOL.ViewModels.Category;
+﻿
+using BO;
+using BO.ViewModels.Category;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace DAL.Category
 {
     public class CategoryDAL
     {
-        private readonly WebDbContext db;
+        private readonly AppDbContext db;
         public CategoryDAL()
         {
-            db = new WebDbContext();
+            db = new AppDbContext();
         }
         public async Task<List<CategoryVM>> GetAll()
         {
@@ -78,7 +79,7 @@ namespace DAL.Category
         {
             try
             {
-                var category = new BOL.Entities.Category
+                var category = new BO.Entities.Category
                 {
                     Id = categoryVM.Id,
                     Name = categoryVM.Name,

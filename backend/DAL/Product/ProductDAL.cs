@@ -1,5 +1,6 @@
-﻿using BOL;
-using BOL.ViewModels.Product;
+﻿
+using BO;
+using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace DAL.Product
 {
     public class ProductDAL
     {
-        private WebDbContext db;
+        private AppDbContext db;
         public ProductDAL()
         {
-            db = new WebDbContext();
+            db = new AppDbContext();
         }
         public async Task<List<ProductVM>> GetAll()
         {
@@ -121,7 +122,7 @@ namespace DAL.Product
         {
             try
             {
-                var product = new BOL.Entities.Product
+                var product = new BO.Entities.Product
                 {
                     Id = productVM.Id,
                     Name = productVM.Name,

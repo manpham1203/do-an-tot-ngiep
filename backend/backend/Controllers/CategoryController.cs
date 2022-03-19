@@ -1,5 +1,5 @@
 ﻿using BLL.Category;
-using BOL.ViewModels.Category;
+using BO.ViewModels.Category;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

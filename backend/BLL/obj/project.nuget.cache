@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7sc1a+7XLPUgrzuJvG+AJbCfgpLiAYNJOZ/05BFch92ixp3qFRj11+S3GcK1S04iVBHPV8rs9R3X9A6XfrY56w==",
+  "dgSpecHash": "lpEzzeJ/7WGXplcze9wVHb80zdRVri34dwxXixr7Rb30fUnCyumzc9hFCv/5YwZZ+IniI0A89r1nS85xFNFtdg==",
   "success": true,
-  "projectFilePath": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
+  "projectFilePath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pmman\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
     "C:\\Users\\pmman\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

@@ -1,5 +1,5 @@
 ﻿using BLL;
-using BOL.ViewModels.Brand;
+using BO.ViewModels.Brand;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

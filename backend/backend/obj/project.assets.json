@@ -2101,7 +2101,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "BOL": "1.0.0",
+          "BO": "1.0.0",
           "DAL": "1.0.0"
         },
         "compile": {
@@ -2111,7 +2111,7 @@
           "bin/placeholder/BLL.dll": {}
         }
       },
-      "BOL/1.0.0": {
+      "BO/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
@@ -2119,10 +2119,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.12"
         },
         "compile": {
-          "bin/placeholder/BOL.dll": {}
+          "bin/placeholder/BO.dll": {}
         },
         "runtime": {
-          "bin/placeholder/BOL.dll": {}
+          "bin/placeholder/BO.dll": {}
         }
       },
       "DAL/1.0.0": {
@@ -2130,7 +2130,7 @@
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
           "AutoMapper": "11.0.1",
-          "BOL": "1.0.0"
+          "BO": "1.0.0"
         },
         "compile": {
           "bin/placeholder/DAL.dll": {}
@@ -7394,10 +7394,10 @@
       "path": "../BLL/BLL.csproj",
       "msbuildProject": "../BLL/BLL.csproj"
     },
-    "BOL/1.0.0": {
+    "BO/1.0.0": {
       "type": "project",
-      "path": "../BOL/BOL.csproj",
-      "msbuildProject": "../BOL/BOL.csproj"
+      "path": "../BO/BO.csproj",
+      "msbuildProject": "../BO/BO.csproj"
     },
     "DAL/1.0.0": {
       "type": "project",
@@ -7408,7 +7408,7 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "BLL >= 1.0.0",
-      "BOL >= 1.0.0",
+      "BO >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 5.0.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.12",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.12",
@@ -7422,11 +7422,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
+      "projectUniqueName": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
+      "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\pmman\\.nuget\\packages\\",
-      "outputPath": "D:\\PhamMinhMan_2119110081\\backend\\backend\\obj\\",
+      "outputPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pmman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7443,11 +7443,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
-              "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj"
+            "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
+              "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj"
             },
-            "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj": {
-              "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj"
+            "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj": {
+              "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj"
             }
           }
         }

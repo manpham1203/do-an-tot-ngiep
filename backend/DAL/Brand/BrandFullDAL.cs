@@ -1,5 +1,5 @@
-﻿using BOL;
-using BOL.ViewModels.Brand;
+﻿using BO;
+using BO.ViewModels.Brand;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,10 @@ namespace DAL.Brand
 {
     public class BrandFullDAL
     {
-        private readonly WebDbContext db;
+        private readonly AppDbContext db;
         public BrandFullDAL()
         {
-            db=new WebDbContext();
+            db=new AppDbContext();
         }
         public async Task<List<BrandFullVM>> GetAll()
         {

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj": {}
+    "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj": {}
   },
   "projects": {
-    "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj": {
+    "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
+        "projectUniqueName": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
+        "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\pmman\\.nuget\\packages\\",
-        "outputPath": "D:\\PhamMinhMan_2119110081\\backend\\backend\\obj\\",
+        "outputPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pmman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,11 +28,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
-                "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj"
+              "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
+                "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj"
               },
-              "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj": {
-                "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj"
+              "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj": {
+                "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj"
               }
             }
           }
@@ -94,14 +94,14 @@
         }
       }
     },
-    "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
+    "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
+        "projectUniqueName": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
+        "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\BLL.csproj",
         "packagesPath": "C:\\Users\\pmman\\.nuget\\packages\\",
-        "outputPath": "D:\\PhamMinhMan_2119110081\\backend\\BLL\\obj\\",
+        "outputPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pmman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -118,11 +118,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj": {
-                "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj"
+              "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj": {
+                "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj"
               },
-              "D:\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj": {
-                "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj"
+              "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj": {
+                "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj"
               }
             }
           }
@@ -155,14 +155,14 @@
         }
       }
     },
-    "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj": {
+    "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj",
-        "projectName": "BOL",
-        "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj",
+        "projectUniqueName": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj",
+        "projectName": "BO",
+        "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj",
         "packagesPath": "C:\\Users\\pmman\\.nuget\\packages\\",
-        "outputPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\obj\\",
+        "outputPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pmman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -225,14 +225,14 @@
         }
       }
     },
-    "D:\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj": {
+    "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj",
+        "projectUniqueName": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj",
+        "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\DAL.csproj",
         "packagesPath": "C:\\Users\\pmman\\.nuget\\packages\\",
-        "outputPath": "D:\\PhamMinhMan_2119110081\\backend\\DAL\\obj\\",
+        "outputPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pmman\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -249,8 +249,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj": {
-                "projectPath": "D:\\PhamMinhMan_2119110081\\backend\\BOL\\BOL.csproj"
+              "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj": {
+                "projectPath": "D:\\New folder\\PhamMinhMan_2119110081\\backend\\BO\\BO.csproj"
               }
             }
           }

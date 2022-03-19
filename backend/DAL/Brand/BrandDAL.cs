@@ -1,5 +1,5 @@
-﻿using BOL;
-using BOL.ViewModels.Brand;
+﻿using BO;
+using BO.ViewModels.Brand;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,10 @@ namespace DAL.Brand
 {
     public class BrandDAL
     {
-        private readonly WebDbContext db;
+        private readonly AppDbContext db;
         public BrandDAL()
         {
-            db = new WebDbContext();
+            db = new AppDbContext();
         }
         public async Task<List<BrandVM>> GetAll()
         {
@@ -78,7 +78,7 @@ namespace DAL.Brand
         {
             try
             {
-                var brand = new BOL.Entities.Brand
+                var brand = new BO.Entities.Brand
                 {
                     Id = brandVM.Id,
                     Name = brandVM.Name,

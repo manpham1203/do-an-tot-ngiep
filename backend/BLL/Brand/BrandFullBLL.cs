@@ -1,6 +1,6 @@
 ﻿using BLL.Product;
-using BOL.ViewModels.Brand;
-using BOL.ViewModels.Product;
+using BO.ViewModels.Brand;
+using BO.ViewModels.Product;
 using DAL.Brand;
 using System;
 using System.Collections.Generic;
