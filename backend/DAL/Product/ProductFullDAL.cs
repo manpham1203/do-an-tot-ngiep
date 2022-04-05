@@ -27,70 +27,64 @@ namespace DAL.Product
         }
         public async Task<List<ProductFullVM>> GetAll()
         {
-            try
+
+            var productFromDb = await db.Products.ToListAsync();
+            if (productFromDb.Count==0)
             {
-                var productFromDb = await db.Products.ToListAsync();
-                if (productFromDb == null)
-                {
-                    return null;
-                }
-                var productVMs = productFromDb.Select(x => new ProductFullVM
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Slug = x.Slug,
-                    Price = x.Price,
-                    PriceDiscount = x.PriceDiscount,
-                    FullDescription = x.FullDescription,
-                    ShortDescription = x.ShortDescription,
-                    Quantity = x.Quantity,
-                    IsActive = x.IsActive,
-                    Deleted = x.Deleted,
-                    CreatedAt = x.CreatedAt,
-                    UpdatedAt = x.UpdatedAt,
-                    BrandId = x.BrandId,
-                    CategoryVMs = null,
-                }).ToList();
-                return productVMs;
+                return new List<ProductFullVM>();
             }
-            catch
+            var productVMs = productFromDb.Select(x => new ProductFullVM
             {
-                return null;
-            }
+                Id = x.Id,
+                Name = x.Name,
+                Slug = x.Slug,
+                Price = x.Price,
+                PriceDiscount = x.PriceDiscount,
+                FullDescription = x.FullDescription,
+                ShortDescription = x.ShortDescription,
+                Quantity = x.Quantity,
+                Pulished = x.Pulished,
+                Deleted = x.Deleted,
+                Likes = x.Likes,
+                Views = x.Views,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                BrandId = x.BrandId,
+                CategoryVMs = null,
+            }).ToList();
+            return productVMs;
+
         }
         public async Task<ProductFullVM> GetById(string id)
         {
-            try
-            {
-                var productFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id);
-                if (productFromDb == null)
-                {
-                    return null;
-                }
-                var productFullVMs = new ProductFullVM
-                {
-                    Id = productFromDb.Id,
-                    Name = productFromDb.Name,
-                    Slug = productFromDb.Slug,
-                    Price = productFromDb.Price,
-                    PriceDiscount = productFromDb.PriceDiscount,
-                    FullDescription = productFromDb.FullDescription,
-                    ShortDescription = productFromDb.ShortDescription,
-                    Quantity = productFromDb.Quantity,
-                    IsActive = productFromDb.IsActive,
-                    Deleted = productFromDb.Deleted,
-                    CreatedAt = productFromDb.CreatedAt,
-                    UpdatedAt = productFromDb.UpdatedAt,
-                    BrandId = productFromDb.BrandId,
-                    BrandVM=null,
-                    CategoryVMs=null,
-                };
-                return productFullVMs;
-            }
-            catch
+
+            var productFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id);
+            if (productFromDb == null)
             {
                 return null;
             }
+            var productFullVMs = new ProductFullVM
+            {
+                Id = productFromDb.Id,
+                Name = productFromDb.Name,
+                Slug = productFromDb.Slug,
+                Price = productFromDb.Price,
+                PriceDiscount = productFromDb.PriceDiscount,
+                FullDescription = productFromDb.FullDescription,
+                ShortDescription = productFromDb.ShortDescription,
+                Quantity = productFromDb.Quantity,
+                Pulished = productFromDb.Pulished,
+                Deleted = productFromDb.Deleted,
+                Likes = productFromDb.Likes,
+                Views = productFromDb.Views,
+                CreatedAt = productFromDb.CreatedAt,
+                UpdatedAt = productFromDb.UpdatedAt,
+                BrandId = productFromDb.BrandId,
+                BrandVM = null,
+                CategoryVMs = null,
+            };
+            return productFullVMs;
+
         }
     }
 }

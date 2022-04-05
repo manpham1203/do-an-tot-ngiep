@@ -18,34 +18,54 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categoryVMs = await categoryBLL.GetAll();
-            if (categoryVMs == null)
+            try
             {
-                return NotFound();
+                var categoryVMs = await categoryBLL.GetAll();
+                return Ok(categoryVMs);
             }
-            return Ok(categoryVMs);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var category=await categoryBLL.GetById(id);
-            if(category == null)
+            try
             {
-                return NotFound();
+                var category = await categoryBLL.GetById(id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                return Ok(category);
             }
-            return Ok(category);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryVM model)
         {
             if (ModelState.IsValid)
             {
-                var categoryCreate = await categoryBLL.Create(model);
-                if (categoryCreate)
+                try
                 {
-                    return StatusCode(StatusCodes.Status201Created);
+                    var categoryCreate = await categoryBLL.Create(model);
+                    if (categoryCreate)
+                    {
+                        return StatusCode(StatusCodes.Status201Created);
+                    }
+                    return BadRequest();
                 }
-                return BadRequest();
+                catch
+                {
+                    return BadRequest();
+                }
+
             }
             else
             {
@@ -57,12 +77,20 @@ namespace backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var categoryUpdate = await categoryBLL.Update(id, model);
-                if (categoryUpdate == false)
+                try
+                {
+                    var categoryUpdate = await categoryBLL.Update(id, model);
+                    if (categoryUpdate == false)
+                    {
+                        return BadRequest();
+                    }
+                    return Ok();
+                }
+                catch
                 {
                     return BadRequest();
                 }
-                return Ok();
+
             }
             else
             {
@@ -72,12 +100,20 @@ namespace backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var categoryDelete = await categoryBLL.Delete(id);
-            if (categoryDelete == false)
+            try
+            {
+                var categoryDelete = await categoryBLL.Delete(id);
+                if (categoryDelete == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
             {
                 return BadRequest();
             }
-            return Ok();
+
         }
     }
 }

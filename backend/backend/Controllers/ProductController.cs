@@ -19,36 +19,56 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await productBLL.GetAll();
-            if (products == null)
+            try
             {
-                return NotFound();
+                var products = await productBLL.GetAll();
+                return Ok(products);
             }
-            return Ok(products);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var product = await productBLL.GetById(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await productBLL.GetById(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
             }
-            return Ok(product);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductVM model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var createProduct = await productBLL.Create(model);
-                if (!createProduct)
+                if (ModelState.IsValid)
+                {
+                    var createProduct = await productBLL.Create(model);
+                    if (!createProduct)
+                    {
+                        return BadRequest();
+                    }
+                    return StatusCode(StatusCodes.Status201Created);
+                }
+                else
                 {
                     return BadRequest();
                 }
-                return StatusCode(StatusCodes.Status201Created);
             }
-            else
+
+            catch
             {
                 return BadRequest();
             }
@@ -57,29 +77,77 @@ namespace backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, UpdateProductVM model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await productBLL.Update(id, model);
+                if (ModelState.IsValid)
+                {
+                    var result = await productBLL.Update(id, model);
+                    if (result == false)
+                    {
+                        return BadRequest();
+                    }
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var result = await productBLL.Delete(id);
                 if (result == false)
                 {
                     return BadRequest();
                 }
                 return Ok();
             }
-            else
+            catch
             {
                 return BadRequest();
             }
+
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpGet("productfull")]
+        public async Task<IActionResult> GetProductFullAll()
         {
-            var result = await productBLL.Delete(id);
-            if (result == false)
+            try
+            {
+                var products = await productBLL.GetProductFullAll();
+                return Ok(products);
+            }
+            catch
             {
                 return BadRequest();
             }
-            return Ok();
+
+        }
+        [HttpGet("productfull/{id}")]
+        public async Task<IActionResult> GetProductFullById(string id)
+        {
+            try
+            {
+                var product = await productBLL.GetProductFullById(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

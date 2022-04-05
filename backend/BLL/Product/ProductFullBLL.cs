@@ -1,5 +1,5 @@
 ﻿using BLL.Category;
-using BLL.ProductCategoryMapping;
+using BLL.ProductCategory;
 using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
 using BO.ViewModels.Product;
@@ -22,12 +22,12 @@ namespace BLL.Product
         public async Task<List<ProductFullVM>> GetAll()
         {
             var productFullVMs = await productFullDAL.GetAll();
-            if (productFullVMs == null)
+            if (productFullVMs.Count==0)
             {
-                return null;
+                return productFullVMs;
             }
 
-            var cpBLL = new ProductCategoryMappingBLL();
+            var cpBLL = new ProductCategoryBLL();
             for (int i = 0; i < productFullVMs.Count; i++)
             {
                 #region Brand
@@ -82,7 +82,7 @@ namespace BLL.Product
                 return null;
             }
 
-            var cpBLL = new ProductCategoryMappingBLL();
+            var cpBLL = new ProductCategoryBLL();
 
             #region Brand
             var brandBLL = new BrandBLL();

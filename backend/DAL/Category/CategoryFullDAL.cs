@@ -19,63 +19,49 @@ namespace DAL.Category
         }
         public async Task<List<CategoryFullVM>> GetAll()
         {
-            try
+            var categoryFromDb = await db.Categories.ToListAsync();
+            if (categoryFromDb.Count==0)
             {
-                var categoryFromDb = await db.Categories.ToListAsync();
-                if (categoryFromDb == null)
-                {
-                    return null;
-                }
-                var categoryVMs = categoryFromDb.Select(x => new CategoryFullVM
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Slug = x.Slug,
-                    FullDescription = x.FullDescription,
-                    ShortDescription = x.ShortDescription,
-                    IsActive = x.IsActive,
-                    Deleted = x.Deleted,
-                    CreatedAt = x.CreatedAt,
-                    UpdatedAt = x.UpdatedAt,
-                    Ordinal = x.Ordinal,
-                    ProductVMs = null
-                }).ToList();
-                return categoryVMs;
+                return new List<CategoryFullVM>();
             }
-            catch
+            var categoryVMs = categoryFromDb.Select(x => new CategoryFullVM
             {
-                return null;
-            }
+                Id = x.Id,
+                Name = x.Name,
+                Slug = x.Slug,
+                FullDescription = x.FullDescription,
+                ShortDescription = x.ShortDescription,
+                Pulished = x.Pulished,
+                Deleted = x.Deleted,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Ordinal = x.Ordinal,
+                ProductVMs = null
+            }).ToList();
+            return categoryVMs;
         }
         public async Task<CategoryFullVM> GetById(string id)
         {
-            try
-            {
-                var categoryFromDb = await db.Categories.SingleOrDefaultAsync(x=>x.Id==id);
-                if (categoryFromDb == null)
-                {
-                    return null;
-                }
-                var categoryVM = new CategoryFullVM
-                {
-                    Id = categoryFromDb.Id,
-                    Name = categoryFromDb.Name,
-                    Slug = categoryFromDb.Slug,
-                    FullDescription = categoryFromDb.FullDescription,
-                    ShortDescription = categoryFromDb.ShortDescription,
-                    IsActive = categoryFromDb.IsActive,
-                    Deleted = categoryFromDb.Deleted,
-                    CreatedAt = categoryFromDb.CreatedAt,
-                    UpdatedAt = categoryFromDb.UpdatedAt,
-                    Ordinal = categoryFromDb.Ordinal,
-                    ProductVMs = null
-                };
-                return categoryVM;
-            }
-            catch
+            var categoryFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+            if (categoryFromDb == null)
             {
                 return null;
             }
+            var categoryVM = new CategoryFullVM
+            {
+                Id = categoryFromDb.Id,
+                Name = categoryFromDb.Name,
+                Slug = categoryFromDb.Slug,
+                FullDescription = categoryFromDb.FullDescription,
+                ShortDescription = categoryFromDb.ShortDescription,
+                Pulished = categoryFromDb.Pulished,
+                Deleted = categoryFromDb.Deleted,
+                CreatedAt = categoryFromDb.CreatedAt,
+                UpdatedAt = categoryFromDb.UpdatedAt,
+                Ordinal = categoryFromDb.Ordinal,
+                ProductVMs = null
+            };
+            return categoryVM;
         }
     }
 }

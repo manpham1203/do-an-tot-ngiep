@@ -17,23 +17,38 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var brandFullVMs = await brandFullBLL.GetAll();
-            if (brandFullVMs == null)
+            try
             {
-                return NotFound();
+                var brandFullVMs = await brandFullBLL.GetAll();
+                if (brandFullVMs == null)
+                {
+                    return NotFound();
+                }
+                return Ok(brandFullVMs);
             }
-            return Ok(brandFullVMs);
+
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var brandFullVM = await brandFullBLL.GetById(id);
-            if (brandFullVM == null)
+            try
             {
-                return NotFound();
+                var brandFullVM = await brandFullBLL.GetById(id);
+                if (brandFullVM == null)
+                {
+                    return NotFound();
+                }
+                return Ok(brandFullVM);
             }
-            return Ok(brandFullVM);
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

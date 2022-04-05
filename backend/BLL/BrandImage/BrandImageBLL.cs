@@ -1,0 +1,54 @@
+﻿using BO.ViewModels.BrandImage;
+using DAL.BrandImage;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.BrandImage
+{
+    public class BrandImageBLL
+    {
+        private BrandImageDAL brandImageDAL;
+        private Common cm;
+
+        public BrandImageBLL()
+        {
+            brandImageDAL = new BrandImageDAL();
+        }
+        public async Task<BrandImageVM> GetById(string id)
+        {
+            return await brandImageDAL.GetById(id);
+        }
+        public async Task<List<BrandImageVM>> GetByBrandId(string id)
+        {
+            return await brandImageDAL.GetByBrandId(id);
+        }
+        public async Task<bool> Create(List<string> imgName, string brandId)
+        {
+            cm = new Common();
+            List<BrandImageVM> brandImages = new List<BrandImageVM>();
+            BrandImageVM brandImageVM;
+            for(int i = 0; i < imgName.Count; i++)
+            {
+                var imgId = cm.RandomString(12);
+                var checkImg = await GetById(imgId);
+                while (checkImg != null)
+                {
+                    imgId = cm.RandomString(12);
+                    checkImg = await GetById(brandId);
+                }
+                brandImageVM = new BrandImageVM
+                {
+                    Id = imgId,
+                    BrandId = brandId,
+                    Name = imgName[i],
+                    Pulished=true,
+                };
+                brandImages.Add(brandImageVM);
+            }
+            return await brandImageDAL.Create(brandImages);
+        }
+    }
+}

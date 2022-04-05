@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* fira font */
+  @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Prata&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Rasa:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+  body {
+    /* font-family: "Fira Sans", sans-serif; */
+    /* font-family: 'Prata', serif; */
+    /* font-family: 'Be Vietnam Pro', sans-serif; */
+    /* font-weight:500; */
+    /* font-family: "Petrona", serif; */
+    /* font-family: 'Rasa', serif; */
+    /* font-family: 'STIX Two Text', serif; */
+    /* font-family: 'Montserrat Alternates', sans-serif; */
+    /* font-family: "Montserrat", sans-serif; */
+    font-family: "Roboto", sans-serif;
+    color: #3f3d4f;
+    background-color: #f8f7f4;
+  }
+
+  .hero .swiper-pagination-bullet {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+  }
+
+  .ProductSlideShow .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ProductSlideShow .swiper-slide {
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+
+  .ProductSlideShow .swiper-wrapper {
+    padding-bottom: 20px;
+    padding-top: 20px;
+  }
+
+  .ProductSlideShow .swiper-slide:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  .productSlideThumb .swiper-slide {
+    opacity: 0.4;
+  }
+
+  .productSlideThumb .swiper-slide-thumb-active {
+    border: 1px solid red !important;
+    opacity: 1;
+  }
+  .productSlideThumb .swiper-button-prev {
+    transform: translateX(-50%) rotate(90deg);
+    top: 20px;
+    left: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  .productSlideThumb .swiper-button-next {
+    top: unset;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* input */
+  .form-input:not(:placeholder-shown) + .form-label,
+  .form-input:focus + .form-label {
+    @apply top-0 left-[10px] px-[10px] block bg-white text-input-label;
+  }
+  .form-input:focus + .form-label {
+    @apply top-0 left-[10px] px-[10px] block bg-white text-main-color;
+  }
+
+  /* checkbox */
+  .checkbox-box {
+    transition: 0.25s ease;
+  }
+  .checkbox-box::after {
+    /* content:"\2713"; */
+    content: url("./assets/checkbox-mark.svg");
+    width: 100%;
+    height: 100%;
+    transform: scale(0);
+    transition: 0.2s ease;
+  }
+  .form-checkbox:checked + .checkbox-box {
+    @apply bg-blue-500;
+  }
+  .form-checkbox:checked + .checkbox-box::after {
+    transform: scale(1);
+  }
+
+  .DraftEditor-editorContainer {
+    background-color: white !important;
+    height: 400px !important;
+    padding: 20px !important;
+  }
+
+  #style-4::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#style-4::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-4::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+	border: 2px solid #555555;
+}
+}

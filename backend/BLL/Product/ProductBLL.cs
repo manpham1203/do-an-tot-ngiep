@@ -1,4 +1,4 @@
-﻿using BLL.ProductCategoryMapping;
+﻿using BLL.ProductCategory;
 using DAL.Product;
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using BO.ViewModels.Product;
-using BO.ViewModels.ProductCategoryMapping;
+using BO.ViewModels.ProductCategory;
 using BLL.Category;
+using BO.ViewModels.Brand;
+using BO.ViewModels.Category;
 
 namespace BLL.Product
 {
@@ -22,12 +24,7 @@ namespace BLL.Product
         }
         public async Task<List<ProductVM>> GetAll()
         {
-            var productVMs = await productDAL.GetAll();
-            if (productVMs == null)
-            {
-                return null;
-            }
-            return productVMs;
+            return await productDAL.GetAll();
         }
         public async Task<ProductVM> GetById(string id)
         {
@@ -35,12 +32,7 @@ namespace BLL.Product
             {
                 return null;
             }
-            var productVM = await productDAL.GetById(id);
-            if (productVM == null)
-            {
-                return null;
-            }
-            return productVM;
+            return await productDAL.GetById(id);
         }
         public async Task<List<ProductVM>> GetByBrandId(string id)
         {
@@ -48,12 +40,7 @@ namespace BLL.Product
             {
                 return null;
             }
-            var products = await productDAL.GetByBrandId(id);
-            if (products == null)
-            {
-                return null;
-            }
-            return products;
+            return await productDAL.GetByBrandId(id);
         }
         public async Task<bool> Create(CreateProductVM createProductVM)
         {
@@ -64,19 +51,18 @@ namespace BLL.Product
                 return false;
             }
 
-            if (createProductVM.ListCategoryId != null)
+            if (createProductVM.CategoryIds != null)
             {
                 var categoryBLL = new CategoryBLL();
-                for (int i = 0; i < createProductVM.ListCategoryId.Count; i++)
+                for (int i = 0; i < createProductVM.CategoryIds.Count; i++)
                 {
-                    var categories = await categoryBLL.GetById(createProductVM.ListCategoryId[i]);
+                    var categories = await categoryBLL.GetById(createProductVM.CategoryIds[i]);
                     if (categories == null)
                     {
                         return false;
                     }
                 }
             }
-
 
             cm = new Common();
             var productId = cm.RandomString(12);
@@ -87,7 +73,6 @@ namespace BLL.Product
                 checkIdExists = await GetById(productId);
             }
             var slug = Regex.Replace(cm.RemoveUnicode(createProductVM.Name).Trim().ToLower(), @"\s+", "-");
-            //slug = slug.Replace(" ", "-");
 
             #region Product
             var productVM = new ProductVM
@@ -100,14 +85,14 @@ namespace BLL.Product
                 FullDescription = createProductVM.FullDescription,
                 ShortDescription = createProductVM.ShortDescription,
                 Quantity = createProductVM.Quantity,
-                IsActive = createProductVM.IsActive,
+                Pulished = createProductVM.Pulished,
                 Deleted = false,
+                Likes = 0,
+                Views = 0,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
                 BrandId = createProductVM.BrandId,
             };
-
-
 
             #endregion
             var productCreate = await productDAL.Create(productVM);
@@ -116,21 +101,18 @@ namespace BLL.Product
                 return false;
             }
 
-
-
             #region Product_Category_Mapping
 
-
-            if (createProductVM.ListCategoryId != null)
+            if (createProductVM.CategoryIds != null)
             {
-                for (int i = 0; i < createProductVM.ListCategoryId.Count; i++)
+                for (int i = 0; i < createProductVM.CategoryIds.Count; i++)
                 {
-                    var pcmVM = new ProductCategoryMappingVM
+                    var pcmVM = new ProductCategoryVM
                     {
-                        CategoryId = createProductVM.ListCategoryId[i],
+                        CategoryId = createProductVM.CategoryIds[i],
                         ProductId = productId
                     };
-                    var pcmBLL = new ProductCategoryMappingBLL();
+                    var pcmBLL = new ProductCategoryBLL();
                     var pcmCreate = await pcmBLL.Create(pcmVM);
                     if (pcmCreate == false)
                     {
@@ -151,12 +133,12 @@ namespace BLL.Product
             {
                 return false;
             }
-            if (updateProductVM.ListCategoryId != null)
+            if (updateProductVM.CategoryIds != null)
             {
                 var categoryBLL = new CategoryBLL();
-                for (int i = 0; i < updateProductVM.ListCategoryId.Count; i++)
+                for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
                 {
-                    var categories = await categoryBLL.GetById(updateProductVM.ListCategoryId[i]);
+                    var categories = await categoryBLL.GetById(updateProductVM.CategoryIds[i]);
                     if (categories == null)
                     {
                         return false;
@@ -185,18 +167,18 @@ namespace BLL.Product
                 FullDescription = updateProductVM.FullDescription,
                 ShortDescription = updateProductVM.ShortDescription,
                 Quantity = updateProductVM.Quantity,
-                IsActive = updateProductVM.IsActive,
+                Pulished = updateProductVM.Pulished,
                 Deleted = updateProductVM.Deleted,
+                Likes = updateProductVM.Likes,
+                Views = updateProductVM.Views,
                 UpdatedAt = DateTime.Now,
                 BrandId = updateProductVM.BrandId,
             };
 
-
-
             #endregion
 
             #region Product_Category_Mapping
-            var pcmBLL = new ProductCategoryMappingBLL();
+            var pcmBLL = new ProductCategoryBLL();
             var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
             if (listProCatMapping.Count != 0)
             {
@@ -204,13 +186,13 @@ namespace BLL.Product
 
                 if (delete)
                 {
-                    if (updateProductVM.ListCategoryId != null)
+                    if (updateProductVM.CategoryIds != null)
                     {
-                        for (int i = 0; i < updateProductVM.ListCategoryId.Count; i++)
+                        for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
                         {
-                            var pcmVM = new ProductCategoryMappingVM
+                            var pcmVM = new ProductCategoryVM
                             {
-                                CategoryId = updateProductVM.ListCategoryId[i],
+                                CategoryId = updateProductVM.CategoryIds[i],
                                 ProductId = id
                             };
                             var pcmCreate = await pcmBLL.Create(pcmVM);
@@ -225,15 +207,15 @@ namespace BLL.Product
                 {
                     return false;
                 }
-                updateProductVM.ListCategoryId = null;
+                updateProductVM.CategoryIds = null;
             }
-            if (updateProductVM.ListCategoryId != null)
+            if (updateProductVM.CategoryIds != null)
             {
-                for (int i = 0; i < updateProductVM.ListCategoryId.Count; i++)
+                for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
                 {
-                    var pcmVM = new ProductCategoryMappingVM
+                    var pcmVM = new ProductCategoryVM
                     {
-                        CategoryId = updateProductVM.ListCategoryId[i],
+                        CategoryId = updateProductVM.CategoryIds[i],
                         ProductId = id
                     };
                     var pcmCreate = await pcmBLL.Create(pcmVM);
@@ -261,7 +243,7 @@ namespace BLL.Product
 
             if (productFullVM.CategoryVMs != null)
             {
-                var pcmBLL = new ProductCategoryMappingBLL();
+                var pcmBLL = new ProductCategoryBLL();
                 var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
                 if (listProCatMapping != null)
                 {
@@ -276,6 +258,111 @@ namespace BLL.Product
 
 
             return await productDAL.Delete(id);
+        }
+
+        public async Task<List<ProductFullVM>> GetProductFullAll()
+        {
+            var productFullVMs = await productDAL.GetProductFullAll();
+            if (productFullVMs.Count == 0)
+            {
+                return productFullVMs;
+            }
+
+            var cpBLL = new ProductCategoryBLL();
+            for (int i = 0; i < productFullVMs.Count; i++)
+            {
+                #region Brand
+                var brandBLL = new BrandBLL();
+                var brand = await brandBLL.GetById(productFullVMs[i].BrandId);
+                if (brand != null)
+                {
+                    productFullVMs[i].BrandVM = new BrandVM();
+                    productFullVMs[i].BrandVM = brand;
+                }
+                //else
+                //{
+                //    productFullVMs[i].BrandVM = new BrandVM();
+                //    productFullVMs[i].BrandVM = null;
+                //}
+                #endregion
+
+                #region Catgeory list
+                var listCategoryProduct = await cpBLL.GetById(productFullVMs[i].Id, "ProductId");
+                if (listCategoryProduct == null)
+                {
+                    productFullVMs[i].CategoryVMs = null;
+                }
+                else
+                {
+                    productFullVMs[i].CategoryVMs = new List<CategoryVM>();
+                    for (int j = 0; j < listCategoryProduct.Count(); j++)
+                    {
+                        var categoryBLL = new CategoryBLL();
+                        var productVM = await categoryBLL.GetById(listCategoryProduct[j].CategoryId);
+                        if (productVM == null)
+                        {
+                            continue;
+                        }
+                        productFullVMs[i].CategoryVMs.Add(productVM);
+                    }
+                }
+                #endregion
+            }
+
+            return productFullVMs;
+        }
+        public async Task<ProductFullVM> GetProductFullById(string id)
+        {
+            if (id.Length != 12)
+            {
+                return null;
+            }
+            var productFullVM = await productDAL.GetProductFullById(id);
+            if (productFullVM == null)
+            {
+                return null;
+            }
+
+            var cpBLL = new ProductCategoryBLL();
+
+            #region Brand
+            var brandBLL = new BrandBLL();
+            var brand = await brandBLL.GetById(productFullVM.BrandId);
+            if (brand != null)
+            {
+                productFullVM.BrandVM = new BrandVM();
+                productFullVM.BrandVM = brand;
+            }
+            //else
+            //{
+            //    productFullVM.BrandVM = null;
+            //}
+            #endregion
+
+            #region Catgeory list
+            var listCategoryProduct = await cpBLL.GetById(productFullVM.Id, "ProductId");
+            if (listCategoryProduct == null)
+            {
+                productFullVM.CategoryVMs = null;
+            }
+            else
+            {
+                productFullVM.CategoryVMs = new List<CategoryVM>();
+                for (int j = 0; j < listCategoryProduct.Count(); j++)
+                {
+                    var categoryBLL = new CategoryBLL();
+                    var productVM = await categoryBLL.GetById(listCategoryProduct[j].CategoryId);
+                    if (productVM == null)
+                    {
+                        continue;
+                    }
+                    productFullVM.CategoryVMs.Add(productVM);
+                }
+            }
+            #endregion
+
+
+            return productFullVM;
         }
     }
 }

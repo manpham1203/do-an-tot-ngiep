@@ -1,4 +1,4 @@
-﻿using BLL.ProductCategoryMapping;
+﻿using BLL.ProductCategory;
 using BO.ViewModels.Category;
 using DAL.Category;
 using System;
@@ -20,23 +20,15 @@ namespace BLL.Category
         }
         public async Task<List<CategoryVM>> GetAll()
         {
-            var categoryVMs = await categoryDAL.GetAll();
-            if (categoryVMs == null)
-            {
-                return null;
-            }
-
-            return categoryVMs;
+            return await categoryDAL.GetAll();
         }
         public async Task<CategoryVM> GetById(string id)
         {
-            var categoryVM = await categoryDAL.GetById(id);
-            if (categoryVM == null)
+            if (id.Length != 12)
             {
                 return null;
             }
-
-            return categoryVM;
+            return await categoryDAL.GetById(id);
         }
         public async Task<bool> Create(CreateCategoryVM model)
         {
@@ -57,19 +49,14 @@ namespace BLL.Category
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                IsActive = model.IsActive,
+                Pulished = model.Pulished,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
                 UpdatedAt=null,
                 Ordinal = model.Ordinal,
             };
 
-            var categoryCreate = await categoryDAL.Create(categoryVM);
-            if (!categoryCreate)
-            {
-                return false;
-            }
-            return true;
+            return await categoryDAL.Create(categoryVM);
         }
         public async Task<bool> Update(string id, UpdateCategoryVM model)
         {
@@ -87,7 +74,7 @@ namespace BLL.Category
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                IsActive = model.IsActive,
+                Pulished = model.Pulished,
                 Deleted = model.Deleted,
                 UpdatedAt = DateTime.Now,
                 Ordinal = model.Ordinal,
@@ -110,7 +97,7 @@ namespace BLL.Category
             }
             if(categoryFullVM.ProductVMs != null)
             {
-                var pcmBLL = new ProductCategoryMappingBLL();
+                var pcmBLL = new ProductCategoryBLL();
                 var listProCatMapping = await pcmBLL.GetById(id, "CategoryId");
                 if (listProCatMapping != null)
                 {

@@ -13,7 +13,7 @@ namespace BO.ViewModels.Category
         public string Name { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
-        public bool IsActive { get; set; }
+        public bool Pulished { get; set; }
         public bool Deleted { get; set; }
         public int? Ordinal { get; set; }
     }

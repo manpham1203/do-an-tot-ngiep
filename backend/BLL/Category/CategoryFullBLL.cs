@@ -1,5 +1,5 @@
 ﻿using BLL.Product;
-using BLL.ProductCategoryMapping;
+using BLL.ProductCategory;
 using BO.ViewModels.Category;
 using BO.ViewModels.Product;
 using DAL.Category;
@@ -21,11 +21,11 @@ namespace BLL.Category
         public async Task<List<CategoryFullVM>> GetAll()
         {
             var categoryFullVMs = await categoryFullDAL.GetAll();
-            if (categoryFullVMs == null)
+            if (categoryFullVMs.Count==0)
             {
-                return null;
+                return categoryFullVMs;
             }
-            var cpBLL = new ProductCategoryMappingBLL();
+            var cpBLL = new ProductCategoryBLL();
             for (int i = 0; i < categoryFullVMs.Count; i++)
             {
 
@@ -61,7 +61,7 @@ namespace BLL.Category
             {
                 return null;
             }
-            var cpBLL = new ProductCategoryMappingBLL();
+            var cpBLL = new ProductCategoryBLL();
 
 
             var listCategoryProduct = await cpBLL.GetById(categoryFullVM.Id, "CategoryId");

@@ -280,3 +280,6 @@ D:\New folder\PhamMinhMan_2119110081\backend\backend\obj\Debug\net5.0\backend.ge
 D:\New folder\PhamMinhMan_2119110081\backend\backend\obj\Debug\net5.0\ref\backend.dll
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\BO.dll
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\BO.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Features.dll
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\System.IO.Pipelines.dll

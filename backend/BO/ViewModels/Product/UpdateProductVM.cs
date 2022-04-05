@@ -12,15 +12,17 @@ namespace BO.ViewModels.Product
         [Required]
         public string Name { get; set; }
         [Required]
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
         public decimal? PriceDiscount { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
-        public int? Quantity { get; set; }
-        public bool IsActive { get; set; }
+        public int Quantity { get; set; }
+        public bool Pulished { get; set; }
         public bool Deleted { get; set; }
+        public int Views { get; set; }
+        public int Likes { get; set; }
         [Required]
         public string BrandId { get; set; }
-        public IList<string> ListCategoryId { get; set; }
+        public IList<string> CategoryIds { get; set; }
     }
 }

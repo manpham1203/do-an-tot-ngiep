@@ -17,23 +17,35 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categoryFullVMs = await categoryFullBLL.GetAll();
-            if (categoryFullVMs == null)
+            try
             {
-                return NotFound();
+                var categoryFullVMs = await categoryFullBLL.GetAll();
+                return Ok(categoryFullVMs);
             }
-            return Ok(categoryFullVMs);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var categoryFullVM = await categoryFullBLL.GetById(id);
-            if (categoryFullVM == null)
+            try
             {
-                return NotFound();
+                var categoryFullVM = await categoryFullBLL.GetById(id);
+                if(categoryFullVM == null)
+                {
+                    return NotFound();
+                }
+                return Ok(categoryFullVM);
             }
-            return Ok(categoryFullVM);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

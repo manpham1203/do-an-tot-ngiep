@@ -17,22 +17,34 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await productFullBLL.GetAll();
-            if (products == null)
+            try
             {
-                return NotFound();
+                var products = await productFullBLL.GetAll();
+                return Ok(products);
             }
-            return Ok(products);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAll(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var product = await productFullBLL.GetById(id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await productFullBLL.GetById(id);
+                if(product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
             }
-            return Ok(product);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

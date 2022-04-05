@@ -1,5 +1,5 @@
-﻿using BLL.ProductCategoryMapping;
-using BO.ViewModels.ProductCategoryMapping;
+﻿using BLL.ProductCategory;
+using BO.ViewModels.ProductCategory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,51 +10,75 @@ namespace backend.Controllers
     [ApiController]
     public class ProductCategoryMappingController : ControllerBase
     {
-        private readonly ProductCategoryMappingBLL objBLL;
+        private readonly ProductCategoryBLL objBLL;
         public ProductCategoryMappingController()
         {
-            objBLL = new ProductCategoryMappingBLL();
+            objBLL = new ProductCategoryBLL();
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await objBLL.GetAll();
-            if (list == null)
+            try
             {
-                return NotFound();
+                var list = await objBLL.GetAll();
+                return Ok(list);
             }
-            return Ok(list);
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(string id, string type)
         {
-            var objList = await objBLL.GetById(id, type);
-            if (objList == null)
+            try
             {
-                return NotFound();
+                var objList = await objBLL.GetById(id, type);
+                return Ok(objList);
             }
-            return Ok(objList);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(ProductCategoryMappingVM model)
-        {
-            var mappingCreate = await objBLL.Create(model);
-            if (!mappingCreate)
-            {
-                return NotFound();
-            }
-            return StatusCode(StatusCodes.Status201Created);
-        }
-        
-        [HttpDelete("DeleteById")]
-        public async Task<IActionResult> Delete(string id, string type)
-        {
-            var result = await objBLL.Delete(id, type);
-            if (result == false)
+            catch
             {
                 return BadRequest();
             }
-            return Ok();
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(ProductCategoryVM model)
+        {
+            try
+            {
+                var mappingCreate = await objBLL.Create(model);
+                if (!mappingCreate)
+                {
+                    return BadRequest();
+                }
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
+        [HttpDelete("DeleteById")]
+        public async Task<IActionResult> Delete(string id, string type)
+        {
+            try
+            {
+                var result = await objBLL.Delete(id, type);
+                if (result == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

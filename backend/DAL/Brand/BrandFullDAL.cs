@@ -14,67 +14,77 @@ namespace DAL.Brand
         private readonly AppDbContext db;
         public BrandFullDAL()
         {
-            db=new AppDbContext();
+            db = new AppDbContext();
         }
         public async Task<List<BrandFullVM>> GetAll()
         {
-            try
+
+            var brandFromDb = await db.Brands.ToListAsync();
+            if (brandFromDb.Count==0)
             {
-                var brandFromDb = await db.Brands.ToListAsync();
-                if (brandFromDb == null)
-                {
-                    return null;
-                }
-                var brandFullVMs = brandFromDb.Select(x => new BrandFullVM
-                {
-                    Id=x.Id,
-                    Name=x.Name,
-                    Slug=x.Slug,
-                    FullDescription=x.FullDescription,
-                    ShortDescription=x.FullDescription,
-                    IsActive=x.IsActive,
-                    Deleted=x.Deleted,
-                    CreatedAt=x.CreatedAt,
-                    UpdatedAt=x.UpdatedAt,
-                    Ordinal=x.Ordinal,
-                    ProductVMs=null,
-                }).ToList();
-                return brandFullVMs;
+                return new List<BrandFullVM>();
             }
-            catch
+            var brandFullVMs = brandFromDb.Select(x => new BrandFullVM
             {
-                return null;
-            }
+                Id = x.Id,
+                Name = x.Name,
+                Slug = x.Slug,
+                FullDescription = x.FullDescription,
+                ShortDescription = x.FullDescription,
+                Pulished = x.Pulished,
+                Deleted = x.Deleted,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Ordinal = x.Ordinal,
+                ProductVMs = null,
+            }).ToList();
+            return brandFullVMs;
         }
         public async Task<BrandFullVM> GetById(string id)
         {
-            try
-            {
-                var brandFromDb = await db.Brands.SingleOrDefaultAsync(x=>x.Id==id);
-                if (brandFromDb == null)
-                {
-                    return null;
-                }
-                var brandFullVM =  new BrandFullVM
-                {
-                    Id = brandFromDb.Id,
-                    Name = brandFromDb.Name,
-                    Slug = brandFromDb.Slug,
-                    FullDescription = brandFromDb.FullDescription,
-                    ShortDescription = brandFromDb.FullDescription,
-                    IsActive = brandFromDb.IsActive,
-                    Deleted = brandFromDb.Deleted,
-                    CreatedAt = brandFromDb.CreatedAt,
-                    UpdatedAt = brandFromDb.UpdatedAt,
-                    Ordinal = brandFromDb.Ordinal,
-                    ProductVMs = null,
-                };
-                return brandFullVM;
-            }
-            catch
+            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
+            if (brandFromDb == null)
             {
                 return null;
             }
+            var brandFullVM = new BrandFullVM
+            {
+                Id = brandFromDb.Id,
+                Name = brandFromDb.Name,
+                Slug = brandFromDb.Slug,
+                FullDescription = brandFromDb.FullDescription,
+                ShortDescription = brandFromDb.FullDescription,
+                Pulished = brandFromDb.Pulished,
+                Deleted = brandFromDb.Deleted,
+                CreatedAt = brandFromDb.CreatedAt,
+                UpdatedAt = brandFromDb.UpdatedAt,
+                Ordinal = brandFromDb.Ordinal,
+                ProductVMs = null,
+            };
+            return brandFullVM;
+        }
+        public async Task<BrandFullVM> GetBySlug(string slug)
+        {
+            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Slug == slug);
+            if (brandFromDb == null)
+            {
+                return null;
+            }
+            var brandFullVM = new BrandFullVM
+            {
+                Id = brandFromDb.Id,
+                Name = brandFromDb.Name,
+                Slug = brandFromDb.Slug,
+                FullDescription = brandFromDb.FullDescription,
+                ShortDescription = brandFromDb.FullDescription,
+                Pulished = brandFromDb.Pulished,
+                Deleted = brandFromDb.Deleted,
+                CreatedAt = brandFromDb.CreatedAt,
+                UpdatedAt = brandFromDb.UpdatedAt,
+                Ordinal = brandFromDb.Ordinal,
+                ProductVMs = null,
+            };
+            return brandFullVM;
         }
     }
 }
