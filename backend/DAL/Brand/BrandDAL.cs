@@ -121,5 +121,57 @@ namespace DAL.Brand
             }
             return false;
         }
+        public async Task<bool> Pulished(string id, bool pulished)
+        {
+            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
+
+            brandFromDb.Pulished = pulished;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Deleted(string id, bool deleted)
+        {
+            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
+
+            brandFromDb.Deleted = deleted;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<List<BrandVM>> GetAllBrandDeleted(bool deleted)
+        {
+            var brandFromDb = await db.Brands.Where(x=>x.Deleted== deleted).ToListAsync();
+
+            if (brandFromDb.Count == 0)
+            {
+                return new List<BrandVM>();
+            }
+
+            var brandVMs = brandFromDb.Select(x => new BrandVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Slug = x.Slug,
+                FullDescription = x.FullDescription,
+                ShortDescription = x.ShortDescription,
+                Pulished = x.Pulished,
+                Deleted = x.Deleted,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Ordinal = x.Ordinal,
+            }).ToList();
+            return brandVMs;
+
+        }
+
     }
 }

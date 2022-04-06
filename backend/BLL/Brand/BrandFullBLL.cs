@@ -30,7 +30,7 @@ namespace BLL.Brand
             for (int i = 0; i < brandFullVMs.Count; i++)
             {
                 var listProduct = await productBLL.GetByBrandId(brandFullVMs[i].Id);
-                if (listProduct == null)
+                if (listProduct.Count>0)
                 {
                     brandFullVMs[i].ProductVMs = null;
                 }
@@ -49,7 +49,7 @@ namespace BLL.Brand
             for (int i = 0; i < brandFullVMs.Count; i++)
             {
                 var listImg = await brandImgBLL.GetByBrandId(brandFullVMs[i].Id);
-                if (listImg == null)
+                if (listImg.Count >0 )
                 {
                     brandFullVMs[i].BrandImageVMs = null;
                 }

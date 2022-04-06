@@ -1,7 +1,11 @@
 ﻿using BLL.Category;
 using BO.ViewModels.Category;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -10,10 +14,14 @@ namespace backend.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryBLL categoryBLL;
-        public CategoryController()
+        private CategoryBLL categoryBLL;
+        private CategoryFullBLL categoryFullBLL;
+        private IWebHostEnvironment iwebHostEnvironment;
+        public CategoryController(IWebHostEnvironment _iwebHostEnvironment)
         {
             categoryBLL = new CategoryBLL();
+            categoryFullBLL = new CategoryFullBLL();
+            this.iwebHostEnvironment = _iwebHostEnvironment;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -48,18 +56,22 @@ namespace backend.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryVM model)
+        public async Task<IActionResult> Create([FromForm] CreateCategoryVM model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var categoryCreate = await categoryBLL.Create(model);
-                    if (categoryCreate)
+                    if (categoryCreate && (model.Files != null || model.Files.Count != 0))
                     {
-                        return StatusCode(StatusCodes.Status201Created);
+                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        if (!saveFile)
+                        {
+                            return BadRequest();
+                        }
                     }
-                    return BadRequest();
+                    return StatusCode(StatusCodes.Status201Created);
                 }
                 catch
                 {
@@ -73,16 +85,20 @@ namespace backend.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, UpdateCategoryVM model)
+        public async Task<IActionResult> Update(string id, [FromForm] UpdateCategoryVM model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var categoryUpdate = await categoryBLL.Update(id, model);
-                    if (categoryUpdate == false)
+                    if (categoryUpdate && (model.Files != null || model.Files.Count != 0))
                     {
-                        return BadRequest();
+                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        if (!saveFile)
+                        {
+                            return BadRequest();
+                        }
                     }
                     return Ok();
                 }
@@ -114,6 +130,126 @@ namespace backend.Controllers
                 return BadRequest();
             }
 
+        }
+        [HttpGet("categoryfull")]
+        public async Task<IActionResult> CategoryFullGetAll()
+        {
+            try
+            {
+                var brandFullVMs = await categoryFullBLL.GetAll();
+                if (brandFullVMs == null)
+                {
+                    return NotFound();
+                }
+                return Ok(brandFullVMs);
+            }
+
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("categoryfullgetbyid/{id}")]
+        public async Task<IActionResult> CategoryFullGetById(string id)
+        {
+            try
+            {
+                var categoryFullVM = await categoryFullBLL.GetById(id);
+
+                if (categoryFullVM == null)
+                {
+                    return NotFound();
+                }
+                for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
+                {
+                    categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
+                }
+                return Ok(categoryFullVM);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("categoryfullgetbyslug/{slug}")]
+        public async Task<IActionResult> CategoryFullGetBySlug(string slug)
+        {
+            try
+            {
+                var categoryFullVM = await categoryFullBLL.GetBySlug(slug);
+
+                if (categoryFullVM == null)
+                {
+                    return NotFound();
+                }
+                for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
+                {
+                    categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
+                }
+                return Ok(categoryFullVM);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [NonAction]
+        public async Task<bool> SaveFile(List<IFormFile> files, List<string> imgName)
+        {
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                //imageName = imgName[i];
+                //imageName = imageName + Path.GetExtension(files[i].FileName);
+
+                var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName[i]);
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await files[i].CopyToAsync(fileStream);
+                }
+
+            }
+            return true;
+        }
+
+        [HttpPost("pulished/{id}")]
+        public async Task<IActionResult> Published(string id)
+        {
+            var result = await categoryBLL.Published(id);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+
+        }
+        [HttpPost("deleted/{id}")]
+        public async Task<IActionResult> Deleted(string id)
+        {
+            var result = await categoryBLL.Deleted(id);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
+
+        }
+
+        [HttpGet("GetAllCategoryDeleted")]
+        public async Task<IActionResult> GetAllCategoryDeleted(bool deleted)
+        {
+            try
+            {
+                var categoryVMs = await categoryBLL.GetAllCategoryDeleted(deleted);
+                return Ok(categoryVMs);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

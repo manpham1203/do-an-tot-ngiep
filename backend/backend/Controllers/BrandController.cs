@@ -85,9 +85,9 @@ namespace backend.Controllers
                 {
 
                     var brandCreate = await brandBLL.Create(model);
-                    if (brandCreate && (model.formFile != null || model.formFile.Count != 0))
+                    if (brandCreate && (model.Files != null || model.Files.Count != 0))
                     {
-                        var saveFile = await SaveFile(model.formFile, model.imageName);
+                        var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
                         {
                             return BadRequest();
@@ -107,16 +107,20 @@ namespace backend.Controllers
 
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, UpdateBrandVM model)
+        public async Task<IActionResult> Update(string id, [FromForm] UpdateBrandVM model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var result = await brandBLL.Update(id, model);
-                    if (result == false)
+                    if (result && (model.Files != null || model.Files.Count != 0))
                     {
-                        return BadRequest();
+                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        if (!saveFile)
+                        {
+                            return BadRequest();
+                        }
                     }
                     return Ok();
                 }
@@ -232,8 +236,42 @@ namespace backend.Controllers
             return true;
         }
 
+        [HttpPost("pulished/{id}")]
+        public async Task<IActionResult> Published(string id)
+        {
+            var result = await brandBLL.Published(id);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
 
+        }
+        [HttpPost("deleted/{id}")]
+        public async Task<IActionResult> Deleted(string id)
+        {
+            var result = await brandBLL.Deleted(id);
+            if (result)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
 
+        }
+
+        [HttpGet("GetAllBrandDeleted")]
+        public async Task<IActionResult> GetAllBrandDeleted(bool deleted)
+        {
+            try
+            {
+                var brandVMs = await brandBLL.GetAllBrandDeleted(deleted);
+                return Ok(brandVMs);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         //[HttpPost("SaveFile")]
         //public IActionResult SaveFile([FromForm] List<IFormFile> file)
         //{

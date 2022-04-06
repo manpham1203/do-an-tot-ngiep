@@ -22,7 +22,7 @@ namespace BLL.Product
         public async Task<List<ProductFullVM>> GetAll()
         {
             var productFullVMs = await productFullDAL.GetAll();
-            if (productFullVMs.Count==0)
+            if (productFullVMs.Count == 0)
             {
                 return productFullVMs;
             }
@@ -35,25 +35,14 @@ namespace BLL.Product
                 var brand = await brandBLL.GetById(productFullVMs[i].BrandId);
                 if (brand != null)
                 {
-                    productFullVMs[i].BrandVM = new BrandVM();
                     productFullVMs[i].BrandVM = brand;
                 }
-                //else
-                //{
-                //    productFullVMs[i].BrandVM = new BrandVM();
-                //    productFullVMs[i].BrandVM = null;
-                //}
                 #endregion
 
                 #region Catgeory list
                 var listCategoryProduct = await cpBLL.GetById(productFullVMs[i].Id, "ProductId");
-                if (listCategoryProduct == null)
+                if (listCategoryProduct.Count > 0)
                 {
-                    productFullVMs[i].CategoryVMs=null;
-                }
-                else
-                {
-                    productFullVMs[i].CategoryVMs = new List<CategoryVM>();
                     for (int j = 0; j < listCategoryProduct.Count(); j++)
                     {
                         var categoryBLL = new CategoryBLL();
@@ -89,24 +78,14 @@ namespace BLL.Product
             var brand = await brandBLL.GetById(productFullVM.BrandId);
             if (brand != null)
             {
-                productFullVM.BrandVM = new BrandVM();
                 productFullVM.BrandVM = brand;
             }
-            //else
-            //{
-            //    productFullVM.BrandVM = null;
-            //}
             #endregion
 
             #region Catgeory list
             var listCategoryProduct = await cpBLL.GetById(productFullVM.Id, "ProductId");
             if (listCategoryProduct == null)
             {
-                productFullVM.CategoryVMs = null;
-            }
-            else
-            {
-                productFullVM.CategoryVMs = new List<CategoryVM>();
                 for (int j = 0; j < listCategoryProduct.Count(); j++)
                 {
                     var categoryBLL = new CategoryBLL();

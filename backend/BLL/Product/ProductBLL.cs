@@ -11,6 +11,8 @@ using BO.ViewModels.ProductCategory;
 using BLL.Category;
 using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
+using System.IO;
+using System.Threading;
 
 namespace BLL.Product
 {
@@ -51,7 +53,7 @@ namespace BLL.Product
                 return false;
             }
 
-            if (createProductVM.CategoryIds != null)
+            if (createProductVM.CategoryIds.Count > 0)
             {
                 var categoryBLL = new CategoryBLL();
                 for (int i = 0; i < createProductVM.CategoryIds.Count; i++)
@@ -73,6 +75,19 @@ namespace BLL.Product
                 checkIdExists = await GetById(productId);
             }
             var slug = Regex.Replace(cm.RemoveUnicode(createProductVM.Name).Trim().ToLower(), @"\s+", "-");
+
+
+            if (createProductVM.Files.Count > 0)
+            {
+                createProductVM.ImageNames = new List<string>();
+                for (int i = 0; i < createProductVM.Files.Count; i++)
+                {
+                    string imageName = slug;
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(createProductVM.Files[i].FileName);
+                    createProductVM.ImageNames.Add(imageName);
+                    Thread.Sleep(200);
+                }
+            }
 
             #region Product
             var productVM = new ProductVM
@@ -101,9 +116,9 @@ namespace BLL.Product
                 return false;
             }
 
-            #region Product_Category_Mapping
+            #region Product_Category
 
-            if (createProductVM.CategoryIds != null)
+            if (createProductVM.CategoryIds.Count > 0)
             {
                 for (int i = 0; i < createProductVM.CategoryIds.Count; i++)
                 {
@@ -121,7 +136,17 @@ namespace BLL.Product
                 }
             }
 
-            #endregion            
+            #endregion    
+            
+            //if (createProductVM.Files.Count > 0)
+            //{
+            //    var productImageBLL = new ProductImageBLL();
+            //    var saveImg = await brandImageBLL.Create(model.ImageNames, brandId);
+            //    if (!saveImg)
+            //    {
+            //        return false;
+            //    }
+            //}
 
             return true;
         }
@@ -177,16 +202,16 @@ namespace BLL.Product
 
             #endregion
 
-            #region Product_Category_Mapping
+            #region Product_Category
             var pcmBLL = new ProductCategoryBLL();
             var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
-            if (listProCatMapping.Count != 0)
+            if (listProCatMapping.Count > 0)
             {
                 var delete = await pcmBLL.Delete(id, "ProductId");
 
                 if (delete)
                 {
-                    if (updateProductVM.CategoryIds != null)
+                    if (updateProductVM.CategoryIds.Count > 0)
                     {
                         for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
                         {
@@ -209,7 +234,7 @@ namespace BLL.Product
                 }
                 updateProductVM.CategoryIds = null;
             }
-            if (updateProductVM.CategoryIds != null)
+            if (updateProductVM.CategoryIds.Count >0)
             {
                 for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
                 {

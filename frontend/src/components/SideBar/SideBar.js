@@ -23,11 +23,16 @@ function SideBar(props) {
       pathname: "/admin/thuong-hieu/bang-thuong-hieu",
       icon: iconParent,
     },
+    {
+      title: "Danh mục",
+      pathname: "/admin/danh-muc/bang-danh-muc",
+      icon: iconParent,
+    },
   ];
   const Product = [
     {
-      title: "Bảng sản phẩm",
-      to: "/admin/bang-san-pham",
+      title: "Danh sách sản phẩm",
+      to: "/admin/danh-sach-san-pham",
       icon: iconchild,
     },
     {
@@ -35,12 +40,12 @@ function SideBar(props) {
       to: "/admin/them-san-pham",
       icon: iconchild,
     },
-    { title: "Thùng rác", to: "/admin/thung-rac-san-pham", icon: iconchild },
+    { title: "Thùng rác", to: "/admin/san-pham-da-xoa", icon: iconchild },
   ];
   const Brand = [
     {
-      title: "Bảng thương hiệu",
-      to: "/admin/bang-thuong-hieu",
+      title: "Danh sách thương hiệu",
+      to: "/admin/danh-sach-thuong-hieu",
       icon: iconParent,
     },
     {
@@ -50,7 +55,24 @@ function SideBar(props) {
     },
     {
       title: "Thùng rác",
-      to: "/admin/thung-rac-thuong-hieu",
+      to: "/admin/thuong-hieu-da-xoa",
+      icon: iconParent,
+    },
+  ];
+  const Category = [
+    {
+      title: "Danh sách danh mục",
+      to: "/admin/danh-sach-danh-muc",
+      icon: iconParent,
+    },
+    {
+      title: "Thêm danh mục",
+      to: "/admin/them-danh-muc",
+      icon: iconParent,
+    },
+    {
+      title: "Thùng rác",
+      to: "/admin/danh-muc-da-xoa",
       icon: iconParent,
     },
   ];
@@ -163,6 +185,46 @@ function SideBar(props) {
               {tab === 1 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
                   {Brand.map((p, i) => {
+                    return (
+                      <li key={i}>
+                        <NavLink
+                          to={p.to}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                            ${
+                              location.pathname !== p.to && "hover:bg-[#494E53]"
+                            }
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer ${
+                    tab !== index && "hover:bg-[#494E53]"
+                  }  text-gray-300 text-sm items-center gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 2 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {Category.map((p, i) => {
                     return (
                       <li key={i}>
                         <NavLink

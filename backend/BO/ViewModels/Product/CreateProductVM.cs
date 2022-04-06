@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +21,14 @@ namespace BO.ViewModels.Product
         public bool Pulished { get; set; }
         [Required]
         public string BrandId { get; set; }
-        public IList<string> CategoryIds { get; set; }
+        public List<string> CategoryIds { get; set; }
+        public List<string> ImageNames { get; set; }
+        public List<IFormFile> Files { get; set; }
+        public CreateProductVM()
+        {
+            CategoryIds = new List<string>();
+            ImageNames = new List<string>();
+            Files = new List<IFormFile>();
+        }
     }
 }

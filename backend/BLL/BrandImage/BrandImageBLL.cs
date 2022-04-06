@@ -50,5 +50,29 @@ namespace BLL.BrandImage
             }
             return await brandImageDAL.Create(brandImages);
         }
+        public async Task<bool> Delete(string id)
+        {
+            var brandImg = await GetById(id);
+            if (brandImg == null)
+            {
+                return false;
+            }
+            return await brandImageDAL.Delete(id);
+        }
+        public async Task<bool> Published(string id)
+        {
+            var brandImageVM = await GetById(id);
+            if (brandImageVM == null)
+            {
+                return false;
+            }
+            bool pulished = !brandImageVM.Pulished;
+            var result = await brandImageDAL.Pulished(id, pulished);
+            if (result)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -63,5 +63,28 @@ namespace DAL.Category
             };
             return categoryVM;
         }
+        public async Task<CategoryFullVM> GetBySlug(string slug)
+        {
+            var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Slug == slug);
+            if (resultFromDb == null)
+            {
+                return null;
+            }
+            var brandFullVM = new CategoryFullVM
+            {
+                Id = resultFromDb.Id,
+                Name = resultFromDb.Name,
+                Slug = resultFromDb.Slug,
+                FullDescription = resultFromDb.FullDescription,
+                ShortDescription = resultFromDb.ShortDescription,
+                Pulished = resultFromDb.Pulished,
+                Deleted = resultFromDb.Deleted,
+                CreatedAt = resultFromDb.CreatedAt,
+                UpdatedAt = resultFromDb.UpdatedAt,
+                Ordinal = resultFromDb.Ordinal,
+                ProductVMs = null,
+            };
+            return brandFullVM;
+        }
     }
 }

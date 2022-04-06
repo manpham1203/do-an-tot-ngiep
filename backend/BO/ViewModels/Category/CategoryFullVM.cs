@@ -1,4 +1,5 @@
-﻿using BO.ViewModels.Product;
+﻿using BO.ViewModels.CategoryImage;
+using BO.ViewModels.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,14 @@ namespace BO.ViewModels.Category
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int? Ordinal { get; set; }
-        public IList<ProductVM> ProductVMs { get; set; }
+        public int Ordinal { get; set; }
+        public List<ProductVM> ProductVMs { get; set; }
+        public List<CategoryImageVM> CategoryImageVMs { get; set; }
+
+        public CategoryFullVM()
+        {
+            ProductVMs = new List<ProductVM>();
+            CategoryImageVMs = new List<CategoryImageVM>();
+        }
     }
 }

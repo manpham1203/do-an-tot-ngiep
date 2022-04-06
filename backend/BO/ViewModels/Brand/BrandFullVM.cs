@@ -19,8 +19,13 @@ namespace BO.ViewModels.Brand
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int? Ordinal { get; set; }
-        public IList<ProductVM> ProductVMs { get; set; }
-        public IList<BrandImageVM> BrandImageVMs { get; set; }
+        public int Ordinal { get; set; }
+        public List<ProductVM> ProductVMs { get; set; }
+        public List<BrandImageVM> BrandImageVMs { get; set; }
+        public BrandFullVM()
+        {
+            ProductVMs =new List<ProductVM>();
+            BrandImageVMs = new List<BrandImageVM>();
+        }
     }
 }

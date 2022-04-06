@@ -16,6 +16,7 @@ function AdminTextArea({ control, ...props }) {
         {props.label}
       </label>
       <textarea
+      // dangerouslySetInnerHTML={{ __html: props.data }}
         {...field}
         {...props}
         id={props.name}

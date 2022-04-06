@@ -76,7 +76,7 @@ namespace DAL.Brand
                 Name = brandFromDb.Name,
                 Slug = brandFromDb.Slug,
                 FullDescription = brandFromDb.FullDescription,
-                ShortDescription = brandFromDb.FullDescription,
+                ShortDescription = brandFromDb.ShortDescription,
                 Pulished = brandFromDb.Pulished,
                 Deleted = brandFromDb.Deleted,
                 CreatedAt = brandFromDb.CreatedAt,

@@ -1,21 +1,19 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoMdCloseCircle } from "react-icons/io";
 import AdminCheckbox from "../../../components/Form/Checkbox/AdminCheckbox";
 import AdminInput from "../../../components/Form/Input/AdminInput";
 import AdminTextArea from "../../../components/Form/Textarea/AdminTextArea";
-
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from "draftjs-to-html";
+import { FaTimes } from "react-icons/fa";
+import CKEditor from "ckeditor4-react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
-import RichText from "../../../components/Form/RichText/RichText";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import ToggleSwitch from "../../../components/ToggleSwitch/ToggleSwitch";
+import AddListImage from "../../../components/AddListImage/AddListImage";
 
 const initState = {
   loading: false,
@@ -74,16 +72,18 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
-    fullDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
+    // fullDescription: yup
+    //   .string()
+    //   .required("Thông tin này không được để trống")
+    //   .trim(),
   })
   .required();
 function BrandEdit(props) {
   const {
     handleSubmit,
     reset,
+    setValue,
+    getValues,
     watch,
     register,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
@@ -94,45 +94,45 @@ function BrandEdit(props) {
     defaultValues: { pulished: true, formFile: [] },
   });
   const [state, dispatch] = useReducer(reducer, initState);
-  const {slug} =useParams();
-  console.log(slug);
+  const { slug } = useParams();
+  const [image, setImage] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const onSubmitHandler = async (values) => {
-    // const formData = new FormData();
-    // formData.append("name", values.name);
-    // formData.append("FullDescription", values.fullDescription);
-    // formData.append("ShortDescription", values.shortDescription);
-    // formData.append("Pulished", values.pulished);
-    // for (var i = 0; i < files.length; i++) {
-    //   formData.append("formFile", files[i]);
-    // }
-    reset();
+    if(richText===""){
+      return;
+    }
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("FullDescription", richText);
+    formData.append("ShortDescription", values.shortDescription);
+    formData.append("Pulished", values.pulished);
+    for (var i = 0; i < files.length; i++) {
+      formData.append("Files", files[i]);
+    }
     await api({
       method: "PUT",
-      url: `/brand`,
-      data: values,
+      url: `/brand/${state.data.id}`,
+      data: formData,
     })
       .then((res) => {
-        if (res.status === 201) {
-          toast.success(`Sửa thành công`, {
+        if (res.status === 200) {
+          toast.success(`Chỉnh sửa thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          reset({
-            name: "",
-            shortDescription: "",
-            fullDescription: "",
-            pulished: true,
-          });
+          setImage([]);
+          setFiles([]);
+          fetchData(state.data.slug);
         } else {
-          toast.error(`Đăng ký thất bại`, {
+          toast.error(`Chỉnh sửa thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
         }
       })
       .catch(() =>
-        toast.error(`Đăng nhập thất bại`, {
+        toast.error(`Chỉnh sửa thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         })
@@ -144,25 +144,93 @@ function BrandEdit(props) {
     await api({
       method: "GET",
       url: `/Brand/brandfullgetbyslug/${slug}`,
-      data:null,
+      data: null,
     })
       .then((res) => {
-        console.log(res);
         dispatch(success(res.data));
         reset({
-          name:res.data.name,
-          shortDescription:res.data.shortDescription,
-          fullDescription:res.data.fullDescription,
-        })
+          name: res.data.name,
+          shortDescription: res.data.shortDescription,
+        });
+        setRichText(res.data.fullDescription)
       })
       .catch(dispatch(fail()));
   };
 
+  useEffect(() => {
+    fetchData(slug);
+  }, [slug]);
+
+  const selectFile = (e) => {
+    const file = e.target.files;
+    const fileArr = Array.from(file);
+    const imgArr = fileArr.map((item) => {
+      return URL.createObjectURL(item);
+    });
+    setImage((prevImg) => prevImg.concat(imgArr));
+    setFiles((prevImg) => prevImg.concat(fileArr));
+  };
+  const DeleteImg = (item, index) => {
+    setImage(image.filter((e) => e !== item));
+    const a1 = files.slice(0, index);
+    const a2 = files.slice(index + 1, files.length);
+    setFiles(a1.concat(a2));
+  };
+  const handlePulished = async (id) => {
+    await api({
+      method: "POST",
+      url: `/brandimage/pulished/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          fetchData(state.data.slug);
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
+  const handleDelete = async (id) => {
+    await api({
+      method: "Delete",
+      url: `/brandimage/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.warn(`Xoá thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData(state.data.slug);
+        } else {
+          toast.error(`Xoá thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Xoá thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
   useEffect(()=>{
-    fetchData(slug)
-  }, [slug])
-
-
+    setRichText(state.data.fullDescription)
+  }, [state.data])
+  const [richText, setRichText]=useState();
+  const watchF = watch("fullDescription");
+  console.log("watch", watchF);
+  console.log(errors);
   return (
     <div className="">
       <form
@@ -190,7 +258,6 @@ function BrandEdit(props) {
             control={control}
             name="shortDescription"
             label="Mô tả ngắn"
-            type="text"
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
@@ -204,55 +271,122 @@ function BrandEdit(props) {
           <AdminCheckbox control={control} name="pulished" label="Phát hành" />
         </div>
         <div>
-          <Controller
-            control={control}
-            name="fullDescription"
-            defaultValue=""
-            render={({ field }) => <RichText label="Mô tả đầy đủ" {...field} />}
+          <CKEditor
+            onChange={(e) => setRichText(e.editor.getData())}
+            data={richText}
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.fullDescription ? null : "invisible"
+              richText==="" ? null : "invisible"
             }`}
           >
-            {errors?.fullDescription?.message}
+            Thông tin này không được để trống
           </p>
         </div>
         <div className="flex flex-col">
           <div>
-          {state.data.brandImageVMs.map((item)=>{
-            return(
-               <img key={item.id} src={item.imageSrc} alt="" className="w-[100px] h-[100px]" />
-            )
-          })}
-           
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="p-4">
+                      <div className="flex items-center">
+                        <input
+                          id="checkbox-all"
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label htmlFor="checkbox-all" className="sr-only">
+                          checkbox
+                        </label>
+                      </div>
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Hình
+                    </th>
+                    <th scope="col" className="px-6 py-3 hidden lg:block">
+                      Link
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Phát hành
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Xoá
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.data?.brandImageVMs?.map((item) => {
+                    return (
+                      <tr
+                        className="bg-white border-b  hover:bg-gray-50 "
+                        key={item.id}
+                      >
+                        <td className="w-4 p-4">
+                          <div className="flex items-center">
+                            <input
+                              id="checkbox-table-1"
+                              type="checkbox"
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                            <label
+                              htmlFor="checkbox-table-1"
+                              className="sr-only"
+                            >
+                              checkbox
+                            </label>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                          <img
+                            src={item.imageSrc}
+                            alt=""
+                            className="w-[100px] h-[100px]"
+                          />
+                        </td>
+                        <td className="px-6 py-4 hidden lg:block">
+                          {item.imageSrc}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div
+                            className={`w-[50px] h-[25px]  flex items-center rounded-full relative
+                            ${item.pulished ? "bg-blue-600 " : "bg-gray-300"}
+                            transition-all duration-200 cursor-pointer
+                            `}
+                            onClick={() => handlePulished(item.id)}
+                          >
+                            <div
+                              className={`w-[18px] h-[18px] bg-white rounded-full  absolute
+                              ${item.pulished ? "ml-[28px]" : "ml-[4px]"}
+                              transition-all duration-200
+                              `}
+                            ></div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-[25px]">
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            type="button"
+                            className="bg-danger text-white p-[2px] rounded-md"
+                          >
+                            <FaTimes />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div>
-          <label
-            htmlFor="imageUpload"
-            className="cursor-pointer flex flex-row w-[300px] h-[50px] bg-gray-300 rounded-xl border-2 border-dashed border-gray-500 justify-center items-center "
-          >
-            <AiOutlinePlus /> Thêm hình ảnh
-          </label>
-          <input
-            id="imageUpload"
-            type="file"
-            name="image"
-            multiple
-            // onChange={selectFile}
-            className="hidden"
-          />
-          <div className="grid grid-cols-6 gap-x-[20px] mt-[25px]"></div>
-        </div>
+        <AddListImage
+          onChange={selectFile}
+          image={image}
+          DeleteImg={DeleteImg}
+        />
 
         <div className="flex justify-center gap-x-[25px]">
-          <button
-            className="text-white min-w-[150px] bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-            type="button"
-          >
-            LÀM LẠI
-          </button>
           <button
             className="text-white min-w-[150px] bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
             type="submit"

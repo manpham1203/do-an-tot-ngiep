@@ -113,5 +113,57 @@ namespace DAL.Category
             }
             return false;
         }
+        public async Task<bool> Pulished(string id, bool pulished)
+        {
+            var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+
+            resultFromDb.Pulished = pulished;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Deleted(string id, bool deleted)
+        {
+            var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+
+            resultFromDb.Deleted = deleted;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<List<CategoryVM>> GetAllCategoryDeleted(bool deleted)
+        {
+            var resultFromDb = await db.Categories.Where(x => x.Deleted == deleted).ToListAsync();
+
+            if (resultFromDb.Count == 0)
+            {
+                return new List<CategoryVM>();
+            }
+
+            var categoryVMs = resultFromDb.Select(x => new CategoryVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Slug = x.Slug,
+                FullDescription = x.FullDescription,
+                ShortDescription = x.ShortDescription,
+                Pulished = x.Pulished,
+                Deleted = x.Deleted,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Ordinal = x.Ordinal,
+            }).ToList();
+            return categoryVMs;
+
+        }
+
     }
 }

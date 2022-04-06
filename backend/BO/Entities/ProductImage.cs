@@ -11,7 +11,7 @@ namespace BO.Entities
         public string Id { get; set; }
         public string Name { get; set; }
         public string ProductId { get; set; }
-        public bool? Pulished { get; set; }
+        public bool Pulished { get; set; }
         public Product Product { get; set; }
     }
 }

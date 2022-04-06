@@ -1,11 +1,14 @@
-﻿using BLL.ProductCategory;
+﻿using BLL.CategoryImage;
+using BLL.ProductCategory;
 using BO.ViewModels.Category;
 using DAL.Category;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BLL.Category
@@ -42,6 +45,18 @@ namespace BLL.Category
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
+            if (model.Files.Count > 0)
+            {
+                model.ImageNames = new List<string>();
+                for (int i = 0; i < model.Files.Count; i++)
+                {
+                    string imageName = slug;
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
+                    model.ImageNames.Add(imageName);
+                    Thread.Sleep(200);
+                }
+            }
+
             var categoryVM = new CategoryVM
             {
                 Id = categoryId,
@@ -52,11 +67,26 @@ namespace BLL.Category
                 Pulished = model.Pulished,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
-                UpdatedAt=null,
+                UpdatedAt = null,
                 Ordinal = model.Ordinal,
             };
+            var saveCategory = await categoryDAL.Create(categoryVM);
+            if (saveCategory == false)
+            {
+                return false;
+            }
 
-            return await categoryDAL.Create(categoryVM);
+            if (model.Files.Count > 0)
+            {
+                var categoryImageBLL = new CategoryImageBLL();
+                var saveImg = await categoryImageBLL.Create(model.ImageNames, categoryId);
+                if (!saveImg)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         public async Task<bool> Update(string id, UpdateCategoryVM model)
         {
@@ -67,6 +97,19 @@ namespace BLL.Category
                 return false;
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
+
+            if (model.Files.Count > 0)
+            {
+                model.ImageNames = new List<string>();
+                for (int i = 0; i < model.Files.Count; i++)
+                {
+                    string imageName = slug;
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
+                    model.ImageNames.Add(imageName);
+                    Thread.Sleep(200);
+                }
+            }
+
             var categoryVM = new CategoryVM
             {
                 Id = id,
@@ -80,7 +123,23 @@ namespace BLL.Category
                 Ordinal = model.Ordinal,
             };
 
-            return await categoryDAL.Update(categoryVM);
+            var saveCategory = await categoryDAL.Update(categoryVM);
+            if (saveCategory == false)
+            {
+                return false;
+            }
+
+            if (model.Files.Count > 0)
+            {
+                var categoryImageBLL = new CategoryImageBLL();
+                var saveImg = await categoryImageBLL.Create(model.ImageNames, id);
+                if (!saveImg)
+                {
+                    return false;
+                }
+            }
+
+            return true;
 
         }
         public async Task<bool> Delete(string id)
@@ -89,13 +148,13 @@ namespace BLL.Category
             {
                 return false;
             }
-            var categoryFullBLL=new CategoryFullBLL();
+            var categoryFullBLL = new CategoryFullBLL();
             var categoryFullVM = await categoryFullBLL.GetById(id);
             if (categoryFullVM == null)
             {
                 return false;
             }
-            if(categoryFullVM.ProductVMs != null)
+            if (categoryFullVM.ProductVMs != null)
             {
                 var pcmBLL = new ProductCategoryBLL();
                 var listProCatMapping = await pcmBLL.GetById(id, "CategoryId");
@@ -108,8 +167,43 @@ namespace BLL.Category
                     }
                 }
             }
-            
+
             return await categoryDAL.Delete(id);
         }
+        public async Task<bool> Published(string id)
+        {
+            var categoryVM = await GetById(id);
+            if (categoryVM == null)
+            {
+                return false;
+            }
+            bool pulished = !categoryVM.Pulished;
+            var result = await categoryDAL.Pulished(id, pulished);
+            if (result)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Deleted(string id)
+        {
+            var categoryVM = await GetById(id);
+            if (categoryVM == null)
+            {
+                return false;
+            }
+            bool deleted = !categoryVM.Deleted;
+            var result = await categoryDAL.Deleted(id, deleted);
+            if (result)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<List<CategoryVM>> GetAllCategoryDeleted(bool deleted)
+        {
+            return await categoryDAL.GetAllCategoryDeleted(deleted);
+        }
+
     }
 }

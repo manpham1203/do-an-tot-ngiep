@@ -1,6 +1,8 @@
-﻿using BLL.Product;
+﻿using BLL.CategoryImage;
+using BLL.Product;
 using BLL.ProductCategory;
 using BO.ViewModels.Category;
+using BO.ViewModels.CategoryImage;
 using BO.ViewModels.Product;
 using DAL.Category;
 using System;
@@ -30,18 +32,31 @@ namespace BLL.Category
             {
 
                 var listCategoryProduct = await cpBLL.GetById(categoryFullVMs[i].Id, "CategoryId");
-                if (listCategoryProduct == null)
+                if (listCategoryProduct.Count >0)
                 {
-                    categoryFullVMs[i].ProductVMs = null;
-                }
-                else
-                {
-                    categoryFullVMs[i].ProductVMs = new List<ProductVM>();
                     for (int j = 0; j < listCategoryProduct.Count(); j++)
                     {
                         var productBLL = new ProductBLL();
                         var productVM = await productBLL.GetById(listCategoryProduct[j].ProductId);
                         categoryFullVMs[i].ProductVMs.Add(productVM);
+                    }
+                }
+            }
+
+            var categoryImageBLL = new CategoryImageBLL();
+            for (int i = 0; i < categoryFullVMs.Count; i++)
+            {
+                var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVMs[i].Id);
+                if (listImg.Count >0)
+                {
+                    categoryFullVMs[i].CategoryImageVMs = null;
+                }
+                else
+                {
+                    categoryFullVMs[i].CategoryImageVMs = new List<CategoryImageVM>();
+                    for (int j = 0; j < listImg.Count; j++)
+                    {
+                        categoryFullVMs[i].CategoryImageVMs.Add(listImg[j]);
                     }
                 }
 
@@ -63,15 +78,9 @@ namespace BLL.Category
             }
             var cpBLL = new ProductCategoryBLL();
 
-
             var listCategoryProduct = await cpBLL.GetById(categoryFullVM.Id, "CategoryId");
-            if (listCategoryProduct == null)
+            if (listCategoryProduct.Count >0)
             {
-                categoryFullVM.ProductVMs= null;
-            }
-            else
-            {
-                categoryFullVM.ProductVMs = new List<ProductVM>();
                 for (int j = 0; j < listCategoryProduct.Count(); j++)
                 {
                     var productBLL = new ProductBLL();
@@ -80,8 +89,59 @@ namespace BLL.Category
                 }
             }
 
+            var categoryImageBLL = new CategoryImageBLL();
+            var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVM.Id);
+            if (listImg.Count == 0)
+            {
+                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
+            }
+            else
+            {
+                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
+                for (int i = 0; i < listImg.Count; i++)
+                {
+                    categoryFullVM.CategoryImageVMs.Add(listImg[i]);
+                }
+            }
+
             return categoryFullVM;
         }
+        public async Task<CategoryFullVM> GetBySlug(string slug)
+        {
+            var categoryFullVM = await categoryFullDAL.GetBySlug(slug);
+            if (categoryFullVM == null)
+            {
+                return null;
+            }
+            var cpBLL = new ProductCategoryBLL();
 
+            var listCategoryProduct = await cpBLL.GetById(categoryFullVM.Id, "CategoryId");
+            if (listCategoryProduct.Count > 0)
+            {
+                for (int j = 0; j < listCategoryProduct.Count(); j++)
+                {
+                    var productBLL = new ProductBLL();
+                    var categoryVM = await productBLL.GetById(listCategoryProduct[j].ProductId);
+                    categoryFullVM.ProductVMs.Add(categoryVM);
+                }
+            }
+            var categoryImageBLL = new CategoryImageBLL();
+            var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVM.Id);
+            if (listImg.Count == 0)
+            {
+                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
+            }
+            else
+            {
+                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
+                for (int i = 0; i < listImg.Count; i++)
+                {
+                    categoryFullVM.CategoryImageVMs.Add(listImg[i]);
+                }
+            }
+
+
+            return categoryFullVM;
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -52,14 +53,16 @@ namespace BLL
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.formFile != null || model.formFile.Count != 0)
+
+            if (model.Files.Count > 0)
             {
-                model.imageName = new List<string>();
-                for (int i = 0; i < model.formFile.Count; i++)
+                model.ImageNames = new List<string>();
+                for (int i = 0; i < model.Files.Count; i++)
                 {
                     string imageName = slug;
-                    imageName += "_" + i + "_" + DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.formFile[i].FileName);
-                    model.imageName.Add(imageName);
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
+                    model.ImageNames.Add(imageName);
+                    Thread.Sleep(200);
                 }
             }
 
@@ -82,10 +85,10 @@ namespace BLL
                 return false;
             }
 
-            if (model.formFile != null || model.formFile.Count != 0)
+            if (model.Files.Count > 0)
             {
                 brandImageBLL = new BrandImageBLL();
-                var saveImg = await brandImageBLL.Create(model.imageName, brandId);
+                var saveImg = await brandImageBLL.Create(model.ImageNames, brandId);
                 if (!saveImg)
                 {
                     return false;
@@ -106,6 +109,20 @@ namespace BLL
 
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
+            if (model.Files.Count > 0)
+            {
+                model.ImageNames = new List<string>();
+                for (int i = 0; i < model.Files.Count; i++)
+                {
+                    string imageName = slug;
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
+                    model.ImageNames.Add(imageName);
+                    Thread.Sleep(200);
+                }
+            }
+
+
+
             var brandVM = new BrandVM
             {
                 Id = id,
@@ -119,7 +136,24 @@ namespace BLL
                 Ordinal = model.Ordinal
             };
 
-            return await brandDAL.Update(brandVM);
+            var saveBrand = await brandDAL.Update(brandVM);
+            if (!saveBrand)
+            {
+                return false;
+            }
+
+            if (model.Files.Count > 0)
+            {
+                brandImageBLL = new BrandImageBLL();
+                var saveImg = await brandImageBLL.Create(model.ImageNames, id);
+                if (!saveImg)
+                {
+                    return false;
+                }
+            }
+
+
+            return true;
         }
         public async Task<bool> Delete(string id)
         {
@@ -134,6 +168,39 @@ namespace BLL
             }
             return await brandDAL.Delete(id);
         }
-
+        public async Task<bool> Published(string id)
+        {
+            var brandVM = await GetById(id);
+            if (brandVM == null)
+            {
+                return false;
+            }
+            bool pulished = !brandVM.Pulished;
+            var result = await brandDAL.Pulished(id, pulished);
+            if (result)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Deleted(string id)
+        {
+            var brandVM = await GetById(id);
+            if (brandVM == null)
+            {
+                return false;
+            }
+            bool deleted = !brandVM.Deleted;
+            var result = await brandDAL.Deleted(id, deleted);
+            if (result)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<List<BrandVM>> GetAllBrandDeleted(bool deleted)
+        {
+            return await brandDAL.GetAllBrandDeleted(deleted);
+        }
     }
 }

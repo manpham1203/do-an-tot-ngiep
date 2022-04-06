@@ -1,5 +1,6 @@
 ﻿using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
+using BO.ViewModels.ProductImage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,13 @@ namespace BO.ViewModels.Product
         public DateTime? UpdatedAt { get; set; }
         public string BrandId { get; set; }
         public BrandVM BrandVM { get; set; }
-        public IList<CategoryVM> CategoryVMs { get; set; }
+        public List<CategoryVM> CategoryVMs { get; set; }
+        public List<ProductImageVM> ProductImageVMs { get; set; }
+        public ProductFullVM()
+        {
+            CategoryVMs = new List<CategoryVM>();
+            BrandVM = new BrandVM();
+            ProductImageVMs = new List<ProductImageVM>();
+        }
     }
 }

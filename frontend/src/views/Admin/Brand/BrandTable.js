@@ -1,7 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
 import api from "../../../apis/api";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Row from "./Row";
+
+import CKEditor from 'ckeditor4-react';
+
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const initState = {
   loading: false,
@@ -55,12 +60,13 @@ const reducer = (state, action) => {
 };
 function BrandTable(props) {
   const [state, dispatch] = useReducer(reducer, initState);
+  const navigate = useNavigate();
   const fetchData = async () => {
     dispatch(loading());
     await api({
       method: "GET",
-      url: `/Brand`,
-      data: null,
+      url: `/Brand/GetAllBrandDeleted`,
+      params: { deleted: false },
     })
       .then((res) => {
         dispatch(success(res.data));
@@ -70,15 +76,62 @@ function BrandTable(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  const [active, setActive] = useState(false);
-  const navigate=useNavigate();
 
+  const handlePulished = async (id) => {
+    await api({
+      method: "POST",
+      url: `/brand/pulished/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {         
+          fetchData();
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
+  const handleEdit = (slug) => {
+    navigate(`/admin/chinh-sua-thuong-hieu/${slug}`);
+  };
+  const handleTrash = async (id) => {
+    await api({
+      method: "POST",
+      url: `/brand/deleted/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.warn(`Chuyển vào thùng rác thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData();
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
 
-  const handlePulished = () => {};
-  const handleEdit = (slug) => {navigate(`/admin/chinh-sua-thuong-hieu/${slug}`)};
-  const handleTrash = () => {};
   return (
     <div className="overflow-hidden overflow-x-auto border border-gray-100 rounded-xl">
+    
       <table className="min-w-full text-sm divide-y divide-gray-200">
         <thead>
           <tr className="bg-white">
@@ -116,15 +169,15 @@ function BrandTable(props) {
                 </td>
                 <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                   <div
-                    onClick={()=>handlePulished(item.id)}
                     className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${item.pulished ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
+                    onClick={() => handlePulished(item.id)}
                   >
                     <div
                       className={`w-[18px] h-[18px] bg-white rounded-full  absolute
-                    ${item.pulished ? "ml-[4px]" : "ml-[28px]"}
+                    ${item.pulished ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
                     ></div>
@@ -133,8 +186,12 @@ function BrandTable(props) {
                 <td className="px-4 py-2 text-gray-700 whitespace-nowrap flex flex-row text-[25px] gap-x-[20px]">
                   <FaRegEdit
                     onClick={() => handleEdit(item.slug)}
+                    className="cursor-pointer"
                   />
-                  <FaRegTrashAlt onClick={()=>handleTrash(item.id)} />
+                  <FaRegTrashAlt
+                    onClick={() => handleTrash(item.id)}
+                    className="cursor-pointer"
+                  />
                 </td>
               </tr>
             );

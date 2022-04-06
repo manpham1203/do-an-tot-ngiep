@@ -68,7 +68,6 @@ namespace BLL.User
                 Id = userId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Gender = null,
                 Birthday = null,
                 Email = null,
                 PhoneNumber = null,
@@ -121,7 +120,6 @@ namespace BLL.User
             userVM.Id = id;
             userVM.FirstName = model.FirstName;
             userVM.LastName = model.LastName;
-            userVM.Gender = model.Gender;
             userVM.Birthday = model.Birthday;
             userVM.Email = model.Email;
             userVM.PhoneNumber = model.PhoneNumber;
