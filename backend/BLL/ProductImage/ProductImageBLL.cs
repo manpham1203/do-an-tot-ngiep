@@ -11,7 +11,7 @@ namespace BLL.ProductImage
     public class ProductImageBLL
     {
         private ProductImageDAL productImageDAL;
-        private Common cm;
+        private CommonBLL cm;
 
         public ProductImageBLL()
         {
@@ -27,7 +27,7 @@ namespace BLL.ProductImage
         }
         public async Task<bool> Create(List<string> imgName, string productId)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             List<ProductImageVM> productImageVMs = new List<ProductImageVM>();
             ProductImageVM productImageVM;
             for (int i = 0; i < imgName.Count; i++)
@@ -44,7 +44,7 @@ namespace BLL.ProductImage
                     Id = imgId,
                     ProductId = productId,
                     Name = imgName[i],
-                    Pulished = true,
+                    Published = true,
                 };
                 productImageVMs.Add(productImageVM);
             }
@@ -66,7 +66,7 @@ namespace BLL.ProductImage
             {
                 return false;
             }
-            bool pulished = !productImageVM.Pulished;
+            bool pulished = !productImageVM.Published;
             var result = await productImageDAL.Pulished(id, pulished);
             if (result)
             {

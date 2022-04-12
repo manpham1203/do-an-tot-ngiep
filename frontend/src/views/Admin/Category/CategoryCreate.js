@@ -21,6 +21,10 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
+      ordinal: yup
+      .string()
+      .required("Thông tin này không được để trống")
+      .trim(),
   })
   .required();
 function CategoryCreate(props) {
@@ -34,7 +38,7 @@ function CategoryCreate(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { pulished: true, formFile: [], fullDescription: "" },
+    defaultValues: { published: true, formFile: [], fullDescription: "", ordinal: 0 },
   });
 
   const onSubmitHandler = async (values) => {
@@ -43,7 +47,8 @@ function CategoryCreate(props) {
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
     formData.append("ShortDescription", values.shortDescription);
-    formData.append("Pulished", values.pulished);
+    formData.append("published", values.published);
+    formData.append("ordinal", values.ordinal);
     for (var i = 0; i < files.length; i++) {
       formData.append("Files", files[i]);
     }
@@ -64,7 +69,8 @@ function CategoryCreate(props) {
           reset({
             name: "",
             shortDescription: "",
-            pulished: true,
+            published: true,
+            ordinal: 0,
           });
         } else {
           toast.error(`Thêm thất bại`, {
@@ -104,7 +110,8 @@ function CategoryCreate(props) {
     reset({
       name: "",
       shortDescription: "",
-      pulished: true,
+      published: true,
+      ordinal: 0,
     });
     setImage([]);
     setFiles([]);
@@ -153,7 +160,22 @@ function CategoryCreate(props) {
           </p>
         </div>
         <div className="">
-          <AdminCheckbox control={control} name="pulished" label="Phát hành" />
+          <AdminCheckbox control={control} name="published" label="Phát hành" />
+        </div>
+        <div className="">
+          <AdminInput
+            control={control}
+            name="ordinal"
+            label="Thứ tự"
+            type="text"
+          />
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              errors?.ordinal ? null : "invisible"
+            }`}
+          >
+            {errors?.ordinal?.message}
+          </p>
         </div>
         <div>
           {/* <Controller

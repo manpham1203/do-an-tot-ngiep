@@ -18,7 +18,7 @@ namespace BO.ViewModels.Product
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public int Quantity { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
         public int Views { get; set; }
         public int Likes { get; set; }
@@ -27,11 +27,5 @@ namespace BO.ViewModels.Product
         public List<string> CategoryIds { get; set; }
         public List<string> ImageNames { get; set; }
         public List<IFormFile> Files { get; set; }
-        public UpdateProductVM()
-        {
-            CategoryIds = new List<string>();
-            ImageNames = new List<string>();
-            Files = new List<IFormFile>();
-        }
     }
 }

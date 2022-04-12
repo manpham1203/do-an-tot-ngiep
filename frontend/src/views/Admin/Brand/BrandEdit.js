@@ -72,6 +72,10 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
+      ordinal: yup
+      .string()
+      .required("Thông tin này không được để trống")
+      .trim(),
     // fullDescription: yup
     //   .string()
     //   .required("Thông tin này không được để trống")
@@ -91,7 +95,7 @@ function BrandEdit(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { pulished: true, formFile: [] },
+    defaultValues: { published: true, formFile: [], ordinal:0 },
   });
   const [state, dispatch] = useReducer(reducer, initState);
   const { slug } = useParams();
@@ -106,7 +110,8 @@ function BrandEdit(props) {
     formData.append("name", values.name);
     formData.append("FullDescription", richText);
     formData.append("ShortDescription", values.shortDescription);
-    formData.append("Pulished", values.pulished);
+    formData.append("published", values.published);
+    formData.append("ordinal", values.ordinal);
     for (var i = 0; i < files.length; i++) {
       formData.append("Files", files[i]);
     }
@@ -151,6 +156,8 @@ function BrandEdit(props) {
         reset({
           name: res.data.name,
           shortDescription: res.data.shortDescription,
+          ordinal: res.data.ordinal,
+          published:res.data.published,
         });
         setRichText(res.data.fullDescription)
       })
@@ -176,10 +183,10 @@ function BrandEdit(props) {
     const a2 = files.slice(index + 1, files.length);
     setFiles(a1.concat(a2));
   };
-  const handlePulished = async (id) => {
+  const handlepublished = async (id) => {
     await api({
       method: "POST",
-      url: `/brandimage/pulished/${id}`,
+      url: `/brandimage/published/${id}`,
     })
       .then((res) => {
         if (res.status === 200) {
@@ -228,9 +235,6 @@ function BrandEdit(props) {
     setRichText(state.data.fullDescription)
   }, [state.data])
   const [richText, setRichText]=useState();
-  const watchF = watch("fullDescription");
-  console.log("watch", watchF);
-  console.log(errors);
   return (
     <div className="">
       <form
@@ -268,7 +272,22 @@ function BrandEdit(props) {
           </p>
         </div>
         <div className="">
-          <AdminCheckbox control={control} name="pulished" label="Phát hành" />
+          <AdminCheckbox control={control} name="published" label="Phát hành" />
+        </div>
+        <div className="">
+          <AdminInput
+            control={control}
+            name="ordinal"
+            label="Thứ tự"
+            type="text"
+          />
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              errors?.ordinal ? null : "invisible"
+            }`}
+          >
+            {errors?.ordinal?.message}
+          </p>
         </div>
         <div>
           <CKEditor
@@ -350,14 +369,14 @@ function BrandEdit(props) {
                         <td className="px-6 py-4">
                           <div
                             className={`w-[50px] h-[25px]  flex items-center rounded-full relative
-                            ${item.pulished ? "bg-blue-600 " : "bg-gray-300"}
+                            ${item.published ? "bg-blue-600 " : "bg-gray-300"}
                             transition-all duration-200 cursor-pointer
                             `}
-                            onClick={() => handlePulished(item.id)}
+                            onClick={() => handlepublished(item.id)}
                           >
                             <div
                               className={`w-[18px] h-[18px] bg-white rounded-full  absolute
-                              ${item.pulished ? "ml-[28px]" : "ml-[4px]"}
+                              ${item.published ? "ml-[28px]" : "ml-[4px]"}
                               transition-all duration-200
                               `}
                             ></div>

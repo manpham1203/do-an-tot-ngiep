@@ -12,6 +12,6 @@ namespace BO.ViewModels.Post
         public string ShortDescription { get; set; }
         public string FullDescription { get; set; }
         public string Image { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
     }
 }

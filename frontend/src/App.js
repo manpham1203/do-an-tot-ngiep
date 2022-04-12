@@ -56,7 +56,7 @@ function App() {
           
           {/* admin */}
           <Route
-            path="/san-pham/:productId"
+            path="/san-pham/:slug"
             element={<ProductDetail />}
           ></Route>
           <Route path="/" element={<Footer />} />
@@ -72,7 +72,7 @@ function App() {
             element={<ProductTable />}
           />
           <Route
-            path="/admin/chinh-sua-san-pham"
+            path="/admin/chinh-sua-san-pham/:slug"
             element={<ProductEdit />}
           />
           <Route

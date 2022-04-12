@@ -19,7 +19,7 @@ namespace BO.ViewModels.Product
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public int Quantity { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
         public int Views { get; set; }
         public int Likes { get; set; }
@@ -29,11 +29,5 @@ namespace BO.ViewModels.Product
         public BrandVM BrandVM { get; set; }
         public List<CategoryVM> CategoryVMs { get; set; }
         public List<ProductImageVM> ProductImageVMs { get; set; }
-        public ProductFullVM()
-        {
-            CategoryVMs = new List<CategoryVM>();
-            BrandVM = new BrandVM();
-            ProductImageVMs = new List<ProductImageVM>();
-        }
     }
 }

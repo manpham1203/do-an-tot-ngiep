@@ -15,18 +15,12 @@ namespace BO.ViewModels.Category
         public string Slug { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int Ordinal { get; set; }
         public List<ProductVM> ProductVMs { get; set; }
         public List<CategoryImageVM> CategoryImageVMs { get; set; }
-
-        public CategoryFullVM()
-        {
-            ProductVMs = new List<ProductVM>();
-            CategoryImageVMs = new List<CategoryImageVM>();
-        }
     }
 }

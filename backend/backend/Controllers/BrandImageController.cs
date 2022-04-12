@@ -24,7 +24,7 @@ namespace backend.Controllers
             }
             return Ok();
         }
-        [HttpPost("pulished/{id}")]
+        [HttpPost("published/{id}")]
         public async Task<IActionResult> Published(string id)
         {
             var result = await brandImageBLL.Published(id);

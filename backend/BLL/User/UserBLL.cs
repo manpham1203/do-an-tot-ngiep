@@ -12,7 +12,7 @@ namespace BLL.User
     public class UserBLL
     {
         private readonly UserDAL userDAL;
-        private Common cm;
+        private CommonBLL cm;
         public UserBLL()
         {
             userDAL = new UserDAL();
@@ -31,7 +31,7 @@ namespace BLL.User
         }
         public async Task<bool> Create(CreateUserVM model)
         {
-            cm=new Common();
+            cm=new CommonBLL();
             var userId = cm.RandomString(9);
             var checkExists=await GetById(userId);
             while (checkExists != null)

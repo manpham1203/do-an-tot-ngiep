@@ -46,7 +46,7 @@ function ProductCard(props) {
     <div className="w-full h-fit relative group shadow-md rounded-md overflow-hidden">
       <div className="w-full overflow-hidden relative">
         <img
-          src={product}
+          src={props.image}
           alt="alt"
           className="w-full object-center object-cover"
         />
@@ -68,7 +68,7 @@ function ProductCard(props) {
       <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px bg-white bottom-[-44px]">
         <h3
           className="cursor-pointer font-primary font-semibold text-[20px] hover:underline"
-          onClick={() => navigate(`/san-pham/${props.id}`)}
+          onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
           {props.name}
         </h3>

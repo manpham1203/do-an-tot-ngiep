@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Row from "./Row";
 
-import CKEditor from 'ckeditor4-react';
-
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const initState = {
@@ -65,7 +63,7 @@ function BrandTable(props) {
     dispatch(loading());
     await api({
       method: "GET",
-      url: `/Brand/GetAllBrandDeleted`,
+      url: `/Brand/allbrandnamedeleted`,
       params: { deleted: false },
     })
       .then((res) => {
@@ -77,10 +75,10 @@ function BrandTable(props) {
     fetchData();
   }, []);
 
-  const handlePulished = async (id) => {
+  const handlePublished = async (id) => {
     await api({
       method: "POST",
-      url: `/brand/pulished/${id}`,
+      url: `/brand/published/${id}`,
     })
       .then((res) => {
         if (res.status === 200) {         
@@ -156,44 +154,7 @@ function BrandTable(props) {
         <tbody className="divide-y divide-gray-100">
           {state.data.map((item) => {
             return (
-              <tr key={item.id}>
-                <td className="sticky left-0 px-4 py-2 ">
-                  <input
-                    className="w-5 h-5 border-gray-200 rounded"
-                    type="checkbox"
-                    id="row_1"
-                  />
-                </td>
-                <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-                  {item.name}
-                </td>
-                <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-                  <div
-                    className={`w-[50px] h-[25px]  flex items-center rounded-full relative
-                  ${item.pulished ? "bg-blue-600 " : "bg-gray-300"}
-                  transition-all duration-200 cursor-pointer
-                  `}
-                    onClick={() => handlePulished(item.id)}
-                  >
-                    <div
-                      className={`w-[18px] h-[18px] bg-white rounded-full  absolute
-                    ${item.pulished ? "ml-[28px]" : "ml-[4px]"}
-                    transition-all duration-200
-                    `}
-                    ></div>
-                  </div>
-                </td>
-                <td className="px-4 py-2 text-gray-700 whitespace-nowrap flex flex-row text-[25px] gap-x-[20px]">
-                  <FaRegEdit
-                    onClick={() => handleEdit(item.slug)}
-                    className="cursor-pointer"
-                  />
-                  <FaRegTrashAlt
-                    onClick={() => handleTrash(item.id)}
-                    className="cursor-pointer"
-                  />
-                </td>
-              </tr>
+              <Row key={item.id} id={item.id} />
             );
           })}
         </tbody>

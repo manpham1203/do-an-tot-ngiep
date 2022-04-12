@@ -16,7 +16,7 @@ namespace BO.Entities
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public int Quantity { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
         public string BrandId { get; set; }
         public int Views { get; set; }

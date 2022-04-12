@@ -67,7 +67,7 @@ const reducer = (state, action) => {
 };
 function ProductDetail() {
   const [state, dispatchProduct] = useReducer(reducer, initState);
-  const { productId } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const [number, setNumber] = useState(1);
   const store = useSelector((store) => store);
@@ -76,11 +76,11 @@ function ProductDetail() {
   // const carts = store.cart;
   document.title = `${state.data.name}`;
 
-  const fetchProductDetail = async (id) => {
+  const fetchProductDetail = async (slug) => {
     dispatchProduct(loading());
     await api({
       method: "GET",
-      url: `/api/productfull/${id}`,
+      url: `/Product/productdetail/${slug}`,
       data: null,
     })
       .then((res) => {
@@ -89,8 +89,8 @@ function ProductDetail() {
       .catch(() => dispatchProduct(fail()));
   };
   useEffect(() => {
-    fetchProductDetail(productId);
-  }, [productId]);
+    fetchProductDetail(slug);
+  }, [slug]);
 
   const addCart = (id, qty) => {
     var objCart = {
@@ -124,17 +124,23 @@ function ProductDetail() {
     }
   };
 
-  const prod = [
-    product,
-    product2,
-    product3,
-    product,
-    product2,
-    product3,
-    product,
-    product2,
-    product3,
-  ];
+  const onHandleNumber = (e) => {
+    const re = /^[1-9\b]+$/;
+
+    if (e.target.value <= 1) {
+      setNumber(1);
+    }
+    if (e.target.value >= 9) {
+      setNumber(9);
+    }
+    if (e.target.value <= 9 && e.target.value >= 1) {
+      if (e.target.value === "" || re.test(e.target.value)) {
+        setNumber(e.target.value);
+      }
+    }
+  };
+
+  console.log(state);
 
   return (
     <div className="pt-[100px] container mx-auto">
@@ -145,12 +151,12 @@ function ProductDetail() {
       ) : (
         <div className="flex flex-row gap-x-[20px] ">
           <div className="w-[50%] p-[20px] flex flex-row">
-            <ProductImageSlider images={prod} />
+            <ProductImageSlider images={state.data?.productImageVMs} />
           </div>
 
           <div className="w-[50%] p-[20px]">
             <div className=" flex flex-col gap-y-[10px] items-center bg-gradient-to-b from-[white] to-transparent ">
-              <h2>{state.data.brandVM?.name}</h2>
+              <h2>{state.data.brandNameVM?.name}</h2>
               <h2 className="text-[30px] mt-[5px]">{state.data.name}</h2>
               <div className="flex flex-row items-center text-[#F7BF63]">
                 <AiFillStar />
@@ -190,7 +196,7 @@ function ProductDetail() {
 
               <span className="flex flex-row mt-[10px]">
                 Loại sản phẩm:
-                {state.data.categoryVMs?.map((item) => {
+                {state.data.categoryNameVMs?.map((item) => {
                   return (
                     <p
                       key={item.id}
@@ -206,20 +212,20 @@ function ProductDetail() {
               <div className="flex flex-row items-center gap-x-[5px] mt-[20px]">
                 <div
                   className="cursor-pointer"
-                  onClick={() => setNumber((number) => number - 1)}
+                  onClick={() => setNumber((number) => number<=1?1: number - 1)}
                 >
                   <BsDashLg />
                 </div>
                 <input
                   type="number"
-                  className="border border-gray-400 w-[50px] text-center"
+                  className="number_cart-item border border-gray-400 w-[50px] text-center"
                   value={number}
-                  onChange={(e) => setNumber(parseInt(e.target.value))}
+                  onChange={(e) => onHandleNumber(e)}
                   min="1"
                 />
                 <div
                   className="cursor-pointer"
-                  onClick={() => setNumber((number) => number + 1)}
+                  onClick={() => setNumber((number) => number>=9?9: number + 1)}
                 >
                   <BsPlusLg />
                 </div>
@@ -237,7 +243,9 @@ function ProductDetail() {
 
       <div className="">
         <h1>Description: </h1>
-        <div>{state.data.fullDescription}</div>
+        <div
+          dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
+        ></div>
       </div>
     </div>
   );

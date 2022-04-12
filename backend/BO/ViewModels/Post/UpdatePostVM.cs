@@ -14,7 +14,7 @@ namespace BO.ViewModels.Post
         public int Views { get; set; }
         public int Likes { get; set; }
         public string Image { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public bool Deleted { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BO.ViewModels.Category;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,17 +19,12 @@ namespace BO.ViewModels.Product
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public int Quantity { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         [Required]
         public string BrandId { get; set; }
         public List<string> CategoryIds { get; set; }
+
         public List<string> ImageNames { get; set; }
         public List<IFormFile> Files { get; set; }
-        public CreateProductVM()
-        {
-            CategoryIds = new List<string>();
-            ImageNames = new List<string>();
-            Files = new List<IFormFile>();
-        }
     }
 }

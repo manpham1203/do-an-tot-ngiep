@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { toast } from "react-toastify";
-import api from "../../../apis/api";
+import React, { useEffect, useReducer } from "react";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import api from "../../../apis/api";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 const initState = {
   loading: false,
   fail: false,
@@ -54,42 +55,14 @@ const reducer = (state, action) => {
   }
 };
 function Row(props) {
-  const [toggle, setToggle] = useState(false);
   const [state, dispatch] = useReducer(reducer, initState);
   const navigate = useNavigate();
 
-  const handlePulished = async (id) => {
-    await api({
-      method: "POST",
-      url: `/brand/pulished/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success(`Sửa thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData(id);
-        } else {
-          toast.error(`Đăng ký thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Đăng nhập thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
   const fetchData = async (id) => {
     dispatch(loading());
     await api({
       method: "GET",
-      url: `/Brand/${id}`,
-      data: null,
+      url: `/Brand/brandrowadmin/${id}`,
     })
       .then((res) => {
         dispatch(success(res.data));
@@ -97,12 +70,32 @@ function Row(props) {
       .catch(dispatch(fail()));
   };
   useEffect(() => {
-    //   setToggle(props.item.pulished);
-    fetchData(props.item.id);
-  }, []);
-
+    fetchData(props.id);
+  }, [props.id]);
+  const handlePublished = async (id) => {
+    await api({
+      method: "POST",
+      url: `/brand/published/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          fetchData(id);
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
   const handleEdit = (slug) => {
-    navigate(`/admin/chinh-sua-thuong-hieu/${slug}`);
+    navigate(`/admin/chinh-sua-san-pham/${slug}`);
   };
   const handleTrash = async (id) => {
     await api({
@@ -111,29 +104,28 @@ function Row(props) {
     })
       .then((res) => {
         if (res.status === 200) {
-          toast.success(`Sửa thành công`, {
+          toast.warn(`Chuyển vào thùng rác thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
           fetchData(id);
         } else {
-          toast.error(`Đăng ký thất bại`, {
+          toast.error(`Thao tác thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
         }
       })
       .catch(() =>
-        toast.error(`Đăng nhập thất bại`, {
+        toast.error(`Thao tác thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         })
       );
   };
-
   return (
     <>
-      {!state.data.deleted && (
+      {state.data.deleted === false ? (
         <tr>
           <td className="sticky left-0 px-4 py-2 ">
             <input
@@ -146,20 +138,16 @@ function Row(props) {
             {state.data.name}
           </td>
           <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-            {/* <ToggleSwitch
-                    onClick={() => handlePulished(item.id)}
-                    switch={item.pulished}
-                  /> */}
             <div
               className={`w-[50px] h-[25px]  flex items-center rounded-full relative
-                  ${state.data.pulished ? "bg-blue-600 " : "bg-gray-300"}
+                  ${state.data.published ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
-              onClick={() => handlePulished(state.data.id)}
+              onClick={() => handlePublished(state.data.id)}
             >
               <div
                 className={`w-[18px] h-[18px] bg-white rounded-full  absolute
-                    ${state.data.pulished ? "ml-[28px]" : "ml-[4px]"}
+                    ${state.data.published ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
               ></div>
@@ -176,7 +164,7 @@ function Row(props) {
             />
           </td>
         </tr>
-      )}
+      ) : null}
     </>
   );
 }

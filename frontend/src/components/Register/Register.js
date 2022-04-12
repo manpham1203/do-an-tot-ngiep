@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Form/Input/Input";
+import useDebounce from "../../hooks/useDebounce";
 
 const schema = yup
   .object({
@@ -63,25 +64,25 @@ function Register(props) {
   });
   const [check, setCheck] = useState(false);
   const watchUsername = watch("username");
+  const query=useDebounce(watchUsername, 800);
 
   //   check username
   useEffect(() => {
-    if (watchUsername !== undefined) {
+    if (query !== undefined) {
       const fetchData = async (w) => {
         await api({
           method: "POST",
           url: `/Account/findUsername?username=${w}`,
         })
           .then((res) => {
-            console.log(res);
             setCheck(res.data);
           })
           .catch();
       };
 
-      fetchData(watchUsername);
+      fetchData(query);
     }
-  }, [watchUsername]);
+  }, [query]);
 
   // submit form
   const onSubmitHandler = async (values) => {

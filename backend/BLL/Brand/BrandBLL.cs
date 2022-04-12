@@ -1,6 +1,8 @@
 ﻿using BLL.BrandImage;
+using BLL.Product;
 using BO.ViewModels.Brand;
 using BO.ViewModels.BrandImage;
+using BO.ViewModels.Product;
 using DAL.Brand;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +22,7 @@ namespace BLL
     {
         private BrandDAL brandDAL;
         private BrandImageBLL brandImageBLL;
-        private Common cm;
+        private CommonBLL cm;
 
         public BrandBLL()
         {
@@ -43,7 +45,7 @@ namespace BLL
         public async Task<bool> Create(CreateBrandVM model)
         {
 
-            cm = new Common();
+            cm = new CommonBLL();
             var brandId = cm.RandomString(12);
             var checkIdExists = await GetById(brandId);
             while (checkIdExists != null)
@@ -74,9 +76,10 @@ namespace BLL
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
+                Ordinal = model.Ordinal,
             };
 
             var saveBrand = await brandDAL.Create(brandVM);
@@ -100,7 +103,7 @@ namespace BLL
         }
         public async Task<bool> Update(string id, UpdateBrandVM model)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             var checkBrand = await GetById(id);
             if (checkBrand == null)
             {
@@ -130,7 +133,7 @@ namespace BLL
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = model.Deleted,
                 UpdatedAt = DateTime.Now,
                 Ordinal = model.Ordinal
@@ -175,8 +178,8 @@ namespace BLL
             {
                 return false;
             }
-            bool pulished = !brandVM.Pulished;
-            var result = await brandDAL.Pulished(id, pulished);
+            bool published = !brandVM.Published;
+            var result = await brandDAL.Pulished(id, published);
             if (result)
             {
                 return true;
@@ -202,5 +205,75 @@ namespace BLL
         {
             return await brandDAL.GetAllBrandDeleted(deleted);
         }
+
+        public async Task<List<BrandNameVM>> AllBrandWithProductCard()
+        {
+            var resultFromDAL = await brandDAL.AllBrandName();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<BrandNameVM>();
+            }
+            if (resultFromDAL.Count > 0)
+            {
+                var productBLL = new ProductBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
+                    var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL[i].Id);
+                    resultFromDAL[i].ProductCardVMs = productCards;
+                }
+                for(int i=0; i < resultFromDAL.Count; i++)
+                {
+                    if (resultFromDAL[i].ProductCardVMs.Count == 0)
+                    {
+                        resultFromDAL.Remove(resultFromDAL[i]);
+                    }
+                }
+            }
+            return resultFromDAL;
+        }
+
+        public async Task<List<BrandNameVM>> AllBrandName()
+        {
+            var resultFromDAL = await brandDAL.AllBrandName();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<BrandNameVM>();
+            }
+            return resultFromDAL;
+        }
+
+        public async Task<List<BrandNameVM>> AllBrandName(bool deleted)
+        {
+            var resultFromDAL = await brandDAL.AllBrandName(deleted);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<BrandNameVM>();
+            }
+            return resultFromDAL;
+        }
+
+        public async Task<BrandRowAdminVM> BrandRowAdmin(string id)
+        {
+            var resultFromDAL = await brandDAL.BrandRowAmin(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+
     }
 }

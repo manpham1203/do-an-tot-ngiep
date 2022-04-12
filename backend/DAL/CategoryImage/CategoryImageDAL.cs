@@ -30,7 +30,7 @@ namespace DAL.CategoryImage
                 brandImageVM.Id = imgFromDb.Id;
                 brandImageVM.Name = imgFromDb.Name;
                 brandImageVM.CategoryId = imgFromDb.CategoryId;
-                brandImageVM.Pulished = imgFromDb.Pulished;
+                brandImageVM.Published = imgFromDb.Published;
 
                 return brandImageVM;
             }
@@ -52,7 +52,7 @@ namespace DAL.CategoryImage
                 Id = x.Id,
                 Name = x.Name,
                 CategoryId = x.CategoryId,
-                Pulished = x.Pulished,
+                Published = x.Published,
             }).ToList();
 
             return categoryImgs;
@@ -65,7 +65,7 @@ namespace DAL.CategoryImage
                 Id = x.Id,
                 Name = x.Name,
                 CategoryId = x.CategoryId,
-                Pulished = x.Pulished,
+                Published = x.Published,
             });
             foreach (var img in imgs)
             {
@@ -93,11 +93,11 @@ namespace DAL.CategoryImage
             }
             return false;
         }
-        public async Task<bool> Pulished(string id, bool pulished)
+        public async Task<bool> Pulished(string id, bool published)
         {
             var categoryImage = await db.CategoryImages.SingleOrDefaultAsync(x => x.Id == id);
 
-            categoryImage.Pulished = pulished;
+            categoryImage.Published = published;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)

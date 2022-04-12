@@ -16,15 +16,10 @@ namespace BO.ViewModels.Brand
         public string Name { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public int Ordinal { get; set; }
         public List<string> ImageNames { get; set; }
         public List<IFormFile> Files { get; set; }
-        public CreateBrandVM()
-        {
-            ImageNames = new List<string>();
-            Files=new List<IFormFile>();
-        }
     }
 }
 

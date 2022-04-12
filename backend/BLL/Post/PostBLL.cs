@@ -12,7 +12,7 @@ namespace BLL.Post
     public class PostBLL
     {
         private readonly PostDAL postDAL;
-        private Common cm;
+        private CommonBLL cm;
         public PostBLL()
         {
             postDAL = new PostDAL();
@@ -36,7 +36,7 @@ namespace BLL.Post
         }
         public async Task<bool> Create(CreatePostVM model)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             var postId = cm.RandomString(9);
             var checkExists=await GetById(postId);
             while (checkExists != null)
@@ -53,7 +53,7 @@ namespace BLL.Post
                 Slug = slug,
                 ShortDescription = model.ShortDescription,
                 FullDescription = model.FullDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = false,
                 Likes = 0,
                 Views = 0,
@@ -64,7 +64,7 @@ namespace BLL.Post
         }
         public async Task<bool> Update(string id, UpdatePostVM model)
         {
-            cm = new Common();
+            cm = new CommonBLL();
 
             var checkExists = await GetById(id);
             if (checkExists == null)
@@ -79,7 +79,7 @@ namespace BLL.Post
                 Slug = slug,
                 ShortDescription = model.ShortDescription,
                 FullDescription = model.FullDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = model.Deleted,
                 Likes = model.Likes,
                 Views = model.Views,

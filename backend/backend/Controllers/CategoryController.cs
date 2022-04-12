@@ -215,7 +215,7 @@ namespace backend.Controllers
             return true;
         }
 
-        [HttpPost("pulished/{id}")]
+        [HttpPost("published/{id}")]
         public async Task<IActionResult> Published(string id)
         {
             var result = await categoryBLL.Published(id);
@@ -251,5 +251,72 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+   
+        [HttpGet("AllCategoryWithProductCard")]
+        public async Task<IActionResult> AllCategoryWithProductCard()
+        {
+            try
+            {
+                var resultFromBLL = await categoryBLL.AllCategoryWithProductCard();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Count == 0)
+                {
+                    return Ok(new List<CategoryNameVM>());
+                }
+                if (resultFromBLL.Count > 0)
+                {
+                    for (int i = 0; i < resultFromBLL.Count; i++)
+                    {
+                        for (int j = 0; j < resultFromBLL[i].ProductCardVMs.Count; j++)
+                        {
+                            resultFromBLL[i].ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ProductCardVMs[j].ImageName);
+                        }
+                    }
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
+        [HttpGet("allcategoryname")]
+        public async Task<IActionResult> AllCategoryName()
+        {
+            var resultFromBLL=await categoryBLL.AllCategoryName();
+            if(resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
+
+        [HttpGet("allcategorynamedeleted")]
+        public async Task<IActionResult> AllCategoryName(bool deleted)
+        {
+            var resultFromBLL = await categoryBLL.AllCategoryName(deleted);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
+
+
+        [HttpGet("categoryrowadmin/{id}")]
+        public async Task<IActionResult> CategoryRowAdmin(string id)
+        {
+            var resultFromBLL = await categoryBLL.CategoryRowAdmin(id);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
+
     }
 }

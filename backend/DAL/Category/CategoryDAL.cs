@@ -1,6 +1,7 @@
 ﻿
 using BO;
 using BO.ViewModels.Category;
+using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace DAL.Category
         public async Task<List<CategoryVM>> GetAll()
         {
             var categoryFromDb = await db.Categories.ToListAsync();
-            if (categoryFromDb.Count==0)
+            if (categoryFromDb.Count == 0)
             {
                 return new List<CategoryVM>();
             }
@@ -31,7 +32,7 @@ namespace DAL.Category
                 Slug = x.Slug,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Pulished = x.Pulished,
+                Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -53,7 +54,7 @@ namespace DAL.Category
             categoryVM.Slug = categoryFromDb.Slug;
             categoryVM.FullDescription = categoryFromDb.FullDescription;
             categoryVM.ShortDescription = categoryFromDb.ShortDescription;
-            categoryVM.Pulished = categoryFromDb.Pulished;
+            categoryVM.Published = categoryFromDb.Published;
             categoryVM.Deleted = categoryFromDb.Deleted;
             categoryVM.CreatedAt = categoryFromDb.CreatedAt;
             categoryVM.UpdatedAt = categoryFromDb.UpdatedAt;
@@ -70,7 +71,7 @@ namespace DAL.Category
                 Slug = categoryVM.Slug,
                 FullDescription = categoryVM.FullDescription,
                 ShortDescription = categoryVM.ShortDescription,
-                Pulished = categoryVM.Pulished,
+                Published = categoryVM.Published,
                 Deleted = categoryVM.Deleted,
                 CreatedAt = categoryVM.CreatedAt,
                 UpdatedAt = categoryVM.UpdatedAt,
@@ -91,7 +92,7 @@ namespace DAL.Category
             categoryFromDb.Slug = categoryVM.Slug;
             categoryFromDb.FullDescription = categoryVM.FullDescription;
             categoryFromDb.ShortDescription = categoryVM.ShortDescription;
-            categoryFromDb.Pulished = categoryVM.Pulished;
+            categoryFromDb.Published = categoryVM.Published;
             categoryFromDb.Deleted = categoryVM.Deleted;
             categoryFromDb.UpdatedAt = categoryVM.UpdatedAt;
             categoryFromDb.Ordinal = categoryVM.Ordinal;
@@ -113,11 +114,11 @@ namespace DAL.Category
             }
             return false;
         }
-        public async Task<bool> Pulished(string id, bool pulished)
+        public async Task<bool> Pulished(string id, bool published)
         {
             var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
-            resultFromDb.Pulished = pulished;
+            resultFromDb.Published = published;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)
@@ -155,7 +156,7 @@ namespace DAL.Category
                 Slug = x.Slug,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Pulished = x.Pulished,
+                Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -164,6 +165,116 @@ namespace DAL.Category
             return categoryVMs;
 
         }
+
+        public async Task<List<CategoryNameVM>> AllCategoryName()
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.Where(x => x.Published == true && x.Deleted == false).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<CategoryNameVM>();
+                }
+                var categoryNameVMs = resultFromDb.Select(x => new CategoryNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+                return categoryNameVMs;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        public async Task<List<CategoryNameVM>> AllCategoryName(bool deleted)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.Where(x => x.Deleted == deleted).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<CategoryNameVM>();
+                }
+                var categoryNameVMs = resultFromDb.Select(x => new CategoryNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+                return categoryNameVMs;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<CategoryNameVM> CategoryNameById(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id && x.Published == true && x.Deleted == false);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var categoryNameVM =new CategoryNameVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    ProductCardVMs = null,
+                };
+                return categoryNameVM;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<CategoryRowAdminVM> CategoryRowAdmin(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new CategoryRowAdminVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    Published = resultFromDb.Published,
+                    Deleted = resultFromDb.Deleted,
+                    CreatedAt = resultFromDb.CreatedAt,
+                    Ordinal = resultFromDb.Ordinal,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
 
     }
 }

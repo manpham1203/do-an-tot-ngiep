@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper";
+import api from "../../apis/api";
+import { useParams } from "react-router-dom";
 
 function ProductImageSlider(props) {
   const [active, setActive] = useState(null);
+  
   return (
     <>
     
@@ -18,10 +21,10 @@ function ProductImageSlider(props) {
         onSwiper={setActive}
         direction={"vertical"}
       >
-        {props.images.map((item, index) => {
+        {props.images?.map((item, index) => {
           return (
             <SwiperSlide key={index} className={`flex  items-center justify-center border border-gray-400`}>
-              <img src={item} alt="product images" />
+              <img src={item.imageSrc} alt="product images" />
             </SwiperSlide>
           );
         })}
@@ -35,10 +38,10 @@ function ProductImageSlider(props) {
         thumbs={{ swiper: active }}
         className="w-full border border-gray-400"
       >
-        {props.images.map((item, index) => {
+        {props.images?.map((item, index) => {
           return (
             <SwiperSlide key={index}>
-              <img src={item} alt="product images" />
+              <img src={item.imageSrc} alt="product images" />
             </SwiperSlide>
           );
         })}

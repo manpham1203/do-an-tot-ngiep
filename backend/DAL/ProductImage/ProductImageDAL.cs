@@ -30,7 +30,7 @@ namespace DAL.ProductImage
                 productImageVM.Id = imgFromDb.Id;
                 productImageVM.Name = imgFromDb.Name;
                 productImageVM.ProductId = imgFromDb.ProductId;
-                productImageVM.Pulished = imgFromDb.Pulished;
+                productImageVM.Published = imgFromDb.Published;
 
                 return productImageVM;
             }
@@ -52,7 +52,7 @@ namespace DAL.ProductImage
                 Id = x.Id,
                 Name = x.Name,
                 ProductId = x.ProductId,
-                Pulished = x.Pulished,
+                Published = x.Published,
             }).ToList();
 
             return productImageVMs;
@@ -65,7 +65,7 @@ namespace DAL.ProductImage
                 Id = x.Id,
                 Name = x.Name,
                 ProductId = x.ProductId,
-                Pulished = x.Pulished,
+                Published = x.Published,
             });
             foreach (var img in imgs)
             {
@@ -97,7 +97,7 @@ namespace DAL.ProductImage
         {
             var productImage = await db.ProductImages.SingleOrDefaultAsync(x => x.Id == id);
 
-            productImage.Pulished = pulished;
+            productImage.Published = pulished;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)

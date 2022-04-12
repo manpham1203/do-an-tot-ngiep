@@ -30,7 +30,7 @@ namespace DAL.Post
                 Slug = x.Slug,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Pulished = x.Pulished,
+                Published = x.Published,
                 Deleted = x.Deleted,
                 Likes = x.Likes,
                 Views = x.Views,
@@ -55,7 +55,7 @@ namespace DAL.Post
                 Slug = postFromDb.Slug,
                 FullDescription = postFromDb.FullDescription,
                 ShortDescription = postFromDb.ShortDescription,
-                Pulished = postFromDb.Pulished,
+                Published = postFromDb.Published,
                 Deleted = postFromDb.Deleted,
                 Likes = postFromDb.Likes,
                 Views = postFromDb.Views,
@@ -74,7 +74,7 @@ namespace DAL.Post
                 Slug = postVM.Slug,
                 FullDescription = postVM.FullDescription,
                 ShortDescription = postVM.ShortDescription,
-                Pulished = postVM.Pulished,
+                Published = postVM.Published,
                 Deleted = postVM.Deleted,
                 Likes = postVM.Likes,
                 Views = postVM.Views,
@@ -97,7 +97,7 @@ namespace DAL.Post
             postFromDb.Slug = postVM.Slug;
             postFromDb.FullDescription = postVM.FullDescription;
             postFromDb.ShortDescription = postVM.ShortDescription;
-            postFromDb.Pulished = postVM.Pulished;
+            postFromDb.Published = postVM.Published;
             postFromDb.Deleted = postVM.Deleted;
             postFromDb.Likes = postVM.Likes;
             postFromDb.Views = postVM.Views;

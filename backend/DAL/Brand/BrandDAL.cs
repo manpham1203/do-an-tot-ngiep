@@ -1,5 +1,6 @@
 ﻿using BO;
 using BO.ViewModels.Brand;
+using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace DAL.Brand
         {
             var brandFromDb = await db.Brands.ToListAsync();
 
-            if(brandFromDb.Count==0)
+            if (brandFromDb.Count == 0)
             {
                 return new List<BrandVM>();
             }
@@ -37,7 +38,7 @@ namespace DAL.Brand
                 Slug = x.Slug,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Pulished = x.Pulished,
+                Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -60,7 +61,7 @@ namespace DAL.Brand
             brandVM.Slug = brandFromDb.Slug;
             brandVM.FullDescription = brandFromDb.FullDescription;
             brandVM.ShortDescription = brandFromDb.ShortDescription;
-            brandVM.Pulished = brandFromDb.Pulished;
+            brandVM.Published = brandFromDb.Published;
             brandVM.Deleted = brandFromDb.Deleted;
             brandVM.CreatedAt = brandFromDb.CreatedAt;
             brandVM.UpdatedAt = brandFromDb.UpdatedAt;
@@ -77,7 +78,7 @@ namespace DAL.Brand
                 Slug = brandVM.Slug,
                 FullDescription = brandVM.FullDescription,
                 ShortDescription = brandVM.ShortDescription,
-                Pulished = brandVM.Pulished,
+                Published = brandVM.Published,
                 Deleted = brandVM.Deleted,
                 CreatedAt = brandVM.CreatedAt,
                 UpdatedAt = brandVM.UpdatedAt,
@@ -98,7 +99,7 @@ namespace DAL.Brand
             brandFromDb.Slug = brandVM.Slug;
             brandFromDb.FullDescription = brandVM.FullDescription;
             brandFromDb.ShortDescription = brandVM.ShortDescription;
-            brandFromDb.Pulished = brandVM.Pulished;
+            brandFromDb.Published = brandVM.Published;
             brandFromDb.Deleted = brandVM.Deleted;
             brandFromDb.UpdatedAt = brandVM.UpdatedAt;
             brandFromDb.Ordinal = brandVM.Ordinal;
@@ -121,11 +122,11 @@ namespace DAL.Brand
             }
             return false;
         }
-        public async Task<bool> Pulished(string id, bool pulished)
+        public async Task<bool> Pulished(string id, bool published)
         {
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
 
-            brandFromDb.Pulished = pulished;
+            brandFromDb.Published = published;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)
@@ -149,7 +150,7 @@ namespace DAL.Brand
         }
         public async Task<List<BrandVM>> GetAllBrandDeleted(bool deleted)
         {
-            var brandFromDb = await db.Brands.Where(x=>x.Deleted== deleted).ToListAsync();
+            var brandFromDb = await db.Brands.Where(x => x.Deleted == deleted).ToListAsync();
 
             if (brandFromDb.Count == 0)
             {
@@ -163,7 +164,7 @@ namespace DAL.Brand
                 Slug = x.Slug,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Pulished = x.Pulished,
+                Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -173,5 +174,89 @@ namespace DAL.Brand
 
         }
 
+        public async Task<List<BrandNameVM>> AllBrandName()
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.Where(x => x.Published == true && x.Deleted == false).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<BrandNameVM>();
+                }
+                var listBrandNameVM = resultFromDb.Select(x => new BrandNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug=x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+                return listBrandNameVM;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+       
+        public async Task<List<BrandNameVM>> AllBrandName(bool deleted)
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.Where(x => x.Deleted == deleted).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<BrandNameVM>();
+                }
+                var listBrandNameVM = resultFromDb.Select(x => new BrandNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+                return listBrandNameVM;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<BrandRowAdminVM> BrandRowAmin(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x =>x.Id==id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new BrandRowAdminVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    Published = resultFromDb.Published,
+                    Deleted = resultFromDb.Deleted,
+                    CreatedAt = resultFromDb.CreatedAt,
+                    Ordinal = resultFromDb.Ordinal,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
     }
 }

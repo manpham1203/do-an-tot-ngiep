@@ -106,7 +106,7 @@ namespace BO
                 entity.Property(e => e.Likes)
                    .HasColumnType("int")
                    .IsRequired(true);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
                 entity.Property(e => e.Deleted)
@@ -159,7 +159,7 @@ namespace BO
                     .HasMaxLength(250)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
             });
@@ -194,7 +194,7 @@ namespace BO
                     .HasColumnType("ntext")
                     .IsRequired(false)
                     .IsUnicode(true);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
                 entity.Property(e => e.Deleted)
@@ -210,7 +210,7 @@ namespace BO
                     .HasPrecision(3);
                 entity.Property(e => e.Ordinal)
                     .HasColumnType("int")
-                    .IsRequired(false);
+                    .IsRequired(true);
 
                 entity.HasMany<CategoryImage>(c => c.CategoryImage)
                 .WithOne(i => i.Catgeory)
@@ -238,7 +238,7 @@ namespace BO
                     .HasMaxLength(250)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
             });
@@ -273,7 +273,7 @@ namespace BO
                     .HasColumnType("ntext")
                     .IsRequired(false)
                     .IsUnicode(true);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
                 entity.Property(e => e.Deleted)
@@ -289,7 +289,7 @@ namespace BO
                     .HasPrecision(3);
                 entity.Property(e => e.Ordinal)
                     .HasColumnType("int")
-                    .IsRequired(false);
+                    .IsRequired(true);
 
                 entity.HasMany<BrandImage>(b => b.BrandImage)
                 .WithOne(i => i.Brand)
@@ -317,7 +317,7 @@ namespace BO
                     .HasMaxLength(250)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
             });
@@ -358,7 +358,7 @@ namespace BO
                 entity.Property(e => e.Likes)
                    .HasColumnType("int")
                    .IsRequired(true);
-                entity.Property(e => e.Pulished)
+                entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
                 entity.Property(e => e.Deleted)

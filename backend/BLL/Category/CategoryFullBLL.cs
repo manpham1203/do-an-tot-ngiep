@@ -47,11 +47,7 @@ namespace BLL.Category
             for (int i = 0; i < categoryFullVMs.Count; i++)
             {
                 var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVMs[i].Id);
-                if (listImg.Count >0)
-                {
-                    categoryFullVMs[i].CategoryImageVMs = null;
-                }
-                else
+                if (listImg.Count > 0)
                 {
                     categoryFullVMs[i].CategoryImageVMs = new List<CategoryImageVM>();
                     for (int j = 0; j < listImg.Count; j++)
@@ -79,7 +75,7 @@ namespace BLL.Category
             var cpBLL = new ProductCategoryBLL();
 
             var listCategoryProduct = await cpBLL.GetById(categoryFullVM.Id, "CategoryId");
-            if (listCategoryProduct.Count >0)
+            if (listCategoryProduct.Count > 0)
             {
                 for (int j = 0; j < listCategoryProduct.Count(); j++)
                 {
@@ -91,11 +87,7 @@ namespace BLL.Category
 
             var categoryImageBLL = new CategoryImageBLL();
             var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVM.Id);
-            if (listImg.Count == 0)
-            {
-                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
-            }
-            else
+            if (listImg.Count > 0)
             {
                 categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
                 for (int i = 0; i < listImg.Count; i++)
@@ -127,11 +119,7 @@ namespace BLL.Category
             }
             var categoryImageBLL = new CategoryImageBLL();
             var listImg = await categoryImageBLL.GetByCategoryId(categoryFullVM.Id);
-            if (listImg.Count == 0)
-            {
-                categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
-            }
-            else
+            if (listImg.Count > 0)
             {
                 categoryFullVM.CategoryImageVMs = new List<CategoryImageVM>();
                 for (int i = 0; i < listImg.Count; i++)

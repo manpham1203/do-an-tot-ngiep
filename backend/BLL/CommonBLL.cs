@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class Common
+    public class CommonBLL
     {
         public string RandomString(int size)
         {
@@ -44,5 +44,6 @@ namespace BLL
             }
             return text;
         }
+    
     }
 }

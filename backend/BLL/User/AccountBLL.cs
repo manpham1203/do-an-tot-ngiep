@@ -13,7 +13,7 @@ namespace BLL.User
     {
         private AccountDAL accountDAL;
         private UserBLL userBLL;
-        private Common cm;
+        private CommonBLL cm;
         public AccountBLL()
         {
             accountDAL = new AccountDAL();
@@ -53,7 +53,7 @@ namespace BLL.User
             {
                 return "exists";
             }
-            cm = new Common();
+            cm = new CommonBLL();
             var userId = cm.RandomString(12);
             var checkExists = await userBLL.GetById(userId);
             while (checkExists != null)

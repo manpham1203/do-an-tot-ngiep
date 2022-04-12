@@ -71,12 +71,12 @@ function Cart() {
   const cart = store.cart;
   document.title = "Giỏ Hàng";
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (arr) => {
     dispatchProduct(loading());
     await api({
-      method: "GET",
-      url: `/api/productfull`,
-      data: null,
+      method: "POST",
+      url: `/Product/cartrows`,
+      data: arr,
     })
       .then((res) => {
         dispatchProduct(success(res.data));
@@ -85,7 +85,11 @@ function Cart() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    var newArr=[];
+    for(var i=0;i<cart.length;i++){
+      newArr.push(cart[i].cartId)
+    }
+    fetchProducts(newArr);
   }, []);
 
   useEffect(() => {
@@ -102,7 +106,6 @@ function Cart() {
     }
     setCartData(newArr);
   }, [cart, state.data]);
-
   return (
     <>
     {cart.length === 0 ? (
@@ -165,8 +168,9 @@ function Cart() {
                 <span className="font-semibold text-sm uppercase">Items 3</span>
                 <span className="font-semibold text-sm">
                   {cartData.reduce((result, prod) => {
-                    return result + prod.item.price * prod.qty;
+                    return prod.item.priceDiscount===0? (result + prod.item.price * prod.qty) :(result + prod.item.priceDiscount * prod.qty);
                   }, 0)}
+                 
                 </span>
               </div>
               <div>

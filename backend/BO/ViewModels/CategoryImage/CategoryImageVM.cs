@@ -11,7 +11,7 @@ namespace BO.ViewModels.CategoryImage
         public string Id { get; set; }
         public string Name { get; set; }
         public string CategoryId { get; set; }
-        public bool Pulished { get; set; }
+        public bool Published { get; set; }
         public string ImageSrc { get; set; }
     }
 }

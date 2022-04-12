@@ -279,14 +279,8 @@ function SideBar(props) {
           />
           <h2>home</h2>
         </div>
-        <div className="w-full p-[20px] ">
-          <div className="flex justify-between items-center h-[50px] bg-white px-[20px] mb-[20px] shadow-admin rounded-[8px]">
-            <h2 className="font-semibold text-[25px]">Sản phẩm</h2>
-            <p>san-pham/bang-san-pham</p>
-          </div>
-          <div className="bg-white rounded-[8px] p-[20px] shadow-admin">
+        <div className="w-full p-[20px] ">       
             <Outlet />
-          </div>
         </div>
       </div>
     </div>

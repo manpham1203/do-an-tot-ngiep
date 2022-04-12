@@ -1,6 +1,8 @@
 ﻿using BLL.CategoryImage;
+using BLL.Product;
 using BLL.ProductCategory;
 using BO.ViewModels.Category;
+using BO.ViewModels.Product;
 using DAL.Category;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace BLL.Category
     public class CategoryBLL
     {
         private readonly CategoryDAL categoryDAL;
-        private Common cm;
+        private CommonBLL cm;
         public CategoryBLL()
         {
             categoryDAL = new CategoryDAL();
@@ -35,7 +37,7 @@ namespace BLL.Category
         }
         public async Task<bool> Create(CreateCategoryVM model)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             var categoryId = cm.RandomString(12);
             var checkIdExists = await GetById(categoryId);
             while (checkIdExists != null)
@@ -64,7 +66,7 @@ namespace BLL.Category
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
@@ -90,7 +92,7 @@ namespace BLL.Category
         }
         public async Task<bool> Update(string id, UpdateCategoryVM model)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             var checkCategory = await GetById(id);
             if (checkCategory == null)
             {
@@ -117,7 +119,7 @@ namespace BLL.Category
                 Slug = slug,
                 FullDescription = model.FullDescription,
                 ShortDescription = model.ShortDescription,
-                Pulished = model.Pulished,
+                Published = model.Published,
                 Deleted = model.Deleted,
                 UpdatedAt = DateTime.Now,
                 Ordinal = model.Ordinal,
@@ -177,8 +179,8 @@ namespace BLL.Category
             {
                 return false;
             }
-            bool pulished = !categoryVM.Pulished;
-            var result = await categoryDAL.Pulished(id, pulished);
+            bool published = !categoryVM.Published;
+            var result = await categoryDAL.Pulished(id, published);
             if (result)
             {
                 return true;
@@ -204,6 +206,108 @@ namespace BLL.Category
         {
             return await categoryDAL.GetAllCategoryDeleted(deleted);
         }
+
+        public async Task<List<CategoryNameVM>> AllCategoryWithProductCard()
+        {
+            var resultFromDAL = await categoryDAL.AllCategoryName();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<CategoryNameVM>();
+            }
+            if (resultFromDAL.Count > 0)
+            {
+                var productBLL = new ProductBLL();
+                var pcBLL = new ProductCategoryBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    var listPC = await pcBLL.GetById(resultFromDAL[i].Id, "CategoryId");
+                    resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
+                    if (listPC.Count > 0)
+                    {
+                        for (int j = 0; j < listPC.Count(); j++)
+                        {
+                            var productCard = await productBLL.ProductCardById(listPC[j].ProductId);
+                            if (productCard != null)
+                            {
+                                resultFromDAL[i].ProductCardVMs.Add(productCard);
+                            }
+                        }
+                    }
+
+
+
+                }
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    if (resultFromDAL[i].ProductCardVMs.Count == 0)
+                    {
+                        resultFromDAL.Remove(resultFromDAL[i]);
+                    }
+                }
+            }
+
+            return resultFromDAL;
+        }
+
+        public async Task<List<CategoryNameVM>> AllCategoryName()
+        {
+            var resultFromDAL = await categoryDAL.AllCategoryName();
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<CategoryNameVM>();
+            }
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+        public async Task<List<CategoryNameVM>> AllCategoryName(bool deleted)
+        {
+            var resultFromDAL = await categoryDAL.AllCategoryName(deleted);
+            if (resultFromDAL.Count == 0)
+            {
+                return new List<CategoryNameVM>();
+            }
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+        public async Task<CategoryRowAdminVM> BrandRowAdmin(string id)
+        {
+            var resultFromDAL = await categoryDAL.CategoryRowAdmin(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+        public async Task<CategoryNameVM> CategoryNameById(string id)
+        {
+            var resultFromDAL = await categoryDAL.CategoryNameById(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+
+        public async Task<CategoryRowAdminVM> CategoryRowAdmin(string id)
+        {
+            var resultFromDAL = await categoryDAL.CategoryRowAdmin(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            return resultFromDAL;
+        }
+
 
     }
 }

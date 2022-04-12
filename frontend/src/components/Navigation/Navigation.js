@@ -128,7 +128,7 @@ function Navigation(props) {
     dispatch(brandLoading());
     await api({
       method: "GET",
-      url: `/brand`,
+      url: `/Brand/allbrandname`,
       data: null,
     })
       .then((res) => dispatch(brandSuccess(res.data)))
@@ -138,7 +138,7 @@ function Navigation(props) {
     dispatch(categoryLoading());
     await api({
       method: "GET",
-      url: `/Category`,
+      url: `/Category/allcategoryname`,
       data: null,
     })
       .then((res) => dispatch(categorySuccess(res.data)))

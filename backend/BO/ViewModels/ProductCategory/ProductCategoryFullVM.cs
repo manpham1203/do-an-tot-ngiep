@@ -14,10 +14,5 @@ namespace BO.ViewModels.ProductCategory
         public CategoryFullVM CategoryFullVM { get; set; }
         public string ProductId { get; set; }
         public ProductFullVM ProductFullVM { get; set; }
-        public ProductCategoryFullVM()
-        {
-            CategoryFullVM = new CategoryFullVM();
-            ProductFullVM = new ProductFullVM();
-        }
     }
 }

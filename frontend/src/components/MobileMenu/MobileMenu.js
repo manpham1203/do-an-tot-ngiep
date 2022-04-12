@@ -142,7 +142,7 @@ const MobileMenu = (props) => {
     dispatch(brandLoading());
     await api({
       method: "GET",
-      url: `/api/brand`,
+      url: `/Brand/allbrandname`,
       data: null,
     })
       .then((res) => dispatch(brandSuccess(res.data)))
@@ -152,7 +152,7 @@ const MobileMenu = (props) => {
     dispatch(categoryLoading());
     await api({
       method: "GET",
-      url: `/api/Category`,
+      url: `/Category/allcategoryname`,
       data: null,
     })
       .then((res) => dispatch(categorySuccess(res.data)))

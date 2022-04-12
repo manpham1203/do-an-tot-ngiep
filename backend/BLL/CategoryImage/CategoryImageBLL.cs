@@ -11,7 +11,7 @@ namespace BLL.CategoryImage
     public class CategoryImageBLL
     {
         private CategoryImageDAL categoryImageDAL;
-        private Common cm;
+        private CommonBLL cm;
 
         public CategoryImageBLL()
         {
@@ -27,7 +27,7 @@ namespace BLL.CategoryImage
         }
         public async Task<bool> Create(List<string> imgName, string categoryId)
         {
-            cm = new Common();
+            cm = new CommonBLL();
             List<CategoryImageVM> categoryImageVMs = new List<CategoryImageVM>();
             CategoryImageVM categoryImageVM;
             for (int i = 0; i < imgName.Count; i++)
@@ -44,7 +44,7 @@ namespace BLL.CategoryImage
                     Id = imgId,
                     CategoryId = categoryId,
                     Name = imgName[i],
-                    Pulished = true,
+                    Published = true,
                 };
 
                 categoryImageVMs.Add(categoryImageVM);
@@ -67,8 +67,8 @@ namespace BLL.CategoryImage
             {
                 return false;
             }
-            bool pulished = !categoryImageVM.Pulished;
-            var result = await categoryImageDAL.Pulished(id, pulished);
+            bool published = !categoryImageVM.Published;
+            var result = await categoryImageDAL.Pulished(id, published);
             if (result)
             {
                 return true;
