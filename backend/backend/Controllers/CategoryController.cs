@@ -306,6 +306,17 @@ namespace backend.Controllers
             return Ok(resultFromBLL);
         }
 
+        [HttpGet("allcategorynameadmindeleted")]
+        public async Task<IActionResult> AllCategoryNameAdmin(bool deleted, CategoryFilterVM model)
+        {
+            var resultFromBLL = await categoryBLL.AllCategoryNameAdmin(deleted, model);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
+
 
         [HttpGet("categoryrowadmin/{id}")]
         public async Task<IActionResult> CategoryRowAdmin(string id)

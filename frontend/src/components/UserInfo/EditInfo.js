@@ -8,8 +8,8 @@ import * as yup from "yup";
 import Input from "../Form/Input/Input";
 import Button from "../Button/Button";
 import Date from "../Form/Date/Date";
-import * as moment from "moment";
-import "moment/locale/nl";
+// import * as moment from "moment";
+// import "moment/locale/nl";
 
 const schema = yup
   .object({
@@ -103,7 +103,7 @@ function EditInfo(props) {
         reset({
           firstName: res.data.firstName,
           lastName: res.data.lastName,
-          birthday: moment(res.data.birthday).format("yyyy-MM-DD"),
+          // birthday: moment(res.data.birthday).format("yyyy-MM-DD"),
           email: res.data.email,
           phoneNumber: res.data.phoneNumber,
           address: res.data.address,

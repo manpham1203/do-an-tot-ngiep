@@ -191,7 +191,7 @@ namespace DAL.Brand
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Slug=x.Slug,
+                    Slug = x.Slug,
                     ProductCardVMs = null,
                 }).ToList();
                 return listBrandNameVM;
@@ -202,7 +202,7 @@ namespace DAL.Brand
             }
 
         }
-       
+
         public async Task<List<BrandNameVM>> AllBrandName(bool deleted)
         {
             try
@@ -230,12 +230,60 @@ namespace DAL.Brand
                 return null;
             }
         }
+        public async Task<List<BrandNameVM>> AllBrandNameAdmin(bool deleted, BrandFilterVM model)
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.Where(x => x.Deleted == deleted).OrderBy(x => x.CreatedAt).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<BrandNameVM>();
+                }
+
+                if (!string.IsNullOrEmpty(model.Search))
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.ShortBy))
+                {
+                    switch (model.ShortBy)
+                    {
+                        case "desc":
+                            resultFromDb = resultFromDb.OrderByDescending(x => x.Name).ToList();
+                            break;
+                        case "asc":
+                            resultFromDb = resultFromDb.OrderBy(x => x.Name).ToList();
+                            break;
+                        default: break;
+                    }
+                }
+
+                var listBrandNameVM = resultFromDb.Select(x => new BrandNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+
+                return listBrandNameVM;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public async Task<BrandRowAdminVM> BrandRowAmin(string id)
         {
             try
             {
-                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x =>x.Id==id);
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
                 if (resultFromDb == null)
                 {
                     return null;

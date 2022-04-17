@@ -19,7 +19,7 @@ namespace BLL.Product
 {
     public class ProductBLL
     {
-        private readonly ProductDAL productDAL;
+        private ProductDAL productDAL;
         private CommonBLL cm;
         public ProductBLL()
         {
@@ -517,25 +517,156 @@ namespace BLL.Product
             }
             if (resultFromDAL.Count == 0)
             {
-                return new ProductPaginationAdminVM {
+                return new ProductPaginationAdminVM
+                {
                     TotalPage = 0,
+                    TotalResult = 0,
                     Products = new List<ProductNameVM>(),
                 };
             }
 
+            var tempBrand = new ProductPaginationAdminVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductNameVM>(),
+            };
+
+            if (model.BrandIds.Count > 0)
+            {
+
+                for (int i = 0; i < model.BrandIds.Count; i++)
+                {
+                    for (int j = 0; j < resultFromDAL.Count; j++)
+                    {
+                        var checkBrand = await GetById(resultFromDAL[j].Id);
+                        if (checkBrand != null)
+                        {
+                            if (model.BrandIds[i] == checkBrand.BrandId)
+                            {
+                                tempBrand.Products.Add(resultFromDAL[j]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var tempCategory = new ProductPaginationAdminVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductNameVM>(),
+            };
+            var pcBLL = new ProductCategoryBLL();
+            if (model.CategoryIds.Count > 0)
+            {
+                for (int i = 0; i < model.CategoryIds.Count; i++)
+                {
+                    for (int j = 0; j < resultFromDAL.Count; j++)
+                    {
+                        var checkCategory = await pcBLL.GetById(model.CategoryIds[i], "CategoryId");
+                        if (checkCategory.Count > 0)
+                        {
+                            for (int c = 0; c < checkCategory.Count; c++)
+                            {
+                                if (resultFromDAL[j].Id == checkCategory[c].ProductId)
+                                {
+                                    tempCategory.Products.Add(resultFromDAL[j]);
+                                }
+                            }
+                        }
+                    }
+                }
+                for(int i = 0; i < tempCategory.Products.Count; i++)
+                {
+                    for(int j = 0; j < tempCategory.Products.Count; j++)
+                    {
+                        if (i == j)
+                        {
+                            continue;
+                        }
+                        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
+                        {
+                            tempCategory.Products.Remove(tempCategory.Products[j]);
+                        }
+                    }
+                }
+            }
+
+            var tempFinal = new ProductPaginationAdminVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductNameVM>(),
+            };
+
+            if (model.BrandIds.Count > 0 && model.CategoryIds.Count > 0)
+            {
+                var tempProduct = new List<ProductNameVM>();
+                for (int j = 0; j < tempCategory.Products.Count; j++)
+                {
+                    for (int m = 0; m < model.BrandIds.Count; m++)
+                    {
+                        if (tempCategory.Products[j].BrandId == model.BrandIds[m])
+                        {
+                            tempProduct.Add(tempCategory.Products[j]);
+                        }
+                    }
+                }
+                tempFinal.Products = tempProduct;
+            }
+
+            if (model.BrandIds.Count > 0 && model.CategoryIds.Count > 0)
+            {
+                var countTemp = tempFinal.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempFinal.Products = tempFinal.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempFinal.TotalPage = totalPageTemp;
+                tempFinal.TotalResult = countTemp;
+                return tempFinal;
+            }
+
+
+            if (model.BrandIds.Count > 0 && model.CategoryIds.Count == 0)
+            {
+                var countTemp = tempBrand.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempBrand.Products = tempBrand.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempBrand.TotalPage = totalPageTemp;
+                tempBrand.TotalResult = countTemp;
+
+                return tempBrand;
+            }
+
+            if (model.CategoryIds.Count > 0 && model.BrandIds.Count == 0)
+            {
+                var countTemp = tempCategory.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempCategory.Products = tempCategory.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempCategory.TotalPage = totalPageTemp;
+                tempCategory.TotalResult = countTemp;
+
+                return tempCategory;
+            }
+
             var count = resultFromDAL.Count();
-            var totalPage=(int)Math.Ceiling(count / (double)model.Limit);
+            var totalPage = (int)Math.Ceiling(count / (double)model.Limit);
             resultFromDAL = resultFromDAL.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
 
             var result = new ProductPaginationAdminVM
             {
                 TotalPage = totalPage,
                 Products = resultFromDAL,
+                TotalResult = count,
             };
 
             return result;
         }
 
+        public async Task<PriceRangeVM> PriceRange()
+        {
+            return await productDAL.PriceRange();
+        }
         public async Task<ProductDetailVM> ProductDetail(string slug)
         {
             var resultFromDAL = await productDAL.ProductDetail(slug);
@@ -619,9 +750,9 @@ namespace BLL.Product
                     }
                 }
 
-                
+
             }
-            
+
             return listProduct;
         }
 

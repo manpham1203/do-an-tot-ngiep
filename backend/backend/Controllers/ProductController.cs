@@ -276,6 +276,18 @@ namespace backend.Controllers
             }
             return Ok(resultFromBLL);
         }
+
+        [HttpGet("pricerange")]
+        public async Task<IActionResult> PriceRange()
+        {
+            var resultFromBLL = await productBLL.PriceRange();
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
+
         [HttpGet("ProductRowAdmin/{id}")]
         public async Task<IActionResult> ProductRowAdmin(string id)
         {

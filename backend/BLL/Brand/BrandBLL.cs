@@ -226,7 +226,7 @@ namespace BLL
                     var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL[i].Id);
                     resultFromDAL[i].ProductCardVMs = productCards;
                 }
-                for(int i=0; i < resultFromDAL.Count; i++)
+                for (int i = 0; i < resultFromDAL.Count; i++)
                 {
                     if (resultFromDAL[i].ProductCardVMs.Count == 0)
                     {
@@ -263,6 +263,38 @@ namespace BLL
                 return new List<BrandNameVM>();
             }
             return resultFromDAL;
+        }
+
+        public async Task<BrandPaginationAdminVM> AllBrandNameAdmin(bool deleted, BrandFilterVM model)
+        {
+            if (!string.IsNullOrEmpty(model.Search))
+            {
+                model.Search.ToLower();
+            }
+            var resultFromDAL = await brandDAL.AllBrandNameAdmin(deleted, model);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new BrandPaginationAdminVM
+                {
+                    TotalPage = 0,
+                    TotalResult = 0,
+                    Brands = new List<BrandNameVM>(),
+                };
+            }
+            var count = resultFromDAL.Count();
+            var totalPage = (int)Math.Ceiling(count / (double)model.Limit);
+            resultFromDAL = resultFromDAL.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+            return new BrandPaginationAdminVM
+            {
+                TotalResult = count,
+                TotalPage = totalPage,
+                Brands = resultFromDAL,
+
+            };
         }
 
         public async Task<BrandRowAdminVM> BrandRowAdmin(string id)

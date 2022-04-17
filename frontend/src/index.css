@@ -145,4 +145,16 @@
   input.number_cart-item[type="number"] {
     -moz-appearance: textfield;
   }
+
+  .pagination{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+  }
+  .pagination .selected{
+    color:pink;
+  }
+
+  
 }

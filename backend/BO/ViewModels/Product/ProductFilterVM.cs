@@ -14,7 +14,7 @@ namespace BO.ViewModels.Product
         public string ShortBy { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int Limit { get; set; } = 10;
-        public List<string> CategorySlug { get; set; }
-        public List<string> BrandSlug { get; set; }
+        public List<string> CategoryIds { get; set; }
+        public List<string> BrandIds { get; set; }
     }
 }

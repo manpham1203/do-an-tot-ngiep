@@ -346,6 +346,16 @@ namespace backend.Controllers
             }
             return Ok(resultFromBLL);
         }
+        [HttpPost("allbrandnameadmindeleted")]
+        public async Task<IActionResult> AllBrandNameAdmin(bool deleted, BrandFilterVM model)
+        {
+            var resultFromBLL = await brandBLL.AllBrandNameAdmin(deleted, model);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            return Ok(resultFromBLL);
+        }
 
         [HttpGet("brandrowadmin/{id}")]
         public async Task<IActionResult> BrandRowAdmin(string id)

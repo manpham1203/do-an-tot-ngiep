@@ -67,59 +67,60 @@ function App() {
             path="/admin/dashboard"
             element={<Dashboard />}
           />
+          
           <Route
-            path="/admin/danh-sach-san-pham"
-            element={<ProductTable />}
-          />
-          <Route
-            path="/admin/chinh-sua-san-pham/:slug"
+            path="/admin/san-pham/chinh-sua/:slug"
             element={<ProductEdit />}
           />
           <Route
-            path="/admin/them-san-pham"
+            path="/admin/san-pham/tao-moi"
             element={<ProductCreate />}
           />
            <Route
-            path="/admin/san-pham-da-xoa"
+            path="/admin/san-pham/thung-rac"
             element={<ProductTrash />}
           />
           <Route
-            path="/admin/danh-sach-thuong-hieu"
+            path="/admin/san-pham/danh-sach"
+            element={<ProductTable />}
+          />
+          <Route
+            path="/admin/thuong-hieu/danh-sach"
             element={<BrandTable />}
           />
           <Route
-            path="/admin/them-thuong-hieu"
+            path="/admin/thuong-hieu/tao-moi"
             element={<BrandCreate />}
           />
           <Route
-            path="/admin/chinh-sua-thuong-hieu/:slug"
+            path="/admin/thuong-hieu/chinh-sua/:slug"
             element={<BrandEdit />}
           />
            <Route
-            path="/admin/thuong-hieu-da-xoa"
+            path="/admin/thuong-hieu/thung-rac"
             element={<BrandTrash />}
           />
           <Route
-            path="/admin/danh-sach-danh-muc"
+            path="/admin/danh-muc/danh-sach"
             element={<CategoryTable />}
           />
           <Route
-            path="/admin/them-danh-muc"
+            path="/admin/danh-muc/tao-moi"
             element={<CategoryCreate />}
           />
           <Route
-            path="/admin/chinh-sua-danh-muc/:slug"
+            path="/admin/danh-muc/chinh-sua/:slug"
             element={<CategoryEdit />}
           />
            <Route
-            path="/admin/danh-muc-da-xoa"
+            path="/admin/danh-muc/thung-rac"
             element={<CategoryTrash />}
           />
 
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
-      <ToastContainer theme={"colored"} />
+      <ToastContainer />
     </div>
   );
 }

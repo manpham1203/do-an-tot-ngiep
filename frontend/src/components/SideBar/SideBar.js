@@ -9,71 +9,73 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 function SideBar(props) {
   const [open, setOpen] = useState(true);
   const [tab, setTab] = useState(null);
+  const [tabMenu, setTabMenu] = useState(null);
   const iconParent = <FaRegCircle className="w-[24px]" />;
   const iconchild = <BsCircleFill className="w-[24px]" />;
   const location = useLocation();
-  const Menus = [
+  const Menu = [
     {
       title: "Sản Phẩm",
-      pathname: "/admin/san-pham/bang-san-pham",
       icon: iconParent,
     },
     {
       title: "Thương Hiệu",
-      pathname: "/admin/thuong-hieu/bang-thuong-hieu",
       icon: iconParent,
     },
     {
       title: "Danh mục",
-      pathname: "/admin/danh-muc/bang-danh-muc",
       icon: iconParent,
     },
   ];
-  const Product = [
+  const ProductTab = [
     {
-      title: "Danh sách sản phẩm",
-      to: "/admin/danh-sach-san-pham",
+      title: "Danh Sách",
+      path: "san-pham/danh-sach",
       icon: iconchild,
     },
     {
-      title: "Thêm sản phẩm",
-      to: "/admin/them-san-pham",
+      title: "Tạo Mới",
+      path: "san-pham/tao-moi",
       icon: iconchild,
     },
-    { title: "Thùng rác", to: "/admin/san-pham-da-xoa", icon: iconchild },
-  ];
-  const Brand = [
     {
-      title: "Danh sách thương hiệu",
-      to: "/admin/danh-sach-thuong-hieu",
-      icon: iconParent,
-    },
-    {
-      title: "Thêm thương hiệu",
-      to: "/admin/them-thuong-hieu",
-      icon: iconParent,
-    },
-    {
-      title: "Thùng rác",
-      to: "/admin/thuong-hieu-da-xoa",
-      icon: iconParent,
+      title: "Thùng Rác",
+      path: "san-pham/thung-rac",
+      icon: iconchild,
     },
   ];
-  const Category = [
+  const BrandTab = [
     {
-      title: "Danh sách danh mục",
-      to: "/admin/danh-sach-danh-muc",
-      icon: iconParent,
+      title: "Danh Sách",
+      path: "thuong-hieu/danh-sach",
+      icon: iconchild,
     },
     {
-      title: "Thêm danh mục",
-      to: "/admin/them-danh-muc",
-      icon: iconParent,
+      title: "Tạo Mới",
+      path: "thuong-hieu/tao-moi",
+      icon: iconchild,
     },
     {
-      title: "Thùng rác",
-      to: "/admin/danh-muc-da-xoa",
-      icon: iconParent,
+      title: "Thùng Rác",
+      path: "thuong-hieu/thung-rac",
+      icon: iconchild,
+    },
+  ];
+  const CategoryTab = [
+    {
+      title: "Danh Sách",
+      path: "danh-muc/danh-sach",
+      icon: iconchild,
+    },
+    {
+      title: "Tạo Mới",
+      path: "danh-muc/tao-moi",
+      icon: iconchild,
+    },
+    {
+      title: "Thùng Rác",
+      path: "danh-muc/thung-rac",
+      icon: iconchild,
     },
   ];
   const handleClick = (i) => {
@@ -118,7 +120,7 @@ function SideBar(props) {
           </div>
         </NavLink>
         <div className="">
-          {Menus.map((Menu, index) => (
+          {Menu.map((Menu, index) => (
             <div key={index}>
               <div
                 onClick={() => handleClick(index)}
@@ -144,11 +146,12 @@ function SideBar(props) {
               </div>
               {tab === 0 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
-                  {Product.map((p, i) => {
+                  {ProductTab.map((p, i) => {
                     return (
-                      <li key={i}>
+                      <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
-                          to={p.to}
+                          to={p.path}
+                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {
@@ -158,12 +161,9 @@ function SideBar(props) {
                               : undefined
                           }
                           className={`
-                            ${
-                              location.pathname !== p.to && "hover:bg-[#494E53]"
-                            }
-                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer ${
-                    tab !== index && "hover:bg-[#494E53]"
-                  }  text-gray-300 text-sm items-center gap-x-4 mt-2
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
                                 `}
                         >
                           <div className="flex flex-row items-center">
@@ -184,11 +184,12 @@ function SideBar(props) {
               )}
               {tab === 1 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
-                  {Brand.map((p, i) => {
+                  {BrandTab.map((p, i) => {
                     return (
-                      <li key={i}>
+                      <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
-                          to={p.to}
+                          to={p.path}
+                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {
@@ -198,12 +199,10 @@ function SideBar(props) {
                               : undefined
                           }
                           className={`
-                            ${
-                              location.pathname !== p.to && "hover:bg-[#494E53]"
-                            }
-                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer ${
-                    tab !== index && "hover:bg-[#494E53]"
-                  }  text-gray-300 text-sm items-center gap-x-4 mt-2
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
                                 `}
                         >
                           <div className="flex flex-row items-center">
@@ -224,11 +223,12 @@ function SideBar(props) {
               )}
               {tab === 2 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
-                  {Category.map((p, i) => {
+                  {CategoryTab.map((p, i) => {
                     return (
-                      <li key={i}>
+                      <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
-                          to={p.to}
+                          to={p.path}
+                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {
@@ -238,12 +238,10 @@ function SideBar(props) {
                               : undefined
                           }
                           className={`
-                            ${
-                              location.pathname !== p.to && "hover:bg-[#494E53]"
-                            }
-                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer ${
-                    tab !== index && "hover:bg-[#494E53]"
-                  }  text-gray-300 text-sm items-center gap-x-4 mt-2
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
                                 `}
                         >
                           <div className="flex flex-row items-center">
@@ -279,8 +277,8 @@ function SideBar(props) {
           />
           <h2>home</h2>
         </div>
-        <div className="w-full p-[20px] ">       
-            <Outlet />
+        <div className="w-full p-[20px] ">
+          <Outlet />
         </div>
       </div>
     </div>

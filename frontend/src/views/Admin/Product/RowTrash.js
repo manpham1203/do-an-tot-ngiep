@@ -97,32 +97,7 @@ function RowTrash(props) {
   const handleEdit = (slug) => {
     navigate(`/admin/chinh-sua-san-pham/${slug}`);
   };
-  const handleTrash = async (id) => {
-    await api({
-      method: "POST",
-      url: `/product/deleted/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          toast.warn(`Chuyển vào thùng rác thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData(id);
-        } else {
-          toast.error(`Thao tác thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Thao tác thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
+  
   return (
     <>
       {state.data.deleted === true ? (
@@ -169,7 +144,7 @@ function RowTrash(props) {
                 className="cursor-pointer"
               />
               <FaTrashRestoreAlt
-                onClick={() => handleTrash(state.data.id)}
+                onClick={() => props.handleTrash(state.data.id)}
                 className="cursor-pointer"
               />
               <button

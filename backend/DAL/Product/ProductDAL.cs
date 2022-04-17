@@ -232,7 +232,6 @@ namespace DAL.Product
             return productVMs;
 
         }
-
         public async Task<List<ProductCardVM>> ListProductCard()
         {
             try
@@ -372,6 +371,7 @@ namespace DAL.Product
                     Id = x.Id,
                     Name = x.Name,
                     Slug = x.Slug,
+                    BrandId = x.BrandId,
                 }).ToList();
                 return result;
             }
@@ -400,6 +400,7 @@ namespace DAL.Product
                     Id = x.Id,
                     Name = x.Name,
                     Slug = x.Slug,
+                    BrandId = x.BrandId,
                 }).ToList();
                 return result;
             }
@@ -457,16 +458,13 @@ namespace DAL.Product
                     }
                 }
 
-                var pageTotal = resultFromDb.Count();
-                
-                //resultFromDb = resultFromDb.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
 
                 var result = resultFromDb.Select(x => new ProductNameVM
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Slug = x.Slug,
+                    BrandId = x.BrandId,
                 }).ToList();
                 return result;
             }
@@ -545,5 +543,26 @@ namespace DAL.Product
             }
             return true;
         }
+
+        public async Task<PriceRangeVM> PriceRange()
+        {
+            try
+            {
+                var maxPrice = await db.Products.MaxAsync(p => p.Price);
+                var minPrice = await db.Products.MinAsync(p => p.Price);
+                var result = new PriceRangeVM
+                {
+                    MaxPrice = maxPrice,
+                    MinPrice = minPrice,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
     }
 }

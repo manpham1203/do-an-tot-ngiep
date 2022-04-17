@@ -279,15 +279,40 @@ namespace BLL.Category
             }
             return resultFromDAL;
         }
-        public async Task<CategoryRowAdminVM> BrandRowAdmin(string id)
+
+
+        public async Task<CategoryPaginationAdminVM> AllCategoryNameAdmin(bool deleted, CategoryFilterVM model)
         {
-            var resultFromDAL = await categoryDAL.CategoryRowAdmin(id);
+            if (!string.IsNullOrEmpty(model.Search))
+            {
+                model.Search.ToLower();
+            }
+            var resultFromDAL = await categoryDAL.AllCategoryNameAdmin(deleted, model);
             if (resultFromDAL == null)
             {
                 return null;
             }
-            return resultFromDAL;
+            if (resultFromDAL.Count == 0)
+            {
+                return new CategoryPaginationAdminVM
+                {
+                    TotalPage = 0,
+                    TotalResult = 0,
+                    Categories = new List<CategoryNameVM>(),
+                };
+            }
+            var count = resultFromDAL.Count();
+            var totalPage = (int)Math.Ceiling(count / (double)model.Limit);
+            resultFromDAL = resultFromDAL.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+            return new CategoryPaginationAdminVM
+            {
+                TotalResult = count,
+                TotalPage = totalPage,
+                Categories = resultFromDAL,
+
+            };
         }
+
         public async Task<CategoryNameVM> CategoryNameById(string id)
         {
             var resultFromDAL = await categoryDAL.CategoryNameById(id);

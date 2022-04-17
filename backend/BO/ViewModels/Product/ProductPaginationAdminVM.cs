@@ -9,6 +9,7 @@ namespace BO.ViewModels.Product
     public class ProductPaginationAdminVM
     {
         public int TotalPage { get; set; }
+        public int TotalResult { get; set; }
         public List<ProductNameVM> Products { get; set; }
     }
 }

@@ -166,6 +166,54 @@ namespace DAL.Category
 
         }
 
+        public async Task<List<CategoryNameVM>> AllCategoryNameAdmin(bool deleted, CategoryFilterVM model)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.Where(x => x.Deleted == deleted).OrderBy(x => x.CreatedAt).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<CategoryNameVM>();
+                }
+
+                if (!string.IsNullOrEmpty(model.Search))
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.ShortBy))
+                {
+                    switch (model.ShortBy)
+                    {
+                        case "desc":
+                            resultFromDb = resultFromDb.OrderByDescending(x => x.Name).ToList();
+                            break;
+                        case "asc":
+                            resultFromDb = resultFromDb.OrderBy(x => x.Name).ToList();
+                            break;
+                        default: break;
+                    }
+                }
+
+                var categoryNameVMs = resultFromDb.Select(x => new CategoryNameVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ProductCardVMs = null,
+                }).ToList();
+
+                return categoryNameVMs;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<List<CategoryNameVM>> AllCategoryName()
         {
             try
