@@ -37,11 +37,11 @@ namespace DAL.Product
                 PriceDiscount = x.PriceDiscount,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Quantity = x.Quantity,
+                QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Likes = x.Likes,
-                Views = x.Views,
+                Like = x.Like,
+                View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
                 BrandId = x.BrandId
@@ -65,11 +65,11 @@ namespace DAL.Product
                 PriceDiscount = productFromDb.PriceDiscount,
                 FullDescription = productFromDb.FullDescription,
                 ShortDescription = productFromDb.ShortDescription,
-                Quantity = productFromDb.Quantity,
+                QuantityInStock = productFromDb.QuantityInStock,
                 Published = productFromDb.Published,
                 Deleted = productFromDb.Deleted,
-                Likes = productFromDb.Likes,
-                Views = productFromDb.Views,
+                Like = productFromDb.Like,
+                View = productFromDb.View,
                 CreatedAt = productFromDb.CreatedAt,
                 UpdatedAt = productFromDb.UpdatedAt,
                 BrandId = productFromDb.BrandId
@@ -94,11 +94,11 @@ namespace DAL.Product
                 PriceDiscount = x.PriceDiscount,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Quantity = x.Quantity,
+                QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Likes = x.Likes,
-                Views = x.Views,
+                Like = x.Like,
+                View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
                 BrandId = x.BrandId
@@ -117,11 +117,11 @@ namespace DAL.Product
                 PriceDiscount = productVM.PriceDiscount,
                 FullDescription = productVM.FullDescription,
                 ShortDescription = productVM.ShortDescription,
-                Quantity = productVM.Quantity,
+                QuantityInStock = productVM.QuantityInStock,
                 Published = productVM.Published,
                 Deleted = productVM.Deleted,
-                Likes = productVM.Likes,
-                Views = productVM.Views,
+                Like = productVM.Like,
+                View = productVM.View,
                 CreatedAt = productVM.CreatedAt,
                 UpdatedAt = productVM.UpdatedAt,
                 BrandId = productVM.BrandId
@@ -146,11 +146,11 @@ namespace DAL.Product
             productFromDb.PriceDiscount = productVM.PriceDiscount;
             productFromDb.FullDescription = productVM.FullDescription;
             productFromDb.ShortDescription = productVM.ShortDescription;
-            productFromDb.Quantity = productVM.Quantity;
+            productFromDb.QuantityInStock = productVM.QuantityInStock;
             productFromDb.Published = productVM.Published;
             productFromDb.Deleted = productVM.Deleted;
-            productFromDb.Likes = productVM.Likes;
-            productFromDb.Views = productVM.Views;
+            productFromDb.Like = productVM.Like;
+            productFromDb.View = productVM.View;
             productFromDb.UpdatedAt = productVM.UpdatedAt;
             productFromDb.BrandId = productVM.BrandId;
 
@@ -220,11 +220,11 @@ namespace DAL.Product
                 PriceDiscount = x.PriceDiscount,
                 FullDescription = x.FullDescription,
                 ShortDescription = x.ShortDescription,
-                Quantity = x.Quantity,
+                QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Likes = x.Likes,
-                Views = x.Views,
+                Like = x.Like,
+                View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
                 BrandId = x.BrandId
@@ -254,6 +254,31 @@ namespace DAL.Product
                     BrandId = x.BrandId,
                 }).ToList();
                 return productCards;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<ProductCardVM> ProductCard(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id==id && x.Published == true && x.Deleted == false);
+
+                var productCard =  new ProductCardVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    Price = resultFromDb.Price,
+                    PriceDiscount = resultFromDb.PriceDiscount,
+                    BrandNameVM = new BrandNameVM(),
+                    ImageName = null,
+                    ImageSrc = null,
+                    BrandId = resultFromDb.BrandId,
+                };
+                return productCard;
             }
             catch
             {
@@ -337,8 +362,8 @@ namespace DAL.Product
                 result.PriceDiscount = resultFromDb.PriceDiscount;
                 result.Published = resultFromDb.Published;
                 result.Deleted = resultFromDb.Deleted;
-                result.Views = resultFromDb.Views;
-                result.Likes = resultFromDb.Likes;
+                result.View = resultFromDb.View;
+                result.Like = resultFromDb.Like;
                 result.CreatedAt = resultFromDb.CreatedAt;
                 result.BrandId = resultFromDb.BrandId;
                 result.BrandNameVM = new BrandNameVM();
@@ -429,18 +454,18 @@ namespace DAL.Product
                 {
                     resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
                 }
-                if (model.From.HasValue)
+                if (model.PriceFrom.HasValue)
                 {
-                    resultFromDb = resultFromDb.Where(x => x.Price >= model.From).ToList();
+                    resultFromDb = resultFromDb.Where(x => x.Price >= model.PriceFrom).ToList();
                 }
-                if (model.To.HasValue)
+                if (model.PriceTo.HasValue)
                 {
-                    resultFromDb = resultFromDb.Where(x => x.Price <= model.To).ToList();
+                    resultFromDb = resultFromDb.Where(x => x.Price <= model.PriceTo).ToList();
                 }
 
-                if (!string.IsNullOrEmpty(model.ShortBy))
+                if (!string.IsNullOrEmpty(model.OrderBy))
                 {
-                    switch (model.ShortBy)
+                    switch (model.OrderBy)
                     {
                         case "desc":
                             resultFromDb = resultFromDb.OrderByDescending(x => x.Name).ToList();
@@ -493,11 +518,11 @@ namespace DAL.Product
                     PriceDiscount = resultFromDb.PriceDiscount,
                     FullDescription = resultFromDb.FullDescription,
                     ShortDescription = resultFromDb.ShortDescription,
-                    Quantity = resultFromDb.Quantity,
+                    QuantityInStock = resultFromDb.QuantityInStock,
                     Published = resultFromDb.Published,
                     Deleted = resultFromDb.Deleted,
-                    Views = resultFromDb.Views,
-                    Likes = resultFromDb.Likes,
+                    View = resultFromDb.View,
+                    Like = resultFromDb.Like,
                     BrandId = resultFromDb.BrandId,
                     BrandNameVM = new BrandNameVM(),
                     CategoryNameVMs = new List<CategoryNameVM>(),
@@ -564,5 +589,99 @@ namespace DAL.Product
 
         }
 
+        public async Task<List<ProductWidgetVM>> NewProductWidget()
+        {
+            var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).OrderBy(x=>x.CreatedAt).Take(5).ToListAsync();
+            if (resultFromDb.Count == 0)
+            {
+                return new List<ProductWidgetVM>();
+            }
+            if (resultFromDb == null)
+            {
+                return null;
+            }
+            var result = resultFromDb.Select(x => new ProductWidgetVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Slug=x.Slug,
+                Price = x.Price,
+                PriceDiscount = x.PriceDiscount,
+                ImgName = null,
+                ImgSrc = null,
+            }).ToList();
+            return result;
+        }
+    
+        public async Task<List<ProductCardVM>> ProductFilter(ProductFilterVM model)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.Where(x => x.Deleted == false && x.Published==true).ToListAsync();
+
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<ProductCardVM>();
+                }
+
+                if (!string.IsNullOrEmpty(model.Search))
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
+                }
+                if (model.PriceFrom.HasValue)
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Price >= model.PriceFrom).ToList();
+                }
+                if (model.PriceTo.HasValue)
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Price <= model.PriceTo).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(model.OrderBy))
+                {
+                    switch (model.OrderBy)
+                    {
+                        case "day_desc":
+                            resultFromDb = resultFromDb.OrderByDescending(x => x.CreatedAt).ToList();
+                            break;
+                        case "day_asc":
+                            resultFromDb = resultFromDb.OrderBy(x => x.CreatedAt).ToList();
+                            break;
+                        case "price_asc":
+                            resultFromDb = resultFromDb.OrderBy(x => x.Price).ToList();
+                            break;
+                        case "price_desc":
+                            resultFromDb = resultFromDb.OrderByDescending(x => x.Price).ToList();
+                            break;
+                        default: break;
+                    }
+                }
+
+
+                var result = resultFromDb.Select(x => new ProductCardVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    Price = x.Price,
+                    PriceDiscount = x.PriceDiscount,
+                    BrandNameVM = new BrandNameVM(),
+                    ImageName = null,
+                    ImageSrc = null,
+                    BrandId = x.BrandId,
+                }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
+ 
     }
 }

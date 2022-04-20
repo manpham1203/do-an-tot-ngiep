@@ -10,10 +10,14 @@ import { addToCart } from "../../../redux/cart/cartActions";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import ProductImageSlider from "../../../components/ProductImageSlider/ProductImageSlider";
+import BrandWidget from "../../../components/Widget/BrandWidget";
+import CategoryWidget from "../../../components/Widget/CategoryWidget";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
+import NewProductWidget from "../../../components/Widget/NewProductWidget";
+import RelatedProducts from "../../../components/Product/RelatedProducts";
 
 const initState = {
   loading: false,
@@ -140,24 +144,24 @@ function ProductDetail() {
     }
   };
 
-  console.log(state);
+  
 
   return (
-    <div className="pt-[100px] container mx-auto">
+    <div className="container mx-auto">
       {state.loading ? (
         <>loading</>
       ) : state.fail ? (
         <>fail</>
       ) : (
-        <div className="flex flex-row gap-x-[20px] ">
-          <div className="w-[50%] p-[20px] flex flex-row">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-x-[20px] ">
+          <div className="w-fit p-[20px] flex flex-col lg:flex-row gap-x-[20px] lg:items-start items-center justify-center">
             <ProductImageSlider images={state.data?.productImageVMs} />
           </div>
 
-          <div className="w-[50%] p-[20px]">
-            <div className=" flex flex-col gap-y-[10px] items-center bg-gradient-to-b from-[white] to-transparent ">
-              <h2>{state.data.brandNameVM?.name}</h2>
-              <h2 className="text-[30px] mt-[5px]">{state.data.name}</h2>
+          <div className="w-full p-[20px]">
+            <div className=" flex flex-col gap-y-[10px] items-center lg:items-start">
+              <h2 className="text-[20px]">{state.data.brandNameVM?.name}</h2>
+              <h2 className="text-[30px]">{state.data.name}</h2>
               <div className="flex flex-row items-center text-[#F7BF63]">
                 <AiFillStar />
                 <AiFillStar />
@@ -168,10 +172,8 @@ function ProductDetail() {
                   (1 lượt đánh giá)
                 </span>
               </div>
-              <span className="mt-[10px]">Lượt thích: {state.data.likes}</span>
-              <span className="mt-[10px]">Lượt xem: {state.data.likes}</span>
               {state.data.priceDiscount === 0 ? (
-                <span className="text-[25px] mt-[10px]">
+                <span className="text-[28px] mt-[10px]">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
@@ -179,13 +181,13 @@ function ProductDetail() {
                 </span>
               ) : (
                 <div className="flex flex-row gap-x-[20px]">
-                  <span className="text-[25px] mt-[10px] font-semibold">
+                  <span className="text-[28px] mt-[10px] ">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
                     }).format(state.data.priceDiscount)}
                   </span>
-                  <span className="text-[25px] mt-[10px] line-through">
+                  <span className="text-[28px] mt-[10px] line-through opacity-[0.5]">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
@@ -193,45 +195,61 @@ function ProductDetail() {
                   </span>
                 </div>
               )}
+              <div className="mt-[10px]">
+                <span className="font-medium">Lượt thích: </span>
+                {state.data.likes}
+              </div>
+              <div className="mt-[10px]">
+                <span className="font-medium">Lượt xem: </span>
+                {state.data.likes}
+              </div>
 
-              <span className="flex flex-row mt-[10px]">
-                Loại sản phẩm:
-                {state.data.categoryNameVMs?.map((item) => {
-                  return (
-                    <p
-                      key={item.id}
-                      className="cursor-pointer"
-                      onClick={() => navigate(`/category/${item.id}`)}
-                    >
-                      {item.name},&nbsp;
-                    </p>
-                  );
-                })}
-              </span>
+              <div className="text-justify">{state.data.shortDescription}</div>
 
-              <div className="flex flex-row items-center gap-x-[5px] mt-[20px]">
+              <div className="mt-[10px]">
+                <div className="">
+                  <span className="font-medium">Loại sản phẩm: </span>
+                  {state.data.categoryNameVMs?.map((item) => {
+                    return (
+                      <span
+                        key={item.id}
+                        className="cursor-pointer hover:underline underline-offset-4"
+                        onClick={() => navigate(`/san-pham?&category=${item.slug}`)}
+                      >
+                        {item.name},&nbsp;
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center mt-[20px] border border-gray-400">
                 <div
-                  className="cursor-pointer"
-                  onClick={() => setNumber((number) => number<=1?1: number - 1)}
+                  className="cursor-pointer px-[10px] border-r border-gray-400 h-[40px] flex items-center"
+                  onClick={() =>
+                    setNumber((number) => (number <= 1 ? 1 : number - 1))
+                  }
                 >
                   <BsDashLg />
                 </div>
                 <input
+                  className="number_cart-item w-[100px] text-center h-[40px] "
                   type="number"
-                  className="number_cart-item border border-gray-400 w-[50px] text-center"
                   value={number}
                   onChange={(e) => onHandleNumber(e)}
                   min="1"
                 />
                 <div
-                  className="cursor-pointer"
-                  onClick={() => setNumber((number) => number>=9?9: number + 1)}
+                  className="cursor-pointer px-[10px] border-l border-gray-400 h-[40px] flex items-center"
+                  onClick={() =>
+                    setNumber((number) => (number >= 9 ? 9 : number + 1))
+                  }
                 >
                   <BsPlusLg />
                 </div>
               </div>
               <button
-                className="mt-[20px] p-[10px] bg-[#F8F7F4] border border-[#161a2133]"
+                className="mt-[20px] p-[10px] border-2 border-second font-medium"
                 onClick={() => addCart(state.data.id, number)}
               >
                 THÊM VÀO GIỎ HÀNG
@@ -240,12 +258,24 @@ function ProductDetail() {
           </div>
         </div>
       )}
-
-      <div className="">
-        <h1>Description: </h1>
-        <div
-          dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
-        ></div>
+      <div className="flex flex-row gap-x-[25px]">
+        <div className="w-full">
+          <h2 className="text-[25px] mb-[25px]">Mô tả sản phẩm</h2>
+          <div
+            className="text-justify"
+            dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
+          ></div>
+        </div>
+        <div className="w-[350px]">
+          <BrandWidget />
+          <CategoryWidget />
+          <NewProductWidget />
+        </div>
+      </div>
+      <div>
+        {state.data?.brandId && (
+          <RelatedProducts brandId={state.data?.brandId} />
+        )}
       </div>
     </div>
   );

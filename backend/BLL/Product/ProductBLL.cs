@@ -78,7 +78,7 @@ namespace BLL.Product
             var slug = Regex.Replace(cm.RemoveUnicode(createProductVM.Name).Trim().ToLower(), @"\s+", "-");
 
 
-            if (createProductVM.Files.Count > 0)
+            if (createProductVM.Files !=null)
             {
                 createProductVM.ImageNames = new List<string>();
                 for (int i = 0; i < createProductVM.Files.Count; i++)
@@ -100,11 +100,11 @@ namespace BLL.Product
                 PriceDiscount = createProductVM.PriceDiscount,
                 FullDescription = createProductVM.FullDescription,
                 ShortDescription = createProductVM.ShortDescription,
-                Quantity = createProductVM.Quantity,
+                QuantityInStock = createProductVM.QuantityInStock,
                 Published = createProductVM.Published,
                 Deleted = false,
-                Likes = 0,
-                Views = 0,
+                Like = 0,
+                View = 0,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
                 BrandId = createProductVM.BrandId,
@@ -139,7 +139,7 @@ namespace BLL.Product
 
             #endregion
 
-            if (createProductVM.Files.Count > 0)
+            if (createProductVM.Files != null)
             {
                 var productImageBLL = new ProductImageBLL();
                 var saveImg = await productImageBLL.Create(createProductVM.ImageNames, productId);
@@ -205,11 +205,9 @@ namespace BLL.Product
                 PriceDiscount = updateProductVM.PriceDiscount,
                 FullDescription = updateProductVM.FullDescription,
                 ShortDescription = updateProductVM.ShortDescription,
-                Quantity = updateProductVM.Quantity,
+                QuantityInStock = updateProductVM.QuantityInStock,
                 Published = updateProductVM.Published,
                 Deleted = updateProductVM.Deleted,
-                Likes = updateProductVM.Likes,
-                Views = updateProductVM.Views,
                 UpdatedAt = DateTime.Now,
                 BrandId = updateProductVM.BrandId,
             };
@@ -378,6 +376,32 @@ namespace BLL.Product
             }
             return resultFromDAL;
         }
+        public async Task<ProductCardVM> ProductCard(string id)
+        {
+            var resultFromDAL = await productDAL.ProductCard(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            
+                var brandBLL = new BrandBLL();
+                var brand = await brandBLL.GetById(resultFromDAL.BrandId);
+                if (brand != null)
+                {
+                    resultFromDAL.BrandNameVM.Id = brand.Id;
+                    resultFromDAL.BrandNameVM.Name = brand.Name;
+                    resultFromDAL.BrandNameVM.Slug = brand.Slug;
+                }
+
+                var productImageBLL = new ProductImageBLL();
+                var listImg = await productImageBLL.GetByProductId(resultFromDAL.Id);
+                if (listImg.Count > 0)
+                {
+                    resultFromDAL.ImageName = listImg[0].Name;
+                }
+            
+            return resultFromDAL;
+        }
 
         public async Task<ProductCardVM> ProductCardById(string id)
         {
@@ -532,17 +556,17 @@ namespace BLL.Product
                 Products = new List<ProductNameVM>(),
             };
 
-            if (model.BrandIds.Count > 0)
+            if (model.BrandSlugs.Count > 0)
             {
 
-                for (int i = 0; i < model.BrandIds.Count; i++)
+                for (int i = 0; i < model.BrandSlugs.Count; i++)
                 {
                     for (int j = 0; j < resultFromDAL.Count; j++)
                     {
                         var checkBrand = await GetById(resultFromDAL[j].Id);
                         if (checkBrand != null)
                         {
-                            if (model.BrandIds[i] == checkBrand.BrandId)
+                            if (model.BrandSlugs[i] == checkBrand.BrandId)
                             {
                                 tempBrand.Products.Add(resultFromDAL[j]);
                             }
@@ -558,13 +582,13 @@ namespace BLL.Product
                 Products = new List<ProductNameVM>(),
             };
             var pcBLL = new ProductCategoryBLL();
-            if (model.CategoryIds.Count > 0)
+            if (model.CategorySlugs.Count > 0)
             {
-                for (int i = 0; i < model.CategoryIds.Count; i++)
+                for (int i = 0; i < model.CategorySlugs.Count; i++)
                 {
                     for (int j = 0; j < resultFromDAL.Count; j++)
                     {
-                        var checkCategory = await pcBLL.GetById(model.CategoryIds[i], "CategoryId");
+                        var checkCategory = await pcBLL.GetById(model.CategorySlugs[i], "CategoryId");
                         if (checkCategory.Count > 0)
                         {
                             for (int c = 0; c < checkCategory.Count; c++)
@@ -600,14 +624,14 @@ namespace BLL.Product
                 Products = new List<ProductNameVM>(),
             };
 
-            if (model.BrandIds.Count > 0 && model.CategoryIds.Count > 0)
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count > 0)
             {
                 var tempProduct = new List<ProductNameVM>();
                 for (int j = 0; j < tempCategory.Products.Count; j++)
                 {
-                    for (int m = 0; m < model.BrandIds.Count; m++)
+                    for (int m = 0; m < model.BrandSlugs.Count; m++)
                     {
-                        if (tempCategory.Products[j].BrandId == model.BrandIds[m])
+                        if (tempCategory.Products[j].BrandId == model.BrandSlugs[m])
                         {
                             tempProduct.Add(tempCategory.Products[j]);
                         }
@@ -616,7 +640,7 @@ namespace BLL.Product
                 tempFinal.Products = tempProduct;
             }
 
-            if (model.BrandIds.Count > 0 && model.CategoryIds.Count > 0)
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count > 0)
             {
                 var countTemp = tempFinal.Products.Count();
                 var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
@@ -627,7 +651,7 @@ namespace BLL.Product
             }
 
 
-            if (model.BrandIds.Count > 0 && model.CategoryIds.Count == 0)
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count == 0)
             {
                 var countTemp = tempBrand.Products.Count();
                 var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
@@ -638,7 +662,7 @@ namespace BLL.Product
                 return tempBrand;
             }
 
-            if (model.CategoryIds.Count > 0 && model.BrandIds.Count == 0)
+            if (model.CategorySlugs.Count > 0 && model.BrandSlugs.Count == 0)
             {
                 var countTemp = tempCategory.Products.Count();
                 var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
@@ -756,5 +780,210 @@ namespace BLL.Product
             return listProduct;
         }
 
+        public async Task<List<ProductWidgetVM>> NewProductWidget()
+        {
+            var resultFromDAL= await productDAL.NewProductWidget();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return resultFromDAL;
+            }
+            for (int i = 0; i < resultFromDAL.Count; i++)
+            {
+                var productImageBLL = new ProductImageBLL();
+                var listImg = await productImageBLL.GetByProductId(resultFromDAL[i].Id);
+                if (listImg.Count > 0)
+                {
+                    resultFromDAL[i].ImgName = listImg[0].Name;
+                }
+            }
+            return resultFromDAL;
+        }
+    
+        public async Task<ProductPaginationVM> ProductFilter(ProductFilterVM model)
+        {
+            
+            if (!string.IsNullOrEmpty(model.Search))
+            {
+                model.Search.ToLower();
+            }
+            var resultFromDAL = await productDAL.ProductFilter(model);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return new ProductPaginationVM
+                {
+                    TotalPage = 0,
+                    TotalResult = 0,
+                    Products = new List<ProductCardVM>(),
+                };
+            }
+
+            for (int i = 0; i < resultFromDAL.Count; i++)
+            {
+                var brandBLL = new BrandBLL();
+                var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
+                if (brand != null)
+                {
+                    resultFromDAL[i].BrandNameVM.Id = brand.Id;
+                    resultFromDAL[i].BrandNameVM.Name = brand.Name;
+                    resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
+                }
+
+                var productImageBLL = new ProductImageBLL();
+                var listImg = await productImageBLL.GetByProductId(resultFromDAL[i].Id);
+                if (listImg.Count > 0)
+                {
+                    resultFromDAL[i].ImageName = listImg[0].Name;
+                }
+            }
+
+            var tempBrand = new ProductPaginationVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductCardVM>(),
+            };
+           
+
+            if (model.BrandSlugs.Count > 0)
+            {
+
+                for (int i = 0; i < model.BrandSlugs.Count; i++)
+                {
+                    for (int j = 0; j < resultFromDAL.Count; j++)
+                    {
+                        var checkBrand = await ProductCard(resultFromDAL[j].Id);
+                        if (checkBrand != null)
+                        {
+                            if (model.BrandSlugs[i] == checkBrand.BrandNameVM.Slug)
+                            {
+                                tempBrand.Products.Add(resultFromDAL[j]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var tempCategory = new ProductPaginationVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductCardVM>(),
+            };
+            var pcBLL = new ProductCategoryBLL();
+            var categoryBLL = new CategoryBLL();
+            if (model.CategorySlugs.Count > 0)
+            {
+                for (int i = 0; i < model.CategorySlugs.Count; i++)
+                {
+                    for (int j = 0; j < resultFromDAL.Count; j++)
+                    {
+                        var category = await categoryBLL.GetBySlug(model.CategorySlugs[i]);
+                        var checkCategory = await pcBLL.GetById(category.Id, "CategoryId");
+                        if (checkCategory.Count > 0)
+                        {
+                            for (int c = 0; c < checkCategory.Count; c++)
+                            {
+                                if (resultFromDAL[j].Id == checkCategory[c].ProductId)
+                                {
+                                    tempCategory.Products.Add(resultFromDAL[j]);
+                                }
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < tempCategory.Products.Count; i++)
+                {
+                    for (int j = 0; j < tempCategory.Products.Count; j++)
+                    {
+                        if (i == j)
+                        {
+                            continue;
+                        }
+                        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
+                        {
+                            tempCategory.Products.Remove(tempCategory.Products[j]);
+                        }
+                    }
+                }
+            }
+
+            var tempFinal = new ProductPaginationVM
+            {
+                TotalPage = 0,
+                TotalResult = 0,
+                Products = new List<ProductCardVM>(),
+            };
+
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count > 0)
+            {
+                var tempProduct = new List<ProductCardVM>();
+                for (int j = 0; j < tempCategory.Products.Count; j++)
+                {
+                    for (int m = 0; m < model.BrandSlugs.Count; m++)
+                    {
+                        if (tempCategory.Products[j].BrandNameVM.Slug == model.BrandSlugs[m])
+                        {
+                            tempProduct.Add(tempCategory.Products[j]);
+                        }
+                    }
+                }
+                tempFinal.Products = tempProduct;
+            }
+
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count > 0)
+            {
+                var countTemp = tempFinal.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempFinal.Products = tempFinal.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempFinal.TotalPage = totalPageTemp;
+                tempFinal.TotalResult = countTemp;
+                return tempFinal;
+            }
+
+
+            if (model.BrandSlugs.Count > 0 && model.CategorySlugs.Count == 0)
+            {
+                var countTemp = tempBrand.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempBrand.Products = tempBrand.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempBrand.TotalPage = totalPageTemp;
+                tempBrand.TotalResult = countTemp;
+
+                return tempBrand;
+            }
+
+            if (model.CategorySlugs.Count > 0 && model.BrandSlugs.Count == 0)
+            {
+                var countTemp = tempCategory.Products.Count();
+                var totalPageTemp = (int)Math.Ceiling(countTemp / (double)model.Limit);
+                tempCategory.Products = tempCategory.Products.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+                tempCategory.TotalPage = totalPageTemp;
+                tempCategory.TotalResult = countTemp;
+
+                return tempCategory;
+            }
+
+            var count = resultFromDAL.Count();
+            var totalPage = (int)Math.Ceiling(count / (double)model.Limit);
+            resultFromDAL = resultFromDAL.Skip((model.CurrentPage - 1) * model.Limit).Take(model.Limit).ToList();
+
+            var result = new ProductPaginationVM
+            {
+                TotalPage = totalPage,
+                Products = resultFromDAL,
+                TotalResult = count,
+            };
+
+            return result;
+        }
+    
     }
 }

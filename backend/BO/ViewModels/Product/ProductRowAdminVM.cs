@@ -17,8 +17,8 @@ namespace BO.ViewModels.Product
         public decimal? PriceDiscount { get; set; }
         public bool Published { get; set; }
         public bool Deleted { get; set; }
-        public int Views { get; set; }
-        public int Likes { get; set; }
+        public int View { get; set; }
+        public int Like { get; set; }
         public DateTime CreatedAt { get; set; }
         public string BrandId { get; set; }
         public BrandNameVM BrandNameVM { get; set; }

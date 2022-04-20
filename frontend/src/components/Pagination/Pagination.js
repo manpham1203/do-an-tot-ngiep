@@ -18,11 +18,11 @@ function Pagination(props) {
   return (
     <ReactPaginate
       breakLabel="..."
-      nextLabel="next >"
+      nextLabel="Trang sau"
       onPageChange={handlePageClick}
       pageRangeDisplayed={5}
       pageCount={pageCount}
-      previousLabel="< previous"
+      previousLabel="Trang trước"
       renderOnZeroPageCount={null}
       className="pagination"
     />

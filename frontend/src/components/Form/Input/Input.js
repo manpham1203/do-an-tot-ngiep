@@ -13,7 +13,7 @@ function Input({ control, ...props }) {
         {...field}
         {...props}
         placeholder=" "
-        className="form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-main-color outline-none "
+        className="form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
       />
       <label
         htmlFor={props.id}

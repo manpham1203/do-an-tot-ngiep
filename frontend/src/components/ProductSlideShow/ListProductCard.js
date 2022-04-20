@@ -10,34 +10,35 @@ function ListProductCard(props) {
     <>
       <Swiper
         slidesPerView={1}
-        spaceBetween={30}
+        // spaceBetween={30}
         navigation={true}
         modules={[Navigation]}
         breakpoints={{
           640: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            // spaceBetween: 20,
           },
           768: {
             slidesPerView: 3,
-            spaceBetween: 30,
+            // spaceBetween: 30,
           },
           1024: {
             slidesPerView: 4,
-            spaceBetween: 30,
+            // spaceBetween: 30,
           },
           1280: {
             slidesPerView: 4,
-            spaceBetween: 30,
+            // spaceBetween: 30,
           },
         }}
         className={`mySwipe p-[20px] 
-        ${props.show !== props.id ? "hidden" : null}
+        ${props.id && props.show !== props.id ? "hidden" : null}
+        
          `}
       >
         {props.products.map((prod) => {
           return (
-            <SwiperSlide key={prod.id}>
+            <SwiperSlide key={prod.id} className="rounded-[8px]  list-product-card">
               <ProductCard
                 id={prod.id}
                 name={prod.name}

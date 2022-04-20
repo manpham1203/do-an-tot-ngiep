@@ -206,6 +206,7 @@ namespace backend.Controllers
                 {
                     brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
                 }
+
                 return Ok(brandFullVM);
             }
             catch
@@ -303,7 +304,7 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
-                if(resultFromBLL.Count == 0)
+                if (resultFromBLL.Count == 0)
                 {
                     return Ok(new List<BrandNameVM>());
                 }
@@ -326,11 +327,34 @@ namespace backend.Controllers
 
         }
 
+        [HttpGet("BrandWithProductCard")]
+        public async Task<IActionResult> BrandWithProductCard(string id)
+        {
+            try
+            {
+                var resultFromBLL = await brandBLL.BrandWithProductCard(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                for (int j = 0; j < resultFromBLL.ProductCardVMs.Count; j++)
+                {
+                    resultFromBLL.ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ProductCardVMs[j].ImageName);
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
         [HttpGet("allbrandname")]
         public async Task<IActionResult> AllBrandName()
         {
-            var resultFromBLL=await brandBLL.AllBrandName();
-            if(resultFromBLL == null)
+            var resultFromBLL = await brandBLL.AllBrandName();
+            if (resultFromBLL == null)
             {
                 return BadRequest();
             }

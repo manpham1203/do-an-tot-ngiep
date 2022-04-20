@@ -8,8 +8,8 @@ import * as yup from "yup";
 import Input from "../Form/Input/Input";
 import Button from "../Button/Button";
 import Date from "../Form/Date/Date";
-// import * as moment from "moment";
-// import "moment/locale/nl";
+import * as moment from "moment";
+import "moment/locale/nl";
 
 const schema = yup
   .object({
@@ -44,12 +44,12 @@ const schema = yup
   .required();
 function EditInfo(props) {
   const preFill = {
-    firstName: null,
-    lastName: null,
-    birthday: null,
-    email: undefined,
-    phoneNumber: null,
-    address: null,
+    firstName: '',
+    lastName: '',
+    birthday: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
   };
   const {
     handleSubmit,
@@ -103,7 +103,7 @@ function EditInfo(props) {
         reset({
           firstName: res.data.firstName,
           lastName: res.data.lastName,
-          // birthday: moment(res.data.birthday).format("yyyy-MM-DD"),
+          birthday: moment(res.data.birthday).format("yyyy-MM-DD"),
           email: res.data.email,
           phoneNumber: res.data.phoneNumber,
           address: res.data.address,
@@ -186,7 +186,7 @@ function EditInfo(props) {
         <div className="flex justify-start mt-6">
           <Button type="submit" outline="true" disabled={isSubmitting}>
             {isSubmitting ? (
-              <div className="mx-auto w-5 h-5 border-4 border-main-color border-t-4 border-t-transparent rounded-full animate-spin"></div>
+              <div className="mx-auto w-5 h-5 border-4 border-second border-t-4 border-t-transparent rounded-full animate-spin"></div>
             ) : (
               "Lưu"
             )}

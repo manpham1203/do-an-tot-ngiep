@@ -5,8 +5,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ["Montserrat", "sans-serif"],
-        second: ["Montserrat Alternates", "sans-serif"],
+        main: ["Montserrat Alternates", "sans-serif"],
+        second: ["Montserrat", "sans-serif"],
       },
       backgroundColor: {
         "custom-color-001": "rgba(201, 76, 76, 1)",
@@ -15,6 +15,8 @@ module.exports = {
         success: "#28A745",
         danger: "#DC3545",
         warning: "#FFC107",
+        "second":"#202121",
+        "third":"#fcfcfc"
       },
       colors: {
         "dark-purple": "#081A51",
@@ -27,6 +29,8 @@ module.exports = {
         warning: "#FFC107",
         cancel: "##6C757D",
         submit:"#1A56DB",
+        "second":"#202121",
+        "third":"#fcfcfc"
       },
       borderColor: {
         "input-border": "#DADCE0",
@@ -34,6 +38,8 @@ module.exports = {
         success: "#28A745",
         danger: "#DC3545",
         warning: "#FFC107",
+        "second":"#202121",
+        "third":"#fcfcfc"
       },
       boxShadow: {
         admin: "rgba(0, 0, 0, 0.24) 0px 3px 8px",

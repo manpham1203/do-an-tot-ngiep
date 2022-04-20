@@ -1,7 +1,5 @@
 import "./App.css";
-import NavBar from "./components/NavBar/NavBar";
-import Footer from "./components/Footer/Footer";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Home from "./views/Client/Home/Home";
 import About from "./views/Client/About/About";
 import Contact from "./views/Client/Contact/Contact";
@@ -30,10 +28,21 @@ import CategoryTrash from "./views/Admin/Category/CategoryTrash";
 import CategoryCreate from "./views/Admin/Category/CategoryCreate";
 import ProductEdit from "./views/Admin/Product/ProductEdit";
 import ProductTrash from "./views/Admin/Product/ProductTrash";
+import { useEffect } from "react";
+import Products from "./views/Client/Products/Products";
 
 function App() {
-  const {user}=useSelector(store=>store);
-  const navigate=useNavigate();
+  const { user } = useSelector((store) => store);
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (user.id === null && location.pathname === "/tai-khoan") {
+      navigate("/dang-nhap");
+    }
+    if (user.id !== null && location.pathname === "/dang-nhap") {
+      navigate("/tai-khoan");
+    }
+  }, [user.id, location.pathname]);
   return (
     <div className="w-[100%]">
       <Routes>
@@ -50,73 +59,40 @@ function App() {
             path="/danh-muc/:categoryId"
             element={<ProductsCategory />}
           ></Route>
-          
-          {user.id!==null?null:<Route path="/dang-nhap" element={<LoginPage />}></Route>}
-          {user.id!==null?<Route path="/tai-khoan" element={<Account />}/>:null}
-          
+
+          {/* {user.id===null&&location.pathname==="/tai-khoan"?()=>navigate("/dang-nhap"):null} */}
+          <Route path="/dang-nhap" element={<LoginPage />}></Route>
+          <Route path="/tai-khoan" element={<Account />} />
+
           {/* admin */}
-          <Route
-            path="/san-pham/:slug"
-            element={<ProductDetail />}
-          ></Route>
-          <Route path="/" element={<Footer />} />
+          <Route path="/san-pham" element={<Products />}></Route>
+          <Route path="/san-pham/:slug" element={<ProductDetail />}></Route>
         </Route>
 
         <Route path="/admin" element={<SideBar />}>
-        <Route
-            path="/admin/dashboard"
-            element={<Dashboard />}
-          />
-          
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+
           <Route
             path="/admin/san-pham/chinh-sua/:slug"
             element={<ProductEdit />}
           />
-          <Route
-            path="/admin/san-pham/tao-moi"
-            element={<ProductCreate />}
-          />
-           <Route
-            path="/admin/san-pham/thung-rac"
-            element={<ProductTrash />}
-          />
-          <Route
-            path="/admin/san-pham/danh-sach"
-            element={<ProductTable />}
-          />
-          <Route
-            path="/admin/thuong-hieu/danh-sach"
-            element={<BrandTable />}
-          />
-          <Route
-            path="/admin/thuong-hieu/tao-moi"
-            element={<BrandCreate />}
-          />
+          <Route path="/admin/san-pham/tao-moi" element={<ProductCreate />} />
+          <Route path="/admin/san-pham/thung-rac" element={<ProductTrash />} />
+          <Route path="/admin/san-pham/danh-sach" element={<ProductTable />} />
+          <Route path="/admin/thuong-hieu/danh-sach" element={<BrandTable />} />
+          <Route path="/admin/thuong-hieu/tao-moi" element={<BrandCreate />} />
           <Route
             path="/admin/thuong-hieu/chinh-sua/:slug"
             element={<BrandEdit />}
           />
-           <Route
-            path="/admin/thuong-hieu/thung-rac"
-            element={<BrandTrash />}
-          />
-          <Route
-            path="/admin/danh-muc/danh-sach"
-            element={<CategoryTable />}
-          />
-          <Route
-            path="/admin/danh-muc/tao-moi"
-            element={<CategoryCreate />}
-          />
+          <Route path="/admin/thuong-hieu/thung-rac" element={<BrandTrash />} />
+          <Route path="/admin/danh-muc/danh-sach" element={<CategoryTable />} />
+          <Route path="/admin/danh-muc/tao-moi" element={<CategoryCreate />} />
           <Route
             path="/admin/danh-muc/chinh-sua/:slug"
             element={<CategoryEdit />}
           />
-           <Route
-            path="/admin/danh-muc/thung-rac"
-            element={<CategoryTrash />}
-          />
-
+          <Route path="/admin/danh-muc/thung-rac" element={<CategoryTrash />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

@@ -26,7 +26,12 @@ namespace BO
         public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
+        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
+        //public DbSet<Role> Roles { get; set; }
 
         public DbSet<ProductCategory> Product_Category_Mappings { get; set; }
         #endregion
@@ -42,11 +47,11 @@ namespace BO
                 entity.HasOne<Product>(cp => cp.Product)
                     .WithMany(p => p.ProductCategory)
                     .HasForeignKey(cp => cp.ProductId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
                 entity.HasOne<Category>(cp => cp.Category)
                     .WithMany(c => c.ProductCategory)
                     .HasForeignKey(cp => cp.CategoryId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(e => e.ProductId)
                     .HasColumnType("char")
                     .HasMaxLength(12)
@@ -97,13 +102,13 @@ namespace BO
                     .HasMaxLength(1000)
                     .IsRequired(false)
                     .IsUnicode(true);
-                entity.Property(e => e.Quantity)
+                entity.Property(e => e.QuantityInStock)
                     .HasColumnType("int")
                     .IsRequired(true);
-                entity.Property(e => e.Views)
+                entity.Property(e => e.View)
                    .HasColumnType("int")
                    .IsRequired(true);
-                entity.Property(e => e.Likes)
+                entity.Property(e => e.Like)
                    .HasColumnType("int")
                    .IsRequired(true);
                 entity.Property(e => e.Published)
@@ -133,6 +138,16 @@ namespace BO
                     .HasForeignKey(s => s.BrandId);
 
                 entity.HasMany<ProductImage>(p => p.ProductImage)
+                .WithOne(i => i.Product)
+                .HasForeignKey(i => i.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany<OrderDetail>(b => b.OrderDetails)
+                .WithOne(i => i.Product)
+                .HasForeignKey(i => i.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany<Wishlist>(b => b.Wishlists)
                 .WithOne(i => i.Product)
                 .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -420,7 +435,7 @@ namespace BO
                   .HasMaxLength(250)
                   .IsRequired(false)
                   .IsUnicode(true);
-                entity.Property(e => e.RoleId)
+                entity.Property(e => e.Role)
                   .HasColumnType("int")
                   .IsRequired(true);
                 entity.HasIndex(e => e.Username).IsUnique();
@@ -443,27 +458,172 @@ namespace BO
                     .IsRequired(false)
                     .HasPrecision(3);
 
-                entity.HasOne<Role>(u => u.Role)
-                    .WithMany(r => r.Users)
-                    .HasForeignKey(u => u.RoleId);
+                entity.HasMany<Order>(b => b.Orders)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany<Wishlist>(b => b.Wishlists)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany<ProductComment>(b => b.ProductComments)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany<PostComment>(b => b.PostComments)
+                .WithOne(i => i.User)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region Role
-            modelBuilder.Entity<Role>(entity =>
+            //modelBuilder.Entity<Role>(entity =>
+            //{
+            //    entity.ToTable("Role");
+            //    entity.HasKey(e => e.Id);
+            //    entity.Property(e => e.Id).ValueGeneratedNever()
+            //        .HasColumnType("int")
+            //        .IsRequired(true)
+            //        .IsUnicode(false);
+            //    entity.Property(e => e.Name)
+            //        .HasColumnType("nvarchar")
+            //        .HasMaxLength(50)
+            //        .IsRequired(true)
+            //        .IsUnicode(true);                
+            //});
+            #endregion
+            #region Order
+            modelBuilder.Entity<Order>(entity =>
             {
-                entity.ToTable("Role");
+                entity.ToTable("Order");
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedNever()
-                    .HasColumnType("int")
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.Name)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(50)
+                entity.Property(e => e.UserId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
                     .IsRequired(true)
-                    .IsUnicode(true);                
+                    .IsUnicode(true);
+                entity.Property(e => e.Amount)
+                    .HasColumnType("decimal")
+                    .HasPrecision(18, 2)
+                    .IsRequired(true);
+                entity.Property(e => e.Status)
+                    .HasColumnType("int")
+                    .IsRequired(true);
+                entity.Property(e => e.Discount)
+                   .HasColumnType("float")
+                    .IsRequired(false);
+                entity.Property(e => e.DeliveryEmail)
+                   .HasColumnType("varchar")
+                   .HasMaxLength(100)
+                   .IsRequired(false)
+                   .IsUnicode(false);
+                entity.Property(e => e.DeliveryPhone)
+                   .HasColumnType("varchar")
+                   .HasMaxLength(10)
+                   .IsRequired(false)
+                   .IsUnicode(false);
+                entity.Property(e => e.DeliveryAddress)
+                  .HasColumnType("nvarchar")
+                  .HasMaxLength(250)
+                  .IsRequired(false)
+                  .IsUnicode(true);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true)
+                    .HasPrecision(3);
+
+                entity.HasMany<OrderDetail>(b => b.OrderDetails)
+                .WithOne(i => i.Order)
+                .HasForeignKey(i => i.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
+            #region OrderDetail
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.ToTable("OrderDetail");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.OrderId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.ProductId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true)
+                    .HasPrecision(3);
+                entity.Property(e => e.Quantity)
+                    .HasColumnType("int")
+                    .IsRequired(true);
+                entity.Property(e => e.UnitPrice)
+                    .HasColumnType("decimal")
+                    .HasPrecision(18, 2)
+                    .IsRequired(true);
+
+                
+            });
+            #endregion
+
+            #region OrderDetail
+            modelBuilder.Entity<ProductComment>(entity =>
+            {
+                entity.ToTable("ProductComment");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.ProductId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.UserId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(1000)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true);
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(false);
+                entity.Property(e => e.Rating)
+                    .HasColumnType("float")
+                    .IsRequired(true);
+
+
+            });
+            #endregion
+
+
         }
     }
 }

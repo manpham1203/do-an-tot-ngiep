@@ -151,7 +151,6 @@ function SideBar(props) {
                       <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
                           to={p.path}
-                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {
@@ -189,7 +188,6 @@ function SideBar(props) {
                       <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
                           to={p.path}
-                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {
@@ -228,7 +226,6 @@ function SideBar(props) {
                       <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
                           to={p.path}
-                          exact
                           style={({ isActive }) =>
                             isActive
                               ? {

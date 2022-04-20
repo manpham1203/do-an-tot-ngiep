@@ -30,7 +30,7 @@ function Login(props) {
   const onSubmitHandler = async (values) => {
     await api({
       method: "POST",
-      url: `/Account/login`,
+      url: `/user/login`,
       data: values,
     })
       .then((res) => {
@@ -95,7 +95,7 @@ function Login(props) {
       <div className="mt-[18px] w-full flex justify-center">
         <Button type="submit" outline="true" disabled={isSubmitting}>
           {isSubmitting ? (
-            <div className="mx-auto w-5 h-5 border-4 border-main-color border-t-4 border-t-transparent rounded-full animate-spin"></div>
+            <div className="mx-auto w-5 h-5 border-4 border-second border-t-4 border-t-transparent rounded-full animate-spin"></div>
           ) : (
             "Đăng Nhập"
           )}

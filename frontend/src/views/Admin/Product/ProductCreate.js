@@ -18,7 +18,6 @@ const schema = yup
     price: yup.string().required("Thông tin này không được để trống").trim(),
     priceDiscount: yup
       .string()
-      .required("Thông tin này không được để trống")
       .trim(),
     quantity: yup.string().required("Thông tin này không được để trống").trim(),
     brandId: yup.object().required("Thông tin này không được để trống"),
@@ -64,7 +63,7 @@ function ProductCreate(props) {
       formData.append("categoryIds", values.categoryIds[j].id);
     }
     // formData.append("categoryIds", values.categoryIds[0]);
-    formData.append("quantity", values.quantity);
+    formData.append("quantityInStock", values.quantity);
     for (var i = 0; i < files.length; i++) {
       formData.append("Files", files[i]);
     }
@@ -87,6 +86,12 @@ function ProductCreate(props) {
             shortDescription: "",
             published: true,
           });
+          setBrandSelected(null);
+          setCategorySelected([]);
+          reset({
+            brandId:null,
+            categoryIds:[],
+          })
         } else {
           toast.error(`Thêm thất bại`, {
             position: toast.POSITION.TOP_RIGHT,

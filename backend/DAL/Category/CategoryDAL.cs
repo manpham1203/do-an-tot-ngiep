@@ -62,6 +62,28 @@ namespace DAL.Category
 
             return categoryVM;
         }
+        public async Task<CategoryVM> GetBySlug(string slug)
+        {
+            var categoryFromDb = await db.Categories.SingleOrDefaultAsync(c => c.Slug == slug);
+            if (categoryFromDb == null)
+            {
+                return null;
+            }
+            var categoryVM = new CategoryVM();
+
+            categoryVM.Id = categoryFromDb.Id;
+            categoryVM.Name = categoryFromDb.Name;
+            categoryVM.Slug = categoryFromDb.Slug;
+            categoryVM.FullDescription = categoryFromDb.FullDescription;
+            categoryVM.ShortDescription = categoryFromDb.ShortDescription;
+            categoryVM.Published = categoryFromDb.Published;
+            categoryVM.Deleted = categoryFromDb.Deleted;
+            categoryVM.CreatedAt = categoryFromDb.CreatedAt;
+            categoryVM.UpdatedAt = categoryFromDb.UpdatedAt;
+            categoryVM.Ordinal = categoryFromDb.Ordinal;
+
+            return categoryVM;
+        }
         public async Task<bool> Create(CategoryVM categoryVM)
         {
             var category = new BO.Entities.Category

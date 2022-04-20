@@ -69,6 +69,28 @@ namespace DAL.Brand
 
             return brandVM;
         }
+        public async Task<BrandVM> GetBySlug(string slug)
+        {
+            var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Slug == slug);
+            if (resultFromDb == null)
+            {
+                return null;
+            }
+            var brandVM = new BrandVM();
+
+            brandVM.Id = resultFromDb.Id;
+            brandVM.Name = resultFromDb.Name;
+            brandVM.Slug = resultFromDb.Slug;
+            brandVM.FullDescription = resultFromDb.FullDescription;
+            brandVM.ShortDescription = resultFromDb.ShortDescription;
+            brandVM.Published = resultFromDb.Published;
+            brandVM.Deleted = resultFromDb.Deleted;
+            brandVM.CreatedAt = resultFromDb.CreatedAt;
+            brandVM.UpdatedAt = resultFromDb.UpdatedAt;
+            brandVM.Ordinal = resultFromDb.Ordinal;
+
+            return brandVM;
+        }
         public async Task<bool> Create(BrandVM brandVM)
         {
             var brand = new BO.Entities.Brand
@@ -230,6 +252,30 @@ namespace DAL.Brand
                 return null;
             }
         }
+        
+        public async Task<BrandNameVM> BrandWithProductCard(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x=>x.Id==id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new BrandNameVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    ProductCardVMs = null,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<List<BrandNameVM>> AllBrandNameAdmin(bool deleted, BrandFilterVM model)
         {
             try
@@ -306,5 +352,6 @@ namespace DAL.Brand
             }
 
         }
+   
     }
 }

@@ -41,6 +41,10 @@ namespace BLL
             }
             return await brandDAL.GetById(id);
         }
+        public async Task<BrandVM> GetBySlug(string slug)
+        {
+            return await brandDAL.GetBySlug(slug);
+        }
 
         public async Task<bool> Create(CreateBrandVM model)
         {
@@ -237,6 +241,22 @@ namespace BLL
             return resultFromDAL;
         }
 
+        public async Task<BrandNameVM> BrandWithProductCard(string id)
+        {
+            var resultFromDAL = await brandDAL.BrandWithProductCard(id);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+
+            var productBLL = new ProductBLL();
+
+            resultFromDAL.ProductCardVMs = new List<ProductCardVM>();
+            var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL.Id);
+            resultFromDAL.ProductCardVMs = productCards;
+
+            return resultFromDAL;
+        }
         public async Task<List<BrandNameVM>> AllBrandName()
         {
             var resultFromDAL = await brandDAL.AllBrandName();

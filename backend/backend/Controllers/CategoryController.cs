@@ -63,7 +63,7 @@ namespace backend.Controllers
                 try
                 {
                     var categoryCreate = await categoryBLL.Create(model);
-                    if (categoryCreate && (model.Files != null || model.Files.Count != 0))
+                    if (categoryCreate && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
@@ -306,7 +306,7 @@ namespace backend.Controllers
             return Ok(resultFromBLL);
         }
 
-        [HttpGet("allcategorynameadmindeleted")]
+        [HttpPost("allcategorynameadmindeleted")]
         public async Task<IActionResult> AllCategoryNameAdmin(bool deleted, CategoryFilterVM model)
         {
             var resultFromBLL = await categoryBLL.AllCategoryNameAdmin(deleted, model);

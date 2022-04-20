@@ -166,12 +166,10 @@ function Home() {
   return (
     <div className="w-[100%]">
       <Carousel></Carousel>
-      <ListBrand />
-      <WeTalkPride />
 
       <ProductSlideShow>
         <Heading title="Thương Hiệu" />
-        <div className="flex flex-row justify-center gap-x-[20px] font-primary font-bold text-[20px]">
+        <div className="flex flex-row justify-center gap-x-[20px] font-primary text-[20px]">
           {state.brand.data.map((item) => {
             return (
               <ListTab

@@ -58,7 +58,7 @@ function CategoryWidget() {
     dispatch(Loading());
     await api({
       method: "GET",
-      url: `/api/category`,
+      url: `/category/allcategoryname`,
       data: null,
     })
       .then((res) => {
@@ -71,20 +71,13 @@ function CategoryWidget() {
   }, []);
   return (
     <div className="mb-[20px]">
-      <div
-        className="font-semibold border-b-[3px] relative border-[#1D1B26] overflow-hidden 
-          before:block before:absolute before:bg-[#1D1B26] before:h-[100px] before:w-[100px] before:rotate-45 before:z-[-1] before:left-[60px]"
-      >
-        <h2 className="bg-[#1D1B26] p-[5px] inline-block text-[white]">
-          DANH MỤC
-        </h2>
-      </div>
-      <ul className="font-medium ml-[20px] mt-[10px]">
+      <h2 className="text-[25px]">Danh mục</h2>
+      <ul className="font-normal ml-[10px]">
         {state.data?.map((item) => {
           return (
             <li key={item.id}>
               &#8210;{" "}
-              <Link to={`/danh-muc/${item.id}`} className="hover:underline">
+              <Link to={`/thuong-hieu/${item.id}`} className="hover:underline underline-offset-4">
                 {item.name}
               </Link>
             </li>

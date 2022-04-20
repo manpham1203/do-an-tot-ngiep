@@ -32,7 +32,7 @@ namespace DAL.User
                 Email = x.Email,
                 PhoneNumber = x.PhoneNumber,
                 Address = x.Address,
-                RoleId = x.RoleId,
+                Role = x.Role,
                 Username = x.Username,
                 Password = x.Password,
                 CreatedAt = x.CreatedAt,
@@ -56,7 +56,7 @@ namespace DAL.User
                 Email = userFromDb.Email,
                 PhoneNumber = userFromDb.PhoneNumber,
                 Address = userFromDb.Address,
-                RoleId = userFromDb.RoleId,
+                Role = userFromDb.Role,
                 Username = userFromDb.Username,
                 Password = userFromDb.Password,
                 CreatedAt = userFromDb.CreatedAt,
@@ -75,7 +75,7 @@ namespace DAL.User
                 Email = userVM.Email,
                 PhoneNumber = userVM.PhoneNumber,
                 Address = userVM.Address,
-                RoleId = userVM.RoleId,
+                Role = userVM.Role,
                 Username = userVM.Username,
                 Password = userVM.Password,
                 CreatedAt = userVM.CreatedAt,
@@ -135,13 +135,73 @@ namespace DAL.User
                 Email = userFromDb.Email,
                 PhoneNumber = userFromDb.PhoneNumber,
                 Address = userFromDb.Address,
-                RoleId = userFromDb.RoleId,
+                Role = userFromDb.Role,
                 Username = userFromDb.Username,
                 Password = userFromDb.Password,
                 CreatedAt = userFromDb.CreatedAt,
                 UpdatedAt = userFromDb.UpdatedAt,
             };
             return userVM;
+        }
+
+        public async Task<bool> Register(UserVM userVM)
+        {
+            var user = new BO.Entities.User
+            {
+                Id = userVM.Id,
+                FirstName = userVM.FirstName,
+                LastName = userVM.LastName,
+                Birthday = userVM.Birthday,
+                Email = userVM.Email,
+                PhoneNumber = userVM.PhoneNumber,
+                Address = userVM.Address,
+                Role = userVM.Role,
+                Username = userVM.Username,
+                Password = userVM.Password,
+                Avatar = null,
+                CreatedAt = userVM.CreatedAt,
+                UpdatedAt = userVM.UpdatedAt,
+            };
+            await db.Users.AddAsync(user);
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Edit(UserVM userVM)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == userVM.Id);
+
+            userFromDb.LastName = userVM.LastName;
+            userFromDb.FirstName = userVM.FirstName;
+            userFromDb.Email = userVM.Email;
+            userFromDb.PhoneNumber = userVM.PhoneNumber;
+            userFromDb.Address = userVM.Address;
+            userFromDb.Birthday = userVM.Birthday;
+            userFromDb.UpdatedAt = DateTime.Now;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> ChangePass(UserVM userVM)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == userVM.Id);
+
+            userFromDb.Password = userVM.Password;
+            userFromDb.UpdatedAt = DateTime.Now;
+
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

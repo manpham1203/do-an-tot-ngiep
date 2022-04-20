@@ -1,7 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import imgthumb from "../../assets/imgthumb.jpg";
-import product from "../../assets/product.jpg";
 import { AiFillStar, AiFillHeart } from "react-icons/ai";
 import { BsFillBagFill } from "react-icons/bs";
 import { FaRegEye } from "react-icons/fa";
@@ -43,7 +41,7 @@ function ProductCard(props) {
     }
   };
   return (
-    <div className="w-full h-fit relative group shadow-md rounded-md overflow-hidden">
+    <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
       <div className="w-full overflow-hidden relative">
         <img
           src={props.image}
@@ -66,8 +64,14 @@ function ProductCard(props) {
         </div>
       </div>
       <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px bg-white bottom-[-44px]">
+      <h3
+          className="cursor-pointer text-second font-normal hover:underline underline-offset-4"
+          onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
+        >
+          {props.brandName}
+        </h3>
         <h3
-          className="cursor-pointer font-primary font-semibold text-[20px] hover:underline"
+          className="cursor-pointer font-primary font-normal text-[20px] hover:underline underline-offset-4 mb-[5px]"
           onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
           {props.name}

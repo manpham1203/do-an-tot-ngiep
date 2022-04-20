@@ -20,6 +20,7 @@ namespace BO.Entities
         public string Image { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public List<PostComment> PostComments { get; set; }
 
     }
 }

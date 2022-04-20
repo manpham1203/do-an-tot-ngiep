@@ -183,6 +183,94 @@ namespace BO.Migrations
                     b.ToTable("CategoryImage");
                 });
 
+            modelBuilder.Entity("BO.Entities.Order", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.Property<string>("DeliveryAddress")
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("DeliveryEmail")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("DeliveryPhone")
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<double?>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(true)
+                        .HasColumnType("char(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("BO.Entities.OrderDetail", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetail");
+                });
+
             modelBuilder.Entity("BO.Entities.Post", b =>
                 {
                     b.Property<string>("Id")
@@ -244,6 +332,37 @@ namespace BO.Migrations
                     b.ToTable("Post");
                 });
 
+            modelBuilder.Entity("BO.Entities.PostComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PostId")
+                        .HasColumnType("char(12)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("char(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostComments");
+                });
+
             modelBuilder.Entity("BO.Entities.Product", b =>
                 {
                     b.Property<string>("Id")
@@ -268,7 +387,7 @@ namespace BO.Migrations
                         .IsUnicode(true)
                         .HasColumnType("ntext");
 
-                    b.Property<int>("Likes")
+                    b.Property<int>("Like")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -288,7 +407,7 @@ namespace BO.Migrations
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
@@ -306,7 +425,7 @@ namespace BO.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
 
-                    b.Property<int>("Views")
+                    b.Property<int>("View")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -336,6 +455,50 @@ namespace BO.Migrations
                     b.ToTable("ProductCategory");
                 });
 
+            modelBuilder.Entity("BO.Entities.ProductComment", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductComment");
+                });
+
             modelBuilder.Entity("BO.Entities.ProductImage", b =>
                 {
                     b.Property<string>("Id")
@@ -363,23 +526,6 @@ namespace BO.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImage");
-                });
-
-            modelBuilder.Entity("BO.Entities.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .IsUnicode(false)
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("BO.Entities.User", b =>
@@ -432,7 +578,7 @@ namespace BO.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -455,12 +601,30 @@ namespace BO.Migrations
                         .IsUnique()
                         .HasFilter("[PhoneNumber] IS NOT NULL");
 
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("BO.Entities.Wishlist", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("char(12)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("char(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wishlists");
                 });
 
             modelBuilder.Entity("BO.Entities.BrandImage", b =>
@@ -485,6 +649,52 @@ namespace BO.Migrations
                     b.Navigation("Catgeory");
                 });
 
+            modelBuilder.Entity("BO.Entities.Order", b =>
+                {
+                    b.HasOne("BO.Entities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BO.Entities.OrderDetail", b =>
+                {
+                    b.HasOne("BO.Entities.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BO.Entities.Product", "Product")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BO.Entities.PostComment", b =>
+                {
+                    b.HasOne("BO.Entities.Post", "Post")
+                        .WithMany("PostComments")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("BO.Entities.User", "User")
+                        .WithMany("PostComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BO.Entities.Product", b =>
                 {
                     b.HasOne("BO.Entities.Brand", "Brand")
@@ -501,18 +711,37 @@ namespace BO.Migrations
                     b.HasOne("BO.Entities.Category", "Category")
                         .WithMany("ProductCategory")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BO.Entities.Product", "Product")
                         .WithMany("ProductCategory")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BO.Entities.ProductComment", b =>
+                {
+                    b.HasOne("BO.Entities.Product", "Product")
+                        .WithMany("ProductComments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BO.Entities.User", "User")
+                        .WithMany("ProductComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BO.Entities.ProductImage", b =>
@@ -526,15 +755,21 @@ namespace BO.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("BO.Entities.User", b =>
+            modelBuilder.Entity("BO.Entities.Wishlist", b =>
                 {
-                    b.HasOne("BO.Entities.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BO.Entities.Product", "Product")
+                        .WithMany("Wishlists")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Role");
+                    b.HasOne("BO.Entities.User", "User")
+                        .WithMany("Wishlists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BO.Entities.Brand", b =>
@@ -551,16 +786,38 @@ namespace BO.Migrations
                     b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("BO.Entities.Product", b =>
+            modelBuilder.Entity("BO.Entities.Order", b =>
                 {
-                    b.Navigation("ProductCategory");
-
-                    b.Navigation("ProductImage");
+                    b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("BO.Entities.Role", b =>
+            modelBuilder.Entity("BO.Entities.Post", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("PostComments");
+                });
+
+            modelBuilder.Entity("BO.Entities.Product", b =>
+                {
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("ProductComments");
+
+                    b.Navigation("ProductImage");
+
+                    b.Navigation("Wishlists");
+                });
+
+            modelBuilder.Entity("BO.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("PostComments");
+
+                    b.Navigation("ProductComments");
+
+                    b.Navigation("Wishlists");
                 });
 #pragma warning restore 612, 618
         }

@@ -110,8 +110,8 @@ function ProductTable(props) {
       currentPage: currentPage,
       limit: limit,
       search: query,
-      BrandIds: watchBrand,
-      categoryIds: watchCategory,
+      brandSlugs: watchBrand,
+      categorySlugs: watchCategory,
       from: priceRange[0],
       to: priceRange[1],
     };
@@ -133,8 +133,8 @@ function ProductTable(props) {
     const data = {
       currentPage: currentPage,
       search: query,
-      BrandIds: watchBrand,
-      categoryIds: watchCategory,
+      brandSlugs: watchBrand,
+      categorySlugs: watchCategory,
       from: priceRange[0],
       to: priceRange[1],
     };

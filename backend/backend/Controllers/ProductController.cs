@@ -65,7 +65,7 @@ namespace backend.Controllers
                 if (ModelState.IsValid)
                 {
                     var result = await productBLL.Create(model);
-                    if (result && (model.Files != null || model.Files.Count != 0))
+                    if (result && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
@@ -331,6 +331,45 @@ namespace backend.Controllers
                 resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
             }
 
+            return Ok(resultFromBLL);
+        }
+    
+        [HttpGet("newproductwidget")]
+        public async Task<IActionResult> NewProductWidget()
+        {
+            var resultFromBLL = await productBLL.NewProductWidget();
+            if(resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.Count == 0)
+            {
+                return Ok(new List<ProductWidgetVM>());
+            }
+            for(int i = 0; i < resultFromBLL.Count; i++)
+            {
+                resultFromBLL[i].ImgSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImgName);
+
+            }
+            return Ok(resultFromBLL);
+        }
+    
+        [HttpPost("productfilter")]
+        public async Task<IActionResult> ProductFilter(ProductFilterVM model)
+        {
+            var resultFromBLL = await productBLL.ProductFilter(model);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.Products.Count == 0)
+            {
+                return Ok(new ProductPaginationVM());
+            }
+            for(int i = 0; i < resultFromBLL.Products.Count; i++)
+            {
+               resultFromBLL.Products[i].ImageSrc= String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Products[i].ImageName);
+            }
             return Ok(resultFromBLL);
         }
     }

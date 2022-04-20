@@ -9,12 +9,12 @@ namespace BO.ViewModels.Product
     public class ProductFilterVM
     {
         public string Search { get; set; }
-        public decimal? From { get;set; }
-        public decimal? To { get;set; }
-        public string ShortBy { get; set; }
+        public decimal? PriceFrom { get;set; }
+        public decimal? PriceTo { get;set; }
+        public string OrderBy { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int Limit { get; set; } = 10;
-        public List<string> CategoryIds { get; set; }
-        public List<string> BrandIds { get; set; }
+        public List<string> CategorySlugs { get; set; }
+        public List<string> BrandSlugs { get; set; }
     }
 }

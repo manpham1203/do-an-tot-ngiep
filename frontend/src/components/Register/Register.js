@@ -72,7 +72,7 @@ function Register(props) {
       const fetchData = async (w) => {
         await api({
           method: "POST",
-          url: `/Account/findUsername?username=${w}`,
+          url: `/user/findUsername?username=${w}`,
         })
           .then((res) => {
             setCheck(res.data);
@@ -89,7 +89,7 @@ function Register(props) {
     console.log(values);
     await api({
       method: "POST",
-      url: `/Account/register`,
+      url: `/user/register`,
       data: values,
     })
       .then((res) => {
@@ -121,8 +121,6 @@ function Register(props) {
         })
       );
   };
-
-  console.log(isSubmitting);
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} autoComplete="off">
@@ -208,7 +206,7 @@ function Register(props) {
       <div className="mt-[18px] w-full flex justify-center">
         <Button type="submit" outline="true" disabled={isSubmitting}>
           {isSubmitting ? (
-            <div className="mx-auto w-5 h-5 border-4 border-main-color border-t-4 border-t-transparent rounded-full animate-spin"></div>
+            <div className="mx-auto w-5 h-5 border-4 border-second border-t-4 border-t-transparent rounded-full animate-spin"></div>
           ) : (
             "Đăng Ký"
           )}

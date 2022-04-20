@@ -41,7 +41,7 @@ function ChangePassword(props) {
     console.log("submit", values);
     await api({
       method: "PUT",
-      url: `/account/changepass/${user.id}`,
+      url: `/user/changepass/${user.id}`,
       data: values,
     })
       .then((res) => {
@@ -121,7 +121,7 @@ function ChangePassword(props) {
           <div className="flex justify-start mt-6">
             <Button type="submit" outline="true" disabled={isSubmitting}>
               {isSubmitting ? (
-                <div className="mx-auto w-5 h-5 border-4 border-main-color border-t-4 border-t-transparent rounded-full animate-spin"></div>
+                <div className="mx-auto w-5 h-5 border-4 border-second border-t-4 border-t-transparent rounded-full animate-spin"></div>
               ) : (
                 "Lưu"
               )}

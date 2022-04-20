@@ -10,18 +10,18 @@ export const menuData = [
       slug: "/gioi-thieu",
     },
     {
-      id: 6,
-      title: "THƯƠNG HIỆU",
-      slug: "/thuong-hieu",
-    },
-    {
-      id: 7,
-      title: "DANH MỤC",
-      slug: "/danh-muc",
+      id:6,
+      title:"SẢN PHẨM",
+      slug:"/san-pham",
     },
     {
       id: 10,
       title: "LIÊN HỆ",
       slug: "/lien-he",
+    },
+    {
+      id: 15,
+      title: "TIN TỨC",
+      slug: "/tin-tuc",
     },
   ];

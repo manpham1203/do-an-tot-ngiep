@@ -45,8 +45,8 @@ function NavBar() {
     <>
       <div
         className={`w-[100%] h-[50px] lg:h-[70px] z-[6] transition-all duration-[300ms] font-primary fixed font-medium flex items-center
-      ${navHome && scroll ? "bg-[#F8F7F4] border-b border-b-[#161a2133] " : ""}
-      ${navHome === false ? "border-b border-b-[#161a2133] bg-[#F8F7F4]" : ""}
+      ${navHome && scroll ? "bg-third border-b border-b-[#161a2133] " : ""}
+      ${navHome === false ? "border-b border-b-[#161a2133] bg-third" : ""}
       `}
       >
         <div className={`container mx-auto flex justify-between`}>
@@ -57,8 +57,8 @@ function NavBar() {
             navHome === false
               ? "text-black"
               : navHome && scroll
-              ? "text-black"
-              : "text-white"
+              ? "text-second"
+              : "text-third"
           }
           `}
           >

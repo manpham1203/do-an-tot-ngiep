@@ -17,11 +17,9 @@ namespace BO.ViewModels.Product
         public decimal? PriceDiscount { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
-        public int Quantity { get; set; }
+        public int QuantityInStock { get; set; }
         public bool Published { get; set; }
         public bool Deleted { get; set; }
-        public int Views { get; set; }
-        public int Likes { get; set; }
         [Required]
         public string BrandId { get; set; }
         public List<string> CategoryIds { get; set; }

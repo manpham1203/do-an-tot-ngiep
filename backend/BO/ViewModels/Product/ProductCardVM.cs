@@ -18,5 +18,6 @@ namespace BO.ViewModels.Product
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
         public string BrandId { get; set; }
+        public string QuantityInStock { get; set; }
     }
 }
