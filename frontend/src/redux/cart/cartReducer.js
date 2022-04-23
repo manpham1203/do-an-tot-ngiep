@@ -4,6 +4,7 @@ import {
   ADJUST_QTY,
   INCREMENT_QTY,
   DECREMENT_QTY,
+  SET_CART_EMPTY
 } from "./cartConstant";
 
 const initialState = [];
@@ -48,6 +49,8 @@ export const cartReducer = (state = initialState, action) => {
           ? { ...item, qty: item.qty >= 9 ? 9 : item.qty + 1 }
           : item;
       });
+      case SET_CART_EMPTY:
+      return [];
 
     default:
       return state;

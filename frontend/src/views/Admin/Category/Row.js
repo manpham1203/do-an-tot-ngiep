@@ -95,7 +95,7 @@ function Row(props) {
       );
   };
   const handleEdit = (slug) => {
-    navigate(`/admin/chinh-sua-san-pham/${slug}`);
+    navigate(`/admin/danh-muc/chinh-sua/${slug}`);
   };
   const handleTrash = async (id) => {
     await api({

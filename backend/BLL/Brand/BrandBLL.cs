@@ -60,7 +60,7 @@ namespace BLL
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
 
-            if (model.Files.Count > 0)
+            if (model.Files != null)
             {
                 model.ImageNames = new List<string>();
                 for (int i = 0; i < model.Files.Count; i++)
@@ -92,7 +92,7 @@ namespace BLL
                 return false;
             }
 
-            if (model.Files.Count > 0)
+            if (model.Files != null)
             {
                 brandImageBLL = new BrandImageBLL();
                 var saveImg = await brandImageBLL.Create(model.ImageNames, brandId);
@@ -116,7 +116,7 @@ namespace BLL
 
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.Files.Count > 0)
+            if (model.Files!=null)
             {
                 model.ImageNames = new List<string>();
                 for (int i = 0; i < model.Files.Count; i++)
@@ -149,7 +149,7 @@ namespace BLL
                 return false;
             }
 
-            if (model.Files.Count > 0)
+            if (model.Files!=null)
             {
                 brandImageBLL = new BrandImageBLL();
                 var saveImg = await brandImageBLL.Create(model.ImageNames, id);

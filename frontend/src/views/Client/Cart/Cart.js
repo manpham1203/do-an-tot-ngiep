@@ -1,15 +1,12 @@
 import { data } from "autoprefixer";
-import React, {
-  useEffect,
-  useState,
-  memo,
-  useMemo,
-  useRef,
-  useReducer,
-} from "react";
+import React, { useEffect, useState, memo, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "../../../components/Cart/CartItem";
+import { setData } from "../../../redux/checkout/checkoutActions";
 import api from "../../../apis/api";
+import { Link, useNavigate } from "react-router-dom";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { toast } from "react-toastify";
 
 const initState = {
   loading: false,
@@ -63,12 +60,26 @@ const reducer = (state, action) => {
   }
 };
 
+function Abc() {
+  const navigate = useNavigate();
+  return (
+    <div className="cursor-default">
+      <h2>Bạn cần phải đăng nhập để tiến hành thanh toán</h2>
+      <button
+        className="hover:underline underline-offset-4 font-semibold"
+        onClick={() => navigate("/dang-nhap")}
+      >
+        Tiến hành đăng nhập...
+      </button>
+    </div>
+  );
+}
 function Cart() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [cartData, setCartData] = useState([]);
   const [state, dispatchProduct] = useReducer(reducer, initState);
-  const store = useSelector((state) => state);
-  const cart = store.cart;
+  const { cart, user } = useSelector((state) => state);
   document.title = "Giỏ Hàng";
 
   const fetchProducts = async (arr) => {
@@ -85,9 +96,9 @@ function Cart() {
   };
 
   useEffect(() => {
-    var newArr=[];
-    for(var i=0;i<cart.length;i++){
-      newArr.push(cart[i].cartId)
+    var newArr = [];
+    for (var i = 0; i < cart.length; i++) {
+      newArr.push(cart[i].cartId);
     }
     fetchProducts(newArr);
   }, []);
@@ -106,30 +117,56 @@ function Cart() {
     }
     setCartData(newArr);
   }, [cart, state.data]);
+
+  const handleCheckout = () => {
+    if (user.id == null) {
+      toast.warn(<Abc />, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      return;
+    }
+    navigate("/thanh-toan");
+  };
+
+ 
+
+  console.log(cart);
   return (
     <>
-    {cart.length === 0 ? (
-        <div className="pt-[100px]">Cart Empty</div>
+      {cart.length === 0 ? (
+        <div className="pt-[30px] flex flex-col items-center">
+          <h2 className="text-center">Bạn chưa thêm sản phẩm vào giỏ hàng</h2>
+          <button
+            onClick={() => navigate("/san-pham")}
+            className=" px-[20px] h-[30px] border-2 border-second mt-[20px] flex flex-row items-center"
+          >
+            Tiếp tục mua hàng
+            <HiOutlineArrowNarrowRight className="text-[20px]" />
+          </button>
+        </div>
       ) : (
-        <div className="pt-[100px]">
-          <div className="flex shadow-md my-10">
-            <div className="w-3/4 bg-[#F8F7F4] px-10 py-10">
+        <div className="">
+          <div className="flex my-10">
+            <div className="w-3/4 px-10 py-[20px]">
               <div className="flex justify-between border-b pb-8">
-                <h1 className="font-semibold text-2xl">Shopping Cart</h1>
-                <h2 className="font-semibold text-2xl">3 Items</h2>
+                <h1 className="font-semibold text-2xl">Giỏ hàng</h1>
+                <h2 className="font-semibold text-2xl">
+                  {cart.length} sản phẩm
+                </h2>
               </div>
               <div className="flex mt-10 mb-5">
                 <h3 className="font-semibold text-gray-600 text-xs uppercase w-2/5">
-                  Product Details
+                  Sản phẩm
                 </h3>
                 <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
-                  Quantity
+                  Số lượng
                 </h3>
                 <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
-                  Price
+                  Đơn giá
                 </h3>
                 <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
-                  Total
+                  Thành tiền
                 </h3>
               </div>
 
@@ -149,31 +186,27 @@ function Cart() {
                 })
               )}
 
-              <h2 className="flex font-semibold text-indigo-600 text-sm mt-10">
-                <svg
-                  className="fill-current mr-2 text-indigo-600 w-4"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-                </svg>
-                Continue Shopping
-              </h2>
+              <Link
+                to="/san-pham"
+                className="flex font-semibold text-second text-sm mt-10 w-fit"
+              >
+                Tiếp tục mua hàng...
+              </Link>
             </div>
 
-            <div id="summary" className="w-1/4 px-8 py-10">
-              <h1 className="font-semibold text-2xl border-b pb-8">
-                Order Summary
-              </h1>
+            <div id="summary" className="w-1/4 px-8 py-[20px]">
+              <h1 className="font-semibold text-2xl border-b pb-8">Đơn hàng</h1>
               <div className="flex justify-between mt-10 mb-5">
-                <span className="font-semibold text-sm uppercase">Items 3</span>
+                <span className="font-semibold text-sm uppercase">
+                  {cart.length} sản phẩm
+                </span>
                 <span className="font-semibold text-sm">
                   {cartData.reduce((result, prod) => {
-                    return prod.item.priceDiscount===0? (result + prod.item.price * prod.qty) :(result + prod.item.priceDiscount * prod.qty);
+                    return result + prod.item.currentPrice * prod.qty;
                   }, 0)}
-                 
                 </span>
               </div>
-              <div>
+              {/* <div>
                 <label className="font-medium inline-block mb-3 text-sm uppercase">
                   Shipping
                 </label>
@@ -197,14 +230,21 @@ function Cart() {
               </div>
               <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
                 Apply
-              </button>
+              </button> */}
               <div className="border-t mt-8">
                 <div className="flex font-semibold justify-between py-6 text-sm uppercase">
-                  <span>Total cost</span>
-                  <span>100</span>
+                  <span>Tổng thanh toán</span>
+                  <span>
+                    {cartData.reduce((result, prod) => {
+                      return result + prod.item.currentPrice * prod.qty;
+                    }, 0)}
+                  </span>
                 </div>
-                <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
-                  Checkout
+                <button
+                  onClick={handleCheckout}
+                  className="bg-second font-semibold  py-3 text-sm text-third uppercase w-full"
+                >
+                  Thanh toán
                 </button>
               </div>
             </div>

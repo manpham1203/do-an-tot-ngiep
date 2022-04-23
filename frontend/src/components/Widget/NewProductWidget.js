@@ -88,7 +88,7 @@ function NewProductWidget(props) {
               <div className="">
                 <Link to={`/san-pham/${item.slug}`}>{item.name}</Link>
        
-                  {item.priceDiscount === 0 ? (
+                  {item.priceDiscount === null ? (
                     <div>
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BO.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220420150332_create-database")]
+    [Migration("20220421000502_create-database")]
     partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,7 +192,8 @@ namespace BO.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal?>("Amount")
+                        .IsRequired()
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 

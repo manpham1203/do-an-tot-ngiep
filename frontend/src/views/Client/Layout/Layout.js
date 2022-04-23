@@ -4,22 +4,22 @@ import Footer from "../../../components/Footer/Footer";
 import Header from "../../../components/NavBar/NavBar";
 
 function Layout(props) {
-  const [mt, setMt]=useState(true);
+  const [mt, setMt] = useState(true);
   const location = useLocation();
-  useEffect(()=>{
-    if(location.pathname==="/"){
+  useEffect(() => {
+    if (location.pathname === "/") {
       setMt(false);
-    }
-    else{
+    } else {
       setMt(true);
     }
-  }, [location])
+  }, [location]);
   return (
     <>
       <Header />
-      <div className={`${mt && 'pt-[70px]'} `}>
+      <div className={`${mt && "pt-[70px]"} `}>
         <Outlet></Outlet>
       </div>
+
       <Footer />
     </>
   );

@@ -77,7 +77,7 @@ function CategoryWidget() {
           return (
             <li key={item.id}>
               &#8210;{" "}
-              <Link to={`/thuong-hieu/${item.id}`} className="hover:underline underline-offset-4">
+              <Link to={`/san-pham?category=${item.slug}`} className="hover:underline underline-offset-4">
                 {item.name}
               </Link>
             </li>

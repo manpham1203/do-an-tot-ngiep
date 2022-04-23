@@ -104,6 +104,21 @@
     @apply top-0 left-[10px] px-[10px] block bg-third text-second;
   }
 
+  /* radio */
+  .radio-circle::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 10000px;
+    display: block;
+    @apply bg-second;
+    transform: scale(0);
+    transition: 0.2s ease;
+  }
+  .radio-input:checked + .radio-circle::after {
+    transform: scale(1);
+  }
+
   /* checkbox */
   .checkbox-box {
     transition: 0.25s ease;
@@ -196,6 +211,16 @@
   }
   .filter .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging{
     @apply shadow-none border-none
+  }
+
+  .short-desc-postcard{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    background:#fff;
+    position:absolute;
+    text-align:justify
   }
  
 }

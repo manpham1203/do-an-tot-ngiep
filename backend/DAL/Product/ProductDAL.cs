@@ -264,9 +264,9 @@ namespace DAL.Product
         {
             try
             {
-                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id==id && x.Published == true && x.Deleted == false);
+                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id && x.Published == true && x.Deleted == false);
 
-                var productCard =  new ProductCardVM
+                var productCard = new ProductCardVM
                 {
                     Id = resultFromDb.Id,
                     Name = resultFromDb.Name,
@@ -549,8 +549,7 @@ namespace DAL.Product
                 Id = resultFromDb.Id,
                 Name = resultFromDb.Name,
                 Slug = resultFromDb.Slug,
-                Price = resultFromDb.Price,
-                PriceDiscount = resultFromDb.PriceDiscount,
+                CurrentPrice = resultFromDb.PriceDiscount != null ? resultFromDb.PriceDiscount : resultFromDb.Price,
                 BrandId = resultFromDb.BrandId,
                 BrandNameVM = null,
                 ImageName = null,
@@ -591,7 +590,7 @@ namespace DAL.Product
 
         public async Task<List<ProductWidgetVM>> NewProductWidget()
         {
-            var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).OrderBy(x=>x.CreatedAt).Take(5).ToListAsync();
+            var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).OrderBy(x => x.CreatedAt).Take(5).ToListAsync();
             if (resultFromDb.Count == 0)
             {
                 return new List<ProductWidgetVM>();
@@ -604,7 +603,7 @@ namespace DAL.Product
             {
                 Id = x.Id,
                 Name = x.Name,
-                Slug=x.Slug,
+                Slug = x.Slug,
                 Price = x.Price,
                 PriceDiscount = x.PriceDiscount,
                 ImgName = null,
@@ -612,12 +611,12 @@ namespace DAL.Product
             }).ToList();
             return result;
         }
-    
+
         public async Task<List<ProductCardVM>> ProductFilter(ProductFilterVM model)
         {
             try
             {
-                var resultFromDb = await db.Products.Where(x => x.Deleted == false && x.Published==true).ToListAsync();
+                var resultFromDb = await db.Products.Where(x => x.Deleted == false && x.Published == true).ToListAsync();
 
                 if (resultFromDb == null)
                 {
@@ -681,7 +680,33 @@ namespace DAL.Product
                 return null;
             }
         }
-    
- 
+
+        public async Task<ProductOrderVM> GetProductByOrderDetail(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.Select(x => new { x.Id, x.Name, x.Slug, x.BrandId }).SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result =  new ProductOrderVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    BrandId = resultFromDb.BrandId,
+                    ImageName = null,
+                    ImageSrc = null,
+                    BrandNameVM = null,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

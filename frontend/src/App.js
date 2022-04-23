@@ -30,6 +30,15 @@ import ProductEdit from "./views/Admin/Product/ProductEdit";
 import ProductTrash from "./views/Admin/Product/ProductTrash";
 import { useEffect } from "react";
 import Products from "./views/Client/Products/Products";
+import Checkout from "./views/Client/Cart/Checkout";
+import OrderTable from "./views/Admin/Order/OrderTable";
+import OrderEdit from "./views/Admin/Order/OrderEdit";
+import PostTable from "./views/Admin/Post/PostTable";
+import PostCreate from "./views/Admin/Post/PostCreate";
+import PostEdit from "./views/Admin/Post/PostEdit";
+import PostTrash from "./views/Admin/Post/PostTrash";
+import Posts from "./views/Client/Posts/Posts";
+import PostDetail from "./views/Client/PostDetail/PostDetail";
 
 function App() {
   const { user } = useSelector((store) => store);
@@ -39,18 +48,17 @@ function App() {
     if (user.id === null && location.pathname === "/tai-khoan") {
       navigate("/dang-nhap");
     }
-    if (user.id !== null && location.pathname === "/dang-nhap") {
-      navigate("/tai-khoan");
-    }
   }, [user.id, location.pathname]);
+  console.log("abc");
   return (
-    <div className="w-[100%]">
+    <div className="w-[100%] min-h-screen">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/gioi-thieu" element={<About />}></Route>
           <Route path="/lien-he" element={<Contact />}></Route>
           <Route path="/gio-hang" element={<Cart />}></Route>
+          <Route path="/thanh-toan" element={<Checkout />}></Route>
           <Route
             path="/thuong-hieu/:brandId"
             element={<ProductsBrand />}
@@ -67,6 +75,8 @@ function App() {
           {/* admin */}
           <Route path="/san-pham" element={<Products />}></Route>
           <Route path="/san-pham/:slug" element={<ProductDetail />}></Route>
+          <Route path="/tin-tuc" element={<Posts />}></Route>
+          <Route path="/tin-tuc/:slug" element={<PostDetail />}></Route>
         </Route>
 
         <Route path="/admin" element={<SideBar />}>
@@ -93,6 +103,15 @@ function App() {
             element={<CategoryEdit />}
           />
           <Route path="/admin/danh-muc/thung-rac" element={<CategoryTrash />} />
+          <Route path="/admin/don-hang/danh-sach" element={<OrderTable />} />
+          <Route
+            path="/admin/don-hang/chinh-sua/:slug"
+            element={<OrderEdit />}
+          />
+          <Route path="/admin/tin-tuc/danh-sach" element={<PostTable />} />
+          <Route path="/admin/tin-tuc/tao-moi" element={<PostCreate />} />
+          <Route path="/admin/tin-tuc/chinh-sua/:id" element={<PostEdit />} />
+          <Route path="/admin/tin-tuc/da-xoa" element={<PostTrash />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

@@ -50,12 +50,12 @@ function ProductCard2(props) {
       </div>
       <div className="flex flex-col justify-around">
         <div>
-          <h2 onClick={() => navigate(`/san-pham/${props.slug}`)} className="font-normal cursor-pointer hover:underline underline-offset-4">
+          <h2 onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)} className="font-normal cursor-pointer hover:underline underline-offset-4">
           {props.brandName}
           </h2>
-          <h2 className="mt-[10px] cursor-pointer hover:underline underline-offset-4 font-medium">{props.name}</h2>
+          <h2 onClick={() => navigate(`/san-pham/${props.slug}`)} className="mt-[10px] cursor-pointer hover:underline underline-offset-4 font-medium">{props.name}</h2>
           <p className="mt-[10px]">
-            {props.priceDiscount === 0 ? (
+            {props.priceDiscount === null ? (
               <span>
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace BO.ViewModels.Post
         public string FullDescription { get; set; }
         public string Image { get; set; }
         public bool Published { get; set; }
+        public IFormFile File { get; set; }
     }
 }

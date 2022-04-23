@@ -95,7 +95,7 @@ namespace backend.Controllers
                 if (ModelState.IsValid)
                 {
                     var result = await productBLL.Update(id, model);
-                    if (result && (model.Files != null || model.Files.Count != 0))
+                    if (result && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)

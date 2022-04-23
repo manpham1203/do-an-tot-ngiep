@@ -34,7 +34,6 @@ function Login(props) {
       data: values,
     })
       .then((res) => {
-        console.log(res);
         if (res.status === 200 && typeof res.data !== "string") {
           toast.success(`Đăng nhập thành công`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -60,7 +59,7 @@ function Login(props) {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)}>
+    <form onSubmit={handleSubmit(onSubmitHandler)} >
       <div className="mt-[25px]">
         <Input
           name="username"

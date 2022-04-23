@@ -26,6 +26,14 @@ function SideBar(props) {
       title: "Danh mục",
       icon: iconParent,
     },
+    {
+      title: "Tin tức",
+      icon: iconParent,
+    },
+    {
+      title: "Đơn hàng",
+      icon: iconParent,
+    },
   ];
   const ProductTab = [
     {
@@ -75,6 +83,30 @@ function SideBar(props) {
     {
       title: "Thùng Rác",
       path: "danh-muc/thung-rac",
+      icon: iconchild,
+    },
+  ];
+  const OrderTab = [
+    {
+      title: "Danh Sách",
+      path: "don-hang/danh-sach",
+      icon: iconchild,
+    },
+  ];
+  const PostTab = [
+    {
+      title: "Danh Sách",
+      path: "tin-tuc/danh-sach",
+      icon: iconchild,
+    },
+    {
+      title: "Tạo Mới",
+      path: "tin-tuc/tao-moi",
+      icon: iconchild,
+    },
+    {
+      title: "Thùng Rác",
+      path: "tin-tuc/da-xoa",
       icon: iconchild,
     },
   ];
@@ -257,6 +289,82 @@ function SideBar(props) {
                   })}
                 </ul>
               )}
+              {tab === 4 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {OrderTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 3 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {PostTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           ))}
         </div>
@@ -274,7 +382,7 @@ function SideBar(props) {
           />
           <h2>home</h2>
         </div>
-        <div className="w-full p-[20px] ">
+        <div className="w-full p-[20px] " id="abc">
           <Outlet />
         </div>
       </div>

@@ -84,7 +84,7 @@ function ProductCard(props) {
           <AiFillStar />
         </div>
         <div className="flex flex-round gap-x-[20px]">
-          {props.priceDiscount === 0 ? (
+          {props.priceDiscount ==null ? (
             <span>
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",

@@ -111,8 +111,8 @@ function ProductTable(props) {
       search: query,
       brandSlugs: watchBrand,
       categorySlugs: watchCategory,
-      from: priceRange[0],
-      to: priceRange[1],
+      priceFrom: priceRange[0],
+      priceTo: priceRange[1],
     };
     dispatch(loading());
     await api({
@@ -125,7 +125,7 @@ function ProductTable(props) {
     })
       .then((res) => {
         dispatch(success(res.data));
-        setLimit(res.data.products.length);
+        // setLimit(res.data.products.length);
       })
       .catch(() => dispatch(fail()));
   };

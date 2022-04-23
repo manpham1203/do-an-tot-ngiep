@@ -114,7 +114,6 @@ function EditInfo(props) {
   useEffect(() => {
     fetchData(user.id);
   }, [user.id]);
-  console.log(errors);
   return (
     <div className="w-full flex flex-col">
       <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">

@@ -6,7 +6,7 @@ function About(props) {
     const store=useSelector(state=>state);
     console.log(store)
     return (
-        <div className='pt-[100px]'>
+        <div className=''>
             About page
         </div>
     );

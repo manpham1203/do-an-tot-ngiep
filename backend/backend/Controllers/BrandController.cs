@@ -87,7 +87,7 @@ namespace backend.Controllers
                 {
 
                     var brandCreate = await brandBLL.Create(model);
-                    if (brandCreate && (model.Files != null || model.Files.Count != 0))
+                    if (brandCreate && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
@@ -116,7 +116,7 @@ namespace backend.Controllers
                 try
                 {
                     var result = await brandBLL.Update(id, model);
-                    if (result && (model.Files != null || model.Files.Count != 0))
+                    if (result && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
@@ -226,10 +226,14 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                for (int i = 0; i < brandFullVM.BrandImageVMs.Count; i++)
+                if (brandFullVM.BrandImageVMs != null)
                 {
-                    brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
+                    for (int i = 0; i < brandFullVM.BrandImageVMs.Count; i++)
+                    {
+                        brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
+                    }
                 }
+
                 return Ok(brandFullVM);
             }
             catch

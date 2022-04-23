@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO.ViewModels.Product;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,7 @@ namespace BO.ViewModels.OrderDetail
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public DateTime CreatedAt { get; set; }
+        public ProductOrderVM ProductOrderVM { get; set; }
+        public CartRowVM CartRowVM { get; set; }
     }
 }

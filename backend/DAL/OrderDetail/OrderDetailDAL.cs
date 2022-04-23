@@ -1,5 +1,6 @@
 ﻿using BO;
 using BO.ViewModels.OrderDetail;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,19 +16,20 @@ namespace DAL.OrderDetail
         {
             db= new AppDbContext();
         }
-        public async Task<bool> Create(OrderDetailVM model)
+        public async Task<bool> Create(List<OrderDetailVM> model)
         {
             try
             {
-                var obj = new BO.Entities.OrderDetail
+                var obj = model.Select(x=>new BO.Entities.OrderDetail
                 {
-                    Id = model.Id,
-                    OrderId = model.OrderId,
-                    ProductId=model.ProductId,
-                    Quantity=model.Quantity,
-                    UnitPrice=model.UnitPrice,
-                };
-                await db.OrderDetails.AddAsync(obj);
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    ProductId=x.ProductId,
+                    Quantity=x.Quantity,
+                    UnitPrice=x.UnitPrice,
+                    CreatedAt=x.CreatedAt,
+                });
+                await db.OrderDetails.AddRangeAsync(obj);
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {
@@ -40,5 +42,36 @@ namespace DAL.OrderDetail
                 return false;
             }
         }
+    
+        public async Task<List<OrderDetailVM>> GetDetailByOrderId(string orderId)
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.Where(x => x.OrderId == orderId).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                if(resultFromDb.Count == 0)
+                {
+                    return new List<OrderDetailVM>();
+                }
+                var result = resultFromDb.Select(x => new OrderDetailVM { 
+                    Id=x.Id,
+                    OrderId=x.OrderId,
+                    ProductId=x.ProductId,
+                    Quantity=x.Quantity,
+                    UnitPrice=x.UnitPrice,
+                    ProductOrderVM=null,
+                    CartRowVM=null
+                }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
     }
 }

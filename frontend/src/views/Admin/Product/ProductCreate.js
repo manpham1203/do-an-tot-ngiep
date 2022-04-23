@@ -219,7 +219,7 @@ function ProductCreate(props) {
               htmlFor="fullDescription"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Mô tả đầy đủ
+              Danh mục
             </label>
             <Controller
               control={control}
@@ -259,7 +259,7 @@ function ProductCreate(props) {
               htmlFor="fullDescription"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
-              Mô tả đầy đủ
+              Thương hiệu
             </label>
             <Controller
               control={control}

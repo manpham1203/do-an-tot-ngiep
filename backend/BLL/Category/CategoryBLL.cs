@@ -104,7 +104,7 @@ namespace BLL.Category
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.Files.Count > 0)
+            if (model.Files !=null )
             {
                 model.ImageNames = new List<string>();
                 for (int i = 0; i < model.Files.Count; i++)
@@ -135,7 +135,7 @@ namespace BLL.Category
                 return false;
             }
 
-            if (model.Files.Count > 0)
+            if (model.Files !=null)
             {
                 var categoryImageBLL = new CategoryImageBLL();
                 var saveImg = await categoryImageBLL.Create(model.ImageNames, id);

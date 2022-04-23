@@ -92,7 +92,7 @@ namespace backend.Controllers
                 try
                 {
                     var categoryUpdate = await categoryBLL.Update(id, model);
-                    if (categoryUpdate && (model.Files != null || model.Files.Count != 0))
+                    if (categoryUpdate && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
                         if (!saveFile)
@@ -184,10 +184,14 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
+                if (categoryFullVM.CategoryImageVMs != null)
                 {
-                    categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
+                    for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
+                    {
+                        categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
+                    }
                 }
+
                 return Ok(categoryFullVM);
             }
             catch
@@ -251,7 +255,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-   
+
         [HttpGet("AllCategoryWithProductCard")]
         public async Task<IActionResult> AllCategoryWithProductCard()
         {
@@ -283,12 +287,12 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
         [HttpGet("allcategoryname")]
         public async Task<IActionResult> AllCategoryName()
         {
-            var resultFromBLL=await categoryBLL.AllCategoryName();
-            if(resultFromBLL == null)
+            var resultFromBLL = await categoryBLL.AllCategoryName();
+            if (resultFromBLL == null)
             {
                 return BadRequest();
             }

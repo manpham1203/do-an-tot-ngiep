@@ -4,13 +4,20 @@ import { useNavigate } from "react-router-dom";
 import ChangePassword from "../../../components/UserInfo/ChangePassword";
 import EditInfo from "../../../components/UserInfo/EditInfo";
 import Info from "../../../components/UserInfo/Info";
+import OrderList from "../../../components/UserInfo/OrderList";
 import { logout } from "../../../redux/user/userActions";
+import OrderCancel from '../../../components/UserInfo/OrderCancel';
+import Ordered from "../../../components/UserInfo/Ordered";
+import PurchasedProduct from "../../../components/UserInfo/PurchasedProduct";
 
 const data = [
   "thông tin cá nhân",
   "sửa thông tin",
   "đổi mật khẩu",
   "quản lý đơn hàng",
+  "đơn hàng đã huỷ",
+  "lịch sử mua hàng",
+  "sản phẩm đã mua",
 ];
 function Account(props) {
   const [tab, setTab] = useState(0);
@@ -24,7 +31,7 @@ function Account(props) {
   return (
     <>
       {user.id !== null && (
-        <div className="pt-[100px] container mx-auto flex flex-row gap-x-[20px]">
+        <div className="mt-[30px] container mx-auto flex flex-row gap-x-[20px]">
           <div className="w-[400px]">
             {data.map((item, index) => {
               return (
@@ -56,6 +63,10 @@ function Account(props) {
             {tab === 0 && <Info />}
             {tab === 1 && <EditInfo />}
             {tab === 2 && <ChangePassword />}
+            {tab === 3 && <OrderList userId={user.id} />}
+            {tab === 4 && <OrderCancel userId={user.id} />}
+            {tab === 5 && <Ordered userId={user.id} />}
+            {tab === 6 && <PurchasedProduct userId={user.id} />}
           </div>
         </div>
       )}

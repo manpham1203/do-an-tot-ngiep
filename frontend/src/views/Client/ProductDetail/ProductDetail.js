@@ -93,7 +93,12 @@ function ProductDetail() {
       .catch(() => dispatchProduct(fail()));
   };
   useEffect(() => {
+    setNumber(1);
     fetchProductDetail(slug);
+  }, [slug]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, [slug]);
 
   const addCart = (id, qty) => {
@@ -144,8 +149,6 @@ function ProductDetail() {
     }
   };
 
-  
-
   return (
     <div className="container mx-auto">
       {state.loading ? (
@@ -172,7 +175,7 @@ function ProductDetail() {
                   (1 lượt đánh giá)
                 </span>
               </div>
-              {state.data.priceDiscount === 0 ? (
+              {state.data.priceDiscount === null ? (
                 <span className="text-[28px] mt-[10px]">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
@@ -197,11 +200,11 @@ function ProductDetail() {
               )}
               <div className="mt-[10px]">
                 <span className="font-medium">Lượt thích: </span>
-                {state.data.likes}
+                {state.data.like}
               </div>
               <div className="mt-[10px]">
                 <span className="font-medium">Lượt xem: </span>
-                {state.data.likes}
+                {state.data.view}
               </div>
 
               <div className="text-justify">{state.data.shortDescription}</div>
@@ -214,7 +217,9 @@ function ProductDetail() {
                       <span
                         key={item.id}
                         className="cursor-pointer hover:underline underline-offset-4"
-                        onClick={() => navigate(`/san-pham?&category=${item.slug}`)}
+                        onClick={() =>
+                          navigate(`/san-pham?&category=${item.slug}`)
+                        }
                       >
                         {item.name},&nbsp;
                       </span>

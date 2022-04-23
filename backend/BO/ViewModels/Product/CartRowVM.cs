@@ -12,8 +12,7 @@ namespace BO.ViewModels.Product
         public string Id { get; set; }
         public string Name { get; set; }
         public string Slug { get; set; }
-        public decimal Price { get; set; }
-        public decimal? PriceDiscount { get; set; }
+        public decimal? CurrentPrice { get; set; }
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
         public string BrandId { get; set; }

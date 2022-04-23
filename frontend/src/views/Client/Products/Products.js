@@ -74,7 +74,7 @@ const colourStyles = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles) => ({
     ...styles,
-    color: "#202121",
+    color: '"#202121"',
     borderLeft: "0.1rem solid #1EB7F3",
     left: "0%",
     lineHeight: "1.3rem",

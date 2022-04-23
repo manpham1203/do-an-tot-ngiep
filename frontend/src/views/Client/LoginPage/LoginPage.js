@@ -12,8 +12,8 @@ function LoginPage(props) {
   return (
     <>
       {user.id === null && (
-        <div className="p-[100px] bg-[url('./assets/bg2.jpg')] bg-center bg-cover">
-          <div className="w-[575px] mx-auto px-[50px] pb-[50px] pt-[40px] bg-third">
+        <div className="mt-[40px]">
+          <div className="w-[575px] mx-auto px-[50px] pb-[50px] pt-[40px] bg-third border border-second">
             <div className="flex flex-row w-full border-b border-input-border">
               {tabs.map((item, index) => {
                 return (

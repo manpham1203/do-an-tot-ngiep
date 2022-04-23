@@ -16,54 +16,22 @@ namespace DAL.Post
         {
             db = new AppDbContext();
         }
-        public async Task<List<PostVM>> GetAll()
+        public async Task<bool> CheckExists(string id)
         {
-            var postFromDb = await db.Posts.ToListAsync();
-            if (postFromDb.Count==0)
+            try
             {
-                return new List<PostVM>();
+                var resultFromDb = await (from post in db.Posts where post.Id == id select new { post.Id }).ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return false;
+                }
+                return true;
+
             }
-            var postVMs = postFromDb.Select(x => new PostVM
+            catch
             {
-                Id = x.Id,
-                Title = x.Title,
-                Slug = x.Slug,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
-                Published = x.Published,
-                Deleted = x.Deleted,
-                Likes = x.Likes,
-                Views = x.Views,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-            }).ToList();
-            return postVMs;
-
-        }
-        public async Task<PostVM> GetById(string id)
-        {
-
-            var postFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
-            if (postFromDb == null)
-            {
-                return null;
+                return true;
             }
-            var postVM = new PostVM
-            {
-                Id = postFromDb.Id,
-                Title = postFromDb.Title,
-                Slug = postFromDb.Slug,
-                FullDescription = postFromDb.FullDescription,
-                ShortDescription = postFromDb.ShortDescription,
-                Published = postFromDb.Published,
-                Deleted = postFromDb.Deleted,
-                Likes = postFromDb.Likes,
-                Views = postFromDb.Views,
-                CreatedAt = postFromDb.CreatedAt,
-                UpdatedAt = postFromDb.UpdatedAt,
-            };
-            return postVM;
-
         }
         public async Task<bool> Create(PostVM postVM)
         {
@@ -78,10 +46,11 @@ namespace DAL.Post
                 Deleted = postVM.Deleted,
                 Likes = postVM.Likes,
                 Views = postVM.Views,
+                Image = postVM.Image,
                 CreatedAt = postVM.CreatedAt,
                 UpdatedAt = postVM.UpdatedAt,
             };
-            await db.AddAsync(post);
+            await db.Posts.AddAsync(post);
             var result = await db.SaveChangesAsync();
             if (result > 0)
             {
@@ -98,10 +67,11 @@ namespace DAL.Post
             postFromDb.FullDescription = postVM.FullDescription;
             postFromDb.ShortDescription = postVM.ShortDescription;
             postFromDb.Published = postVM.Published;
-            postFromDb.Deleted = postVM.Deleted;
-            postFromDb.Likes = postVM.Likes;
-            postFromDb.Views = postVM.Views;
             postFromDb.UpdatedAt = postVM.UpdatedAt;
+            if (!string.IsNullOrEmpty(postVM.Image))
+            {
+                postFromDb.Image = postVM.Image;
+            }
 
             var result = await db.SaveChangesAsync();
             if (result > 0)
@@ -120,6 +90,164 @@ namespace DAL.Post
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<string>> RowsAdminDeleted(bool deleted, string query)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.Where(x => x.Deleted == deleted).Select(x => new { x.Id, x.Title }).ToListAsync();
+                if (!string.IsNullOrEmpty(query))
+                {
+                    resultFromDb = resultFromDb.Where(x => x.Title.ToLower().Contains(query.ToLower())).ToList();
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<string>();
+                }
+                return resultFromDb.Select(x => x.Id).ToList();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<RowAdmin> RowsAdminById(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
+
+                var result = new RowAdmin
+                {
+                    Id = resultFromDb.Id,
+                    Title = resultFromDb.Title,
+                    Published = resultFromDb.Published,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> Published(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                resultFromDb.Published = !resultFromDb.Published;
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Deleted(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                resultFromDb.Deleted = !resultFromDb.Deleted;
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<SetDataUpdateVM> SetDataUpdate(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.ShortDescription, x.FullDescription, x.Published, x.Image }).SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return new SetDataUpdateVM
+                {
+                    Title = resultFromDb.Title,
+                    ShortDescription = resultFromDb.ShortDescription,
+                    FullDescription = resultFromDb.FullDescription,
+                    Published = resultFromDb.Published,
+                    Image = resultFromDb.Image
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<bool> DeleteFromDatabase(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                db.Posts.Remove(resultFromDb);
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    
+        public async Task<List<PostCardVM>> PostCards()
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.Where(x => x.Published==true && x.Deleted==false).Select(x => new { x.Id, x.Title,x.Slug, x.ShortDescription, x.Views, x.Image, x.CreatedAt }).ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<PostCardVM>();
+                }
+                var result = resultFromDb.Select(x => new PostCardVM
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Slug = x.Slug,
+                    ShortDescription = x.ShortDescription,
+                    Views = x.Views,
+                    Image = x.Image,
+                    CreatedAt = x.CreatedAt,
+                }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

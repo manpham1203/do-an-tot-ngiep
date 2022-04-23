@@ -80,9 +80,9 @@ function NavBar() {
             }
             `}
           >
-            <button className="text-[25px]">
+            {/* <button className="text-[25px]">
               <FiSearch />
-            </button>
+            </button> */}
 
             <div className="relative" onClick={() => navigate("/gio-hang")}>
               <AiOutlineShopping className="cursor-pointer text-[25px]" />

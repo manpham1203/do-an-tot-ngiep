@@ -95,7 +95,7 @@ function RowTrash(props) {
       );
   };
   const handleEdit = (slug) => {
-    navigate(`/admin/chinh-sua-san-pham/${slug}`);
+    navigate(`/admin/thuong-hieu/chinh-sua/${slug}`);
   };
   const handleTrash = async (id) => {
     await api({

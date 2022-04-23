@@ -3,7 +3,7 @@ import React from 'react';
 function Contact(props) {
     document.title="Liên Hệ";
     return (
-        <div className='pt-[100px]'>
+        <div className=''>
             Contact page
         </div>
     );

@@ -190,7 +190,8 @@ namespace BO.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal?>("Amount")
+                        .IsRequired()
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
