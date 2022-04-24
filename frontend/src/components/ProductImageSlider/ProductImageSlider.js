@@ -6,10 +6,33 @@ import { useParams } from "react-router-dom";
 
 function ProductImageSlider(props) {
   const [active, setActive] = useState(null);
-
+  const [isMobile, setIsMobile] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+  useEffect(() => {
+    const handleSize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        heigth: window.innerHeight,
+      });
+    };
+    window.addEventListener("resize", handleSize);
+    handleSize();
+    return () => window.removeEventListener("resize", handleSize);
+  }, []);
+  useEffect(() => {
+    if (windowSize.width < 1024) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, [windowSize]);
+  console.log(isMobile);
   return (
     <>
-      <div className="h-[100px] w-auto hidden lg:block">
+      <div className="lg:h-[500px] lg:w-[92px] w-full mt-[20px] lg:mt-0 ">
         <Swiper
           loop={false}
           spaceBetween={10}
@@ -17,9 +40,11 @@ function ProductImageSlider(props) {
           navigation={true}
           grabCursor={true}
           modules={[Navigation, Thumbs]}
-          className="productSlideThumb h-[500px] w-[92px]"
+          className={`${
+            !isMobile && "productSlideThumb"
+          } w-full h-[92px] lg:h-[500px] lg:w-[92px]`}
           onSwiper={setActive}
-          direction={"vertical"}
+          direction={isMobile ? "horizontal" : "vertical"}
           style={{
             "--swiper-navigation-color": "#bg-color-second",
             "--swiper-pagination-color": "#bg-color-second",
@@ -29,7 +54,7 @@ function ProductImageSlider(props) {
             return (
               <SwiperSlide
                 key={index}
-                className={` overflow-hidden`}
+                className={` overflow-hidden cursor-pointer`}
               >
                 <img
                   src={item.imageSrc}
@@ -41,7 +66,8 @@ function ProductImageSlider(props) {
           })}
         </Swiper>
       </div>
-      <div className="w-[500px] h-[500px]">
+
+      <div className="w-full lg:h-[500px] lg:w-[500px] h-fit">
         <Swiper
           loop={false}
           spaceBetween={10}
@@ -68,7 +94,7 @@ function ProductImageSlider(props) {
           })}
         </Swiper>
       </div>
-      <div className="block lg:hidden mt-[20px]">
+      {/* <div className="mt-[20px]">
         <Swiper
           loop={false}
           spaceBetween={10}
@@ -86,10 +112,7 @@ function ProductImageSlider(props) {
         >
           {props.images?.map((item, index) => {
             return (
-              <SwiperSlide
-                key={index}
-                className={` overflow-hidden`}
-              >
+              <SwiperSlide key={index} className={` overflow-hidden`}>
                 <img
                   src={item.imageSrc}
                   alt="product images"
@@ -99,7 +122,7 @@ function ProductImageSlider(props) {
             );
           })}
         </Swiper>
-      </div>
+      </div> */}
     </>
   );
 }

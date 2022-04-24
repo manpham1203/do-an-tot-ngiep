@@ -18,12 +18,26 @@ function Posts(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(data);
   return (
-    <div>
-      {data.map((item) => {
-        return <PostCard key={item.id} title={item.title} image={item.imageSrc} createdAt={item.createdAt} shortDescription={item.shortDescription} />;
-      })}
+    <div className="container mx-auto mt-[20px]">
+      <div className="flex flex-row gap-x-[25px]">
+        <div className="flex flex-col gap-y-[25px]">
+          {data.map((item) => {
+            return (
+              <PostCard
+                key={item.id}
+                title={item.title}
+                slug={item.slug}
+                image={item.imageSrc}
+                createdAt={item.createdAt}
+                shortDescription={item.shortDescription}
+                view={item.views}
+              />
+            );
+          })}
+        </div>
+        <div className="w-[350px] flex-none">widget</div>
+      </div>
     </div>
   );
 }

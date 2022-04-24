@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Carousel from "../../../components/Carousel/Carousel";
-import ListBrand from "../../../components/ListBrand/ListBrand";
-import Heading from "../../../components/ProductSlideShow/Heading";
+import Heading from "../../../components/Heading/Heading";
 import ListProductCard from "../../../components/ProductSlideShow/ListProductCard";
 import ListTab from "../../../components/ProductSlideShow/ListTab";
 import ProductSlideShow from "../../../components/ProductSlideShow/ProductSlideShow";
-import WeTalkPride from "../../../components/WeTalkPride/WeTalkPride";
 import api from "../../../apis/api";
+import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
 const initState = {
   category: {
@@ -162,11 +161,9 @@ function Home() {
   }, [state.brand.data]);
   document.title = "Web";
 
-
   return (
     <div className="w-[100%]">
       <Carousel></Carousel>
-
       <ProductSlideShow>
         <Heading title="Thương Hiệu" />
         <div className="flex flex-row justify-center gap-x-[20px] font-primary text-[20px]">
@@ -219,6 +216,7 @@ function Home() {
           );
         })}
       </ProductSlideShow>
+      <PostSlideShow />
     </div>
   );
 }

@@ -249,5 +249,32 @@ namespace DAL.Post
                 return null;
             }
         }
+    
+        public async Task<PostDetailVM> PostDetail(string slug)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.Select(x => new { x.Title, x.Slug, x.ShortDescription, x.FullDescription, x.Views, x.Image, x.CreatedAt }).SingleOrDefaultAsync(x => x.Slug == slug);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new PostDetailVM
+                {
+                    Title = resultFromDb.Title,
+                    Slug = resultFromDb.Slug,
+                    ShortDescription = resultFromDb.ShortDescription,
+                    FullDescription = resultFromDb.FullDescription,
+                    Views = resultFromDb.Views,
+                    Image = resultFromDb.Image,
+                    CreatedAt = resultFromDb.CreatedAt,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

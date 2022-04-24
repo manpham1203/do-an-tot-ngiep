@@ -1,124 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../apis/api";
+import FooterNav from "./FooterNav";
 
 function Footer(props) {
+  const [brand, setBrand] = useState([]);
+  const [category, setCategory] = useState([]);
+  const fetchBrand = async (id) => {
+    await api({
+      method: "GET",
+      url: `/category/allcategoryname`,
+      params: { id: id },
+    })
+      .then((res) => {
+        setCategory(res.data);
+      })
+      .catch(() => console.log("fail"));
+  };
+  const fetchCategory = async (id) => {
+    await api({
+      method: "GET",
+      url: `/brand/allbrandname`,
+      params: { id: id },
+    })
+      .then((res) => {
+        setBrand(res.data);
+      })
+      .catch(() => console.log("fail"));
+  };
+  useEffect(() => {
+    fetchBrand();
+    fetchCategory();
+  }, []);
   return (
-    <div className="text-gray-600 body-font">
-      <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-        <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-          <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-           
-            <span className="ml-3 text-xl">Tailblocks</span>
-          </a>
-          <p className="mt-2 text-sm text-gray-500">
-            Air plant banjo lyft occupy retro adaptogen indego
-          </p>
+    <div className="border-t border-t-[#161a2133] mt-[40px]">
+      <div className="mx-auto container">
+        <div className="flex flex-row mt-[40px] gap-x-[40px]">
+          <div className="flex-1">
+            <h2>Logo</h2>
+            <p className="font-light text-[#777]">Nhà tôi 3 đời bán đồng hồ</p>
+          </div>
+          <div className="flex-1">
+            <FooterNav title="Thương Hiệu" data={brand} type="brand" />
+          </div>
+          <div className="flex-1">
+            <FooterNav title="Danh Mục" data={category} type="category" />
+          </div>
+          <div className="flex-1">Địa chỉ</div>
         </div>
-        <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-          <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-              CATEGORIES
-            </h2>
-            <nav className="list-none mb-10">
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">First Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Second Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Third Link</a>
-              </li>
-              <li>
-                <a className="text-gray-600 hover:text-gray-800">Fourth Link</a>
-              </li>
-            </nav>
-          </div>
-        </div>
-      </div>
-      <div className="bg-gray-100">
-        <div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-          <p className="text-gray-500 text-sm text-center sm:text-left">
-            © 2020 Tailblocks —
-            <a
-              href="https://twitter.com/knyttneve"
-              rel="noopener noreferrer"
-              className="text-gray-600 ml-1"
-              target="_blank"
-            >
-              @knyttneve
-            </a>
-          </p>
-          <span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
-            <a className="text-gray-500">
-            
-            </a>
-            <a className="ml-3 text-gray-500">
-              
-            </a>
-            <a className="ml-3 text-gray-500">
-              
-            </a>
-            <a className="ml-3 text-gray-500">
-              
-            </a>
-          </span>
+        <div className="border-t border-t-[#161a2133] h-[70px] flex flex-row items-center mt-[40px] gap-x-[40px] font-light">
+          <span>ĐỒ ÁN TỐT NGHIỆP</span>
+          <span>Phạm Minh Mẫn</span>
         </div>
       </div>
     </div>

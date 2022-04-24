@@ -212,5 +212,17 @@ namespace BLL.Post
                 return null;
             }
         }
+    
+        public async Task<PostDetailVM> PostDetail(string slug)
+        {
+            try
+            {
+                return await postDAL.PostDetail (slug);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

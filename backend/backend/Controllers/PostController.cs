@@ -204,5 +204,24 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("postdetail")]
+        public async Task<IActionResult> PostDetail(string slug)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.PostDetail(slug);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

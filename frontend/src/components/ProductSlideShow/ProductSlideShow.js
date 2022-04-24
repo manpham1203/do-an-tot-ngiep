@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Heading from "./Heading";
-import ListProductCard from "./ListProductCard";
-import ListTab from "./ListTab";
 
 function ProductSlideShow(props) {
   
