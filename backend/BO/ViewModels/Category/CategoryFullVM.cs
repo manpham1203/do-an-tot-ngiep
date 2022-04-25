@@ -1,4 +1,4 @@
-﻿using BO.ViewModels.CategoryImage;
+﻿using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using System;
 using System.Collections.Generic;
@@ -19,8 +19,8 @@ namespace BO.ViewModels.Category
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int Ordinal { get; set; }
         public List<ProductVM> ProductVMs { get; set; }
-        public List<CategoryImageVM> CategoryImageVMs { get; set; }
+        public PictureVM PictureVM { get; set; }
+        public string ImageSrc { get; set; }
     }
 }

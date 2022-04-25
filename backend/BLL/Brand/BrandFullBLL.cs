@@ -1,7 +1,6 @@
-﻿using BLL.BrandImage;
+﻿using BLL.Picture;
 using BLL.Product;
 using BO.ViewModels.Brand;
-using BO.ViewModels.BrandImage;
 using BO.ViewModels.Product;
 using DAL.Brand;
 using System;
@@ -15,68 +14,61 @@ namespace BLL.Brand
     public class BrandFullBLL
     {
         private readonly BrandFullDAL brandFullDAL;
+        private string objectType = "brand";
         public BrandFullBLL()
         {
             brandFullDAL = new BrandFullDAL();
         }
-        public async Task<List<BrandFullVM>> GetAll()
-        {
-            var brandFullVMs = await brandFullDAL.GetAll();
-            if (brandFullVMs.Count == 0)
-            {
-                return brandFullVMs;
-            }
-            //var productBLL = new ProductBLL();
-            //for (int i = 0; i < brandFullVMs.Count; i++)
-            //{
-            //    var listProduct = await productBLL.GetByBrandId(brandFullVMs[i].Id);
-            //    if (listProduct.Count>0)
-            //    {
-            //        brandFullVMs[i].ProductVMs = new List<ProductVM>();
-            //        for (int j = 0; j < listProduct.Count; j++)
-            //        {
-            //            brandFullVMs[i].ProductVMs.Add(listProduct[j]);
-            //        }
-            //    }
+        //public async Task<List<BrandFullVM>> GetAll()
+        //{
+        //    var brandFullVMs = await brandFullDAL.GetAll();
+        //    if (brandFullVMs.Count == 0)
+        //    {
+        //        return brandFullVMs;
+        //    }
+        //    //var productBLL = new ProductBLL();
+        //    //for (int i = 0; i < brandFullVMs.Count; i++)
+        //    //{
+        //    //    var listProduct = await productBLL.GetByBrandId(brandFullVMs[i].Id);
+        //    //    if (listProduct.Count>0)
+        //    //    {
+        //    //        brandFullVMs[i].ProductVMs = new List<ProductVM>();
+        //    //        for (int j = 0; j < listProduct.Count; j++)
+        //    //        {
+        //    //            brandFullVMs[i].ProductVMs.Add(listProduct[j]);
+        //    //        }
+        //    //    }
 
-            //}
-            var productFullBLL = new ProductFullBLL();
-            for (int i = 0; i < brandFullVMs.Count; i++)
-            {
-                var listProduct = await productFullBLL.GetByBrandId(brandFullVMs[i].Id);
-                    //brandFullVMs[i].ProductFullVMs = new List<ProductFullVM>();
-                if (listProduct.Count > 0)
-                {
-                    for (int j = 0; j < listProduct.Count; j++)
-                    {
-                        brandFullVMs[i].ProductFullVMs.Add(listProduct[j]);
-                    }
-                }
-            }
+        //    //}
+        //    var productFullBLL = new ProductFullBLL();
+        //    for (int i = 0; i < brandFullVMs.Count; i++)
+        //    {
+        //        var listProduct = await productFullBLL.GetByBrandId(brandFullVMs[i].Id);
+        //        //brandFullVMs[i].ProductFullVMs = new List<ProductFullVM>();
+        //        if (listProduct.Count > 0)
+        //        {
+        //            for (int j = 0; j < listProduct.Count; j++)
+        //            {
+        //                brandFullVMs[i].ProductFullVMs.Add(listProduct[j]);
+        //            }
+        //        }
+        //    }
 
-            var brandImgBLL = new BrandImageBLL();
-            for (int i = 0; i < brandFullVMs.Count; i++)
-            {
-                var listImg = await brandImgBLL.GetByBrandId(brandFullVMs[i].Id);
-                if (listImg.Count > 0 )
-                {
-                    //brandFullVMs[i].BrandImageVMs = new List<BrandImageVM>();
-                    for (int j = 0; j < listImg.Count; j++)
-                    {
-                        brandFullVMs[i].BrandImageVMs.Add(listImg[j]);
-                    }
-                }
-            }
+        //    var brandImgBLL = new PictureBLL();
+        //    for (int i = 0; i < brandFullVMs.Count; i++)
+        //    {
+        //        var listImg = await brandImgBLL.GetByObjectId(brandFullVMs[i].Id, objectType);
+        //        if (listImg[0] != null)
+        //        {
+        //            brandFullVMs[i].PictureVM = listImg[0];
+        //        }
+        //    }
 
 
-            return brandFullVMs;
-        }
+        //    return brandFullVMs;
+        //}
         public async Task<BrandFullVM> GetById(string id)
         {
-            if (id.Length != 12)
-            {
-                return null;
-            }
             var brandFullVM = await brandFullDAL.GetById(id);
             if (brandFullVM == null)
             {
@@ -98,15 +90,11 @@ namespace BLL.Brand
                 }
             }
 
-            var brandImgBLL = new BrandImageBLL();
-            var listImg = await brandImgBLL.GetByBrandId(brandFullVM.Id);
-            if (listImg.Count > 0)
+            var brandImgBLL = new PictureBLL();
+            var listImg = await brandImgBLL.GetByObjectId(brandFullVM.Id, objectType);
+            if (listImg[0] != null)
             {
-                brandFullVM.BrandImageVMs = new List<BrandImageVM>();
-                for (int i = 0; i < listImg.Count; i++)
-                {
-                    brandFullVM.BrandImageVMs.Add(listImg[i]);
-                }
+                brandFullVM.PictureVM = listImg[0];
             }
 
             return brandFullVM;
@@ -134,19 +122,23 @@ namespace BLL.Brand
                 }
             }
 
-            var brandImgBLL = new BrandImageBLL();
-            var listImg = await brandImgBLL.GetByBrandId(brandFullVM.Id);
-            if (listImg.Count > 0)
+            var brandImgBLL = new PictureBLL();
+            var listImg = await brandImgBLL.GetByObjectId(brandFullVM.Id, objectType);
+            if (listImg != null)
             {
-                brandFullVM.BrandImageVMs = new List<BrandImageVM>();
-                for (int i = 0; i < listImg.Count; i++)
+                if (listImg.Count == 0)
                 {
-                    brandFullVM.BrandImageVMs.Add(listImg[i]);
+                    return brandFullVM;
+                }
+                if (listImg[0] != null)
+                {
+                    brandFullVM.PictureVM = listImg[0];
                 }
             }
 
+
             return brandFullVM;
         }
-        
+
     }
 }

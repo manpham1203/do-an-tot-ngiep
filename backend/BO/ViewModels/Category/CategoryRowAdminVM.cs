@@ -14,6 +14,5 @@ namespace BO.ViewModels.Category
         public bool Published { get; set; }
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int Ordinal { get; set; }
     }
 }

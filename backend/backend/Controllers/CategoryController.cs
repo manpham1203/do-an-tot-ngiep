@@ -23,38 +23,38 @@ namespace backend.Controllers
             categoryFullBLL = new CategoryFullBLL();
             this.iwebHostEnvironment = _iwebHostEnvironment;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var categoryVMs = await categoryBLL.GetAll();
-                return Ok(categoryVMs);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    try
+        //    {
+        //        var categoryVMs = await categoryBLL.GetAll();
+        //        return Ok(categoryVMs);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            try
-            {
-                var category = await categoryBLL.GetById(id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
-                return Ok(category);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //}
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetById(string id)
+        //{
+        //    try
+        //    {
+        //        var category = await categoryBLL.GetById(id);
+        //        if (category == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(category);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateCategoryVM model)
         {
@@ -63,9 +63,9 @@ namespace backend.Controllers
                 try
                 {
                     var categoryCreate = await categoryBLL.Create(model);
-                    if (categoryCreate && (model.Files != null))
+                    if (categoryCreate && (model.File != null))
                     {
-                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        var saveFile = await SaveFile(model.File, model.ImageName);
                         if (!saveFile)
                         {
                             return BadRequest();
@@ -92,9 +92,9 @@ namespace backend.Controllers
                 try
                 {
                     var categoryUpdate = await categoryBLL.Update(id, model);
-                    if (categoryUpdate && (model.Files != null))
+                    if (categoryUpdate && (model.File != null))
                     {
-                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        var saveFile = await SaveFile(model.File, model.ImageName);
                         if (!saveFile)
                         {
                             return BadRequest();
@@ -161,9 +161,9 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
+                if (categoryFullVM.PictureVM != null)
                 {
-                    categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
+                    categoryFullVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.PictureVM.Name);
                 }
                 return Ok(categoryFullVM);
             }
@@ -184,12 +184,9 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                if (categoryFullVM.CategoryImageVMs != null)
+                if (categoryFullVM.PictureVM != null)
                 {
-                    for (int i = 0; i < categoryFullVM.CategoryImageVMs.Count; i++)
-                    {
-                        categoryFullVM.CategoryImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.CategoryImageVMs[i].Name);
-                    }
+                    categoryFullVM.PictureVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, categoryFullVM.PictureVM.Name);
                 }
 
                 return Ok(categoryFullVM);
@@ -201,20 +198,12 @@ namespace backend.Controllers
         }
 
         [NonAction]
-        public async Task<bool> SaveFile(List<IFormFile> files, List<string> imgName)
+        public async Task<bool> SaveFile(IFormFile file, string imgName)
         {
-
-            for (int i = 0; i < files.Count; i++)
+            var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
-                //imageName = imgName[i];
-                //imageName = imageName + Path.GetExtension(files[i].FileName);
-
-                var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName[i]);
-                using (var fileStream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await files[i].CopyToAsync(fileStream);
-                }
-
+                await file.CopyToAsync(fileStream);
             }
             return true;
         }

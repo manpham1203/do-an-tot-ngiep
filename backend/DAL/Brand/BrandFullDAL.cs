@@ -35,7 +35,6 @@ namespace DAL.Brand
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
                 ProductVMs = null,
             }).ToList();
             return brandFullVMs;
@@ -58,7 +57,6 @@ namespace DAL.Brand
                 Deleted = brandFromDb.Deleted,
                 CreatedAt = brandFromDb.CreatedAt,
                 UpdatedAt = brandFromDb.UpdatedAt,
-                Ordinal = brandFromDb.Ordinal,
                 ProductVMs = null,
             };
             return brandFullVM;
@@ -81,7 +79,6 @@ namespace DAL.Brand
                 Deleted = brandFromDb.Deleted,
                 CreatedAt = brandFromDb.CreatedAt,
                 UpdatedAt = brandFromDb.UpdatedAt,
-                Ordinal = brandFromDb.Ordinal,
                 ProductVMs = null,
             };
             return brandFullVM;

@@ -68,7 +68,6 @@ const reducer = (state, action) => {
 const schema = yup
   .object({
     name: yup.string().required("Thông tin này không được để trống").trim(),
-    ordinal: yup.string().required("Thông tin này không được để trống").trim(),
     shortDescription: yup
       .string()
       .required("Thông tin này không được để trống")
@@ -92,12 +91,10 @@ function CategoryEdit(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { published: true, formFile: [], ordinal:0 },
+    defaultValues: { published: true, formFile: []},
   });
   const [state, dispatch] = useReducer(reducer, initState);
   const { slug } = useParams();
-  const [image, setImage] = useState([]);
-  const [files, setFiles] = useState([]);
 
   const onSubmitHandler = async (values) => {
     if(richText===""){
@@ -108,10 +105,7 @@ function CategoryEdit(props) {
     formData.append("FullDescription", richText);
     formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
-    formData.append("ordinal", values.ordinal);
-    for (var i = 0; i < files.length; i++) {
-      formData.append("Files", files[i]);
-    }
+      formData.append("File", file);
     await api({
       method: "PUT",
       url: `/category/${state.data.id}`,
@@ -123,8 +117,8 @@ function CategoryEdit(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          setImage([]);
-          setFiles([]);
+          setImage(null);
+          setFile(null);
           fetchData(state.data.slug);
         } else {
           toast.error(`Chỉnh sửa thất bại`, {
@@ -153,7 +147,6 @@ function CategoryEdit(props) {
         reset({
           name: res.data.name,
           shortDescription: res.data.shortDescription,
-          ordinal: res.data.ordinal,
           published: res.data.published,
         });
         setRichText(res.data.fullDescription)
@@ -165,69 +158,18 @@ function CategoryEdit(props) {
     fetchData(slug);
   }, [slug]);
 
-  const selectFile = (e) => {
-    const file = e.target.files;
-    const fileArr = Array.from(file);
-    const imgArr = fileArr.map((item) => {
-      return URL.createObjectURL(item);
-    });
-    setImage((prevImg) => prevImg.concat(imgArr));
-    setFiles((prevImg) => prevImg.concat(fileArr));
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const handlePreviewImage = (e) => {
+    const tempfile = e.target.files[0];
+    setFile(tempfile);
+    setImage(URL.createObjectURL(tempfile));
   };
-  const DeleteImg = (item, index) => {
-    setImage(image.filter((e) => e !== item));
-    const a1 = files.slice(0, index);
-    const a2 = files.slice(index + 1, files.length);
-    setFiles(a1.concat(a2));
-  };
-  const handlepublished = async (id) => {
-    await api({
-      method: "POST",
-      url: `/categoryimage/published/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          fetchData(state.data.slug);
-        } else {
-          toast.error(`Thao tác thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Thao tác thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
-  const handleDelete = async (id) => {
-    await api({
-      method: "Delete",
-      url: `/categoryimage/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          toast.warn(`Xoá thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData(state.data.slug);
-        } else {
-          toast.error(`Xoá thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Xoá thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
+  useEffect(() => {
+    return () => {
+      image && URL.revokeObjectURL(image);
+    };
+  }, [image]);
   useEffect(()=>{
     setRichText(state.data.fullDescription)
   }, [state.data])
@@ -272,21 +214,6 @@ function CategoryEdit(props) {
         <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
-        <div className="">
-          <AdminInput
-            control={control}
-            name="ordinal"
-            label="Thứ tự"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.ordinal ? null : "invisible"
-            }`}
-          >
-            {errors?.ordinal?.message}
-          </p>
-        </div>
         <div>
           <CKEditor
             onChange={(e) => setRichText(e.editor.getData())}
@@ -300,108 +227,33 @@ function CategoryEdit(props) {
             Thông tin này không được để trống
           </p>
         </div>
+
         <div className="flex flex-col">
-          <div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-all"
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />
-                        <label htmlFor="checkbox-all" className="sr-only">
-                          checkbox
-                        </label>
-                      </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Hình
-                    </th>
-                    <th scope="col" className="px-6 py-3 hidden lg:block">
-                      Link
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Phát hành
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Xoá
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {state.data?.categoryImageVMs?.map((item) => {
-                    return (
-                      <tr
-                        className="bg-white border-b  hover:bg-gray-50 "
-                        key={item.id}
-                      >
-                        <td className="w-4 p-4">
-                          <div className="flex items-center">
-                            <input
-                              id="checkbox-table-1"
-                              type="checkbox"
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <label
-                              htmlFor="checkbox-table-1"
-                              className="sr-only"
-                            >
-                              checkbox
-                            </label>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                          <img
-                            src={item.imageSrc}
-                            alt=""
-                            className="w-[100px] h-[100px]"
-                          />
-                        </td>
-                        <td className="px-6 py-4 hidden lg:block">
-                          {item.imageSrc}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div
-                            className={`w-[50px] h-[25px]  flex items-center rounded-full relative
-                            ${item.published ? "bg-blue-600 " : "bg-gray-300"}
-                            transition-all duration-200 cursor-pointer
-                            `}
-                            onClick={() => handlepublished(item.id)}
-                          >
-                            <div
-                              className={`w-[18px] h-[18px] bg-white rounded-full  absolute
-                              ${item.published ? "ml-[28px]" : "ml-[4px]"}
-                              transition-all duration-200
-                              `}
-                            ></div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-[25px]">
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            type="button"
-                            className="bg-danger text-white p-[2px] rounded-md"
-                          >
-                            <FaTimes />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <label
+            htmlFor="image"
+            className="block mb-2 text-sm font-medium text-gray-900 "
+          >
+            Chọn ảnh
+          </label>
+          <label
+            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
+            htmlFor="image"
+          >
+            <input
+              type="file"
+              onChange={handlePreviewImage}
+              className="hidden"
+              id="image"
+            />
+            {image && (
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+            )}
+          </label>
         </div>
-        <AddListImage
-          onChange={selectFile}
-          image={image}
-          DeleteImg={DeleteImg}
-        />
 
         <div className="flex justify-center gap-x-[25px]">
           <button

@@ -1,6 +1,7 @@
 ﻿
 using BO;
 using BO.ViewModels.Category;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,28 +19,28 @@ namespace DAL.Category
         {
             db = new AppDbContext();
         }
-        public async Task<List<CategoryVM>> GetAll()
-        {
-            var categoryFromDb = await db.Categories.ToListAsync();
-            if (categoryFromDb.Count == 0)
-            {
-                return new List<CategoryVM>();
-            }
-            var categoryVMs = categoryFromDb.Select(x => new CategoryVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Slug = x.Slug,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
-                Published = x.Published,
-                Deleted = x.Deleted,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
-            }).ToList();
-            return categoryVMs;
-        }
+        //public async Task<List<CategoryVM>> GetAll()
+        //{
+        //    var categoryFromDb = await db.Categories.ToListAsync();
+        //    if (categoryFromDb.Count == 0)
+        //    {
+        //        return new List<CategoryVM>();
+        //    }
+        //    var categoryVMs = categoryFromDb.Select(x => new CategoryVM
+        //    {
+        //        Id = x.Id,
+        //        Name = x.Name,
+        //        Slug = x.Slug,
+        //        FullDescription = x.FullDescription,
+        //        ShortDescription = x.ShortDescription,
+        //        Published = x.Published,
+        //        Deleted = x.Deleted,
+        //        CreatedAt = x.CreatedAt,
+        //        UpdatedAt = x.UpdatedAt,
+        //        Ordinal = x.Ordinal,
+        //    }).ToList();
+        //    return categoryVMs;
+        //}
         public async Task<CategoryVM> GetById(string id)
         {
             var categoryFromDb = await db.Categories.SingleOrDefaultAsync(c => c.Id == id);
@@ -58,7 +59,6 @@ namespace DAL.Category
             categoryVM.Deleted = categoryFromDb.Deleted;
             categoryVM.CreatedAt = categoryFromDb.CreatedAt;
             categoryVM.UpdatedAt = categoryFromDb.UpdatedAt;
-            categoryVM.Ordinal = categoryFromDb.Ordinal;
 
             return categoryVM;
         }
@@ -80,11 +80,42 @@ namespace DAL.Category
             categoryVM.Deleted = categoryFromDb.Deleted;
             categoryVM.CreatedAt = categoryFromDb.CreatedAt;
             categoryVM.UpdatedAt = categoryFromDb.UpdatedAt;
-            categoryVM.Ordinal = categoryFromDb.Ordinal;
 
             return categoryVM;
         }
-        public async Task<bool> Create(CategoryVM categoryVM)
+        public async Task<bool> CheckExistsId(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> CheckExistsSlug(string slug)
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Slug == slug);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Create(CategoryVM categoryVM, PictureVM pictureVM)
         {
             var category = new BO.Entities.Category
             {
@@ -99,17 +130,35 @@ namespace DAL.Category
                 UpdatedAt = categoryVM.UpdatedAt,
             };
             await db.Categories.AddAsync(category);
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultBrand = await db.SaveChangesAsync();
+            if (resultBrand == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            var picture = new BO.Entities.Picture
+            {
+                Id = pictureVM.Id,
+                Name = pictureVM.Name,
+                Published = pictureVM.Published,
+                ObjectId = pictureVM.ObjectId,
+                ObjectType=pictureVM.ObjectType,
+            };
+
+            await db.Pictures.AddAsync(picture);
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
+            {
+                return false;
+            }
+
+
+
+            return true;
         }
-        public async Task<bool> Update(CategoryVM categoryVM)
+        public async Task<bool> Update(CategoryVM categoryVM, PictureVM pictureVM)
         {
             var categoryFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == categoryVM.Id);
-
             categoryFromDb.Name = categoryVM.Name;
             categoryFromDb.Slug = categoryVM.Slug;
             categoryFromDb.FullDescription = categoryVM.FullDescription;
@@ -117,18 +166,48 @@ namespace DAL.Category
             categoryFromDb.Published = categoryVM.Published;
             categoryFromDb.Deleted = categoryVM.Deleted;
             categoryFromDb.UpdatedAt = categoryVM.UpdatedAt;
-            categoryFromDb.Ordinal = categoryVM.Ordinal;
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+
+            var resultCategory = await db.SaveChangesAsync();
+            if (resultCategory == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == categoryFromDb.Id);
+            pictureFromDb.Name = pictureVM.Name;
+
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
         public async Task<bool> Delete(string id)
         {
             var categoryFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
             db.Categories.Remove(categoryFromDb);
+            var resultCatgeory = await db.SaveChangesAsync();
+            if (resultCatgeory == 0)
+            {
+                return false;
+            }
+            var pictureFromDb = await db.Pictures.Where(x => x.ObjectId == id).Where(x => x.ObjectType == "category").SingleOrDefaultAsync();
+            db.Pictures.Remove(pictureFromDb);
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        public async Task<bool> Pulished(string id)
+        {
+            var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
+
+            resultFromDb.Published = !resultFromDb.Published;
+
             var result = await db.SaveChangesAsync();
             if (result > 0)
             {
@@ -136,24 +215,11 @@ namespace DAL.Category
             }
             return false;
         }
-        public async Task<bool> Pulished(string id, bool published)
+        public async Task<bool> Deleted(string id)
         {
             var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
-            resultFromDb.Published = published;
-
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task<bool> Deleted(string id, bool deleted)
-        {
-            var resultFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == id);
-
-            resultFromDb.Deleted = deleted;
+            resultFromDb.Deleted = !resultFromDb.Deleted;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)
@@ -182,10 +248,8 @@ namespace DAL.Category
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
             }).ToList();
             return categoryVMs;
-
         }
 
         public async Task<List<CategoryNameVM>> AllCategoryNameAdmin(bool deleted, CategoryFilterVM model)
@@ -335,7 +399,6 @@ namespace DAL.Category
                     Published = resultFromDb.Published,
                     Deleted = resultFromDb.Deleted,
                     CreatedAt = resultFromDb.CreatedAt,
-                    Ordinal = resultFromDb.Ordinal,
                 };
                 return result;
             }

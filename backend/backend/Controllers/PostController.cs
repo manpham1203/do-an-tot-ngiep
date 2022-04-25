@@ -44,7 +44,7 @@ namespace backend.Controllers
                 }
                 if (resultFromBLL && (model.File != null))
                 {
-                    var saveFile = await SaveFile(model.File, model.Image);
+                    var saveFile = await SaveFile(model.File, model.ImageName);
                 }
                 return StatusCode(StatusCodes.Status201Created);
             }
@@ -65,7 +65,7 @@ namespace backend.Controllers
                 }
                 if (resultFromBLL && (model.File != null))
                 {
-                    var saveFile = await SaveFile(model.File, model.Image);
+                    var saveFile = await SaveFile(model.File, model.ImageName);
                 }
                 return StatusCode(StatusCodes.Status201Created);
             }

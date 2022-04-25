@@ -28,56 +28,56 @@ namespace backend.Controllers
             brandFullBLL = new BrandFullBLL();
             this.iwebHostEnvironment = _iwebHostEnvironment;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var brandVMs = await brandBLL.GetAll();
-                return Ok(brandVMs);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
-        {
-            try
-            {
-                var brand = await brandBLL.GetById(id);
-                if (brand == null)
-                {
-                    return NotFound();
-                }
-                return Ok(brand);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    try
+        //    {
+        //        var brandVMs = await brandBLL.GetAll();
+        //        return Ok(brandVMs);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetById(string id)
+        //{
+        //    try
+        //    {
+        //        var brand = await brandBLL.GetById(id);
+        //        if (brand == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(brand);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
 
-        [HttpGet("getbyslug/{slug}")]
-        public async Task<IActionResult> GetBySlug(string slug)
-        {
-            try
-            {
-                var brand = await brandFullBLL.GetBySlug(slug);
-                if (brand == null)
-                {
-                    return NotFound();
-                }
-                return Ok(brand);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //[HttpGet("getbyslug/{slug}")]
+        //public async Task<IActionResult> GetBySlug(string slug)
+        //{
+        //    try
+        //    {
+        //        var brand = await brandFullBLL.GetBySlug(slug);
+        //        if (brand == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(brand);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateBrandVM model)
         {
@@ -87,9 +87,9 @@ namespace backend.Controllers
                 {
 
                     var brandCreate = await brandBLL.Create(model);
-                    if (brandCreate && (model.Files != null))
+                    if (brandCreate && (model.File != null))
                     {
-                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        var saveFile = await SaveFile(model.File, model.ImageName);
                         if (!saveFile)
                         {
                             return BadRequest();
@@ -116,9 +116,9 @@ namespace backend.Controllers
                 try
                 {
                     var result = await brandBLL.Update(id, model);
-                    if (result && (model.Files != null))
+                    if (result && (model.File != null))
                     {
-                        var saveFile = await SaveFile(model.Files, model.ImageNames);
+                        var saveFile = await SaveFile(model.File, model.ImageName);
                         if (!saveFile)
                         {
                             return BadRequest();
@@ -154,66 +154,66 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("brandfull")]
-        public async Task<IActionResult> BrandFullGetAll()
-        {
-            try
-            {
-                var brandFullVM = await brandFullBLL.GetAll();
+        //[HttpGet("brandfull")]
+        //public async Task<IActionResult> BrandFullGetAll()
+        //{
+        //    try
+        //    {
+        //        var brandFullVM = await brandFullBLL.GetAll();
 
-                if (brandFullVM == null)
-                {
-                    return NotFound();
-                }
-                for (int i = 0; i < brandFullVM.Count; i++)
-                {
-                    for (int j = 0; j < brandFullVM[i].BrandImageVMs.Count; j++)
-                    {
-                        brandFullVM[i].BrandImageVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM[i].BrandImageVMs[j].Name);
-                    }
-                    //brandFullVM[i].ProductFullVMs = new List<ProductFullVM>();
-                    for (int p = 0; p < brandFullVM[i].ProductFullVMs.Count; p++)
-                    {
-                        //brandFullVM[i].ProductFullVMs[p].ProductImageVMs = new List<ProductImageVM>();
-                        for (int m = 0; m < brandFullVM[i].ProductFullVMs[p].ProductImageVMs.Count; m++)
-                        {
-                            brandFullVM[i].ProductFullVMs[p].ProductImageVMs[m].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM[i].ProductFullVMs[p].ProductImageVMs[m].Name);
-                        }
+        //        if (brandFullVM == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        for (int i = 0; i < brandFullVM.Count; i++)
+        //        {
+        //            for (int j = 0; j < brandFullVM[i]BrandImageVMs.Count; j++)
+        //            {
+        //                brandFullVM[i].BrandImageVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM[i].BrandImageVMs[j].Name);
+        //            }
+        //            //brandFullVM[i].ProductFullVMs = new List<ProductFullVM>();
+        //            for (int p = 0; p < brandFullVM[i].ProductFullVMs.Count; p++)
+        //            {
+        //                //brandFullVM[i].ProductFullVMs[p].ProductImageVMs = new List<ProductImageVM>();
+        //                for (int m = 0; m < brandFullVM[i].ProductFullVMs[p].ProductImageVMs.Count; m++)
+        //                {
+        //                    brandFullVM[i].ProductFullVMs[p].ProductImageVMs[m].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM[i].ProductFullVMs[p].ProductImageVMs[m].Name);
+        //                }
 
-                    }
-                }
-                return Ok(brandFullVM);
-            }
+        //            }
+        //        }
+        //        return Ok(brandFullVM);
+        //    }
 
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        [HttpGet("brandfullgetbyid/{id}")]
-        public async Task<IActionResult> BrandFullGetById(string id)
-        {
-            try
-            {
-                var brandFullVM = await brandFullBLL.GetById(id);
+        //[HttpGet("brandfullgetbyid/{id}")]
+        //public async Task<IActionResult> BrandFullGetById(string id)
+        //{
+        //    try
+        //    {
+        //        var brandFullVM = await brandFullBLL.GetById(id);
 
-                if (brandFullVM == null)
-                {
-                    return NotFound();
-                }
-                for (int i = 0; i < brandFullVM.BrandImageVMs.Count; i++)
-                {
-                    brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
-                }
+        //        if (brandFullVM == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        for (int i = 0; i < brandFullVM.BrandImageVMs.Count; i++)
+        //        {
+        //            brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
+        //        }
 
-                return Ok(brandFullVM);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        //        return Ok(brandFullVM);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
         [HttpGet("brandfullgetbyslug/{slug}")]
         public async Task<IActionResult> BrandFullGetBySlug(string slug)
@@ -226,12 +226,9 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                if (brandFullVM.BrandImageVMs != null)
+                if (brandFullVM.PictureVM != null)
                 {
-                    for (int i = 0; i < brandFullVM.BrandImageVMs.Count; i++)
-                    {
-                        brandFullVM.BrandImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.BrandImageVMs[i].Name);
-                    }
+                    brandFullVM.PictureVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, brandFullVM.PictureVM.Name);
                 }
 
                 return Ok(brandFullVM);
@@ -243,21 +240,14 @@ namespace backend.Controllers
         }
 
         [NonAction]
-        public async Task<bool> SaveFile(List<IFormFile> files, List<string> imgName)
+        public async Task<bool> SaveFile(IFormFile file, string imgName)
         {
-
-            for (int i = 0; i < files.Count; i++)
+            var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
-                //imageName = imgName[i];
-                //imageName = imageName + Path.GetExtension(files[i].FileName);
-
-                var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName[i]);
-                using (var fileStream = new FileStream(imagePath, FileMode.Create))
-                {
-                    await files[i].CopyToAsync(fileStream);
-                }
-
+                await file.CopyToAsync(fileStream);
             }
+
             return true;
         }
 

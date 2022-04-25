@@ -1,7 +1,7 @@
-﻿using BLL.BrandImage;
+﻿using BLL.Picture;
 using BLL.Product;
 using BO.ViewModels.Brand;
-using BO.ViewModels.BrandImage;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using DAL.Brand;
 using Microsoft.AspNetCore.Hosting;
@@ -21,55 +21,67 @@ namespace BLL
     public class BrandBLL
     {
         private BrandDAL brandDAL;
-        private BrandImageBLL brandImageBLL;
         private CommonBLL cm;
+        private string objectType="brand";
 
         public BrandBLL()
         {
             brandDAL = new BrandDAL();
         }
 
-        public async Task<List<BrandVM>> GetAll()
-        {
-            return await brandDAL.GetAll();
-        }
+        //public async Task<List<BrandVM>> GetAll()
+        //{
+        //    return await brandDAL.GetAll();
+        //}
         public async Task<BrandVM> GetById(string id)
         {
-            if (id.Length != 12)
-            {
-                return null;
-            }
             return await brandDAL.GetById(id);
         }
-        public async Task<BrandVM> GetBySlug(string slug)
+        //public async Task<BrandVM> GetBySlug(string slug)
+        //{
+        //    return await brandDAL.GetBySlug(slug);
+        //}
+        public async Task<bool> CheckExistsId(string id)
         {
-            return await brandDAL.GetBySlug(slug);
+            try
+            {
+                return await brandDAL.CheckExistsId(id);
+            }
+            catch
+            {
+                return false;
+            }
         }
-
+        public async Task<bool> CheckExistsSlug(string slug)
+        {
+            try
+            {
+                return await brandDAL.CheckExistsSlug(slug);
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<bool> Create(CreateBrandVM model)
         {
 
             cm = new CommonBLL();
-            var brandId = cm.RandomString(12);
-            var checkIdExists = await GetById(brandId);
-            while (checkIdExists != null)
+            var brandId = cm.RandomString(6);
+            var checkIdExists = await CheckExistsId(brandId);
+            while (checkIdExists)
             {
-                brandId = cm.RandomString(12);
-                checkIdExists = await GetById(brandId);
+                brandId = cm.RandomString(6);
+                checkIdExists = await CheckExistsId(brandId);
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
 
-            if (model.Files != null)
+            if (model.File != null)
             {
-                model.ImageNames = new List<string>();
-                for (int i = 0; i < model.Files.Count; i++)
-                {
-                    string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
-                    model.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
-                }
+                string imageName = slug;
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.ImageName = imageName;
             }
 
 
@@ -83,24 +95,32 @@ namespace BLL
                 Published = model.Published,
                 Deleted = false,
                 CreatedAt = DateTime.Now,
-                Ordinal = model.Ordinal,
             };
 
-            var saveBrand = await brandDAL.Create(brandVM);
+            var pictureBLL = new PictureBLL();
+            var pictureId = cm.RandomString(16);
+            var checkPictureId = await pictureBLL.CheckExists(pictureId);
+            while (checkPictureId)
+            {
+                pictureId = cm.RandomString(16);
+                checkPictureId = await pictureBLL.CheckExists(pictureId);
+            }
+
+            var pictureVM = new PictureVM
+            {
+                Id = pictureId,
+                Name = model.ImageName,
+                ObjectId = brandId,
+                ObjectType= objectType,
+                Published = true,
+            };
+
+            var saveBrand = await brandDAL.Create(brandVM, pictureVM);
             if (!saveBrand)
             {
                 return false;
             }
 
-            if (model.Files != null)
-            {
-                brandImageBLL = new BrandImageBLL();
-                var saveImg = await brandImageBLL.Create(model.ImageNames, brandId);
-                if (!saveImg)
-                {
-                    return false;
-                }
-            }
 
             return true;
 
@@ -108,27 +128,20 @@ namespace BLL
         public async Task<bool> Update(string id, UpdateBrandVM model)
         {
             cm = new CommonBLL();
-            var checkBrand = await GetById(id);
-            if (checkBrand == null)
+            var checkBrand = await CheckExistsId(id);
+            if (checkBrand == false)
             {
                 return false;
             }
 
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.Files!=null)
+            if (model.File != null)
             {
-                model.ImageNames = new List<string>();
-                for (int i = 0; i < model.Files.Count; i++)
-                {
-                    string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
-                    model.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
-                }
+                string imageName = slug;
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.ImageName = imageName;
             }
-
-
 
             var brandVM = new BrandVM
             {
@@ -140,36 +153,29 @@ namespace BLL
                 Published = model.Published,
                 Deleted = model.Deleted,
                 UpdatedAt = DateTime.Now,
-                Ordinal = model.Ordinal
             };
 
-            var saveBrand = await brandDAL.Update(brandVM);
+            var pictureVM = new PictureVM
+            {
+                Name = model.ImageName,
+                ObjectId = id,
+                Published = true,
+            };
+
+            var saveBrand = await brandDAL.Update(brandVM, pictureVM);
             if (!saveBrand)
             {
                 return false;
             }
 
-            if (model.Files!=null)
-            {
-                brandImageBLL = new BrandImageBLL();
-                var saveImg = await brandImageBLL.Create(model.ImageNames, id);
-                if (!saveImg)
-                {
-                    return false;
-                }
-            }
 
 
             return true;
         }
         public async Task<bool> Delete(string id)
         {
-            if (id.Length != 12)
-            {
-                return false;
-            }
-            var brandVM = await GetById(id);
-            if (brandVM == null)
+            var brandVM = await CheckExistsId(id);
+            if (brandVM == false)
             {
                 return false;
             }
@@ -177,13 +183,12 @@ namespace BLL
         }
         public async Task<bool> Published(string id)
         {
-            var brandVM = await GetById(id);
-            if (brandVM == null)
+            var brandVM = await CheckExistsId(id);
+            if (brandVM == false)
             {
                 return false;
             }
-            bool published = !brandVM.Published;
-            var result = await brandDAL.Pulished(id, published);
+            var result = await brandDAL.Pulished(id);
             if (result)
             {
                 return true;
@@ -192,13 +197,12 @@ namespace BLL
         }
         public async Task<bool> Deleted(string id)
         {
-            var brandVM = await GetById(id);
-            if (brandVM == null)
+            var brandVM = await CheckExistsId(id);
+            if (brandVM == false)
             {
                 return false;
             }
-            bool deleted = !brandVM.Deleted;
-            var result = await brandDAL.Deleted(id, deleted);
+            var result = await brandDAL.Deleted(id);
             if (result)
             {
                 return true;

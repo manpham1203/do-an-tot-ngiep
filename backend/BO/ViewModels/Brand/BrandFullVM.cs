@@ -1,4 +1,4 @@
-﻿using BO.ViewModels.BrandImage;
+﻿using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using System;
 using System.Collections.Generic;
@@ -19,9 +19,8 @@ namespace BO.ViewModels.Brand
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int Ordinal { get; set; }
         public List<ProductVM> ProductVMs { get; set; }
         public List<ProductFullVM> ProductFullVMs { get; set; }
-        public List<BrandImageVM> BrandImageVMs { get; set; }
+        public PictureVM PictureVM { get; set; }
     }
 }

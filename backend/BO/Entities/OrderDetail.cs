@@ -16,6 +16,6 @@ namespace BO.Entities
         public DateTime CreatedAt { get; set; }
         public Order Order { get; set; }
         public Product Product { get; set; }
-
+        //public Comment Comment { get; set; }
     }
 }

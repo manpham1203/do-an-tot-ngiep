@@ -35,7 +35,6 @@ namespace DAL.Category
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
                 ProductVMs = null
             }).ToList();
             return categoryVMs;
@@ -58,7 +57,6 @@ namespace DAL.Category
                 Deleted = categoryFromDb.Deleted,
                 CreatedAt = categoryFromDb.CreatedAt,
                 UpdatedAt = categoryFromDb.UpdatedAt,
-                Ordinal = categoryFromDb.Ordinal,
                 ProductVMs = null
             };
             return categoryVM;
@@ -81,7 +79,6 @@ namespace DAL.Category
                 Deleted = resultFromDb.Deleted,
                 CreatedAt = resultFromDb.CreatedAt,
                 UpdatedAt = resultFromDb.UpdatedAt,
-                Ordinal = resultFromDb.Ordinal,
                 ProductVMs = null,
             };
             return brandFullVM;

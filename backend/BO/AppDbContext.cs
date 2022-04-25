@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext() { }
         //public AppDbContext(DbContextOptions options) : base(options) { }
@@ -19,17 +19,14 @@ namespace BO
         }
         #region DbSet
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Brand> Brands { get; set; }
-        public DbSet<BrandImage> BrandImages { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<ProductComment> ProductComments { get; set; }
-        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         //public DbSet<Role> Roles { get; set; }
 
@@ -40,8 +37,6 @@ namespace BO
             #region Product_Category
             modelBuilder.Entity<ProductCategory>(entity =>
             {
-                //1 dong product => nhieu dong category_product
-                //1 dong category => nhieu dong category_product
                 entity.ToTable("ProductCategory");
                 entity.HasKey(cp => new { cp.ProductId, cp.CategoryId });
                 entity.HasOne<Product>(cp => cp.Product)
@@ -57,9 +52,9 @@ namespace BO
                     .HasMaxLength(12)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.ProductId)
+                entity.Property(e => e.CategoryId)
                     .HasColumnType("char")
-                    .HasMaxLength(12)
+                    .HasMaxLength(6)
                     .IsRequired(true)
                     .IsUnicode(false);
             });
@@ -127,7 +122,7 @@ namespace BO
                     .HasPrecision(3);
                 entity.Property(e => e.BrandId)
                     .HasColumnType("char")
-                    .HasMaxLength(12)
+                    .HasMaxLength(6)
                     .IsRequired(true)
                     .IsUnicode(false);
 
@@ -137,10 +132,7 @@ namespace BO
                     .WithMany(b => b.Products)
                     .HasForeignKey(s => s.BrandId);
 
-                entity.HasMany<ProductImage>(p => p.ProductImage)
-                .WithOne(i => i.Product)
-                .HasForeignKey(i => i.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+
 
                 entity.HasMany<OrderDetail>(b => b.OrderDetails)
                 .WithOne(i => i.Product)
@@ -154,21 +146,27 @@ namespace BO
 
             });
             #endregion
-            #region ProductImage
-            modelBuilder.Entity<ProductImage>(entity =>
+            #region Picture
+            modelBuilder.Entity<Picture>(entity =>
             {
-                entity.ToTable("ProductImage");
+
+                entity.ToTable("Picture");
                 entity.HasKey(e => new { e.Id });
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
-                    .HasMaxLength(12)
+                    .HasMaxLength(16)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.ProductId)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
+                entity.Property(e => e.ObjectId)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired()
                     .IsUnicode(false);
+                entity.Property(e => e.ObjectType)
+                   .HasColumnType("varchar")
+                   .HasMaxLength(50)
+                   .IsRequired(true)
+                   .IsUnicode(false);
                 entity.Property(e => e.Name)
                     .HasColumnType("varchar")
                     .HasMaxLength(250)
@@ -177,6 +175,23 @@ namespace BO
                 entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
+
+                //entity.HasOne<Product>(p => p.Product)
+                //.WithMany(i => i.Pictures)
+                //.HasForeignKey(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Restrict);
+               // entity.HasOne<Brand>(p => p.Brand)
+               // .WithOne(i => i.Picture)
+               // .HasForeignKey<Picture>(i => i.ObjectId)
+               // .OnDelete(DeleteBehavior.Cascade);
+               // entity.HasOne<Category>(p => p.Category)
+               // .WithOne(i => i.Picture)
+               // .HasForeignKey<Picture>(i => i.ObjectId)
+               // .OnDelete(DeleteBehavior.Cascade);
+               // entity.HasOne<Post>(p => p.Post)
+               //.WithOne(i => i.Picture)
+               //.HasForeignKey<Picture>(i => i.ObjectId)
+               //.OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region Category
@@ -186,7 +201,7 @@ namespace BO
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
-                    .HasMaxLength(12)
+                    .HasMaxLength(6)
                     .IsRequired(true)
                     .IsUnicode(false);
                 entity.Property(e => e.Name)
@@ -223,39 +238,14 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(false)
                     .HasPrecision(3);
-                entity.Property(e => e.Ordinal)
+                entity.Property(e => e.Order)
                     .HasColumnType("int")
                     .IsRequired(true);
 
-                entity.HasMany<CategoryImage>(c => c.CategoryImage)
-                .WithOne(i => i.Catgeory)
-                .HasForeignKey(i => i.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
-            });
-            #endregion
-            #region CategoryImage
-            modelBuilder.Entity<CategoryImage>(entity =>
-            {
-                entity.ToTable("CategoryImage");
-                entity.HasKey(e => new { e.Id });
-                entity.Property(e => e.Id)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.CategoryId)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.Name)
-                    .HasColumnType("varchar")
-                    .HasMaxLength(250)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.Published)
-                    .HasColumnType("bit")
-                    .IsRequired(true);
+                //entity.HasOne<Picture>(c => c.Picture)
+                //.WithOne(i => i.Category)
+                //.HasForeignKey<Picture>(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region Brand
@@ -265,7 +255,7 @@ namespace BO
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
-                    .HasMaxLength(12)
+                    .HasMaxLength(6)
                     .IsRequired(true)
                     .IsUnicode(false);
                 entity.Property(e => e.Name)
@@ -302,39 +292,11 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(false)
                     .HasPrecision(3);
-                entity.Property(e => e.Ordinal)
-                    .HasColumnType("int")
-                    .IsRequired(true);
 
-                entity.HasMany<BrandImage>(b => b.BrandImage)
-                .WithOne(i => i.Brand)
-                .HasForeignKey(i => i.BrandId)
-                .OnDelete(DeleteBehavior.Cascade);
-            });
-            #endregion
-            #region BrandImage
-            modelBuilder.Entity<BrandImage>(entity =>
-            {
-                entity.ToTable("BrandImage");
-                entity.HasKey(e => new { e.Id });
-                entity.Property(e => e.Id)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.BrandId)
-                    .HasColumnType("char")
-                    .HasMaxLength(12)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.Name)
-                    .HasColumnType("varchar")
-                    .HasMaxLength(250)
-                    .IsRequired(true)
-                    .IsUnicode(false);
-                entity.Property(e => e.Published)
-                    .HasColumnType("bit")
-                    .IsRequired(true);
+                //entity.HasOne<Picture>(c => c.Picture)
+                // .WithOne(i => i.Brand)
+                // .HasForeignKey<Picture>(i => i.ObjectId)
+                // .OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region Post
@@ -343,7 +305,7 @@ namespace BO
                 entity.ToTable("Post");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id)
-                    .HasColumnType("char")
+                    .HasColumnType("varchar")
                     .HasMaxLength(12)
                     .IsRequired(true)
                     .IsUnicode(false);
@@ -367,12 +329,9 @@ namespace BO
                     .HasColumnType("ntext")
                     .IsRequired(false)
                     .IsUnicode(true);
-                entity.Property(e => e.Views)
+                entity.Property(e => e.View)
                   .HasColumnType("int")
                   .IsRequired(true);
-                entity.Property(e => e.Likes)
-                   .HasColumnType("int")
-                   .IsRequired(true);
                 entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
@@ -387,11 +346,11 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(false)
                     .HasPrecision(3);
-                entity.Property(e => e.Image)
-                    .HasColumnType("varchar")
-                    .HasMaxLength(250)
-                    .IsRequired(false)
-                    .IsUnicode(false);
+
+                //entity.HasOne<Picture>(c => c.Picture)
+                //.WithOne(i => i.Post)
+                //.HasForeignKey<Picture>(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region User
@@ -417,7 +376,7 @@ namespace BO
                 entity.Property(e => e.Birthday)
                    .HasColumnType("date")
                    .IsRequired(false);
-                   //.HasPrecision(3);
+                //.HasPrecision(3);
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.Property(e => e.Email)
                    .HasColumnType("varchar")
@@ -441,12 +400,12 @@ namespace BO
                 entity.HasIndex(e => e.Username).IsUnique();
                 entity.Property(e => e.Username)
                     .HasColumnType("varchar")
-                    .HasMaxLength(1000)
+                    .HasMaxLength(50)
                     .IsRequired(true)
                     .IsUnicode(false);
                 entity.Property(e => e.Password)
                     .HasColumnType("varchar")
-                    .HasMaxLength(1000)
+                    .HasMaxLength(64)
                     .IsRequired(true)
                     .IsUnicode(false);
                 entity.Property(e => e.CreatedAt)
@@ -468,15 +427,12 @@ namespace BO
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasMany<ProductComment>(b => b.ProductComments)
-                .WithOne(i => i.User)
-                .HasForeignKey(i => i.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasMany<PostComment>(b => b.PostComments)
-                .WithOne(i => i.User)
-                .HasForeignKey(i => i.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+
+                //entity.HasOne<Picture>(c => c.Picture)
+                //.WithOne(i => i.User)
+                //.HasForeignKey<Picture>(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Cascade);
             });
             #endregion
             #region Role
@@ -579,14 +535,79 @@ namespace BO
                     .HasPrecision(18, 2)
                     .IsRequired(true);
 
-                
+
+            });
+            #endregion
+            #region Comment
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.ToTable("Comment");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.ObjectId)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.ObjectType)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.UserId)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.OrderDetailId)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(false)
+                    .IsUnicode(false);
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(1000)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true);
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(false);
+                entity.Property(e => e.Star)
+                    .HasColumnType("int")
+                    .IsRequired(false);
+
+                //entity.HasOne<User>(b => b.User)
+                //.WithMany(i => i.Comments)
+                //.HasForeignKey(i => i.UserId)
+                //.OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne<Product>(b => b.Product)
+                //.WithMany(i => i.Comments)
+                //.HasForeignKey(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne<Post>(b => b.Post)
+                //.WithMany(i => i.Comments)
+                //.HasForeignKey(i => i.ObjectId)
+                //.OnDelete(DeleteBehavior.Cascade);
+                //entity.HasOne<OrderDetail>(b => b.OrderDetail)
+                //.WithOne(i => i.Comment)
+                //.HasForeignKey<Comment>(i => i.OrderDetailId)
+                //.OnDelete(DeleteBehavior.Cascade);
+
             });
             #endregion
 
-            #region OrderDetail
-            modelBuilder.Entity<ProductComment>(entity =>
+            #region Wishlist
+            modelBuilder.Entity<Wishlist>(entity =>
             {
-                entity.ToTable("ProductComment");
+                entity.ToTable("Wishlist");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
@@ -603,22 +624,6 @@ namespace BO
                     .HasMaxLength(12)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.Content)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(1000)
-                    .IsRequired(true)
-                    .IsUnicode(true);
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnType("datetime2")
-                    .IsRequired(true);
-                entity.Property(e => e.UpdatedAt)
-                    .HasColumnType("datetime2")
-                    .IsRequired(false);
-                entity.Property(e => e.Rating)
-                    .HasColumnType("float")
-                    .IsRequired(true);
-
 
             });
             #endregion

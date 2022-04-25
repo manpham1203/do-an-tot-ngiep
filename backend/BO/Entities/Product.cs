@@ -25,9 +25,9 @@ namespace BO.Entities
         public DateTime? UpdatedAt { get; set; }
         public Brand Brand { get; set; }
         public List<ProductCategory> ProductCategory { get; set; }
-        public List<ProductImage> ProductImage { get; set; }
+        //public List<Picture> Pictures { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
-        public List<ProductComment> ProductComments { get; set; }
+        //public List<Comment> Comments { get; set; }
         public List<Wishlist> Wishlists { get; set; }
     }
 }

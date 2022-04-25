@@ -18,83 +18,93 @@ namespace BLL.User
         {
             userDAL = new UserDAL();
         }
-        public async Task<List<UserVM>> GetAll()
+        //public async Task<List<UserVM>> GetAll()
+        //{
+        //    return await userDAL.GetAll();
+        //}
+        //public async Task<UserVM> GetById(string id)
+        //{
+        //    if (id.Length != 12)
+        //    {
+        //        return null;
+        //    }
+        //    return await userDAL.GetById(id);
+        //}
+        public async Task<bool> CheckExists(string id)
         {
-            return await userDAL.GetAll();
-        }
-        public async Task<UserVM> GetById(string id)
-        {
-            if (id.Length != 12)
+            try
             {
-                return null;
+                return await userDAL.CheckExists(id);
             }
-            return await userDAL.GetById(id);
-        }
-        public async Task<bool> Create(CreateUserVM model)
-        {
-            cm=new CommonBLL();
-            var userId = cm.RandomString(9);
-            var checkExists=await GetById(userId);
-            while (checkExists != null)
-            {
-                userId=cm.RandomString(9);
-                checkExists = await GetById(userId);
-            }
-            userId = "USR" + userId;
-            var userVM = new UserVM
-            {
-                Id=userId,
-                FirstName=model.FirstName,
-                LastName=model.LastName,
-                Birthday=model.Birthday,
-                Email=model.Email,
-                PhoneNumber=model.PhoneNumber,
-                Address=model.Address,
-                Role = model.Role,
-                Username=model.Username,
-                Password=model.Password,
-                CreatedAt=DateTime.Now,
-                UpdatedAt=null,
-            };
-            return await userDAL.Create(userVM);
-        }
-        public async Task<bool> Update(string id, UpdateUserVM model)
-        {
-            var checkExists = await GetById(id);
-            if (checkExists == null)
+            catch
             {
                 return false;
             }
+        }
+        //public async Task<bool> Create(CreateUserVM model)
+        //{
+        //    cm=new CommonBLL();
+        //    var userId = cm.RandomString(12);
+        //    var checkExists=await CheckExists(userId);
+        //    while (checkExists)
+        //    {
+        //        userId=cm.RandomString(12);
+        //        checkExists = await CheckExists(userId);
+        //    }
+        //    var userVM = new UserVM
+        //    {
+        //        Id=userId,
+        //        FirstName=model.FirstName,
+        //        LastName=model.LastName,
+        //        Birthday=model.Birthday,
+        //        Email=model.Email,
+        //        PhoneNumber=model.PhoneNumber,
+        //        Address=model.Address,
+        //        Role = model.Role,
+        //        Username=model.Username,
+        //        Password=model.Password,
+        //        CreatedAt=DateTime.Now,
+        //        UpdatedAt=null,
+        //    };
+        //    return await userDAL.Create(userVM);
+        //}
+        //public async Task<bool> Update(string id, UpdateUserVM model)
+        //{
+        //    var checkExists = await CheckExists(id);
+        //    if (checkExists == false)
+        //    {
+        //        return false;
+        //    }
 
-            var userVM = new UserVM();
-            userVM.Id = id;
-            userVM.FirstName=model.FirstName;
-            userVM.LastName=model.LastName;
-            userVM.Birthday=model.Birthday;
-            userVM.Email=model.Email;
-            userVM.PhoneNumber=model.PhoneNumber;
-            userVM.Address=model.Address;
-            userVM.Role = model.Role;
-            userVM.Username=model.Username;
-            userVM.Password=model.Password;
-            userVM.UpdatedAt=DateTime.Now;
+        //    var userVM = new UserVM();
+        //    userVM.Id = id;
+        //    userVM.FirstName=model.FirstName;
+        //    userVM.LastName=model.LastName;
+        //    userVM.Birthday=model.Birthday;
+        //    userVM.Email=model.Email;
+        //    userVM.PhoneNumber=model.PhoneNumber;
+        //    userVM.Address=model.Address;
+        //    userVM.Role = model.Role;
+        //    userVM.Username=model.Username;
+        //    userVM.Password=model.Password;
+        //    userVM.UpdatedAt=DateTime.Now;
 
-            return await userDAL.Update(userVM);
-        }
-        public async Task<bool> Delete(string id)
-        {
-            if (id.Length != 12)
-            {
-                return false;
-            }
-            var userVM = await GetById(id);
-            if (userVM == null)
-            {
-                return false;
-            }
-            return await userDAL.Delete(id);
-        }
-        public async Task<UserVM> GetByUsername(string username)
+        //    return await userDAL.Update(userVM);
+        //}
+        //public async Task<bool> Delete(string id)
+        //{
+        //    if (id.Length != 12)
+        //    {
+        //        return false;
+        //    }
+        //    var userVM = await CheckExists(id);
+        //    if (userVM == false)
+        //    {
+        //        return false;
+        //    }
+        //    return await userDAL.Delete(id);
+        //}
+        public async Task<UserInfoClientVM> GetByUsername(string username)
         {
             return await userDAL.GetByUsername(username);
         }
@@ -133,13 +143,12 @@ namespace BLL.User
             }
             cm = new CommonBLL();
             var userId = cm.RandomString(12);
-            var checkExists = await GetById(userId);
-            while (checkExists != null)
+            var checkExists = await CheckExists(userId);
+            while (checkExists)
             {
                 userId = cm.RandomString(12);
-                checkExists = await GetById(userId);
+                checkExists = await CheckExists(userId);
             }
-
 
             var userVM = new UserVM
             {
@@ -163,7 +172,7 @@ namespace BLL.User
             }
             return "fail";
         }
-        public async Task<UserVM> Login(LoginVM model)
+        public async Task<UserInfoClientVM> Login(LoginVM model)
         {
 
             model.Username.ToLower();
@@ -171,23 +180,24 @@ namespace BLL.User
             {
                 return null;
             }
-            var user = await GetByUsername(model.Username);
-            if (user == null)
+            var userPass = await GetPasswordByUsername(model.Username);
+            if (userPass == null)
             {
                 return null;
             }
 
-            if (ToSHA256(model.Password) != user.Password)
+            if (ToSHA256(model.Password) != userPass)
             {
                 return null;
             }
+            var user = await GetByUsername(model.Username);
 
             return user;
         }
         public async Task<bool> Edit(string id, UpdateUserVM model)
         {
-            var checkExists = await GetById(id);
-            if (checkExists == null)
+            var checkExists = await CheckExists(id);
+            if (checkExists == false)
             {
                 return false;
             }
@@ -207,19 +217,41 @@ namespace BLL.User
 
             return await userDAL.Edit(userVM);
         }
+        public async Task<string> GetPasswordById(string id)
+        {
+            try
+            {
+                return await userDAL.GetPasswordById(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<string> GetPasswordByUsername(string username)
+        {
+            try
+            {
+                return await userDAL.GetPasswordByUsername(username);
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<bool> ChangePass(string id, ChangePassVM model)
         {
             if (model.NewPassword != model.RePassword)
             {
                 return false;
             }
-            var checkExists = await GetById(id);
-            if (checkExists == null)
+            var getPass = await GetPasswordById(id);
+            if (getPass == null)
             {
                 return false;
             }
 
-            if (checkExists.Password != ToSHA256(model.OldPassword))
+            if (getPass != ToSHA256(model.OldPassword))
             {
                 return false;
             }

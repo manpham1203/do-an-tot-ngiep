@@ -134,61 +134,61 @@ namespace backend.Controllers
             }
 
         }
-        [HttpGet("productfull")]
-        public async Task<IActionResult> GetProductFullAll()
-        {
-            try
-            {
-                var products = await productFullBLL.GetAll();
-                return Ok(products);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //[HttpGet("productfull")]
+        //public async Task<IActionResult> GetProductFullAll()
+        //{
+        //    try
+        //    {
+        //        var products = await productFullBLL.GetAll();
+        //        return Ok(products);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
-        [HttpGet("productfull/{id}")]
-        public async Task<IActionResult> GetProductFullById(string id)
-        {
-            try
-            {
-                var product = await productFullBLL.GetById(id);
-                if (product == null)
-                {
-                    return NotFound();
-                }
-                return Ok(product);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //}
+        //[HttpGet("productfull/{id}")]
+        //public async Task<IActionResult> GetProductFullById(string id)
+        //{
+        //    try
+        //    {
+        //        var product = await productFullBLL.GetById(id);
+        //        if (product == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(product);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
 
-        [HttpGet("productfullgetbyslug/{slug}")]
-        public async Task<IActionResult> ProductFullGetBySlug(string slug)
-        {
-            try
-            {
-                var productFullVM = await productFullBLL.GetBySlug(slug);
+        //[HttpGet("productfullgetbyslug/{slug}")]
+        //public async Task<IActionResult> ProductFullGetBySlug(string slug)
+        //{
+        //    try
+        //    {
+        //        var productFullVM = await productFullBLL.GetBySlug(slug);
 
-                if (productFullVM == null)
-                {
-                    return NotFound();
-                }
-                for (int i = 0; i < productFullVM.ProductImageVMs.Count; i++)
-                {
-                    productFullVM.ProductImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.ProductImageVMs[i].Name);
-                }
-                return Ok(productFullVM);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        //        if (productFullVM == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        for (int i = 0; i < productFullVM.ProductImageVMs.Count; i++)
+        //        {
+        //            productFullVM.ProductImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.ProductImageVMs[i].Name);
+        //        }
+        //        return Ok(productFullVM);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
         [NonAction]
         public async Task<bool> SaveFile(List<IFormFile> files, List<string> imgName)
@@ -308,11 +308,11 @@ namespace backend.Controllers
             {
                 return BadRequest();
             }
-            if (resultFromBLL.ProductImageVMs.Count > 0)
+            if (resultFromBLL.PictureVMs.Count > 0)
             {
-                for (int i = 0; i < resultFromBLL.ProductImageVMs.Count; i++)
+                for (int i = 0; i < resultFromBLL.PictureVMs.Count; i++)
                 {
-                    resultFromBLL.ProductImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ProductImageVMs[i].Name);
+                    resultFromBLL.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.PictureVMs[i].Name);
                 }
             }
             return Ok(resultFromBLL);

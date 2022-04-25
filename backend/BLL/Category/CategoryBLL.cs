@@ -1,7 +1,8 @@
-﻿using BLL.CategoryImage;
+﻿using BLL.Picture;
 using BLL.Product;
 using BLL.ProductCategory;
 using BO.ViewModels.Category;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using DAL.Category;
 using System;
@@ -19,48 +20,62 @@ namespace BLL.Category
     {
         private readonly CategoryDAL categoryDAL;
         private CommonBLL cm;
+        private string objectType = "category";
         public CategoryBLL()
         {
             categoryDAL = new CategoryDAL();
         }
-        public async Task<List<CategoryVM>> GetAll()
-        {
-            return await categoryDAL.GetAll();
-        }
+        //public async Task<List<CategoryVM>> GetAll()
+        //{
+        //    return await categoryDAL.GetAll();
+        //}
         public async Task<CategoryVM> GetById(string id)
         {
-            if (id.Length != 12)
-            {
-                return null;
-            }
             return await categoryDAL.GetById(id);
         }
         public async Task<CategoryVM> GetBySlug(string slug)
         {
             return await categoryDAL.GetBySlug(slug);
         }
+        public async Task<bool> CheckExistsId(string id)
+        {
+            try
+            {
+                return await categoryDAL.CheckExistsId(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> CheckExistsSlug(string slug)
+        {
+            try
+            {
+                return await categoryDAL.CheckExistsSlug(slug);
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<bool> Create(CreateCategoryVM model)
         {
             cm = new CommonBLL();
-            var categoryId = cm.RandomString(12);
-            var checkIdExists = await GetById(categoryId);
-            while (checkIdExists != null)
+            var categoryId = cm.RandomString(6);
+            var checkIdExists = await CheckExistsId(categoryId);
+            while (checkIdExists)
             {
-                categoryId = cm.RandomString(12);
-                checkIdExists = await GetById(categoryId);
+                categoryId = cm.RandomString(6);
+                checkIdExists = await CheckExistsId(categoryId);
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.Files !=null)
+            if (model.File != null)
             {
-                model.ImageNames = new List<string>();
-                for (int i = 0; i < model.Files.Count; i++)
-                {
-                    string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
-                    model.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
-                }
+                string imageName = slug;
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.ImageName = imageName;
             }
 
             var categoryVM = new CategoryVM
@@ -74,46 +89,51 @@ namespace BLL.Category
                 Deleted = false,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
-                Ordinal = model.Ordinal,
             };
-            var saveCategory = await categoryDAL.Create(categoryVM);
+
+            var pictureBLL = new PictureBLL();
+            var pictureId = cm.RandomString(16);
+            var checkPictureId = await pictureBLL.CheckExists(pictureId);
+            while (checkPictureId)
+            {
+                pictureId = cm.RandomString(16);
+                checkPictureId = await pictureBLL.CheckExists(pictureId);
+            }
+
+            var pictureVM = new PictureVM
+            {
+                Id = pictureId,
+                Name = model.ImageName,
+                ObjectId = categoryId,
+                Published = true,
+                ObjectType= objectType,
+            };
+
+            var saveCategory = await categoryDAL.Create(categoryVM, pictureVM);
             if (saveCategory == false)
             {
                 return false;
             }
 
-            if (model.Files !=null )
-            {
-                var categoryImageBLL = new CategoryImageBLL();
-                var saveImg = await categoryImageBLL.Create(model.ImageNames, categoryId);
-                if (!saveImg)
-                {
-                    return false;
-                }
-            }
+
 
             return true;
         }
         public async Task<bool> Update(string id, UpdateCategoryVM model)
         {
             cm = new CommonBLL();
-            var checkCategory = await GetById(id);
-            if (checkCategory == null)
+            var checkCategory = await CheckExistsId(id);
+            if (checkCategory == false)
             {
                 return false;
             }
             var slug = Regex.Replace(cm.RemoveUnicode(model.Name).Trim().ToLower(), @"\s+", "-");
 
-            if (model.Files !=null )
+            if (model.File != null)
             {
-                model.ImageNames = new List<string>();
-                for (int i = 0; i < model.Files.Count; i++)
-                {
-                    string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.Files[i].FileName);
-                    model.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
-                }
+                string imageName = slug;
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.ImageName = imageName;
             }
 
             var categoryVM = new CategoryVM
@@ -126,23 +146,19 @@ namespace BLL.Category
                 Published = model.Published,
                 Deleted = model.Deleted,
                 UpdatedAt = DateTime.Now,
-                Ordinal = model.Ordinal,
             };
 
-            var saveCategory = await categoryDAL.Update(categoryVM);
+            var pictureVM = new PictureVM
+            {
+                Name = model.ImageName,
+                ObjectId = id,
+                Published = true,
+            };
+
+            var saveCategory = await categoryDAL.Update(categoryVM, pictureVM);
             if (saveCategory == false)
             {
                 return false;
-            }
-
-            if (model.Files !=null)
-            {
-                var categoryImageBLL = new CategoryImageBLL();
-                var saveImg = await categoryImageBLL.Create(model.ImageNames, id);
-                if (!saveImg)
-                {
-                    return false;
-                }
             }
 
             return true;
@@ -150,10 +166,6 @@ namespace BLL.Category
         }
         public async Task<bool> Delete(string id)
         {
-            if (id.Length != 12)
-            {
-                return false;
-            }
             var categoryFullBLL = new CategoryFullBLL();
             var categoryFullVM = await categoryFullBLL.GetById(id);
             if (categoryFullVM == null)
@@ -178,13 +190,12 @@ namespace BLL.Category
         }
         public async Task<bool> Published(string id)
         {
-            var categoryVM = await GetById(id);
-            if (categoryVM == null)
+            var categoryVM = await CheckExistsId(id);
+            if (categoryVM == false)
             {
                 return false;
             }
-            bool published = !categoryVM.Published;
-            var result = await categoryDAL.Pulished(id, published);
+            var result = await categoryDAL.Pulished(id);
             if (result)
             {
                 return true;
@@ -193,13 +204,12 @@ namespace BLL.Category
         }
         public async Task<bool> Deleted(string id)
         {
-            var categoryVM = await GetById(id);
-            if (categoryVM == null)
+            var categoryVM = await CheckExistsId(id);
+            if (categoryVM == false)
             {
                 return false;
             }
-            bool deleted = !categoryVM.Deleted;
-            var result = await categoryDAL.Deleted(id, deleted);
+            var result = await categoryDAL.Deleted(id);
             if (result)
             {
                 return true;

@@ -17,9 +17,8 @@ namespace BO.ViewModels.Brand
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public bool Published { get; set; }
-        public int Ordinal { get; set; }
-        public List<string> ImageNames { get; set; }
-        public List<IFormFile> Files { get; set; }
+        public string ImageName { get; set; }
+        public IFormFile File { get; set; }
     }
 }
 

@@ -21,10 +21,6 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
-      ordinal: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
   })
   .required();
 function CategoryCreate(props) {
@@ -38,7 +34,10 @@ function CategoryCreate(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { published: true, formFile: [], fullDescription: "", ordinal: 0 },
+    defaultValues: {
+      published: true,
+      fullDescription: "",
+    },
   });
 
   const onSubmitHandler = async (values) => {
@@ -48,10 +47,7 @@ function CategoryCreate(props) {
     formData.append("FullDescription", values.fullDescription);
     formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
-    formData.append("ordinal", values.ordinal);
-    for (var i = 0; i < files.length; i++) {
-      formData.append("Files", files[i]);
-    }
+    formData.append("File", file);
     await api({
       method: "POST",
       url: `/category`,
@@ -64,13 +60,12 @@ function CategoryCreate(props) {
             autoClose: 3000,
           });
           setRichText("");
-          setImage([]);
-          setFiles([]);
+          setImage(null);
+          setFile(null);
           reset({
             name: "",
             shortDescription: "",
             published: true,
-            ordinal: 0,
           });
         } else {
           toast.error(`Thêm thất bại`, {
@@ -87,34 +82,27 @@ function CategoryCreate(props) {
       );
   };
 
-  const [image, setImage] = useState([]);
-  const [files, setFiles] = useState([]);
-  const selectFile = (e) => {
-    const file = e.target.files;
-    const fileArr = Array.from(file);
-    const imgArr = fileArr.map((item) => {
-      return URL.createObjectURL(item);
-    });
-    setImage((prevImg) => prevImg.concat(imgArr));
-    setFiles((prevImg) => prevImg.concat(fileArr));
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
+  const handlePreviewImage = (e) => {
+    const tempfile = e.target.files[0];
+    setFile(tempfile);
+    setImage(URL.createObjectURL(tempfile));
   };
-
-  const DeleteImg = (item, index) => {
-    setImage(image.filter((e) => e !== item));
-    const a1 = files.slice(0, index);
-    const a2 = files.slice(index + 1, files.length);
-    setFiles(a1.concat(a2));
-  };
+  useEffect(() => {
+    return () => {
+      image && URL.revokeObjectURL(image);
+    };
+  }, [image]);
 
   const onClickResetForm = () => {
     reset({
       name: "",
       shortDescription: "",
       published: true,
-      ordinal: 0,
     });
-    setImage([]);
-    setFiles([]);
+    setImage(null);
+    setFile(null);
     setRichText("");
   };
   const [richText, setRichText] = useState();
@@ -162,21 +150,7 @@ function CategoryCreate(props) {
         <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
-        <div className="">
-          <AdminInput
-            control={control}
-            name="ordinal"
-            label="Thứ tự"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.ordinal ? null : "invisible"
-            }`}
-          >
-            {errors?.ordinal?.message}
-          </p>
-        </div>
+        
         <div>
           {/* <Controller
             control={control}
@@ -204,11 +178,33 @@ function CategoryCreate(props) {
             {errors?.shortDescription?.message}
           </p>
         </div>
-        <AddListImage
-          onChange={selectFile}
-          image={image}
-          DeleteImg={DeleteImg}
-        />
+
+        <div className="flex flex-col">
+          <label
+            htmlFor="image"
+            className="block mb-2 text-sm font-medium text-gray-900 "
+          >
+            Chọn ảnh
+          </label>
+          <label
+            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
+            htmlFor="image"
+          >
+            <input
+              type="file"
+              onChange={handlePreviewImage}
+              className="hidden"
+              id="image"
+            />
+            {image && (
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+            )}
+          </label>
+        </div>
 
         <div className="flex justify-center gap-x-[25px]">
           <button

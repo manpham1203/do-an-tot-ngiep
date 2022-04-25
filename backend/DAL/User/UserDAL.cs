@@ -16,132 +16,184 @@ namespace DAL.User
         {
             db = new AppDbContext();
         }
-        public async Task<List<UserVM>> GetAll()
+        //public async Task<List<UserVM>> GetAll()
+        //{
+        //    var userFromDb = await db.Users.ToListAsync();
+        //    if (userFromDb.Count == 0)
+        //    {
+        //        return new List<UserVM>();
+        //    }
+        //    var userVMs = userFromDb.Select(x => new UserVM
+        //    {
+        //        Id = x.Id,
+        //        FirstName = x.FirstName,
+        //        LastName = x.LastName,
+        //        Birthday = x.Birthday,
+        //        Email = x.Email,
+        //        PhoneNumber = x.PhoneNumber,
+        //        Address = x.Address,
+        //        Role = x.Role,
+        //        Username = x.Username,
+        //        Password = x.Password,
+        //        CreatedAt = x.CreatedAt,
+        //        UpdatedAt = x.UpdatedAt,
+        //    }).ToList();
+        //    return userVMs;
+        //}
+        //public async Task<UserVM> GetById(string id)
+        //{
+        //    var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
+        //    if (userFromDb == null)
+        //    {
+        //        return null;
+        //    }
+        //    var userVM = new UserVM
+        //    {
+        //        Id = userFromDb.Id,
+        //        FirstName = userFromDb.FirstName,
+        //        LastName = userFromDb.LastName,
+        //        Birthday = userFromDb.Birthday,
+        //        Email = userFromDb.Email,
+        //        PhoneNumber = userFromDb.PhoneNumber,
+        //        Address = userFromDb.Address,
+        //        Role = userFromDb.Role,
+        //        Username = userFromDb.Username,
+        //        Password = userFromDb.Password,
+        //        CreatedAt = userFromDb.CreatedAt,
+        //        UpdatedAt = userFromDb.UpdatedAt,
+        //    };
+        //    return userVM;
+        //}
+        public async Task<string> GetPasswordById(string id)
         {
-            var userFromDb = await db.Users.ToListAsync();
-            if (userFromDb.Count == 0)
+            try
             {
-                return new List<UserVM>();
+                var resultFromDb = await db.Users.Select(x => new { x.Id, x.Password }).SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return resultFromDb.Password;
             }
-            var userVMs = userFromDb.Select(x => new UserVM
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Birthday = x.Birthday,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                Address = x.Address,
-                Role = x.Role,
-                Username = x.Username,
-                Password = x.Password,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-            }).ToList();
-            return userVMs;
-        }
-        public async Task<UserVM> GetById(string id)
-        {
-            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
-            if (userFromDb == null)
+            catch
             {
                 return null;
             }
-            var userVM = new UserVM
-            {
-                Id = userFromDb.Id,
-                FirstName = userFromDb.FirstName,
-                LastName = userFromDb.LastName,
-                Birthday = userFromDb.Birthday,
-                Email = userFromDb.Email,
-                PhoneNumber = userFromDb.PhoneNumber,
-                Address = userFromDb.Address,
-                Role = userFromDb.Role,
-                Username = userFromDb.Username,
-                Password = userFromDb.Password,
-                CreatedAt = userFromDb.CreatedAt,
-                UpdatedAt = userFromDb.UpdatedAt,
-            };
-            return userVM;
         }
-        public async Task<bool> Create(UserVM userVM)
+        public async Task<string> GetPasswordByUsername(string username)
         {
-            var user = new BO.Entities.User
+            try
             {
-                Id = userVM.Id,
-                FirstName = userVM.FirstName,
-                LastName = userVM.LastName,
-                Birthday = userVM.Birthday,
-                Email = userVM.Email,
-                PhoneNumber = userVM.PhoneNumber,
-                Address = userVM.Address,
-                Role = userVM.Role,
-                Username = userVM.Username,
-                Password = userVM.Password,
-                CreatedAt = userVM.CreatedAt,
-                UpdatedAt = userVM.UpdatedAt,
-            };
-            await db.Users.AddAsync(user);
-            var result =await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
+                var resultFromDb = await db.Users.Select(x => new { x.Username, x.Password }).SingleOrDefaultAsync(x => x.Username == username);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return resultFromDb.Password;
             }
-            return false;
-        }
-        public async Task<bool> Update(UserVM userVM)
-        {
-            var userFromDb = await db.Users.SingleOrDefaultAsync(x=>x.Id==userVM.Id);
-
-            userFromDb.FirstName=userVM.FirstName;
-            userFromDb.LastName=userVM.LastName;
-            userFromDb.Birthday = userVM.Birthday;
-            userFromDb.Email=userVM.Email;
-            userFromDb.PhoneNumber=userVM.PhoneNumber;
-            userFromDb.Address=userVM.Address;
-            userFromDb.UpdatedAt=userVM.UpdatedAt;
-
-            var result= await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task<bool> Delete(string id)
-        {
-            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
-            db.Users.Remove(userFromDb);
-            var result= await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task<UserVM> GetByUsername(string username)
-        {
-            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Username == username);
-            if (userFromDb == null)
+            catch
             {
                 return null;
             }
-            var userVM = new UserVM
+        }
+        public async Task<bool> CheckExists(string id)
+        {
+            try
             {
-                Id = userFromDb.Id,
-                FirstName = userFromDb.FirstName,
-                LastName = userFromDb.LastName,
-                Birthday = userFromDb.Birthday,
-                Email = userFromDb.Email,
-                PhoneNumber = userFromDb.PhoneNumber,
-                Address = userFromDb.Address,
-                Role = userFromDb.Role,
-                Username = userFromDb.Username,
-                Password = userFromDb.Password,
-                CreatedAt = userFromDb.CreatedAt,
-                UpdatedAt = userFromDb.UpdatedAt,
-            };
-            return userVM;
+                var resultFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        //public async Task<bool> Create(UserVM userVM)
+        //{
+        //    var user = new BO.Entities.User
+        //    {
+        //        Id = userVM.Id,
+        //        FirstName = userVM.FirstName,
+        //        LastName = userVM.LastName,
+        //        Birthday = userVM.Birthday,
+        //        Email = userVM.Email,
+        //        PhoneNumber = userVM.PhoneNumber,
+        //        Address = userVM.Address,
+        //        Role = userVM.Role,
+        //        Username = userVM.Username,
+        //        Password = userVM.Password,
+        //        CreatedAt = userVM.CreatedAt,
+        //        UpdatedAt = userVM.UpdatedAt,
+        //    };
+        //    await db.Users.AddAsync(user);
+        //    var result = await db.SaveChangesAsync();
+        //    if (result > 0)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public async Task<bool> Update(UserVM userVM)
+        //{
+        //    var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == userVM.Id);
+
+        //    userFromDb.FirstName = userVM.FirstName;
+        //    userFromDb.LastName = userVM.LastName;
+        //    userFromDb.Birthday = userVM.Birthday;
+        //    userFromDb.Email = userVM.Email;
+        //    userFromDb.PhoneNumber = userVM.PhoneNumber;
+        //    userFromDb.Address = userVM.Address;
+        //    userFromDb.UpdatedAt = userVM.UpdatedAt;
+
+        //    var result = await db.SaveChangesAsync();
+        //    if (result > 0)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        //public async Task<bool> Delete(string id)
+        //{
+        //    var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
+        //    db.Users.Remove(userFromDb);
+        //    var result = await db.SaveChangesAsync();
+        //    if (result > 0)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        public async Task<UserInfoClientVM> GetByUsername(string username)
+        {
+            //var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Username == username);
+            var resultFromDb = await (from u in db.Users
+                                      join p in db.Pictures on u.Id equals p.ObjectId
+                                      where u.Username == username
+                                      select new UserInfoClientVM
+                                      {
+                                          Id=u.Id,
+                                          Username = u.Username,
+                                          FirstName=u.FirstName,
+                                          LastName=u.LastName,
+                                          Birthday=u.Birthday,
+                                          Email=u.Email,
+                                          PhoneNumber=u.PhoneNumber,
+                                          Address=u.Address,
+                                          Role=u.Role,
+                                          CreatedAt=u.CreatedAt,
+                                          ImageName=p.Name,
+                                          ImageSrc=null,
+                                      }
+                                   ).SingleOrDefaultAsync();
+            if (resultFromDb == null)
+            {
+                return null;
+            }
+            return resultFromDb;
         }
 
         public async Task<bool> Register(UserVM userVM)
@@ -158,7 +210,6 @@ namespace DAL.User
                 Role = userVM.Role,
                 Username = userVM.Username,
                 Password = userVM.Password,
-                Avatar = null,
                 CreatedAt = userVM.CreatedAt,
                 UpdatedAt = userVM.UpdatedAt,
             };

@@ -2,6 +2,7 @@
 using BO;
 using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using BO.ViewModels.ProductImage;
 using Microsoft.EntityFrameworkCore;
@@ -105,7 +106,7 @@ namespace DAL.Product
             }).ToList();
             return productVMs;
         }
-        public async Task<bool> Create(ProductVM productVM)
+        public async Task<bool> Create(ProductVM productVM, List<PictureVM> pictureVMs)
         {
 
             var product = new BO.Entities.Product
@@ -127,15 +128,33 @@ namespace DAL.Product
                 BrandId = productVM.BrandId
             };
             await db.Products.AddAsync(product);
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultProduct = await db.SaveChangesAsync();
+
+            if (resultProduct ==0 )
             {
-                return true;
+                return false;
             }
-            return false;
+
+            var pictutes = pictureVMs.Select(x => new BO.Entities.Picture
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ObjectId = x.ObjectId,
+                ObjectType = x.ObjectType,
+                Published = x.Published,
+            }).ToList();
+
+            await db.Pictures.AddRangeAsync(pictutes);
+            var resultPicture=await db.SaveChangesAsync();
+            if (resultPicture != pictutes.Count)
+            {
+                return false;
+            }
+            
+            return true;
 
         }
-        public async Task<bool> Update(ProductVM productVM)
+        public async Task<bool> Update(ProductVM productVM, List<PictureVM> pictureVMs)
         {
 
             var productFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == productVM.Id);
@@ -154,11 +173,29 @@ namespace DAL.Product
             productFromDb.UpdatedAt = productVM.UpdatedAt;
             productFromDb.BrandId = productVM.BrandId;
 
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultProduct = await db.SaveChangesAsync();
+            if (resultProduct == 0)
             {
-                return true;
+                return false;
             }
+
+
+            var pictutes = pictureVMs.Select(x => new BO.Entities.Picture
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ObjectId = x.ObjectId,
+                ObjectType = x.ObjectType,
+                Published = x.Published,
+            }).ToList();
+
+            await db.Pictures.AddRangeAsync(pictutes);
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture != pictutes.Count)
+            {
+                return false;
+            }
+
             return false;
 
         }
@@ -526,7 +563,7 @@ namespace DAL.Product
                     BrandId = resultFromDb.BrandId,
                     BrandNameVM = new BrandNameVM(),
                     CategoryNameVMs = new List<CategoryNameVM>(),
-                    ProductImageVMs = new List<ProductImageVM>(),
+                    PictureVMs = new List<PictureVM>(),
                 };
                 return result;
             }

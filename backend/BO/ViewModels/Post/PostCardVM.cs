@@ -12,7 +12,7 @@ namespace BO.ViewModels.Post
         public string Title { get; set; }
         public string Slug { get; set; }
         public string ShortDescription { get; set; }
-        public int Views { get; set; }
+        public int View { get; set; }
         public string Image { get; set; }
         public string ImageSrc { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -1,4 +1,6 @@
-﻿using BO.ViewModels.Post;
+﻿using BLL.Picture;
+using BO.ViewModels.Picture;
+using BO.ViewModels.Post;
 using DAL.Post;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ namespace BLL.Post
     {
         private readonly PostDAL postDAL;
         private CommonBLL cm;
+        private string objectType="post";
         public PostBLL()
         {
             postDAL = new PostDAL();
@@ -39,14 +42,14 @@ namespace BLL.Post
                 postId = cm.RandomString(9);
                 checkExists = await CheckExists(postId);
             }
-            var slug = Regex.Replace(model.Title, @"`!@#$%^&*()-_=+[{]}\|;:',<.>/?""", string.Empty);
+            var slug = Regex.Replace(model.Title, @"[$&+,:;=?@#|'<>.-^*()%!]", string.Empty);
             slug = Regex.Replace(cm.RemoveUnicode(model.Title).Trim().ToLower(), @"\s+", "-");
 
             if (model.File != null)
             {
                 string imageName = slug;
                 imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
-                model.Image = imageName;
+                model.ImageName = imageName;
             }
 
 
@@ -59,13 +62,30 @@ namespace BLL.Post
                 FullDescription = model.FullDescription,
                 Published = model.Published,
                 Deleted = false,
-                Likes = 0,
-                Views = 0,
+                View = 0,
                 CreatedAt = DateTime.Now,
-                Image=model.Image,
                 UpdatedAt = null,
             };
-            return await postDAL.Create(postVM);
+
+            var pictureBLL = new PictureBLL();
+            var pictureId = cm.RandomString(16);
+            var checkPictureId = await pictureBLL.CheckExists(pictureId);
+            while (checkPictureId)
+            {
+                pictureId = cm.RandomString(16);
+                checkPictureId = await pictureBLL.CheckExists(pictureId);
+            }
+
+            var pictureVM = new PictureVM
+            {
+                Id = pictureId,
+                Name = model.ImageName,
+                ObjectId = postId,
+                Published = true,
+                ObjectType= objectType,
+            };
+
+            return await postDAL.Create(postVM, pictureVM);
         }
         public async Task<bool> Update(string id, UpdatePostVM model)
         {
@@ -84,7 +104,7 @@ namespace BLL.Post
             {
                 string imageName = slug;
                 imageName +=Path.GetExtension(model.File.FileName);
-                model.Image = imageName;
+                model.ImageName = imageName;
             }
 
             var postVM = new PostVM
@@ -96,12 +116,18 @@ namespace BLL.Post
                 FullDescription = model.FullDescription,
                 Published = model.Published,
                 Deleted = model.Deleted,
-                Likes = model.Likes,
-                Views = model.Views,
-                Image=model.Image,
+                View = model.View,
                 UpdatedAt = DateTime.Now,
             };
-            return await postDAL.Update(postVM);
+
+            var pictureVM = new PictureVM
+            {
+                Name = model.ImageName,
+                ObjectId = id,
+                Published = true,
+            };
+
+            return await postDAL.Update(postVM, pictureVM);
         }
         public async Task<bool> Delete(string id)
         {

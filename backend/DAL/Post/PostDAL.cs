@@ -1,4 +1,5 @@
 ﻿using BO;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Post;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,7 +34,7 @@ namespace DAL.Post
                 return true;
             }
         }
-        public async Task<bool> Create(PostVM postVM)
+        public async Task<bool> Create(PostVM postVM, PictureVM pictureVM)
         {
             var post = new BO.Entities.Post
             {
@@ -44,21 +45,36 @@ namespace DAL.Post
                 ShortDescription = postVM.ShortDescription,
                 Published = postVM.Published,
                 Deleted = postVM.Deleted,
-                Likes = postVM.Likes,
-                Views = postVM.Views,
-                Image = postVM.Image,
+                View = postVM.View,
                 CreatedAt = postVM.CreatedAt,
                 UpdatedAt = postVM.UpdatedAt,
             };
             await db.Posts.AddAsync(post);
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultPost = await db.SaveChangesAsync();
+            if (resultPost == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            var picture = new BO.Entities.Picture
+            {
+                Id = pictureVM.Id,
+                Name = pictureVM.Name,
+                Published = pictureVM.Published,
+                ObjectId = pictureVM.ObjectId,
+                ObjectType=pictureVM.ObjectType,
+            };
+
+            await db.Pictures.AddAsync(picture);
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
-        public async Task<bool> Update(PostVM postVM)
+        public async Task<bool> Update(PostVM postVM, PictureVM pictureVM)
         {
             var postFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == postVM.Id);
 
@@ -68,26 +84,39 @@ namespace DAL.Post
             postFromDb.ShortDescription = postVM.ShortDescription;
             postFromDb.Published = postVM.Published;
             postFromDb.UpdatedAt = postVM.UpdatedAt;
-            if (!string.IsNullOrEmpty(postVM.Image))
+
+            var resultPost = await db.SaveChangesAsync();
+            if (resultPost == 0)
             {
-                postFromDb.Image = postVM.Image;
+                return false;
             }
 
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == postFromDb.Id);
+            pictureFromDb.Name = pictureVM.Name;
+
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            return true;
         }
         public async Task<bool> Delete(string id)
         {
             var postFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
             db.Posts.Remove(postFromDb);
             var result = await db.SaveChangesAsync();
-            if (result > 0)
+            if (result == 0)
             {
-                return true;
+                return false;
+            }
+            var pictureFromDb = await db.Pictures.Where(x => x.ObjectId == id).Where(x => x.ObjectType == "post").SingleOrDefaultAsync();
+            db.Pictures.Remove(pictureFromDb);
+            var resultPicture = await db.SaveChangesAsync();
+            if (resultPicture == 0)
+            {
+                return false;
             }
             return false;
         }
@@ -211,11 +240,18 @@ namespace DAL.Post
                 }
                 db.Posts.Remove(resultFromDb);
                 var result = await db.SaveChangesAsync();
-                if (result > 0)
+                if (result ==0)
                 {
-                    return true;
+                    return false;
                 }
-                return false;
+                var pictureFromDb = await db.Pictures.Where(x => x.ObjectId == id).Where(x => x.ObjectType == "post").SingleOrDefaultAsync();
+                db.Pictures.Remove(pictureFromDb);
+                var resultPicture = await db.SaveChangesAsync();
+                if (resultPicture == 0)
+                {
+                    return false;
+                }
+                return true;
             }
             catch
             {
@@ -227,7 +263,7 @@ namespace DAL.Post
         {
             try
             {
-                var resultFromDb = await db.Posts.Where(x => x.Published==true && x.Deleted==false).Select(x => new { x.Id, x.Title,x.Slug, x.ShortDescription, x.Views, x.Image, x.CreatedAt }).ToListAsync();
+                var resultFromDb = await db.Posts.Where(x => x.Published==true && x.Deleted==false).Select(x => new { x.Id, x.Title,x.Slug, x.ShortDescription, x.View, x.Image, x.CreatedAt }).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<PostCardVM>();
@@ -238,7 +274,7 @@ namespace DAL.Post
                     Title = x.Title,
                     Slug = x.Slug,
                     ShortDescription = x.ShortDescription,
-                    Views = x.Views,
+                    View = x.View,
                     Image = x.Image,
                     CreatedAt = x.CreatedAt,
                 }).ToList();
@@ -254,7 +290,7 @@ namespace DAL.Post
         {
             try
             {
-                var resultFromDb = await db.Posts.Select(x => new { x.Title, x.Slug, x.ShortDescription, x.FullDescription, x.Views, x.Image, x.CreatedAt }).SingleOrDefaultAsync(x => x.Slug == slug);
+                var resultFromDb = await db.Posts.Select(x => new { x.Title, x.Slug, x.ShortDescription, x.FullDescription, x.View, x.Image, x.CreatedAt }).SingleOrDefaultAsync(x => x.Slug == slug);
                 if (resultFromDb == null)
                 {
                     return null;
@@ -265,7 +301,7 @@ namespace DAL.Post
                     Slug = resultFromDb.Slug,
                     ShortDescription = resultFromDb.ShortDescription,
                     FullDescription = resultFromDb.FullDescription,
-                    Views = resultFromDb.Views,
+                    View = resultFromDb.View,
                     Image = resultFromDb.Image,
                     CreatedAt = resultFromDb.CreatedAt,
                 };

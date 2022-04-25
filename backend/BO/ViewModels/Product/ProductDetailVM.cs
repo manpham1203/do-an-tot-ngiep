@@ -1,5 +1,6 @@
 ﻿using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
+using BO.ViewModels.Picture;
 using BO.ViewModels.ProductImage;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,6 @@ namespace BO.ViewModels.Product
         public string BrandId { get; set; }
         public BrandNameVM BrandNameVM { get; set; }
         public List<CategoryNameVM> CategoryNameVMs { get; set; }
-        public List<ProductImageVM> ProductImageVMs { get; set; }
+        public List<PictureVM> PictureVMs { get; set; }
     }
 }

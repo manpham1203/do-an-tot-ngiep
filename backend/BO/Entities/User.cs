@@ -18,13 +18,12 @@ namespace BO.Entities
         public int Role { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Avatar { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         //public Role Role { get; set; }
         public List<Order> Orders { get; set; }
         public List<Wishlist> Wishlists { get; set; }
-        public List<ProductComment> ProductComments { get; set; }
-        public List<PostComment> PostComments { get; set; }
+        public List<Comment> Comments { get; set; }
+        //public Picture Picture { get; set; }
     }
 }

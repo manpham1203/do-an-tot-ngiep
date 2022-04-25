@@ -1,5 +1,6 @@
 ﻿using BO;
 using BO.ViewModels.Brand;
+using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,31 +23,31 @@ namespace DAL.Brand
         //{
         //    db= context;
         //}
-        public async Task<List<BrandVM>> GetAll()
-        {
-            var brandFromDb = await db.Brands.ToListAsync();
+        //public async Task<List<BrandVM>> GetAll()
+        //{
+        //    var brandFromDb = await db.Brands.ToListAsync();
 
-            if (brandFromDb.Count == 0)
-            {
-                return new List<BrandVM>();
-            }
+        //    if (brandFromDb.Count == 0)
+        //    {
+        //        return new List<BrandVM>();
+        //    }
 
-            var brandVMs = brandFromDb.Select(x => new BrandVM
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Slug = x.Slug,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
-                Published = x.Published,
-                Deleted = x.Deleted,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
-            }).ToList();
-            return brandVMs;
+        //    var brandVMs = brandFromDb.Select(x => new BrandVM
+        //    {
+        //        Id = x.Id,
+        //        Name = x.Name,
+        //        Slug = x.Slug,
+        //        FullDescription = x.FullDescription,
+        //        ShortDescription = x.ShortDescription,
+        //        Published = x.Published,
+        //        Deleted = x.Deleted,
+        //        CreatedAt = x.CreatedAt,
+        //        UpdatedAt = x.UpdatedAt,
+        //        Ordinal = x.Ordinal,
+        //    }).ToList();
+        //    return brandVMs;
 
-        }
+        //}
         public async Task<BrandVM> GetById(string id)
         {
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(b => b.Id == id);
@@ -65,58 +66,132 @@ namespace DAL.Brand
             brandVM.Deleted = brandFromDb.Deleted;
             brandVM.CreatedAt = brandFromDb.CreatedAt;
             brandVM.UpdatedAt = brandFromDb.UpdatedAt;
-            brandVM.Ordinal = brandFromDb.Ordinal;
 
             return brandVM;
         }
-        public async Task<BrandVM> GetBySlug(string slug)
-        {
-            var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Slug == slug);
-            if (resultFromDb == null)
-            {
-                return null;
-            }
-            var brandVM = new BrandVM();
+        //public async Task<BrandVM> GetBySlug(string slug)
+        //{
+        //    //var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Slug == slug);
+        //    var resultFromDb = await (from b in db.Brands
+        //                       join p in db.Pictures on b.Id equals p.ObjectId
+        //                              where b.Slug == slug
+        //                       select new BrandVM
+        //                       {
+        //                           Id = b.Id,
+        //                           Name = p.Name,
+        //                           Slug = b.Slug,
+        //                           FullDescription = b.FullDescription,
+        //                           ShortDescription=b.ShortDescription,
+        //                           Published = b.Published,
+        //                           Deleted=b.Deleted,
+        //                           CreatedAt=b.CreatedAt,
+        //                           UpdatedAt=b.UpdatedAt,
+        //                           Ordinal=b.Ordinal,
+        //                           Image=p.Name,
+        //                           ImageSrc=null,
+        //                       }).SingleOrDefaultAsync();
+        //    if (resultFromDb == null)
+        //    {
+        //        return null;
+        //    }
+        //    var brandVM = new BrandVM();
 
-            brandVM.Id = resultFromDb.Id;
-            brandVM.Name = resultFromDb.Name;
-            brandVM.Slug = resultFromDb.Slug;
-            brandVM.FullDescription = resultFromDb.FullDescription;
-            brandVM.ShortDescription = resultFromDb.ShortDescription;
-            brandVM.Published = resultFromDb.Published;
-            brandVM.Deleted = resultFromDb.Deleted;
-            brandVM.CreatedAt = resultFromDb.CreatedAt;
-            brandVM.UpdatedAt = resultFromDb.UpdatedAt;
-            brandVM.Ordinal = resultFromDb.Ordinal;
+        //    brandVM.Id = resultFromDb.Id;
+        //    brandVM.Name = resultFromDb.Name;
+        //    brandVM.Slug = resultFromDb.Slug;
+        //    brandVM.FullDescription = resultFromDb.FullDescription;
+        //    brandVM.ShortDescription = resultFromDb.ShortDescription;
+        //    brandVM.Published = resultFromDb.Published;
+        //    brandVM.Deleted = resultFromDb.Deleted;
+        //    brandVM.CreatedAt = resultFromDb.CreatedAt;
+        //    brandVM.UpdatedAt = resultFromDb.UpdatedAt;
+        //    brandVM.Ordinal = resultFromDb.Ordinal;
 
-            return brandVM;
-        }
-        public async Task<bool> Create(BrandVM brandVM)
+        //    return brandVM;
+        //}
+        public async Task<bool> CheckExistsId(string id)
         {
-            var brand = new BO.Entities.Brand
+            try
             {
-                Id = brandVM.Id,
-                Name = brandVM.Name,
-                Slug = brandVM.Slug,
-                FullDescription = brandVM.FullDescription,
-                ShortDescription = brandVM.ShortDescription,
-                Published = brandVM.Published,
-                Deleted = brandVM.Deleted,
-                CreatedAt = brandVM.CreatedAt,
-                UpdatedAt = brandVM.UpdatedAt,
-            };
-            await db.Brands.AddAsync(brand);
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
-            {
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
                 return true;
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
-        public async Task<bool> Update(BrandVM brandVM)
+        public async Task<bool> CheckExistsSlug(string slug)
+        {
+            try
+            {
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Slug == slug);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Create(BrandVM brandVM, PictureVM pictureVM)
+        {
+            try
+            {
+                var brand = new BO.Entities.Brand
+                {
+                    Id = brandVM.Id,
+                    Name = brandVM.Name,
+                    Slug = brandVM.Slug,
+                    FullDescription = brandVM.FullDescription,
+                    ShortDescription = brandVM.ShortDescription,
+                    Published = brandVM.Published,
+                    Deleted = brandVM.Deleted,
+                    CreatedAt = brandVM.CreatedAt,
+                    UpdatedAt = brandVM.UpdatedAt,
+                };
+                await db.Brands.AddAsync(brand);
+                var resultBrand = await db.SaveChangesAsync();
+                if (resultBrand == 0)
+                {
+                    return false;
+                }
+
+                var picture = new BO.Entities.Picture
+                {
+                    Id = pictureVM.Id,
+                    Name = pictureVM.Name,
+                    Published = pictureVM.Published,
+                    ObjectId = pictureVM.ObjectId,
+                    ObjectType = pictureVM.ObjectType,
+                };
+
+                await db.Pictures.AddAsync(picture);
+                var resultPicture = await db.SaveChangesAsync();
+                if (resultPicture == 0)
+                {
+                    return false;
+                }
+
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+        public async Task<bool> Update(BrandVM brandVM, PictureVM pictureVM)
         {
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == brandVM.Id);
-
             brandFromDb.Name = brandVM.Name;
             brandFromDb.Slug = brandVM.Slug;
             brandFromDb.FullDescription = brandVM.FullDescription;
@@ -124,19 +199,52 @@ namespace DAL.Brand
             brandFromDb.Published = brandVM.Published;
             brandFromDb.Deleted = brandVM.Deleted;
             brandFromDb.UpdatedAt = brandVM.UpdatedAt;
-            brandFromDb.Ordinal = brandVM.Ordinal;
 
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultBrand = await db.SaveChangesAsync();
+            if (resultBrand == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+            if (pictureVM.Name != null)
+            {
+                var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == brandFromDb.Id);
+                pictureFromDb.Name = pictureVM.Name;
+
+                var resultPicture = await db.SaveChangesAsync();
+                if (resultPicture == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         public async Task<bool> Delete(string id)
         {
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
             db.Brands.Remove(brandFromDb);
+            var resultBrand = await db.SaveChangesAsync();
+            if (resultBrand == 0)
+            {
+                return false;
+            }
+            var pictureFromDb = await db.Pictures.Where(x=>x.ObjectId==id).Where(x=>x.ObjectType=="brand").SingleOrDefaultAsync();
+            db.Pictures.Remove(pictureFromDb);
+            var resultPicture = await db.SaveChangesAsync();
+            if(resultPicture == 0)
+            {
+                return false;
+            }
+
+
+            return true;
+        }
+        public async Task<bool> Pulished(string id)
+        {
+            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
+
+            brandFromDb.Published = !brandFromDb.Published;
+
             var result = await db.SaveChangesAsync();
             if (result > 0)
             {
@@ -144,24 +252,11 @@ namespace DAL.Brand
             }
             return false;
         }
-        public async Task<bool> Pulished(string id, bool published)
+        public async Task<bool> Deleted(string id)
         {
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
 
-            brandFromDb.Published = published;
-
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        public async Task<bool> Deleted(string id, bool deleted)
-        {
-            var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
-
-            brandFromDb.Deleted = deleted;
+            brandFromDb.Deleted = !brandFromDb.Deleted;
 
             var result = await db.SaveChangesAsync();
             if (result > 0)
@@ -190,7 +285,6 @@ namespace DAL.Brand
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
-                Ordinal = x.Ordinal,
             }).ToList();
             return brandVMs;
 
@@ -252,12 +346,12 @@ namespace DAL.Brand
                 return null;
             }
         }
-        
+
         public async Task<BrandNameVM> BrandWithProductCard(string id)
         {
             try
             {
-                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x=>x.Id==id);
+                var resultFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == id);
                 if (resultFromDb == null)
                 {
                     return null;
@@ -342,7 +436,6 @@ namespace DAL.Brand
                     Published = resultFromDb.Published,
                     Deleted = resultFromDb.Deleted,
                     CreatedAt = resultFromDb.CreatedAt,
-                    Ordinal = resultFromDb.Ordinal,
                 };
                 return result;
             }
@@ -352,6 +445,6 @@ namespace DAL.Brand
             }
 
         }
-   
+
     }
 }

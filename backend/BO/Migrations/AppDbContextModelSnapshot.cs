@@ -22,9 +22,9 @@ namespace BO.Migrations
             modelBuilder.Entity("BO.Entities.Brand", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(12)
+                        .HasMaxLength(6)
                         .IsUnicode(false)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("char(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(3)
@@ -42,9 +42,6 @@ namespace BO.Migrations
                         .HasMaxLength(250)
                         .IsUnicode(false)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("Ordinal")
-                        .HasColumnType("int");
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
@@ -72,41 +69,12 @@ namespace BO.Migrations
                     b.ToTable("Brand");
                 });
 
-            modelBuilder.Entity("BO.Entities.BrandImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<string>("BrandId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<bool>("Published")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.ToTable("BrandImage");
-                });
-
             modelBuilder.Entity("BO.Entities.Category", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(12)
+                        .HasMaxLength(6)
                         .IsUnicode(false)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("char(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(3)
@@ -125,7 +93,7 @@ namespace BO.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("Ordinal")
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
                     b.Property<bool>("Published")
@@ -154,33 +122,57 @@ namespace BO.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("BO.Entities.CategoryImage", b =>
+            modelBuilder.Entity("BO.Entities.Comment", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(12)
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
-                    b.Property<string>("CategoryId")
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ObjectId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ObjectType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("OrderDetailId")
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("Star")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(12)
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<bool>("Published")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("CategoryImage");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("BO.Entities.Order", b =>
@@ -272,12 +264,45 @@ namespace BO.Migrations
                     b.ToTable("OrderDetail");
                 });
 
+            modelBuilder.Entity("BO.Entities.Picture", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(16)
+                        .IsUnicode(false)
+                        .HasColumnType("char(16)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("ObjectId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ObjectType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Picture");
+                });
+
             modelBuilder.Entity("BO.Entities.Post", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(12)
                         .IsUnicode(false)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("varchar(12)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(3)
@@ -291,12 +316,7 @@ namespace BO.Migrations
                         .HasColumnType("ntext");
 
                     b.Property<string>("Image")
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
@@ -322,7 +342,7 @@ namespace BO.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
 
-                    b.Property<int>("Views")
+                    b.Property<int>("View")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -331,37 +351,6 @@ namespace BO.Migrations
                         .IsUnique();
 
                     b.ToTable("Post");
-                });
-
-            modelBuilder.Entity("BO.Entities.PostComment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PostId")
-                        .HasColumnType("char(12)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("char(12)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PostComments");
                 });
 
             modelBuilder.Entity("BO.Entities.Product", b =>
@@ -373,9 +362,9 @@ namespace BO.Migrations
 
                     b.Property<string>("BrandId")
                         .IsRequired()
-                        .HasMaxLength(12)
+                        .HasMaxLength(6)
                         .IsUnicode(false)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("char(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(3)
@@ -447,86 +436,15 @@ namespace BO.Migrations
                         .HasColumnType("char(12)");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("char(12)");
+                        .HasMaxLength(6)
+                        .IsUnicode(false)
+                        .HasColumnType("char(6)");
 
                     b.HasKey("ProductId", "CategoryId");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("ProductCategory");
-                });
-
-            modelBuilder.Entity("BO.Entities.ProductComment", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProductComment");
-                });
-
-            modelBuilder.Entity("BO.Entities.ProductImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
-                    b.Property<bool>("Published")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("BO.Entities.User", b =>
@@ -540,9 +458,6 @@ namespace BO.Migrations
                         .HasMaxLength(250)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("date");
@@ -570,9 +485,9 @@ namespace BO.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(64)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(10)
@@ -588,9 +503,9 @@ namespace BO.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -611,12 +526,20 @@ namespace BO.Migrations
             modelBuilder.Entity("BO.Entities.Wishlist", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
 
                     b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
                         .HasColumnType("char(12)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
                         .HasColumnType("char(12)");
 
                     b.HasKey("Id");
@@ -625,29 +548,18 @@ namespace BO.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wishlists");
+                    b.ToTable("Wishlist");
                 });
 
-            modelBuilder.Entity("BO.Entities.BrandImage", b =>
+            modelBuilder.Entity("BO.Entities.Comment", b =>
                 {
-                    b.HasOne("BO.Entities.Brand", "Brand")
-                        .WithMany("BrandImage")
-                        .HasForeignKey("BrandId")
+                    b.HasOne("BO.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Brand");
-                });
-
-            modelBuilder.Entity("BO.Entities.CategoryImage", b =>
-                {
-                    b.HasOne("BO.Entities.Category", "Catgeory")
-                        .WithMany("CategoryImage")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Catgeory");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BO.Entities.Order", b =>
@@ -680,22 +592,6 @@ namespace BO.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("BO.Entities.PostComment", b =>
-                {
-                    b.HasOne("BO.Entities.Post", "Post")
-                        .WithMany("PostComments")
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("BO.Entities.User", "User")
-                        .WithMany("PostComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BO.Entities.Product", b =>
                 {
                     b.HasOne("BO.Entities.Brand", "Brand")
@@ -726,47 +622,19 @@ namespace BO.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("BO.Entities.ProductComment", b =>
-                {
-                    b.HasOne("BO.Entities.Product", "Product")
-                        .WithMany("ProductComments")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BO.Entities.User", "User")
-                        .WithMany("ProductComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BO.Entities.ProductImage", b =>
-                {
-                    b.HasOne("BO.Entities.Product", "Product")
-                        .WithMany("ProductImage")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BO.Entities.Wishlist", b =>
                 {
                     b.HasOne("BO.Entities.Product", "Product")
                         .WithMany("Wishlists")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BO.Entities.User", "User")
                         .WithMany("Wishlists")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
 
@@ -775,15 +643,11 @@ namespace BO.Migrations
 
             modelBuilder.Entity("BO.Entities.Brand", b =>
                 {
-                    b.Navigation("BrandImage");
-
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BO.Entities.Category", b =>
                 {
-                    b.Navigation("CategoryImage");
-
                     b.Navigation("ProductCategory");
                 });
 
@@ -792,31 +656,20 @@ namespace BO.Migrations
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("BO.Entities.Post", b =>
-                {
-                    b.Navigation("PostComments");
-                });
-
             modelBuilder.Entity("BO.Entities.Product", b =>
                 {
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductCategory");
 
-                    b.Navigation("ProductComments");
-
-                    b.Navigation("ProductImage");
-
                     b.Navigation("Wishlists");
                 });
 
             modelBuilder.Entity("BO.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Orders");
-
-                    b.Navigation("PostComments");
-
-                    b.Navigation("ProductComments");
 
                     b.Navigation("Wishlists");
                 });

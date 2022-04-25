@@ -13,7 +13,7 @@ namespace BO.ViewModels.Post
         public string Slug { get; set; }
         public string ShortDescription { get; set; }
         public string FullDescription { get; set; }
-        public int Views { get; set; }
+        public int View { get; set; }
         public string Image { get; set; }
         public string ImageSrc { get; set; }
         public DateTime CreatedAt { get; set; }
