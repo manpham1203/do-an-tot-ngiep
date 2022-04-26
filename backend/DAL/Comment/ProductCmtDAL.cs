@@ -72,6 +72,7 @@ namespace DAL.Comment
                     ObjectId = model.ObjectId,
                     ObjectType = model.ObjectType,
                     OrderDetailId = model.OrderDetailId,
+                    CreatedAt=model.CreatedAt,
                 };
                 await db.Comments.AddAsync(obj);
                 var result = await db.SaveChangesAsync();

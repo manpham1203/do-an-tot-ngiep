@@ -29,10 +29,8 @@ function Ordered(props) {
     setModalData({
       ...modalData,
       userId: props.userId,
-      content: "",
       ObjectId: detail.productOrderVM.id,
       OrderDetailId: detail.id,
-      star: 0,
     });
     setOpenModal(true);
   };
@@ -85,7 +83,13 @@ function Ordered(props) {
                 {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
               </div>
               {itemOrder === item.id && (
-                <div className="py-[20px] px-[20px]">
+                <div className="py-[20px] px-[20px] relative">
+                  {openModal && (
+                    <ProductCmt
+                      modalData={modalData}
+                      setOpenModal={setOpenModal}
+                    />
+                  )}
                   <div>
                     <div>
                       Tên người nhận: {item.lastName + " " + item.firstName}
@@ -105,49 +109,55 @@ function Ordered(props) {
                   </div>
                   <div className="">
                     <h2 className="mb-[20px]">Sản phẩm đã mua:</h2>
-                    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
+                    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px] ">
                       {item.orderDetailVMs.map((detail) => {
                         return (
                           <div
                             key={detail.id}
-                            className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third"
+                            className="flex flex-col  gap-y-[10px] rounded-md bg-third "
                           >
-                            <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
-                              <img
-                                src={detail.productOrderVM.imageSrc}
-                                alt={detail.productOrderVM.imageName}
-                                className="w-full h-full object-cover object-center"
-                              />
+                            <div className="flex flex-row  p-[10px] gap-x-[10px]">
+                              <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
+                                <img
+                                  src={detail.productOrderVM.imageSrc}
+                                  alt={detail.productOrderVM.imageName}
+                                  className="w-full h-full object-cover object-center"
+                                />
+                              </div>
+                              <div className="flex flex-col grow-[1] bg-white rounded-md p-[10px] gap-y-[2px]">
+                                <Link
+                                  to={`/san-pham?brand=${detail.productOrderVM.brandNameVM.slug}`}
+                                >
+                                  {detail.productOrderVM.brandNameVM.name}
+                                </Link>
+                                <Link
+                                  to={`/san-pham/${detail.productOrderVM.slug}`}
+                                >
+                                  {detail.productOrderVM.name}
+                                </Link>
+                                <p>Số lượng: {detail.quantity}</p>
+                                <p>
+                                  Đơn giá:{" "}
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(detail.unitPrice)}
+                                </p>
+                                <p>
+                                  Thành tiền:{" "}
+                                  {new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(detail.unitPrice * detail.quantity)}
+                                </p>
+                              </div>
                             </div>
-                            <div className="flex flex-col grow-[1] bg-white rounded-md p-[10px] gap-y-[2px]">
-                              <Link
-                                to={`/san-pham?brand=${detail.productOrderVM.brandNameVM.slug}`}
-                              >
-                                {detail.productOrderVM.brandNameVM.name}
-                              </Link>
-                              <Link
-                                to={`/san-pham/${detail.productOrderVM.slug}`}
-                              >
-                                {detail.productOrderVM.name}
-                              </Link>
-                              <p>Số lượng: {detail.quantity}</p>
-                              <p>
-                                Đơn giá:{" "}
-                                {new Intl.NumberFormat("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(detail.unitPrice)}
-                              </p>
-                              <p>
-                                Thành tiền:{" "}
-                                {new Intl.NumberFormat("vi-VN", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(detail.unitPrice * detail.quantity)}
-                              </p>
-                            </div>
-                            <button onClick={() => handleOpenModal(detail)}>
-                              OpenModal
+
+                            <button
+                              onClick={() => handleOpenModal(detail)}
+                              className="border-2 border-second px-[20px] h-[40px] w-fit self-center"
+                            >
+                              Đánh Giá
                             </button>
                           </div>
                         );
@@ -159,7 +169,6 @@ function Ordered(props) {
             </div>
           );
         })}
-      {openModal && <ProductCmt modalData={modalData} setOpenModal={setOpenModal} />}
     </div>
   );
 }

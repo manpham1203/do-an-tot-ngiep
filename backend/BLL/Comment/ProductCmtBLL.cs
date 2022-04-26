@@ -51,6 +51,7 @@ namespace BLL.Comment
                     checkExists = await CheckExists(cmtId);
                 }
                 productCmtVM.Id = cmtId;
+                productCmtVM.ObjectType = "product";
                 productCmtVM.CreatedAt = DateTime.Now;
                 return await productCmtDAL.Create(productCmtVM);
             }
