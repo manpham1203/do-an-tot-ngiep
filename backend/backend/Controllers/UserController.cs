@@ -28,23 +28,23 @@ namespace backend.Controllers
         //        return BadRequest();
         //    }
         //}
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetById(string id)
-        //{
-        //    try
-        //    {
-        //        var user = await userBLL.GetById(id);
-        //        if (user == null)
-        //        {
-        //            return NotFound(); ;
-        //        }
-        //        return Ok(user);
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByUserId(string id)
+        {
+            try
+            {
+                var user = await userBLL.GetById(id);
+                if (user == null)
+                {
+                    return NotFound(); ;
+                }
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         //[HttpPost]
         //public async Task<IActionResult> Create(CreateUserVM model)
         //{
@@ -229,6 +229,38 @@ namespace backend.Controllers
             }
 
         }
-
+        [HttpGet("getbyusername")]
+        public async Task<IActionResult> GetByUserName(string username)
+        {
+            try{
+                var resultFromBLL = await userBLL.GetByUsername(username);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            try
+            {
+                var resultFromBLL = await userBLL.GetById(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

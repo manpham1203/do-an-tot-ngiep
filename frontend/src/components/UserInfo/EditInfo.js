@@ -32,24 +32,33 @@ const schema = yup
     email: yup
       .string()
       .email("Sai định dạng email")
-      .required("Thông tin này không được để trống").nullable()
+      .required("Thông tin này không được để trống")
+      .nullable()
       .trim(),
+    // birthday: yup
+    //   .string("Thông tin này không được để trống")
+    //   .required("Thông tin này không được để trống")
+    //   .nullable(),
     phoneNumber: yup
       .string()
       .required("Thông tin này không được để trống")
-      .matches(/^\d+$/, "Chỉ được phép nhật số").nullable()
+      .matches(/^\d+$/, "Chỉ được phép nhật số")
+      .nullable()
       .trim(),
-    address: yup.string().required("Thông tin này không được để trống").nullable(),
+    address: yup
+      .string()
+      .required("Thông tin này không được để trống")
+      .nullable(),
   })
   .required();
 function EditInfo(props) {
   const preFill = {
-    firstName: '',
-    lastName: '',
-    birthday: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
+    firstName: "",
+    lastName: "",
+    // birthday: null,
+    email: "",
+    phoneNumber: "",
+    address: "",
   };
   const {
     handleSubmit,
@@ -63,9 +72,10 @@ function EditInfo(props) {
     resolver: yupResolver(schema),
   });
   const onSubmitHandler = async (values) => {
+    console.log(values);
     await api({
       method: "PUT",
-      url: `/user/${user.id}`,
+      url: `/user/edit/${user.id}`,
       data: values,
     })
       .then((res) => {
@@ -96,7 +106,8 @@ function EditInfo(props) {
   const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/user/${id}`,
+      url: `/user/getbyid`,
+      params: { id: id },
     })
       .then((res) => {
         console.log(res);
@@ -114,6 +125,7 @@ function EditInfo(props) {
   useEffect(() => {
     fetchData(user.id);
   }, [user.id]);
+  console.log(errors);
   return (
     <div className="w-full flex flex-col">
       <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
@@ -171,6 +183,13 @@ function EditInfo(props) {
         </div>
         <div className="mt-[25px]">
           <Date label="Ngày sinh" control={control} name="birthday" />
+          <p
+            className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
+              errors?.birthday ? null : "invisible"
+            }`}
+          >
+            {errors?.birthday?.message}
+          </p>
         </div>
         <div className="mt-[25px]">
           <Input name="address" type="text" label="Địa chỉ" control={control} />

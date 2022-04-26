@@ -142,12 +142,16 @@ namespace DAL.Category
                 Name = pictureVM.Name,
                 Published = pictureVM.Published,
                 ObjectId = pictureVM.ObjectId,
-                ObjectType=pictureVM.ObjectType,
+                ObjectType = pictureVM.ObjectType,
             };
 
-            await db.Pictures.AddAsync(picture);
+            if (pictureVM.Name != null)
+            {
+                await db.Pictures.AddAsync(picture);
+            }
             var resultPicture = await db.SaveChangesAsync();
-            if (resultPicture == 0)
+
+            if (pictureVM.Name != null && resultPicture == 0)
             {
                 return false;
             }
@@ -366,7 +370,7 @@ namespace DAL.Category
                 {
                     return null;
                 }
-                var categoryNameVM =new CategoryNameVM
+                var categoryNameVM = new CategoryNameVM
                 {
                     Id = resultFromDb.Id,
                     Name = resultFromDb.Name,
@@ -407,7 +411,7 @@ namespace DAL.Category
                 return null;
             }
         }
-        
+
 
     }
 }

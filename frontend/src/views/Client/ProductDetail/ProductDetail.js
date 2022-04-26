@@ -158,7 +158,7 @@ function ProductDetail() {
       ) : (
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-x-[20px] ">
           <div className="w-full p-[20px] flex flex-col-reverse lg:flex-row h-fit gap-x-[20px] lg:items-start items-center justify-center">
-            <ProductImageSlider images={state.data?.productImageVMs} />
+            <ProductImageSlider images={state.data?.pictureVMs} />
           </div>
 
           <div className="w-full p-[20px]">

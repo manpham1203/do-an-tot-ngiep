@@ -6,6 +6,7 @@ import * as moment from "moment";
 import "moment/locale/nl";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import ProductCmt from "../Modal/ProductCmt";
 
 function Ordered(props) {
   const orderOptions = [
@@ -16,6 +17,25 @@ function Ordered(props) {
     { value: 0, label: "Đã huỷ", color: "#ED553B" },
   ];
   const [data, setData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalData, setModalData] = useState({
+    userId: props.userId,
+    content: "",
+    ObjectId: "",
+    OrderDetailId: "",
+    star: 0,
+  });
+  const handleOpenModal = (detail) => {
+    setModalData({
+      ...modalData,
+      userId: props.userId,
+      content: "",
+      ObjectId: detail.productOrderVM.id,
+      OrderDetailId: detail.id,
+      star: 0,
+    });
+    setOpenModal(true);
+  };
   const fetchData = async (id) => {
     await api({
       method: "GET",
@@ -41,12 +61,14 @@ function Ordered(props) {
   const orderStatusText = (status) =>
     orderOptions.map((s) =>
       s.value === status ? (
-        <span key={s.value} style={{ color: `${s.color}` }}>{s.label}</span>
+        <span key={s.value} style={{ color: `${s.color}` }}>
+          {s.label}
+        </span>
       ) : null
     );
 
   return (
-    <div className="flex flex-col gap-y-[20px] w-full">
+    <div className="flex flex-col gap-y-[20px] w-full relative">
       {data.length > 0 &&
         data.map((item) => {
           return (
@@ -86,7 +108,10 @@ function Ordered(props) {
                     <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
                       {item.orderDetailVMs.map((detail) => {
                         return (
-                          <div key={detail.id} className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third">
+                          <div
+                            key={detail.id}
+                            className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third"
+                          >
                             <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
                               <img
                                 src={detail.productOrderVM.imageSrc}
@@ -121,6 +146,9 @@ function Ordered(props) {
                                 }).format(detail.unitPrice * detail.quantity)}
                               </p>
                             </div>
+                            <button onClick={() => handleOpenModal(detail)}>
+                              OpenModal
+                            </button>
                           </div>
                         );
                       })}
@@ -131,6 +159,7 @@ function Ordered(props) {
             </div>
           );
         })}
+      {openModal && <ProductCmt modalData={modalData} setOpenModal={setOpenModal} />}
     </div>
   );
 }

@@ -105,10 +105,10 @@ namespace BLL.Product
             };
 
             #endregion
-            
+
 
             #region Product_Category
-
+            var listPC = new List<ProductCategoryVM>();
             if (createProductVM.CategoryIds.Count > 0)
             {
                 for (int i = 0; i < createProductVM.CategoryIds.Count; i++)
@@ -118,12 +118,7 @@ namespace BLL.Product
                         CategoryId = createProductVM.CategoryIds[i],
                         ProductId = productId
                     };
-                    var pcmBLL = new ProductCategoryBLL();
-                    var pcmCreate = await pcmBLL.Create(pcmVM);
-                    if (pcmCreate == false)
-                    {
-                        return false;
-                    }
+                    listPC.Add(pcmVM);
                 }
             }
 
@@ -155,7 +150,7 @@ namespace BLL.Product
 
             }
 
-            var productCreate = await productDAL.Create(productVM, pictures);
+            var productCreate = await productDAL.Create(productVM, pictures, listPC);
             if (!productCreate)
             {
                 return false;
@@ -227,58 +222,11 @@ namespace BLL.Product
 
             #endregion
 
-            #region Product_Category
-            var pcmBLL = new ProductCategoryBLL();
-            var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
-            if (listProCatMapping.Count > 0)
-            {
-                var delete = await pcmBLL.Delete(id, "ProductId");
+            //var listPC = new List<ProductCategoryVM>();
 
-                if (delete)
-                {
-                    if (updateProductVM.CategoryIds.Count > 0)
-                    {
-                        for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
-                        {
-                            var pcmVM = new ProductCategoryVM
-                            {
-                                CategoryId = updateProductVM.CategoryIds[i],
-                                ProductId = id
-                            };
-                            var pcmCreate = await pcmBLL.Create(pcmVM);
-                            if (pcmCreate == false)
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-                updateProductVM.CategoryIds = null;
-            }
-            updateProductVM.CategoryIds = new List<string>();
-            if (updateProductVM.CategoryIds.Count > 0)
-            {
-                for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
-                {
-                    var pcmVM = new ProductCategoryVM
-                    {
-                        CategoryId = updateProductVM.CategoryIds[i],
-                        ProductId = id
-                    };
-                    var pcmCreate = await pcmBLL.Create(pcmVM);
-                    if (pcmCreate == false)
-                    {
-                        return false;
-                    }
-                }
-            }
-            #endregion
 
-           
+
+
 
             var pictures = new List<PictureVM>();
             if (updateProductVM.Files != null)
@@ -304,13 +252,80 @@ namespace BLL.Product
                     pictures.Add(pictureVM);
                 }
 
-                var saveProduct = await productDAL.Update(productVM, pictures);
-                if (saveProduct == false)
-                {
-                    return false;
-                }
 
             }
+
+            var listPC = new List<ProductCategoryVM>();
+            for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
+            {
+                var pcmVM = new ProductCategoryVM
+                {
+                    CategoryId = updateProductVM.CategoryIds[i],
+                    ProductId = id
+                };
+                listPC.Add(pcmVM);
+            }
+
+            var saveProduct = await productDAL.Update(productVM, pictures, listPC);
+            if (saveProduct == false)
+            {
+                return false;
+            }
+
+            #region Product_Category
+            //var pcmBLL = new ProductCategoryBLL();
+            //var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
+            //if (listProCatMapping.Count > 0)
+            //{
+            //    var delete = await pcmBLL.Delete(id, "ProductId");
+
+            //    if (delete)
+            //    {
+            //        if (updateProductVM.CategoryIds.Count > 0)
+            //        {
+            //            var listPC = new List<ProductCategoryVM>();
+            //            for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
+            //            {
+            //                var pcmVM = new ProductCategoryVM
+            //                {
+            //                    CategoryId = updateProductVM.CategoryIds[i],
+            //                    ProductId = id
+            //                };
+            //                listPC.Add(pcmVM);
+            //            }
+            //            var pcmCreate = await pcmBLL.Create(listPC);
+            //            if (pcmCreate == false)
+            //            {
+            //                return false;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+            //    updateProductVM.CategoryIds = null;
+            //}
+            ////updateProductVM.CategoryIds = new List<string>();
+            //if (updateProductVM.CategoryIds != null)
+            //{
+            //    var listPC = new List<ProductCategoryVM>();
+            //    for (int i = 0; i < updateProductVM.CategoryIds.Count; i++)
+            //    {
+            //        var pcmVM = new ProductCategoryVM
+            //        {
+            //            CategoryId = updateProductVM.CategoryIds[i],
+            //            ProductId = id
+            //        };
+            //        listPC.Add(pcmVM);
+            //    }
+            //    var pcmCreate = await pcmBLL.Create(listPC);
+            //    if (pcmCreate == false)
+            //    {
+            //        return false;
+            //    }
+            //}
+            #endregion
 
             return true;
         }

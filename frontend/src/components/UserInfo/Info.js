@@ -13,7 +13,8 @@ function Info(props) {
   const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/user/${id}`,
+      url: `/user/getbyid`,
+      params: { id: id },
     })
       .then((res) => {
         console.log(res);
@@ -51,7 +52,9 @@ function Info(props) {
               data.birthday === null ? "font-normal" : "font-medium"
             }`}
           >
-            {moment(data.birthday).format("DD-MM-yyyy") || empty}
+            {data.birthday === null
+              ? empty
+              : moment(data.birthday).format("DD-MM-yyyy")}
           </h2>
 
           <h2

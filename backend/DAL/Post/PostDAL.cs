@@ -62,7 +62,7 @@ namespace DAL.Post
                 Name = pictureVM.Name,
                 Published = pictureVM.Published,
                 ObjectId = pictureVM.ObjectId,
-                ObjectType=pictureVM.ObjectType,
+                ObjectType = pictureVM.ObjectType,
             };
 
             await db.Pictures.AddAsync(picture);
@@ -240,7 +240,7 @@ namespace DAL.Post
                 }
                 db.Posts.Remove(resultFromDb);
                 var result = await db.SaveChangesAsync();
-                if (result ==0)
+                if (result == 0)
                 {
                     return false;
                 }
@@ -258,54 +258,79 @@ namespace DAL.Post
                 return false;
             }
         }
-    
+
         public async Task<List<PostCardVM>> PostCards()
         {
             try
             {
-                var resultFromDb = await db.Posts.Where(x => x.Published==true && x.Deleted==false).Select(x => new { x.Id, x.Title,x.Slug, x.ShortDescription, x.View, x.Image, x.CreatedAt }).ToListAsync();
+                //var resultFromDb = await db.Posts.Where(x => x.Published==true && x.Deleted==false).Select(x => new { x.Id, x.Title,x.Slug, x.ShortDescription, x.View, x.Image, x.CreatedAt }).ToListAsync();
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId
+                                          where pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          select new PostCardVM
+                                          {
+                                              Id = post.Id,
+                                              Title=post.Title,
+                                              Slug=post.Slug,
+                                              ShortDescription=post.ShortDescription,
+                                              View=post.View,
+                                              Image=pic.Name,
+                                              CreatedAt=post.CreatedAt,
+                                          }).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<PostCardVM>();
                 }
-                var result = resultFromDb.Select(x => new PostCardVM
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Slug = x.Slug,
-                    ShortDescription = x.ShortDescription,
-                    View = x.View,
-                    Image = x.Image,
-                    CreatedAt = x.CreatedAt,
-                }).ToList();
-                return result;
+                //var result = resultFromDb.Select(x => new PostCardVM
+                //{
+                //    Id = x.Id,
+                //    Title = x.Title,
+                //    Slug = x.Slug,
+                //    ShortDescription = x.ShortDescription,
+                //    View = x.View,
+                //    Image = x.Image,
+                //    CreatedAt = x.CreatedAt,
+                //}).ToList();
+                return resultFromDb;
             }
             catch
             {
                 return null;
             }
         }
-    
+
         public async Task<PostDetailVM> PostDetail(string slug)
         {
             try
             {
-                var resultFromDb = await db.Posts.Select(x => new { x.Title, x.Slug, x.ShortDescription, x.FullDescription, x.View, x.Image, x.CreatedAt }).SingleOrDefaultAsync(x => x.Slug == slug);
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId
+                                          where post.Slug==slug && pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          select new PostDetailVM
+                                          {
+                                              Title = post.Title,
+                                              Slug = post.Slug,
+                                              ShortDescription = post.ShortDescription,
+                                              FullDescription = post.FullDescription,
+                                              View = post.View,
+                                              Image = pic.Name,
+                                              CreatedAt = post.CreatedAt,
+                                          }).SingleOrDefaultAsync();
                 if (resultFromDb == null)
                 {
                     return null;
                 }
-                var result = new PostDetailVM
-                {
-                    Title = resultFromDb.Title,
-                    Slug = resultFromDb.Slug,
-                    ShortDescription = resultFromDb.ShortDescription,
-                    FullDescription = resultFromDb.FullDescription,
-                    View = resultFromDb.View,
-                    Image = resultFromDb.Image,
-                    CreatedAt = resultFromDb.CreatedAt,
-                };
-                return result;
+                //var result = new PostDetailVM
+                //{
+                //    Title = resultFromDb.Title,
+                //    Slug = resultFromDb.Slug,
+                //    ShortDescription = resultFromDb.ShortDescription,
+                //    FullDescription = resultFromDb.FullDescription,
+                //    View = resultFromDb.View,
+                //    Image = resultFromDb.Image,
+                //    CreatedAt = resultFromDb.CreatedAt,
+                //};
+                return resultFromDb;
             }
             catch
             {

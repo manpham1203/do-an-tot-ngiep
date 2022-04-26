@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using BLL.Picture;
 
 namespace BLL.User
 {
@@ -108,6 +109,20 @@ namespace BLL.User
         {
             return await userDAL.GetByUsername(username);
         }
+        public async Task<UserInfoClientVM> GetById(string id)
+        {
+            var user = await userDAL.GetById(id);
+            if (user != null)
+            {
+                var picBLL = new PictureBLL();
+                var pic = await picBLL.GetByObjectId(user.Id, "user");
+                if (pic != null && pic.Count > 0)
+                {
+                    user.ImageName = pic[0].Name;
+                }
+            }
+            return user;
+        }
         public static string ToSHA256(string s)
         {
             var str = Encoding.ASCII.GetBytes(s);
@@ -191,6 +206,15 @@ namespace BLL.User
                 return null;
             }
             var user = await GetByUsername(model.Username);
+            if (user != null)
+            {
+                var picBLL = new PictureBLL();
+                var pic = await picBLL.GetByObjectId(user.Id, "user");
+                if (pic != null && pic.Count>0)
+                {
+                    user.ImageName = pic[0].Name;
+                }
+            }
 
             return user;
         }

@@ -2,6 +2,7 @@
 using BO.ViewModels.ProductCategory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -44,7 +45,7 @@ namespace backend.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ProductCategoryVM model)
+        public async Task<IActionResult> Create(List<ProductCategoryVM> model)
         {
             try
             {

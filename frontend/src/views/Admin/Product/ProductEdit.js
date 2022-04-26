@@ -68,18 +68,18 @@ const reducer = (state, action) => {
   }
 };
 const schema = yup
-  .object({
-    name: yup.string().required("Thông tin này không được để trống").trim(),
-    shortDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-    // fullDescription: yup
-    //   .string()
-    //   .required("Thông tin này không được để trống")
-    //   .trim(),
-  })
-  .required();
+.object({
+  name: yup.string().required("Thông tin này không được để trống").trim(),
+  price: yup.string().required("Thông tin này không được để trống").trim(),
+  quantityInStock: yup.string().required("Thông tin này không được để trống").trim(),
+  brandId: yup.object().required("Thông tin này không được để trống"),
+  categoryIds: yup.array().required("Thông tin này không được để trống"),
+  shortDescription: yup
+    .string()
+    .required("Thông tin này không được để trống")
+    .trim(),
+})
+.required();
 function ProductEdit(props) {
   const {
     handleSubmit,
@@ -91,7 +91,7 @@ function ProductEdit(props) {
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: { published: true, formFile: [] },
   });
@@ -99,9 +99,13 @@ function ProductEdit(props) {
   const { slug } = useParams();
   const [image, setImage] = useState([]);
   const [files, setFiles] = useState([]);
-
+console.log(state);
   const onSubmitHandler = async (values) => {
-    if(richText===""){
+    if(values.priceDiscount===null){
+      values.priceDiscount=""
+    }
+    console.log((values.priceDiscount));
+    if (richText === "") {
       return;
     }
     const formData = new FormData();
@@ -110,7 +114,11 @@ function ProductEdit(props) {
     formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
     formData.append("price", parseFloat(values.price));
-    formData.append("priceDiscount", parseFloat(values.priceDiscount));
+    if (values.priceDiscount !== "") {
+      // formData.append("priceDiscount", null);
+      formData.append("priceDiscount", parseFloat(values.priceDiscount));
+    }
+    formData.append("quantityInStock", parseInt(values.quantityInStock));
     formData.append("brandId", values.brandId.id);
     for (var j = 0; j < values.categoryIds.length; j++) {
       formData.append("categoryIds", values.categoryIds[j].id);
@@ -159,26 +167,22 @@ function ProductEdit(props) {
         reset({
           name: res.data.name,
           shortDescription: res.data.shortDescription,
-          published:res.data.published,
-          brandId:res.data.brandVM,
-          categoryIds:res.data.categoryVMs,
-          price:res.data.price,
-          priceDiscount:res.data.priceDiscount,
-          quantity:res.data.quantity
+          published: res.data.published,
+          brandId: res.data.brandVM,
+          categoryIds: res.data.categoryVMs,
+          price: res.data.price,
+          priceDiscount: res.data.priceDiscount,
+          quantityInStock: res.data.quantityInStock,
         });
         // setCategorySelected(res.data.categoryVMs)
-        setRichText(res.data.fullDescription)
+        setRichText(res.data.fullDescription);
       })
       .catch(dispatch(fail()));
   };
 
-  
-
   useEffect(() => {
     fetchData(slug);
   }, [slug]);
-
-
 
   const selectFile = (e) => {
     const file = e.target.files;
@@ -198,7 +202,7 @@ function ProductEdit(props) {
   const handlepublished = async (id) => {
     await api({
       method: "POST",
-      url: `/productImage/published/${id}`,
+      url: `/picture/published/${id}`,
     })
       .then((res) => {
         if (res.status === 200) {
@@ -220,7 +224,7 @@ function ProductEdit(props) {
   const handleDelete = async (id) => {
     await api({
       method: "Delete",
-      url: `/productImage/${id}`,
+      url: `/picture/${id}`,
     })
       .then((res) => {
         if (res.status === 200) {
@@ -243,14 +247,15 @@ function ProductEdit(props) {
         })
       );
   };
-  useEffect(()=>{
-    setRichText(state.data.fullDescription)
-  }, [state.data])
-  const [richText, setRichText]=useState();
+  useEffect(() => {
+    setRichText(state.data.fullDescription);
+  }, [state.data]);
+  const [richText, setRichText] = useState();
   const fetchDataCategory = async () => {
     return await api({
       method: "GET",
-      url: `/category`,
+      url: `/category/allcategorynamedeleted`,
+      params: { deleted: false },
     }).then((res) => {
       return res.data;
     });
@@ -258,13 +263,15 @@ function ProductEdit(props) {
   const fetchDataBrand = async () => {
     return await api({
       method: "GET",
-      url: `/brand`,
+      url: `/brand/allbrandnamedeleted`,
+      params: { deleted: false },
     }).then((res) => {
       return res.data;
     });
   };
   const [brandSelected, setBrandSelected] = useState(null);
   const [categorySelected, setCategorySelected] = useState([]);
+  console.log(errors);
   return (
     <div className="">
       <form
@@ -404,16 +411,16 @@ function ProductEdit(props) {
         <div className="">
           <AdminInput
             control={control}
-            name="quantity"
+            name="quantityInStock"
             label="Số lượng"
             type="text"
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.quantity ? null : "invisible"
+              errors?.quantityInStock ? null : "invisible"
             }`}
           >
-            {errors?.quantity?.message}
+            {errors?.quantityInStock?.message}
           </p>
         </div>
         <div className="">
@@ -434,7 +441,7 @@ function ProductEdit(props) {
         <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
-       
+
         <div>
           <CKEditor
             onChange={(e) => setRichText(e.editor.getData())}
@@ -442,7 +449,7 @@ function ProductEdit(props) {
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              richText==="" ? null : "invisible"
+              richText === "" ? null : "invisible"
             }`}
           >
             Thông tin này không được để trống
@@ -481,7 +488,7 @@ function ProductEdit(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {state.data?.productImageVMs?.map((item) => {
+                  {state.data?.pictureVMs?.map((item) => {
                     return (
                       <tr
                         className="bg-white border-b  hover:bg-gray-50 "

@@ -68,7 +68,7 @@ function Register(props) {
 
   //   check username
   useEffect(() => {
-    if (query !== undefined) {
+    if (watchUsername !== undefined) {
       const fetchData = async (w) => {
         await api({
           method: "POST",

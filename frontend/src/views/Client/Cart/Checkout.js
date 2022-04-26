@@ -333,7 +333,7 @@ console.log(errors)
                 className="flex flex-row justify-between pt-[20px] border-b pb-[20px] border-[#EBEBEB]"
               >
                 <div className="font-light max-w-[220px]">
-                  {cart?.item?.name}
+                  {cart?.item?.name} (x{cart?.qty})
                 </div>
                 <div className="font-light w-[110px] text-right">
                   {cart?.item?.currentPrice * cart?.qty}

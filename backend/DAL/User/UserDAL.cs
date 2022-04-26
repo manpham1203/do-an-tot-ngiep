@@ -169,31 +169,99 @@ namespace DAL.User
         //}
         public async Task<UserInfoClientVM> GetByUsername(string username)
         {
-            //var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Username == username);
-            var resultFromDb = await (from u in db.Users
-                                      join p in db.Pictures on u.Id equals p.ObjectId
-                                      where u.Username == username
-                                      select new UserInfoClientVM
-                                      {
-                                          Id=u.Id,
-                                          Username = u.Username,
-                                          FirstName=u.FirstName,
-                                          LastName=u.LastName,
-                                          Birthday=u.Birthday,
-                                          Email=u.Email,
-                                          PhoneNumber=u.PhoneNumber,
-                                          Address=u.Address,
-                                          Role=u.Role,
-                                          CreatedAt=u.CreatedAt,
-                                          ImageName=p.Name,
-                                          ImageSrc=null,
-                                      }
-                                   ).SingleOrDefaultAsync();
-            if (resultFromDb == null)
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Username == username);
+            //var picture = await db.Pictures.Where(x=>x.ObjectType=="user").SingleOrDefaultAsync(x => x.ObjectId == userFromDb.Id);
+            if (userFromDb == null)
             {
                 return null;
             }
-            return resultFromDb;
+            else
+            {
+                var result = new UserInfoClientVM
+                {
+                    Id = userFromDb.Id,
+                    Username = userFromDb.Username,
+                    FirstName = userFromDb.FirstName,
+                    LastName = userFromDb.LastName,
+                    Birthday = userFromDb.Birthday,
+                    Email = userFromDb.Email,
+                    PhoneNumber = userFromDb.PhoneNumber,
+                    Address = userFromDb.Address,
+                    Role = userFromDb.Role,
+                    CreatedAt = userFromDb.CreatedAt,
+                    ImageName = null,
+                    ImageSrc = null,
+                };
+                return result;
+
+            }
+
+            //var resultFromDb = await db.Users.GroupJoin(
+            //    db.Pictures,
+            //    u => u.Id,
+            //    p => p.ObjectId,
+            //    (x, y) => new { u = x, p = y }
+            //    ).Where(x=>x.u.Username==username)
+            //    .SelectMany(x => x.p.DefaultIfEmpty(), (x, y) => new UserInfoClientVM
+            //    {
+            //        Id = x.u.Id,
+            //        Username = x.u.Username,
+            //        FirstName = x.u.FirstName,
+            //        LastName = x.u.LastName,
+            //        Birthday = x.u.Birthday,
+            //        Email = x.u.Email,
+            //        PhoneNumber = x.u.PhoneNumber,
+            //        Address = x.u.Address,
+            //        Role = x.u.Role,
+            //        CreatedAt = x.u.CreatedAt,
+            //        ImageName = y.Name,
+            //        ImageSrc = null,
+            //    }).SingleOrDefaultAsync();
+
+            //var resultFromDb = await (from u in db.Users
+            //                          join p in db.Pictures on u.Id equals p.ObjectId
+            //                          where u.Username == username && p.ObjectId==u.Id
+            //                          select new UserInfoClientVM
+            //                          {
+            //                              Id=u.Id,
+            //                              Username = u.Username,
+            //                              FirstName=u.FirstName,
+            //                              LastName=u.LastName,
+            //                              Birthday=u.Birthday,
+            //                              Email=u.Email,
+            //                              PhoneNumber=u.PhoneNumber,
+            //                              Address=u.Address,
+            //                              Role=u.Role,
+            //                              CreatedAt=u.CreatedAt,
+            //                              ImageName=p.Name,
+            //                              ImageSrc=null,
+            //                          }
+            //                       ).SingleOrDefaultAsync();
+
+        }
+        public async Task<UserInfoClientVM> GetById(string id)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
+            var result = new UserInfoClientVM
+            {
+                Id = userFromDb.Id,
+                Username = userFromDb.Username,
+                FirstName = userFromDb.FirstName,
+                LastName = userFromDb.LastName,
+                Birthday = userFromDb.Birthday,
+                Email = userFromDb.Email,
+                PhoneNumber = userFromDb.PhoneNumber,
+                Address = userFromDb.Address,
+                Role = userFromDb.Role,
+                CreatedAt = userFromDb.CreatedAt,
+                ImageName = null,
+                ImageSrc = null,
+            };
+            if (result == null)
+            {
+                return null;
+            }
+            return result;
         }
 
         public async Task<bool> Register(UserVM userVM)

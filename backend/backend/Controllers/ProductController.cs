@@ -95,6 +95,10 @@ namespace backend.Controllers
                 if (ModelState.IsValid)
                 {
                     var result = await productBLL.Update(id, model);
+                    if (result == false)
+                    {
+                        return BadRequest();
+                    }
                     if (result && (model.Files != null))
                     {
                         var saveFile = await SaveFile(model.Files, model.ImageNames);
@@ -167,28 +171,28 @@ namespace backend.Controllers
 
         //}
 
-        //[HttpGet("productfullgetbyslug/{slug}")]
-        //public async Task<IActionResult> ProductFullGetBySlug(string slug)
-        //{
-        //    try
-        //    {
-        //        var productFullVM = await productFullBLL.GetBySlug(slug);
+        [HttpGet("productfullgetbyslug/{slug}")]
+        public async Task<IActionResult> ProductFullGetBySlug(string slug)
+        {
+            try
+            {
+                var productFullVM = await productFullBLL.GetBySlug(slug);
 
-        //        if (productFullVM == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        for (int i = 0; i < productFullVM.ProductImageVMs.Count; i++)
-        //        {
-        //            productFullVM.ProductImageVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.ProductImageVMs[i].Name);
-        //        }
-        //        return Ok(productFullVM);
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+                if (productFullVM == null)
+                {
+                    return NotFound();
+                }
+                for (int i = 0; i < productFullVM.PictureVMs.Count; i++)
+                {
+                    productFullVM.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.PictureVMs[i].Name);
+                }
+                return Ok(productFullVM);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
         [NonAction]
         public async Task<bool> SaveFile(List<IFormFile> files, List<string> imgName)

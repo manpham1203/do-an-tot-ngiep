@@ -37,7 +37,7 @@ namespace BLL.ProductCategory
             return result;
         }
 
-        public async Task<bool> Create(ProductCategoryVM model)
+        public async Task<bool> Create(List<ProductCategoryVM> model)
         {
             return await pcmDAL.Create(model);
         }

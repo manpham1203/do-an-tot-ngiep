@@ -144,7 +144,8 @@ function ProductCreate(props) {
   const fetchDataCategory = async () => {
     return await api({
       method: "GET",
-      url: `/category`,
+      url: `/category/allcategorynamedeleted`,
+      params:{deleted:false}
     }).then((res) => {
       return res.data;
     });
@@ -152,7 +153,8 @@ function ProductCreate(props) {
   const fetchDataBrand = async () => {
     return await api({
       method: "GET",
-      url: `/brand`,
+      url: `/brand/allbrandnamedeleted`,
+      params:{deleted:false}
     }).then((res) => {
       return res.data;
     });

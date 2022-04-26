@@ -4,6 +4,7 @@ using BO.ViewModels.Brand;
 using BO.ViewModels.Category;
 using BO.ViewModels.Picture;
 using BO.ViewModels.Product;
+using BO.ViewModels.ProductCategory;
 using BO.ViewModels.ProductImage;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -106,7 +107,7 @@ namespace DAL.Product
             }).ToList();
             return productVMs;
         }
-        public async Task<bool> Create(ProductVM productVM, List<PictureVM> pictureVMs)
+        public async Task<bool> Create(ProductVM productVM, List<PictureVM> pictureVMs, List<ProductCategoryVM> pcVMs)
         {
 
             var product = new BO.Entities.Product
@@ -135,6 +136,18 @@ namespace DAL.Product
                 return false;
             }
 
+            var productCategoryVM = pcVMs.Select(x => new BO.Entities.ProductCategory
+            {
+                CategoryId = x.CategoryId,
+                ProductId = x.ProductId,
+            });
+            await db.Product_Category_Mappings.AddRangeAsync(productCategoryVM);
+            var resultPC = await db.SaveChangesAsync();
+            if (resultPC == 0)
+            {
+                return false;
+            }
+
             var pictutes = pictureVMs.Select(x => new BO.Entities.Picture
             {
                 Id = x.Id,
@@ -154,7 +167,7 @@ namespace DAL.Product
             return true;
 
         }
-        public async Task<bool> Update(ProductVM productVM, List<PictureVM> pictureVMs)
+        public async Task<bool> Update(ProductVM productVM, List<PictureVM> pictureVMs, List<ProductCategoryVM> pcVMs)
         {
 
             var productFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == productVM.Id);
@@ -178,6 +191,25 @@ namespace DAL.Product
             {
                 return false;
             }
+            var productCategory = pcVMs.Select(x => new BO.Entities.ProductCategory
+            {
+                CategoryId = x.CategoryId,
+                ProductId = x.ProductId,
+            }).ToList();
+            var listCurrentPC = await db.Product_Category_Mappings.Where(x => x.ProductId == productFromDb.Id).ToListAsync();
+            db.Product_Category_Mappings.RemoveRange(listCurrentPC);
+            var resultPCDelete=await db.SaveChangesAsync();
+            if (resultPCDelete != listCurrentPC.Count)
+            {
+                return false;
+            }
+            
+            await db.Product_Category_Mappings.AddRangeAsync(productCategory);
+            var resultPC = await db.SaveChangesAsync();
+            if (resultPC != pcVMs.Count)
+            {
+                return false;
+            }
 
 
             var pictutes = pictureVMs.Select(x => new BO.Entities.Picture
@@ -196,7 +228,7 @@ namespace DAL.Product
                 return false;
             }
 
-            return false;
+            return true;
 
         }
         public async Task<bool> Delete(string id)

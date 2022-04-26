@@ -56,17 +56,17 @@ namespace DAL.ProductCategory
             return objVM;
         }
         
-        public async Task<bool> Create(ProductCategoryVM model)
+        public async Task<bool> Create(List<ProductCategoryVM> model)
         {
 
-            var ProductCategory = new BO.Entities.ProductCategory
+            var ProductCategory = model.Select(x=>new BO.Entities.ProductCategory
             {
-                ProductId = model.ProductId,
-                CategoryId = model.CategoryId,
-            };
-            await db.Product_Category_Mappings.AddAsync(ProductCategory);
+                ProductId = x.ProductId,
+                CategoryId = x.CategoryId,
+            }).ToList();
+            await db.Product_Category_Mappings.AddRangeAsync(ProductCategory);
             var result = await db.SaveChangesAsync();
-            if (result > 0)
+            if (result ==model.Count)
             {
                 return true;
             }
