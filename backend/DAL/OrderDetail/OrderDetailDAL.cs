@@ -43,7 +43,7 @@ namespace DAL.OrderDetail
             }
         }
     
-        public async Task<List<OrderDetailVM>> GetDetailByOrderId(string orderId)
+        public async Task<List<OrderDetailVM>> GetListDetailByOrderId(string orderId)
         {
             try
             {
@@ -73,5 +73,21 @@ namespace DAL.OrderDetail
             }
         }
     
+        public async Task<bool> CheckCommented(string userId, string productId, string detailId)
+        {
+            try
+            {
+                var resultFromDb = await (from c in db.Comments where c.UserId == userId && c.ObjectId == productId && c.OrderDetailId == detailId select c.Id).SingleOrDefaultAsync();
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return true;
+            }
+        }
     }
 }

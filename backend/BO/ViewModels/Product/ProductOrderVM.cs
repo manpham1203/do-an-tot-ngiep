@@ -16,5 +16,6 @@ namespace BO.ViewModels.Product
         public string ImageSrc { get; set; }
         public string BrandId { get; set; }
         public BrandNameVM BrandNameVM { get; set; }
+        public bool Commented { get; set; }
     }
 }

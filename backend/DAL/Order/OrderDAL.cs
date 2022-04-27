@@ -124,7 +124,7 @@ namespace DAL.Order
                     DeliveryEmail = x.DeliveryEmail,
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
-                    OrderDetailVMs = new List<OrderDetailVM>()
+                    OrderDetailVMs = null,
                 }).ToList();
                 return order;
             }

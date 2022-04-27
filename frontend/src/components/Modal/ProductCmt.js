@@ -33,6 +33,7 @@ function ProductCmt(props) {
             autoClose: 1000,
           });
           props.setOpenModal(false);
+          props.setFetchDetail(props.modalData.OrderDetailId);
         } else {
           toast.error(`Gửi đánh giá thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -57,7 +58,7 @@ function ProductCmt(props) {
   console.log(star);
 
   return (
-    <div className="absolute w-[80%] h-[300px] bg-white rounded-xl shadow-admin left-[50%] translate-x-[-50%]">
+    <div className="fixed w-[600px] h-[300px] top-[150px] z-[100] bg-white rounded-xl shadow-admin left-[50%] translate-x-[-50%]">
       <div className="w-full text-right text-[30px]">
         <button onClick={() => props.setOpenModal(false)} className="m-[10px]">
           <FaTimes />

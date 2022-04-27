@@ -32,5 +32,40 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("ProductCmtItem")]
+        public async Task<IActionResult> ProductCmtItem(string id)
+        {
+            try
+            {
+                var resultFromDb = await productCmtBLL.CommentItem(id);
+                if (resultFromDb == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromDb);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("IdsOfProduct")]
+        public async Task<IActionResult> IdsOfProduct(string id)
+        {
+            try
+            {
+                var resultFromDb = await productCmtBLL.IdsOfProduct(id);
+                if (resultFromDb == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromDb);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

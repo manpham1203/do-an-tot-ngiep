@@ -7,6 +7,7 @@ import "moment/locale/nl";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import ProductCmt from "../Modal/ProductCmt";
+import OrderDetailOfOrdered from "./OrderDetailOfOrdered";
 
 function Ordered(props) {
   const orderOptions = [
@@ -18,6 +19,7 @@ function Ordered(props) {
   ];
   const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [fetchDetail, setFetchDetail] = useState();
   const [modalData, setModalData] = useState({
     userId: props.userId,
     content: "",
@@ -25,12 +27,13 @@ function Ordered(props) {
     OrderDetailId: "",
     star: 0,
   });
-  const handleOpenModal = (detail) => {
+  const handleOpenModal = (item) => {
+    console.log(item);
     setModalData({
       ...modalData,
       userId: props.userId,
-      ObjectId: detail.productOrderVM.id,
-      OrderDetailId: detail.id,
+      ObjectId: item.productOrderVM.id,
+      OrderDetailId: item.id,
     });
     setOpenModal(true);
   };
@@ -64,112 +67,84 @@ function Ordered(props) {
         </span>
       ) : null
     );
-
+  useEffect(() => {
+    if (openModal) {
+      document.body.style.overflow = "hidden";
+    }
+    else{
+      document.body.style.overflow = "scroll";
+    }
+  }, [openModal]);
   return (
-    <div className="flex flex-col gap-y-[20px] w-full relative">
-      {data.length > 0 &&
-        data.map((item) => {
-          return (
-            <div key={item.id} className="bg-white shadow-md rounded-md">
-              <div
-                onClick={() => handlerOpenItemOrder(item.id)}
-                className="bg-white shadow-md w-full rounded-md flex flex-row items-center justify-between px-[20px] cursor-pointer"
-              >
-                <div className="flex flex-row gap-x-[20px] rounded-md  py-[15px]">
-                  <div>Mã đơn hàng: {item.id}</div>
-                  <div>|</div>
-                  <div>Trạng thái đơn hàng: {orderStatusText(item.status)}</div>
+    <>
+      <div className="flex flex-col gap-y-[20px] w-full relative">
+        {data.length > 0 &&
+          data.map((item) => {
+            return (
+              <div key={item.id} className="bg-white shadow-md rounded-md">
+                <div
+                  onClick={() => handlerOpenItemOrder(item.id)}
+                  className="bg-white shadow-md w-full rounded-md flex flex-row items-center justify-between px-[20px] cursor-pointer"
+                >
+                  <div className="flex flex-row gap-x-[20px] rounded-md  py-[15px]">
+                    <div>Mã đơn hàng: {item.id}</div>
+                    <div>|</div>
+                    <div>
+                      Trạng thái đơn hàng: {orderStatusText(item.status)}
+                    </div>
+                  </div>
+                  {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
                 </div>
-                {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
+                {itemOrder === item.id && (
+                  <div className="py-[20px] px-[20px] relative">
+                    {openModal && (
+                      <ProductCmt
+                        modalData={modalData}
+                        setOpenModal={setOpenModal}
+                        setFetchDetail={setFetchDetail}
+                      />
+                    )}
+                    <div>
+                      <div>
+                        Tên người nhận: {item.lastName + " " + item.firstName}
+                      </div>
+                      <div>Địa chỉ nhận hàng: {item.deliveryAddress}</div>
+                      <div>Chiết khấu: {item.discount}</div>
+                      <div>
+                        Tổng hoá đơn:{" "}
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(item.amount)}
+                      </div>
+                      <div>
+                        Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
+                      </div>
+                    </div>
+                    <div className="">
+                      <h2 className="mb-[20px]">Sản phẩm đã mua:</h2>
+                      <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px] ">
+                        <OrderDetailOfOrdered
+                          orderId={item.id}
+                          handleOpenModal={handleOpenModal}
+                          userId={props.userId}
+                          fetchDetail={fetchDetail}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              {itemOrder === item.id && (
-                <div className="py-[20px] px-[20px] relative">
-                  {openModal && (
-                    <ProductCmt
-                      modalData={modalData}
-                      setOpenModal={setOpenModal}
-                    />
-                  )}
-                  <div>
-                    <div>
-                      Tên người nhận: {item.lastName + " " + item.firstName}
-                    </div>
-                    <div>Địa chỉ nhận hàng: {item.deliveryAddress}</div>
-                    <div>Chiết khấu: {item.discount}</div>
-                    <div>
-                      Tổng hoá đơn:{" "}
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.amount)}
-                    </div>
-                    <div>
-                      Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
-                    </div>
-                  </div>
-                  <div className="">
-                    <h2 className="mb-[20px]">Sản phẩm đã mua:</h2>
-                    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px] ">
-                      {item.orderDetailVMs.map((detail) => {
-                        return (
-                          <div
-                            key={detail.id}
-                            className="flex flex-col  gap-y-[10px] rounded-md bg-third "
-                          >
-                            <div className="flex flex-row  p-[10px] gap-x-[10px]">
-                              <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
-                                <img
-                                  src={detail.productOrderVM.imageSrc}
-                                  alt={detail.productOrderVM.imageName}
-                                  className="w-full h-full object-cover object-center"
-                                />
-                              </div>
-                              <div className="flex flex-col grow-[1] bg-white rounded-md p-[10px] gap-y-[2px]">
-                                <Link
-                                  to={`/san-pham?brand=${detail.productOrderVM.brandNameVM.slug}`}
-                                >
-                                  {detail.productOrderVM.brandNameVM.name}
-                                </Link>
-                                <Link
-                                  to={`/san-pham/${detail.productOrderVM.slug}`}
-                                >
-                                  {detail.productOrderVM.name}
-                                </Link>
-                                <p>Số lượng: {detail.quantity}</p>
-                                <p>
-                                  Đơn giá:{" "}
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(detail.unitPrice)}
-                                </p>
-                                <p>
-                                  Thành tiền:{" "}
-                                  {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }).format(detail.unitPrice * detail.quantity)}
-                                </p>
-                              </div>
-                            </div>
-
-                            <button
-                              onClick={() => handleOpenModal(detail)}
-                              className="border-2 border-second px-[20px] h-[40px] w-fit self-center"
-                            >
-                              Đánh Giá
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-    </div>
+            );
+          })}
+      </div>
+      <div
+        onClick={() => setOpenModal(false)}
+        className={`${
+          openModal ? null : "hidden"
+        }  w-100% h-screen bg-[black] opacity-[0.5] fixed top-0 left-0 right-0 bottom-0 z-[7] transition-all duration-[0.3s]`}
+      ></div>
+    </>
   );
 }
 

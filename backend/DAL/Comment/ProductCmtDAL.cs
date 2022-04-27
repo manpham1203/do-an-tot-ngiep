@@ -72,7 +72,7 @@ namespace DAL.Comment
                     ObjectId = model.ObjectId,
                     ObjectType = model.ObjectType,
                     OrderDetailId = model.OrderDetailId,
-                    CreatedAt=model.CreatedAt,
+                    CreatedAt = model.CreatedAt,
                 };
                 await db.Comments.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -86,6 +86,52 @@ namespace DAL.Comment
             {
                 return false;
 
+            }
+        }
+
+        public async Task<ProductCmtVM> CommentItem(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Comments.SingleOrDefaultAsync(x=>x.Id==id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new ProductCmtVM
+                {
+                    Id = resultFromDb.Id,
+                    UserId = resultFromDb.UserId,
+                    Content = resultFromDb.Content,
+                    ObjectId = resultFromDb.ObjectId,
+                    ObjectType = resultFromDb.ObjectType,
+                    OrderDetailId = resultFromDb.OrderDetailId,
+                    Star = resultFromDb.Star,
+                    CreatedAt = resultFromDb.CreatedAt,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
+        public async Task<List<string>> IdsOfProduct(string productId)
+        {
+            try
+            {
+                var resultFromDb = await db.Comments.Where(x => x.ObjectId == productId && x.ObjectType == "product").ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<string>();
+                }
+                var result = resultFromDb.Select(x => x.Id).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

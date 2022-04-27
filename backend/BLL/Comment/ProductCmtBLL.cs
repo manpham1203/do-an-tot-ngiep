@@ -60,5 +60,28 @@ namespace BLL.Comment
                 return false;
             }
         }
+    
+        public async Task<ProductCmtVM> CommentItem(string id)
+        {
+            try
+            {
+                return await productCmtDAL.CommentItem(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<string>> IdsOfProduct(string productId)
+        {
+            try
+            {
+                return await productCmtDAL.IdsOfProduct(productId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

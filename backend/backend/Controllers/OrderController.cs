@@ -104,13 +104,6 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
-                for (int i = 0; i < resultFromBLL.Count; i++)
-                {
-                    for (int j = 0; j < resultFromBLL[i].OrderDetailVMs.Count; j++)
-                    {
-                        resultFromBLL[i].OrderDetailVMs[j].ProductOrderVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].OrderDetailVMs[j].ProductOrderVM.ImageName);
-                    }
-                }
                 return Ok(resultFromBLL);
             }
             catch

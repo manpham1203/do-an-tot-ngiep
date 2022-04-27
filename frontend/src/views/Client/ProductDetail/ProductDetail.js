@@ -18,6 +18,7 @@ import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
 import RelatedProducts from "../../../components/Product/RelatedProducts";
+import Comment from "../../../components/Comment/Comment";
 
 const initState = {
   loading: false,
@@ -149,6 +150,7 @@ function ProductDetail() {
     }
   };
 
+  console.log(state);
   return (
     <div className="container mx-auto">
       {state.loading ? (
@@ -270,6 +272,8 @@ function ProductDetail() {
             className="text-justify"
             dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
           ></div>
+          <h2 className="text-[25px] mb-[25px] mt-[25px]">Đánh giá sản phẩm</h2>
+          {state?.data?.id && <Comment id={state.data.id} />}
         </div>
         <div className="w-[350px]">
           <BrandWidget />

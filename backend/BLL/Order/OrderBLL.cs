@@ -71,7 +71,7 @@ namespace BLL.Order
                 var detailBLL = new OrderDetailBLL();
                 for (int i = 0; i < resultFromDAL.Count; i++)
                 {
-                    var detail = await detailBLL.GetDetailByOrderId(resultFromDAL[i].Id);
+                    var detail = await detailBLL.GetListDetailByOrderId(resultFromDAL[i].Id);
                     if (detail != null)
                     {
                         resultFromDAL[i].OrderDetailVMs = detail;
@@ -101,7 +101,7 @@ namespace BLL.Order
                 var detailBLL = new OrderDetailBLL();
                 for (int i = 0; i < resultFromDAL.Count; i++)
                 {
-                    var detail = await detailBLL.GetDetailByOrderId(resultFromDAL[i].Id);
+                    var detail = await detailBLL.GetListDetailByOrderId(resultFromDAL[i].Id);
                     if (detail != null)
                     {
                         resultFromDAL[i].OrderDetailVMs = detail;
@@ -128,15 +128,15 @@ namespace BLL.Order
                 {
                     return new List<OrderVM>();
                 }
-                var detailBLL = new OrderDetailBLL();
-                for (int i = 0; i < resultFromDAL.Count; i++)
-                {
-                    var detail = await detailBLL.GetDetailByOrderId(resultFromDAL[i].Id);
-                    if (detail != null)
-                    {
-                        resultFromDAL[i].OrderDetailVMs = detail;
-                    }
-                }
+                //var detailBLL = new OrderDetailBLL();
+                //for (int i = 0; i < resultFromDAL.Count; i++)
+                //{
+                //    var detail = await detailBLL.GetDetailByOrderId(resultFromDAL[i].Id);
+                //    if (detail != null)
+                //    {
+                //        resultFromDAL[i].OrderDetailVMs = detail;
+                //    }
+                //}
 
                 return resultFromDAL;
             }
@@ -165,22 +165,10 @@ namespace BLL.Order
                     var detail = await detailBLL.OrderedProduct(resultFromDAL[i].Id);
                     tempList.AddRange(detail);
                 }
-                for(int i = 0; i < tempList.Count; i++)
-                {
-                    for(int j = 0; j < tempList.Count; j++)
-                    {
-                        if (i == j)
-                        {
-                            continue;
-                        }
-                        if(tempList[i].ProductId == tempList[j].ProductId)
-                        {
-                            tempList.Remove(tempList[j]);
-                        }
-                    }
-                }
 
-                return tempList;
+                List<OrderDetailVM> resultList = tempList.GroupBy(x=>x.ProductId).Select(x=>x.First()).ToList();
+
+                return resultList;
             }
             catch
             {
