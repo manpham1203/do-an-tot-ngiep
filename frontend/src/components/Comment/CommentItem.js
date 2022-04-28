@@ -3,6 +3,7 @@ import api from "../../apis/api";
 import { AiFillStar } from "react-icons/ai";
 import * as moment from "moment";
 import "moment/locale/nl";
+import defaultuser from "../../assets/defaultuser.png";
 
 function CommentItem(props) {
   const [data, setData] = useState([]);
@@ -27,12 +28,12 @@ function CommentItem(props) {
       <div className="w-[150px] flex flex-col justify-center items-center gap-y-[10px]">
         <div className="w-[100px] h-[100px]">
           <img
-            src=""
+            src={data.imageSrc || defaultuser}
             alt=""
             className="w-full h-full object-cover object-center "
           />
         </div>
-        <h2 className="text-center">Tên</h2>
+        <h2 className="text-center">{data.fullName}</h2>
         {data?.star && data.star === 1 ? (
           <div className="flex flex-row items-center text-gray-400 justify-center">
             <AiFillStar className="text-[#F7BF63]" />
@@ -77,7 +78,9 @@ function CommentItem(props) {
       </div>
 
       <div className="font-light">
-        <p className="italic text-gray-400 mb-[5px]">{moment(data.createdAt).startOf('hour').fromNow()}</p>
+        <p className="italic text-gray-400 mb-[5px]">
+          {moment(data.createdAt).startOf("hour").fromNow()}
+        </p>
         <p>{data.content}</p>
       </div>
     </div>

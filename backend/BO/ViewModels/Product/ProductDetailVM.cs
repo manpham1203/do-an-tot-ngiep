@@ -28,5 +28,7 @@ namespace BO.ViewModels.Product
         public BrandNameVM BrandNameVM { get; set; }
         public List<CategoryNameVM> CategoryNameVMs { get; set; }
         public List<PictureVM> PictureVMs { get; set; }
+        public float? Star { get; set; }
+        public int? StarCount { get; set; }
     }
 }

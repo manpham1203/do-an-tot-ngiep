@@ -15,6 +15,7 @@ using System.IO;
 using System.Threading;
 using BLL.Picture;
 using BO.ViewModels.Picture;
+using BLL.Comment;
 
 namespace BLL.Product
 {
@@ -768,6 +769,24 @@ namespace BLL.Product
             var productImageBLL = new PictureBLL();
             var listImg = await productImageBLL.GetByObjectId(resultFromDAL.Id, objectType);
             resultFromDAL.PictureVMs = listImg;
+
+
+            var cmtBLL = new ProductCmtBLL();
+
+            var star = await cmtBLL.Star(resultFromDAL.Id);
+
+            if (star.Count() == 0)
+            {
+                resultFromDAL.Star = 0;
+                resultFromDAL.StarCount = 0;
+            }
+            else
+            {
+                resultFromDAL.Star = star.Sum(x => x.Value) / (float)star.Count();
+                resultFromDAL.StarCount = star.Count();
+            }
+
+
 
             return resultFromDAL;
         }

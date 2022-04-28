@@ -1,4 +1,5 @@
 ﻿using BO;
+using BO.ViewModels.Picture;
 using BO.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -241,27 +242,46 @@ namespace DAL.User
         }
         public async Task<UserInfoClientVM> GetById(string id)
         {
-            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
-            var result = new UserInfoClientVM
-            {
-                Id = userFromDb.Id,
-                Username = userFromDb.Username,
-                FirstName = userFromDb.FirstName,
-                LastName = userFromDb.LastName,
-                Birthday = userFromDb.Birthday,
-                Email = userFromDb.Email,
-                PhoneNumber = userFromDb.PhoneNumber,
-                Address = userFromDb.Address,
-                Role = userFromDb.Role,
-                CreatedAt = userFromDb.CreatedAt,
-                ImageName = null,
-                ImageSrc = null,
-            };
-            if (result == null)
+            //var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);
+            var resultFromDb = await (from u in db.Users
+                                      join p in db.Pictures on u.Id equals p.ObjectId into list
+                                      from p in list.DefaultIfEmpty()
+                                      where u.Id == id
+                                      select new UserInfoClientVM
+                                      {
+                                          Id = u.Id,
+                                          Username = u.Username,
+                                          FirstName = u.FirstName,
+                                          LastName = u.LastName,
+                                          Birthday = u.Birthday,
+                                          Email = u.Email,
+                                          PhoneNumber = u.PhoneNumber,
+                                          Address = u.Address,
+                                          Role = u.Role,
+                                          CreatedAt = u.CreatedAt,
+                                          ImageName = p.Name,
+                                          ImageSrc = null,
+                                      }).SingleOrDefaultAsync();
+            //var result = new UserInfoClientVM
+            //{
+            //    Id = userFromDb.Id,
+            //    Username = userFromDb.Username,
+            //    FirstName = userFromDb.FirstName,
+            //    LastName = userFromDb.LastName,
+            //    Birthday = userFromDb.Birthday,
+            //    Email = userFromDb.Email,
+            //    PhoneNumber = userFromDb.PhoneNumber,
+            //    Address = userFromDb.Address,
+            //    Role = userFromDb.Role,
+            //    CreatedAt = userFromDb.CreatedAt,
+            //    ImageName = null,
+            //    ImageSrc = null,
+            //};
+            if (resultFromDb == null)
             {
                 return null;
             }
-            return result;
+            return resultFromDb;
         }
 
         public async Task<bool> Register(UserVM userVM)
@@ -289,7 +309,7 @@ namespace DAL.User
             }
             return false;
         }
-        public async Task<bool> Edit(UserVM userVM)
+        public async Task<bool> Edit(UserVM userVM, PictureVM picVM)
         {
             var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == userVM.Id);
 
@@ -301,12 +321,45 @@ namespace DAL.User
             userFromDb.Birthday = userVM.Birthday;
             userFromDb.UpdatedAt = DateTime.Now;
 
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
+            var resultUser = await db.SaveChangesAsync();
+            if (resultUser == 0)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            if (picVM.Name != null)
+            {
+                var pic = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == userVM.Id);
+                if (pic == null)
+                {
+                    var picture = new BO.Entities.Picture
+                    {
+                        Id = picVM.Id,
+                        Name = picVM.Name,
+                        Published = picVM.Published,
+                        ObjectType = picVM.ObjectType,
+                        ObjectId = picVM.ObjectId
+                    };
+                    await db.Pictures.AddAsync(picture);
+                    var resultPic = await db.SaveChangesAsync();
+                    if (resultPic == 0)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    pic.Name = picVM.Name;
+                    var resultPic = await db.SaveChangesAsync();
+                    if (resultPic == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+
+            return true;
         }
         public async Task<bool> ChangePass(UserVM userVM)
         {

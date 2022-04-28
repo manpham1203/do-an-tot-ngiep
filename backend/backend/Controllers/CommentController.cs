@@ -2,6 +2,7 @@
 using BO.ViewModels.Comment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -32,7 +33,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
         [HttpGet("ProductCmtItem")]
         public async Task<IActionResult> ProductCmtItem(string id)
         {
@@ -43,6 +44,11 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
+                if (resultFromDb.ImageName != null)
+                {
+                    resultFromDb.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromDb.ImageName);
+                }
+
                 return Ok(resultFromDb);
             }
             catch
@@ -51,11 +57,11 @@ namespace backend.Controllers
             }
         }
         [HttpGet("IdsOfProduct")]
-        public async Task<IActionResult> IdsOfProduct(string id)
+        public async Task<IActionResult> IdsOfProduct(string id, int limit = 5, int currentPage = 1)
         {
             try
             {
-                var resultFromDb = await productCmtBLL.IdsOfProduct(id);
+                var resultFromDb = await productCmtBLL.IdsOfProduct(id, limit, currentPage);
                 if (resultFromDb == null)
                 {
                     return BadRequest();

@@ -1,7 +1,10 @@
 ﻿using BLL.User;
 using BO.ViewModels.User;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -11,9 +14,11 @@ namespace backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserBLL userBLL;
-        public UserController()
+        private IWebHostEnvironment iwebHostEnvironment;
+        public UserController(IWebHostEnvironment _iwebHostEnvironment)
         {
             userBLL = new UserBLL();
+            this.iwebHostEnvironment = _iwebHostEnvironment;
         }
         //[HttpGet]
         //public async Task<IActionResult> GetAll()
@@ -110,6 +115,24 @@ namespace backend.Controllers
         //        return BadRequest();
         //    }
         //}
+        [NonAction]
+        public async Task<bool> SaveFile(IFormFile file, string imgName)
+        {
+            try
+            {
+                var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName);
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterVM model)
@@ -144,18 +167,22 @@ namespace backend.Controllers
             }
         }
         [HttpPut("edit/{id}")]
-        public async Task<IActionResult> Edit(string id, UpdateUserVM model)
+        public async Task<IActionResult> Edit(string id,[FromForm] UpdateUserVM model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var user = await userBLL.Edit(id, model);
-                    if (user)
+                    if (user == false)
                     {
-                        return Ok();
+                        return BadRequest();
                     }
-                    return BadRequest();
+                    if (user && (model.File != null))
+                    {
+                        var saveFile = await SaveFile(model.File, model.Image);
+                    }
+                    return Ok();
                 }
                 catch
                 {
@@ -232,7 +259,8 @@ namespace backend.Controllers
         [HttpGet("getbyusername")]
         public async Task<IActionResult> GetByUserName(string username)
         {
-            try{
+            try
+            {
                 var resultFromBLL = await userBLL.GetByUsername(username);
                 if (resultFromBLL == null)
                 {
@@ -255,6 +283,8 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
+                resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ImageName);
+
                 return Ok(resultFromBLL);
             }
             catch

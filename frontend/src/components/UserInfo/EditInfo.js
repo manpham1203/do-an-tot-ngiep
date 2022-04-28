@@ -10,6 +10,8 @@ import Button from "../Button/Button";
 import Date from "../Form/Date/Date";
 import * as moment from "moment";
 import "moment/locale/nl";
+import defaultuser from "../../assets/defaultuser.png";
+import { FiCamera } from "react-icons/fi";
 
 const schema = yup
   .object({
@@ -72,11 +74,20 @@ function EditInfo(props) {
     resolver: yupResolver(schema),
   });
   const onSubmitHandler = async (values) => {
-    console.log(values);
+  
+    const formData = new FormData();
+    formData.append("firstName", values.firstName);
+    formData.append("lastName", values.lastName);
+    formData.append("email", values.email);
+    formData.append("address", values.address);
+    formData.append("birthday", values.birthday);
+    formData.append("phoneNumber", values.phoneNumber);
+    formData.append("File", file);
+
     await api({
       method: "PUT",
       url: `/user/edit/${user.id}`,
-      data: values,
+      data: formData,
     })
       .then((res) => {
         console.log(res);
@@ -93,7 +104,7 @@ function EditInfo(props) {
         }
       })
       .catch(() =>
-        toast.error(`Đăng nhập thất bại`, {
+        toast.error(`Chỉnh sửa thông tin thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         })
@@ -101,7 +112,6 @@ function EditInfo(props) {
   };
   const store = useSelector((store) => store);
   const user = store.user;
-  const [data, setData] = useState({});
 
   const fetchData = async (id) => {
     await api({
@@ -119,18 +129,55 @@ function EditInfo(props) {
           phoneNumber: res.data.phoneNumber,
           address: res.data.address,
         });
+        setImage(res.data.imageSrc);
       })
       .catch(() => console.log("fail"));
   };
   useEffect(() => {
     fetchData(user.id);
   }, [user.id]);
-  console.log(errors);
+  const [image, setImage] = useState();
+  const [file, setFile] = useState();
+  const handlePreviewImage = (e) => {
+    const tempfile = e.target.files[0];
+    setFile(tempfile);
+    setImage(URL.createObjectURL(tempfile));
+  };
+  useEffect(() => {
+    return () => {
+      image && URL.revokeObjectURL(image);
+    };
+  }, [image]);
+  console.log(file);
   return (
     <div className="w-full flex flex-col">
       <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
         CẬP NHẬT THÔNG TIN
       </h2>
+      <div className="flex justify-center">
+        <div className="relative">
+          <div className="w-[150px] h-[150px] block border border-second rounded-full overflow-hidden">
+            <img
+              src={image || defaultuser}
+              alt=""
+              className="w-full h-full object-cover object-center"
+            />
+            <label
+              htmlFor="avatar"
+              className="cursor-pointer absolute top-0 left-0 w-[40px] h-[40px] bg-third rounded-full border border-second flex justify-center items-center text-[20px]"
+            >
+              <FiCamera />
+            </label>
+          </div>
+        </div>
+
+        <input
+          type="file"
+          onChange={handlePreviewImage}
+          id="avatar"
+          className="hidden"
+        />
+      </div>
 
       <form
         onSubmit={handleSubmit(onSubmitHandler)}

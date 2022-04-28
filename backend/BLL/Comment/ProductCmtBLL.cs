@@ -72,11 +72,33 @@ namespace BLL.Comment
                 return null;
             }
         }
-        public async Task<List<string>> IdsOfProduct(string productId)
+        public async Task<ProductCmtPaginationVM> IdsOfProduct(string productId, int limit, int currentPage)
         {
             try
             {
-                return await productCmtDAL.IdsOfProduct(productId);
+                var resultFromDAL = await productCmtDAL.IdsOfProduct(productId);
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+                return new ProductCmtPaginationVM
+                {
+                    TotalResult=count,
+                    TotalPage=totalPage,
+                    List=resultFromDAL,
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+   
+        public async Task<List<int?>> Star(string id)
+        {
+            try
+            {
+                return await productCmtDAL.Star(id);
             }
             catch
             {

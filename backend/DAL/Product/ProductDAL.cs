@@ -596,6 +596,7 @@ namespace DAL.Product
                     BrandNameVM = new BrandNameVM(),
                     CategoryNameVMs = new List<CategoryNameVM>(),
                     PictureVMs = new List<PictureVM>(),
+                    Star=null,
                 };
                 return result;
             }

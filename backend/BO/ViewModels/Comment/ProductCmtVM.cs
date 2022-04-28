@@ -17,5 +17,8 @@ namespace BO.ViewModels.Comment
         public int? Star { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string ImageName { get; set; }
+        public string ImageSrc { get; set; }
+        public string FullName { get; set; }
     }
 }

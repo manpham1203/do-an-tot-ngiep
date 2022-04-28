@@ -5,7 +5,7 @@ import product from "../../../assets/product.jpg";
 import product3 from "../../../assets/product3.jpg";
 import product2 from "../../../assets/product2.jpg";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
-import { AiFillStar } from "react-icons/ai";
+
 import { addToCart } from "../../../redux/cart/cartActions";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ import "swiper/css/thumbs";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
 import RelatedProducts from "../../../components/Product/RelatedProducts";
 import Comment from "../../../components/Comment/Comment";
+import ShowStar from "../../../components/ShowStar/ShowStar";
 
 const initState = {
   loading: false,
@@ -150,7 +151,8 @@ function ProductDetail() {
     }
   };
 
-  console.log(state);
+  console.log("check", 4 < state.data.star < 5);
+
   return (
     <div className="container mx-auto">
       {state.loading ? (
@@ -167,14 +169,11 @@ function ProductDetail() {
             <div className=" flex flex-col gap-y-[10px] items-center lg:items-start">
               <h2 className="text-[20px]">{state.data.brandNameVM?.name}</h2>
               <h2 className="text-[30px]">{state.data.name}</h2>
-              <div className="flex flex-row items-center text-[#F7BF63]">
-                <AiFillStar />
-                <AiFillStar />
-                <AiFillStar />
-                <AiFillStar />
-                <AiFillStar />
+              <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
+                <ShowStar star={state.data.star} />
+
                 <span className="ml-[10px] text-[#3f3d4f]">
-                  (1 lượt đánh giá)
+                  ({state.data.starCount} lượt đánh giá)
                 </span>
               </div>
               {state.data.priceDiscount === null ? (

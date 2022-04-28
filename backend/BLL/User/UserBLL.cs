@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using BLL.Picture;
+using System.IO;
+using BO.ViewModels.Picture;
 
 namespace BLL.User
 {
@@ -226,6 +228,23 @@ namespace BLL.User
                 return false;
             }
 
+            cm = new CommonBLL();
+            if (model.File != null)
+            {
+                string imageName = Regex.Replace(cm.RemoveUnicode(id).Trim().ToLower(), @"\s+", "-");
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.Image = imageName;
+            }
+
+            var pictureBLL = new PictureBLL();
+            var picId = cm.RandomString(16);
+            var check = await pictureBLL.CheckExists(picId);
+            if (check)
+            {
+                picId = cm.RandomString(16);
+                check = await pictureBLL.CheckExists(picId);
+            }
+
             var userVM = new UserVM();
             userVM.Id = id;
             userVM.FirstName = model.FirstName;
@@ -239,7 +258,17 @@ namespace BLL.User
             userVM.Password = null;
             userVM.UpdatedAt = DateTime.Now;
 
-            return await userDAL.Edit(userVM);
+
+            var picVM = new PictureVM
+            {
+                Id = picId,
+                Name = model.Image,
+                Published = true,
+                ObjectId = id,
+                ObjectType = "user",
+            };
+
+            return await userDAL.Edit(userVM, picVM);
         }
         public async Task<string> GetPasswordById(string id)
         {
