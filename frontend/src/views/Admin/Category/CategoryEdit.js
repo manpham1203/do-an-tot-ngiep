@@ -14,6 +14,8 @@ import api from "../../../apis/api";
 import { useNavigate, useParams } from "react-router-dom";
 import ToggleSwitch from "../../../components/ToggleSwitch/ToggleSwitch";
 import AddListImage from "../../../components/AddListImage/AddListImage";
+import { FiCamera } from "react-icons/fi";
+import { MdClose } from "react-icons/md";
 
 const initState = {
   loading: false,
@@ -91,13 +93,13 @@ function CategoryEdit(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { published: true, formFile: []},
+    defaultValues: { published: true, formFile: [] },
   });
   const [state, dispatch] = useReducer(reducer, initState);
   const { slug } = useParams();
 
   const onSubmitHandler = async (values) => {
-    if(richText===""){
+    if (richText === "") {
       return;
     }
     const formData = new FormData();
@@ -105,7 +107,7 @@ function CategoryEdit(props) {
     formData.append("FullDescription", richText);
     formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
-      formData.append("File", file);
+    formData.append("File", file);
     await api({
       method: "PUT",
       url: `/category/${state.data.id}`,
@@ -149,7 +151,8 @@ function CategoryEdit(props) {
           shortDescription: res.data.shortDescription,
           published: res.data.published,
         });
-        setRichText(res.data.fullDescription)
+        setImage(res.data.pictureVM.imageSrc);
+        setRichText(res.data.fullDescription);
       })
       .catch(dispatch(fail()));
   };
@@ -170,11 +173,14 @@ function CategoryEdit(props) {
       image && URL.revokeObjectURL(image);
     };
   }, [image]);
-  useEffect(()=>{
-    setRichText(state.data.fullDescription)
-  }, [state.data])
-  const [richText, setRichText]=useState();
-  console.log(state);
+  useEffect(() => {
+    setRichText(state.data.fullDescription);
+  }, [state.data]);
+  const [richText, setRichText] = useState();
+  const handleResetImage = () => {
+    setImage(state.data.pictureVM.imageSrc);
+    setFile(undefined);
+  };
   return (
     <div className="">
       <form
@@ -221,7 +227,7 @@ function CategoryEdit(props) {
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              richText==="" ? null : "invisible"
+              richText === "" ? null : "invisible"
             }`}
           >
             Thông tin này không được để trống
@@ -229,30 +235,39 @@ function CategoryEdit(props) {
         </div>
 
         <div className="flex flex-col">
+          <div className="relative w-fit">
+            <div className="w-[200px] h-[200px] block border border-second overflow-hidden">
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+              <label
+                htmlFor="image"
+                className="cursor-pointer absolute top-0 right-[-20px] w-[40px] h-[40px] bg-third rounded-full border border-second flex justify-center items-center text-[20px]"
+              >
+                <FiCamera />
+              </label>
+              <span
+                onClick={() => handleResetImage()}
+                className="cursor-pointer absolute top-[50px] right-[-20px] w-[40px] h-[40px] bg-third rounded-full border border-second flex justify-center items-center text-[20px]"
+              >
+                <MdClose />
+              </span>
+            </div>
+          </div>
           <label
             htmlFor="image"
             className="block mb-2 text-sm font-medium text-gray-900 "
           >
             Chọn ảnh
           </label>
-          <label
-            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
-            htmlFor="image"
-          >
-            <input
-              type="file"
-              onChange={handlePreviewImage}
-              className="hidden"
-              id="image"
-            />
-            {image && (
-              <img
-                src={image}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-            )}
-          </label>
+          <input
+            type="file"
+            onChange={handlePreviewImage}
+            className="hidden"
+            id="image"
+          />
         </div>
 
         <div className="flex justify-center gap-x-[25px]">

@@ -49,7 +49,6 @@ function App() {
       navigate("/dang-nhap");
     }
   }, [user.id, location.pathname]);
-  console.log("abc");
   return (
     <div className="w-[100%] min-h-screen">
       <Routes>

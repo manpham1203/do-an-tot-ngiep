@@ -73,6 +73,7 @@ namespace DAL.Comment
                     ObjectType = model.ObjectType,
                     OrderDetailId = model.OrderDetailId,
                     CreatedAt = model.CreatedAt,
+                    ParentId = model.ParentId,
                 };
                 await db.Comments.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -147,7 +148,8 @@ namespace DAL.Comment
                                               CreatedAt = cmt.CreatedAt,
                                               ImageName = pic.Name,
                                               ImageSrc = null,
-                                              FullName = u.LastName + " " + u.FirstName
+                                              FullName = u.LastName + " " + u.FirstName,
+                                              Children=null,
                                           }).SingleOrDefaultAsync();
                 if (resultFromDb == null)
                 {
@@ -176,7 +178,7 @@ namespace DAL.Comment
         {
             try
             {
-                var resultFromDb = await db.Comments.OrderByDescending(x => x.CreatedAt).Where(x => x.ObjectId == productId && x.ObjectType == "product").ToListAsync();
+                var resultFromDb = await db.Comments.OrderByDescending(x => x.CreatedAt).Where(x => x.ObjectId == productId && x.ObjectType == "product" && x.ParentId == null).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<string>();
@@ -194,7 +196,39 @@ namespace DAL.Comment
         {
             try
             {
-                return await db.Comments.Where(x => x.ObjectId == id && x.ObjectType == "product").Select(x => x.Star).ToListAsync();
+                return await db.Comments.Where(x => x.ObjectId == id && x.ObjectType == "product" && x.ParentId == null).Select(x => x.Star).ToListAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<ProductCmtVM>> CmtChildren(string parentId)
+        {
+            try
+            {
+                return await (from cmt in db.Comments
+                              join pic in db.Pictures on cmt.UserId equals pic.ObjectId into list
+                              from pic in list.DefaultIfEmpty()
+                              join u in db.Users on cmt.UserId equals u.Id
+                              where cmt.ParentId == parentId
+                              select new ProductCmtVM
+                              {
+                                  Id = cmt.Id,
+                                  UserId = cmt.UserId,
+                                  Content = cmt.Content,
+                                  ObjectId = cmt.ObjectId,
+                                  ObjectType = cmt.ObjectType,
+                                  OrderDetailId = cmt.OrderDetailId,
+                                  Star = cmt.Star,
+                                  CreatedAt = cmt.CreatedAt,
+                                  ImageName = pic.Name,
+                                  ImageSrc = null,
+                                  FullName = u.LastName + " " + u.FirstName,
+                                  Children=null,
+                              }).OrderByDescending(x => x.CreatedAt).ToListAsync();
+
             }
             catch
             {

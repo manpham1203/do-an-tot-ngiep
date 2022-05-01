@@ -36,9 +36,12 @@ namespace BLL.Order
                     DeliveryAddress = model.DeliveryAddress,
                     DeliveryEmail = model.DeliveryEmail,
                     DeliveryPhone = model.DeliveryPhone,
+                    FirstName=model.FirstName,
+                    LastName=model.LastName,
+                    Note=model.Note,
                     Amount = amount,
                     CreatedAt = DateTime.Now,
-                    Status=1,
+                    State = 1,
                 };
                 var resulrOrder = await orderDAL.Create(orderObj);
                 if (resulrOrder == false)
@@ -85,11 +88,11 @@ namespace BLL.Order
                 return null;
             }
         }
-        public async Task<List<OrderVM>> GetOrderByUserIdStatus0(string userId)
+        public async Task<List<OrderVM>> GetOrderByUserIdState0(string userId)
         {
             try
             {
-                var resultFromDAL = await orderDAL.GetOrderByUserIdStatus0(userId);
+                var resultFromDAL = await orderDAL.GetOrderByUserIdState0(userId);
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -115,11 +118,11 @@ namespace BLL.Order
                 return null;
             }
         }
-        public async Task<List<OrderVM>> GetOrderByUserIdStatus4(string userId)
+        public async Task<List<OrderVM>> GetOrderByUserIdState4(string userId)
         {
             try
             {
-                var resultFromDAL = await orderDAL.GetOrderByUserIdStatus4(userId);
+                var resultFromDAL = await orderDAL.GetOrderByUserIdState4(userId);
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -149,7 +152,7 @@ namespace BLL.Order
         {
             try
             {
-                var resultFromDAL = await orderDAL.GetOrderByUserIdStatus4(userId);
+                var resultFromDAL = await orderDAL.GetOrderByUserIdState4(userId);
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -228,7 +231,7 @@ namespace BLL.Order
             }
         }
     
-        public async Task<bool> ChangeStatus(string id, int status)
+        public async Task<bool> ChangeState(string id, int State)
         {
             try
             {
@@ -237,7 +240,7 @@ namespace BLL.Order
                 {
                     return false;
                 }
-                var result = await orderDAL.ChangeStatus(id, status);
+                var result = await orderDAL.ChangeState(id, State);
                 if (result == false)
                 {
                     return false;

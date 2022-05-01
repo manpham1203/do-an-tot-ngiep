@@ -26,12 +26,15 @@ namespace DAL.Order
                     Id = model.Id,
                     UserId = model.UserId,
                     Amount = model.Amount,
-                    Status = model.Status,
+                    State = model.State,
                     Discount = model.Discount,
                     DeliveryAddress = model.DeliveryAddress,
                     DeliveryEmail = model.DeliveryEmail,
                     DeliveryPhone = model.DeliveryPhone,
                     CreatedAt = model.CreatedAt,
+                    FirstName=model.FirstName,
+                    LastName=model.LastName,
+                    Note=model.Note,
                 };
                 await db.Orders.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -50,7 +53,7 @@ namespace DAL.Order
         {
             try
             {
-                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.Status != 0 && x.Status!=4).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.State != 0 && x.State != 4).OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<OrderVM>();
@@ -60,7 +63,7 @@ namespace DAL.Order
                     Id = x.Id,
                     UserId = x.UserId,
                     Amount = x.Amount,
-                    Status = x.Status,
+                    State = x.State,
                     Discount = x.Discount,
                     DeliveryAddress = x.DeliveryAddress,
                     DeliveryEmail = x.DeliveryEmail,
@@ -75,11 +78,11 @@ namespace DAL.Order
                 return null;
             }
         }
-        public async Task<List<OrderVM>> GetOrderByUserIdStatus0(string userId)
+        public async Task<List<OrderVM>> GetOrderByUserIdState0(string userId)
         {
             try
             {
-                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.Status == 0).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.State == 0).OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<OrderVM>();
@@ -89,7 +92,7 @@ namespace DAL.Order
                     Id = x.Id,
                     UserId = x.UserId,
                     Amount = x.Amount,
-                    Status = x.Status,
+                    State = x.State,
                     Discount = x.Discount,
                     DeliveryAddress = x.DeliveryAddress,
                     DeliveryEmail = x.DeliveryEmail,
@@ -104,11 +107,11 @@ namespace DAL.Order
                 return null;
             }
         }
-        public async Task<List<OrderVM>> GetOrderByUserIdStatus4(string userId)
+        public async Task<List<OrderVM>> GetOrderByUserIdState4(string userId)
         {
             try
             {
-                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.Status == 4).OrderByDescending(x => x.CreatedAt).ToListAsync();
+                var resultFromDb = await db.Orders.Where(x => x.UserId == userId && x.State == 4).OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<OrderVM>();
@@ -118,7 +121,7 @@ namespace DAL.Order
                     Id = x.Id,
                     UserId = x.UserId,
                     Amount = x.Amount,
-                    Status = x.Status,
+                    State = x.State,
                     Discount = x.Discount,
                     DeliveryAddress = x.DeliveryAddress,
                     DeliveryEmail = x.DeliveryEmail,
@@ -156,7 +159,7 @@ namespace DAL.Order
                     Id = x.Id,
                     UserId = x.UserId,
                     Amount = x.Amount,
-                    Status = x.Status,
+                    State = x.State,
                     Discount = x.Discount,
                     DeliveryAddress = x.DeliveryAddress,
                     DeliveryEmail = x.DeliveryEmail,
@@ -185,7 +188,7 @@ namespace DAL.Order
                     Id = resultFromDb.Id,
                     UserId = resultFromDb.UserId,
                     Amount = resultFromDb.Amount,
-                    Status = resultFromDb.Status,
+                    State = resultFromDb.State,
                     Discount = resultFromDb.Discount,
                     DeliveryAddress = resultFromDb.DeliveryAddress,
                     DeliveryEmail = resultFromDb.DeliveryEmail,
@@ -201,7 +204,7 @@ namespace DAL.Order
             }
         }
 
-        public async Task<bool> ChangeStatus(string id, int status)
+        public async Task<bool> ChangeState(string id, int status)
         {
             try
             {
@@ -210,7 +213,7 @@ namespace DAL.Order
                 {
                     return false;
                 }
-                resultFromDb.Status = status;
+                resultFromDb.State = status;
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {

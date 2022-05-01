@@ -16,12 +16,10 @@ const schema = yup
   .object({
     name: yup.string().required("Thông tin này không được để trống").trim(),
     price: yup.string().required("Thông tin này không được để trống").trim(),
-    priceDiscount: yup
-      .string()
-      .trim(),
+    priceDiscount: yup.string().trim(),
     quantity: yup.string().required("Thông tin này không được để trống").trim(),
-    brandId: yup.object().required("Thông tin này không được để trống"),
-    categoryIds: yup.array().required("Thông tin này không được để trống"),
+    brandId: yup.object().required("Thông tin này không được để trống").nullable(),
+    categoryIds: yup.array().required("Thông tin này không được để trống").nullable(),
     shortDescription: yup
       .string()
       .required("Thông tin này không được để trống")
@@ -35,6 +33,7 @@ const schema = yup
 function ProductCreate(props) {
   const {
     handleSubmit,
+    watch,
     reset,
     setValue,
     getValues,
@@ -51,6 +50,10 @@ function ProductCreate(props) {
   });
 
   const onSubmitHandler = async (values) => {
+    if (image === undefined) {
+      setImage([])
+      return;
+    }
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
@@ -79,7 +82,7 @@ function ProductCreate(props) {
             autoClose: 3000,
           });
           setRichText("");
-          setImage([]);
+          setImage(undefined);
           setFiles([]);
           reset({
             name: "",
@@ -89,9 +92,9 @@ function ProductCreate(props) {
           setBrandSelected(null);
           setCategorySelected([]);
           reset({
-            brandId:null,
-            categoryIds:[],
-          })
+            brandId: null,
+            categoryIds: null,
+          });
         } else {
           toast.error(`Thêm thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -107,7 +110,7 @@ function ProductCreate(props) {
       );
   };
 
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState(undefined);
   const [files, setFiles] = useState([]);
   const selectFile = (e) => {
     const file = e.target.files;
@@ -145,7 +148,7 @@ function ProductCreate(props) {
     return await api({
       method: "GET",
       url: `/category/allcategorynamedeleted`,
-      params:{deleted:false}
+      params: { deleted: false },
     }).then((res) => {
       return res.data;
     });
@@ -154,13 +157,15 @@ function ProductCreate(props) {
     return await api({
       method: "GET",
       url: `/brand/allbrandnamedeleted`,
-      params:{deleted:false}
+      params: { deleted: false },
     }).then((res) => {
       return res.data;
     });
   };
   const [brandSelected, setBrandSelected] = useState(null);
   const [categorySelected, setCategorySelected] = useState([]);
+  const watchBran=watch("categoryIds")
+  console.log("b",watchBran);
   return (
     <div className="">
       <form
@@ -189,7 +194,7 @@ function ProductCreate(props) {
               control={control}
               name="price"
               label="Giá"
-              type="text"
+              type="number"
             />
             <p
               className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
@@ -204,7 +209,7 @@ function ProductCreate(props) {
               control={control}
               name="priceDiscount"
               label="Giảm giá"
-              type="text"
+              type="number"
             />
             <p
               className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
@@ -302,7 +307,7 @@ function ProductCreate(props) {
             control={control}
             name="quantity"
             label="Số lượng"
-            type="text"
+            type="number"
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
@@ -357,11 +362,20 @@ function ProductCreate(props) {
             {errors?.shortDescription?.message}
           </p>
         </div>
-        <AddListImage
-          onChange={selectFile}
-          image={image}
-          DeleteImg={DeleteImg}
-        />
+        <div>
+          <AddListImage
+            onChange={selectFile}
+            image={image}
+            DeleteImg={DeleteImg}
+          />
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              image?.length === 0 ? null : "invisible"
+            }`}
+          >
+            Thông tin này không được để trống
+          </p>
+        </div>
 
         <div className="flex justify-center gap-x-[25px]">
           <button

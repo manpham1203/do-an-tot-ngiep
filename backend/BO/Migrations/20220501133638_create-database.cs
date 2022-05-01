@@ -14,8 +14,8 @@ namespace BO.Migrations
                     Id = table.Column<string>(type: "char(6)", unicode: false, maxLength: 6, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(250)", unicode: false, maxLength: 250, nullable: false),
                     Slug = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
-                    FullDescription = table.Column<string>(type: "ntext", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    FullDescription = table.Column<string>(type: "ntext", nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Published = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
@@ -33,13 +33,12 @@ namespace BO.Migrations
                     Id = table.Column<string>(type: "char(6)", unicode: false, maxLength: 6, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Slug = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
-                    FullDescription = table.Column<string>(type: "ntext", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    FullDescription = table.Column<string>(type: "ntext", nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Published = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true),
-                    Order = table.Column<int>(type: "int", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +67,11 @@ namespace BO.Migrations
                     Id = table.Column<string>(type: "varchar(12)", unicode: false, maxLength: 12, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(250)", unicode: false, maxLength: 250, nullable: false),
                     Slug = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
-                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    FullDescription = table.Column<string>(type: "ntext", nullable: true),
+                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    FullDescription = table.Column<string>(type: "ntext", nullable: false),
                     View = table.Column<int>(type: "int", nullable: false),
                     Published = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true)
                 },
@@ -87,8 +85,8 @@ namespace BO.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Birthday = table.Column<DateTime>(type: "date", nullable: true),
                     Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
                     PhoneNumber = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
@@ -113,8 +111,8 @@ namespace BO.Migrations
                     Slug = table.Column<string>(type: "varchar(250)", unicode: false, maxLength: 250, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     PriceDiscount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
-                    FullDescription = table.Column<string>(type: "ntext", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    FullDescription = table.Column<string>(type: "ntext", nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     QuantityInStock = table.Column<int>(type: "int", nullable: false),
                     Published = table.Column<bool>(type: "bit", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -141,17 +139,24 @@ namespace BO.Migrations
                 {
                     Id = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
                     UserId = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ObjectId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     ObjectType = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     OrderDetailId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     Star = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true),
+                    ParentId = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comment_Comment_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Comment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Comment_User_UserId",
                         column: x => x.UserId,
@@ -167,12 +172,15 @@ namespace BO.Migrations
                     Id = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
                     UserId = table.Column<string>(type: "char(12)", maxLength: 12, nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
                     Discount = table.Column<double>(type: "float", nullable: true),
-                    DeliveryAddress = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    DeliveryPhone = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
-                    DeliveryEmail = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
+                    DeliveryAddress = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    DeliveryPhone = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
+                    DeliveryEmail = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -213,13 +221,12 @@ namespace BO.Migrations
                 name: "Wishlist",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
                     ProductId = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
                     UserId = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wishlist", x => x.Id);
+                    table.PrimaryKey("PK_Wishlist", x => new { x.ProductId, x.UserId });
                     table.ForeignKey(
                         name: "FK_Wishlist_Product_ProductId",
                         column: x => x.ProductId,
@@ -273,6 +280,11 @@ namespace BO.Migrations
                 table: "Category",
                 column: "Slug",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_ParentId",
+                table: "Comment",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_UserId",
@@ -335,11 +347,6 @@ namespace BO.Migrations
                 table: "User",
                 column: "Username",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wishlist_ProductId",
-                table: "Wishlist",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wishlist_UserId",

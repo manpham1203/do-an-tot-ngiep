@@ -40,7 +40,7 @@ function Ordered(props) {
   const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/Order/GetOrderByUserIdStatus4`,
+      url: `/Order/GetOrderByUserIdState4`,
       params: { userId: id },
     })
       .then((res) => {
@@ -90,7 +90,7 @@ function Ordered(props) {
                     <div>Mã đơn hàng: {item.id}</div>
                     <div>|</div>
                     <div>
-                      Trạng thái đơn hàng: {orderStatusText(item.status)}
+                      Trạng thái đơn hàng: {orderStatusText(item.state)}
                     </div>
                   </div>
                   {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}

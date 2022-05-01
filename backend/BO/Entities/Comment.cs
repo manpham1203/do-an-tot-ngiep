@@ -17,6 +17,9 @@ namespace BO.Entities
         public int? Star { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string ParentId { get; set; }
+        public Comment Parent { get; set; }
+        public List<Comment> Children { get; set; }
         public User User { get; set; }
         //public Post Post { get;set; }
         //public Product Product { get; set; }

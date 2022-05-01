@@ -41,7 +41,10 @@ function CategoryCreate(props) {
   });
 
   const onSubmitHandler = async (values) => {
-    console.log(values);
+    if(file===undefined){
+      setFile(null);
+      return;
+    }
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
@@ -61,7 +64,7 @@ function CategoryCreate(props) {
           });
           setRichText("");
           setImage(null);
-          setFile(null);
+          setFile(undefined);
           reset({
             name: "",
             shortDescription: "",
@@ -82,8 +85,8 @@ function CategoryCreate(props) {
       );
   };
 
-  const [image, setImage] = useState(null);
-  const [file, setFile] = useState(null);
+  const [image, setImage] = useState();
+  const [file, setFile] = useState();
   const handlePreviewImage = (e) => {
     const tempfile = e.target.files[0];
     setFile(tempfile);
@@ -102,7 +105,7 @@ function CategoryCreate(props) {
       published: true,
     });
     setImage(null);
-    setFile(null);
+    setFile(undefined);
     setRichText("");
   };
   const [richText, setRichText] = useState();
@@ -204,6 +207,13 @@ function CategoryCreate(props) {
               />
             )}
           </label>
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              file===null ? null : "invisible"
+            }`}
+          >
+            Thông tin này không được để trống
+          </p>
         </div>
 
         <div className="flex justify-center gap-x-[25px]">

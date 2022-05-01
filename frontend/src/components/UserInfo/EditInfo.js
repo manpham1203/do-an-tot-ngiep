@@ -74,7 +74,6 @@ function EditInfo(props) {
     resolver: yupResolver(schema),
   });
   const onSubmitHandler = async (values) => {
-  
     const formData = new FormData();
     formData.append("firstName", values.firstName);
     formData.append("lastName", values.lastName);

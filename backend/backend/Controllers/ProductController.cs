@@ -182,10 +182,14 @@ namespace backend.Controllers
                 {
                     return NotFound();
                 }
-                for (int i = 0; i < productFullVM.PictureVMs.Count; i++)
+                if (productFullVM.PictureVMs != null)
                 {
-                    productFullVM.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.PictureVMs[i].Name);
+                    for (int i = 0; i < productFullVM.PictureVMs.Count; i++)
+                    {
+                        productFullVM.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, productFullVM.PictureVMs[i].Name);
+                    }
                 }
+
                 return Ok(productFullVM);
             }
             catch
@@ -326,7 +330,7 @@ namespace backend.Controllers
         public async Task<IActionResult> CartRows(List<string> ids)
         {
             var resultFromBLL = await productBLL.CartRows(ids);
-            if (resultFromBLL.Count ==0)
+            if (resultFromBLL.Count == 0)
             {
                 return BadRequest();
             }
@@ -337,12 +341,12 @@ namespace backend.Controllers
 
             return Ok(resultFromBLL);
         }
-    
+
         [HttpGet("newproductwidget")]
         public async Task<IActionResult> NewProductWidget()
         {
             var resultFromBLL = await productBLL.NewProductWidget();
-            if(resultFromBLL == null)
+            if (resultFromBLL == null)
             {
                 return BadRequest();
             }
@@ -350,14 +354,14 @@ namespace backend.Controllers
             {
                 return Ok(new List<ProductWidgetVM>());
             }
-            for(int i = 0; i < resultFromBLL.Count; i++)
+            for (int i = 0; i < resultFromBLL.Count; i++)
             {
                 resultFromBLL[i].ImgSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImgName);
 
             }
             return Ok(resultFromBLL);
         }
-    
+
         [HttpPost("productfilter")]
         public async Task<IActionResult> ProductFilter(ProductFilterVM model)
         {
@@ -370,9 +374,9 @@ namespace backend.Controllers
             {
                 return Ok(new ProductPaginationVM());
             }
-            for(int i = 0; i < resultFromBLL.Products.Count; i++)
+            for (int i = 0; i < resultFromBLL.Products.Count; i++)
             {
-               resultFromBLL.Products[i].ImageSrc= String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Products[i].ImageName);
+                resultFromBLL.Products[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Products[i].ImageName);
             }
             return Ok(resultFromBLL);
         }

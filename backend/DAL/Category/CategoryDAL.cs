@@ -177,14 +177,18 @@ namespace DAL.Category
                 return false;
             }
 
-            var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == categoryFromDb.Id);
-            pictureFromDb.Name = pictureVM.Name;
-
-            var resultPicture = await db.SaveChangesAsync();
-            if (resultPicture == 0)
+            if (pictureVM.Name != null)
             {
-                return false;
+                var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == categoryFromDb.Id);
+                pictureFromDb.Name = pictureVM.Name;
+
+                var resultPicture = await db.SaveChangesAsync();
+                if (resultPicture == 0)
+                {
+                    return false;
+                }
             }
+
 
             return true;
         }

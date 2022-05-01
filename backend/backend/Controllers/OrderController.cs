@@ -69,12 +69,12 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("GetOrderByUserIdStatus0")]
-        public async Task<IActionResult> GetOrderByUserIdStatus0(string userId)
+        [HttpGet("GetOrderByUserIdState0")]
+        public async Task<IActionResult> GetOrderByUserIdState0(string userId)
         {
             try
             {
-                var resultFromBLL = await orderBLL.GetOrderByUserIdStatus0(userId);
+                var resultFromBLL = await orderBLL.GetOrderByUserIdState0(userId);
                 if (resultFromBLL == null)
                 {
                     return BadRequest();
@@ -94,12 +94,12 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("GetOrderByUserIdStatus4")]
-        public async Task<IActionResult> GetOrderByUserIdStatus4(string userId)
+        [HttpGet("GetOrderByUserIdState4")]
+        public async Task<IActionResult> GetOrderByUserIdState4(string userId)
         {
             try
             {
-                var resultFromBLL = await orderBLL.GetOrderByUserIdStatus4(userId);
+                var resultFromBLL = await orderBLL.GetOrderByUserIdState4(userId);
                 if (resultFromBLL == null)
                 {
                     return BadRequest();
@@ -167,12 +167,12 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-        [HttpPut("changestatus/{id}")]
-        public async Task<IActionResult> ChangeStatus(string id, int status)
+        [HttpPut("changeState/{id}")]
+        public async Task<IActionResult> ChangeState(string id, int State)
         {
             try
             {
-                var resultFromBLL = await orderBLL.ChangeStatus(id, status);
+                var resultFromBLL = await orderBLL.ChangeState(id, State);
                 if (resultFromBLL == false)
                 {
                     return BadRequest();

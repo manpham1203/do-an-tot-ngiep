@@ -167,7 +167,7 @@ namespace backend.Controllers
             }
         }
         [HttpPut("edit/{id}")]
-        public async Task<IActionResult> Edit(string id,[FromForm] UpdateUserVM model)
+        public async Task<IActionResult> Edit(string id, [FromForm] UpdateUserVM model)
         {
             if (ModelState.IsValid)
             {
@@ -283,7 +283,11 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
-                resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ImageName);
+                if (resultFromBLL.ImageName != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ImageName);
+
+                }
 
                 return Ok(resultFromBLL);
             }

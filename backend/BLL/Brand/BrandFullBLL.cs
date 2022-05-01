@@ -122,18 +122,11 @@ namespace BLL.Brand
                 }
             }
 
-            var brandImgBLL = new PictureBLL();
-            var listImg = await brandImgBLL.GetByObjectId(brandFullVM.Id, objectType);
-            if (listImg != null)
+            var categoryImageBLL = new PictureBLL();
+            var listImg = await categoryImageBLL.GetByObjectId(brandFullVM.Id, objectType);
+            if (listImg[0] != null)
             {
-                if (listImg.Count == 0)
-                {
-                    return brandFullVM;
-                }
-                if (listImg[0] != null)
-                {
-                    brandFullVM.PictureVM = listImg[0];
-                }
+                brandFullVM.PictureVM = listImg[0];
             }
 
 

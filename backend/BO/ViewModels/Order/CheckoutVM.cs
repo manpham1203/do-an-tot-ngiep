@@ -18,6 +18,12 @@ namespace BO.ViewModels.Order
         public string DeliveryPhone { get; set; }
         [Required]
         public string DeliveryEmail { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        public string Note { get; set; }
+
         public List<OrderDetailVM> OrderDetailVMs { get; set; }
     }
 }

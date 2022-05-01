@@ -19,7 +19,7 @@ import "swiper/css/thumbs";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
 import RelatedProducts from "../../../components/Product/RelatedProducts";
 import Comment from "../../../components/Comment/Comment";
-import ShowStar from "../../../components/ShowStar/ShowStar";
+import ShowStarAvg from "../../../components/ShowStar/ShowStarAvg";
 
 const initState = {
   loading: false,
@@ -170,7 +170,7 @@ function ProductDetail() {
               <h2 className="text-[20px]">{state.data.brandNameVM?.name}</h2>
               <h2 className="text-[30px]">{state.data.name}</h2>
               <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
-                <ShowStar star={state.data.star} />
+                <ShowStarAvg star={state.data.star} />
 
                 <span className="ml-[10px] text-[#3f3d4f]">
                   ({state.data.starCount} lượt đánh giá)

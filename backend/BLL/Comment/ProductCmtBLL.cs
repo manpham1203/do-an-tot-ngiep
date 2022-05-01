@@ -14,7 +14,7 @@ namespace BLL.Comment
         private CommonBLL cm;
         public ProductCmtBLL()
         {
-            productCmtDAL=new ProductCmtDAL();
+            productCmtDAL = new ProductCmtDAL();
         }
         public async Task<List<ProductCmtVM>> ProductCmtVMs(string produtctId)
         {
@@ -50,9 +50,11 @@ namespace BLL.Comment
                     cmtId = cm.RandomString(12);
                     checkExists = await CheckExists(cmtId);
                 }
+                productCmtVM.Content = string.IsNullOrEmpty(productCmtVM.Content) ? null : productCmtVM.Content;
                 productCmtVM.Id = cmtId;
                 productCmtVM.ObjectType = "product";
                 productCmtVM.CreatedAt = DateTime.Now;
+                productCmtVM.ParentId = null;
                 return await productCmtDAL.Create(productCmtVM);
             }
             catch
@@ -60,12 +62,15 @@ namespace BLL.Comment
                 return false;
             }
         }
-    
+
         public async Task<ProductCmtVM> CommentItem(string id)
         {
             try
             {
-                return await productCmtDAL.CommentItem(id);
+                var resultFromDAL= await productCmtDAL.CommentItem(id);
+                var children = await CmtChildren(id);
+                resultFromDAL.Children=children;
+                return resultFromDAL;
             }
             catch
             {
@@ -83,9 +88,9 @@ namespace BLL.Comment
 
                 return new ProductCmtPaginationVM
                 {
-                    TotalResult=count,
-                    TotalPage=totalPage,
-                    List=resultFromDAL,
+                    TotalResult = count,
+                    TotalPage = totalPage,
+                    List = resultFromDAL,
                 };
             }
             catch
@@ -93,12 +98,54 @@ namespace BLL.Comment
                 return null;
             }
         }
-   
+
         public async Task<List<int?>> Star(string id)
         {
             try
             {
                 return await productCmtDAL.Star(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
+
+        public async Task<bool> RepCmt(string parentId, string content,string userId)
+        {
+            try
+            {
+                cm = new CommonBLL();
+                var cmtId = cm.RandomString(12);
+                var checkExists = await CheckExists(cmtId);
+                var objectId = await CommentItem(parentId);
+                if (checkExists)
+                {
+                    cmtId = cm.RandomString(12);
+                    checkExists = await CheckExists(cmtId);
+                }
+                var cmtVM = new ProductCmtVM();
+                cmtVM.Content = content;
+                cmtVM.Id = cmtId;
+                cmtVM.ObjectType = "product";
+                cmtVM.CreatedAt = DateTime.Now;
+                cmtVM.ParentId = parentId;
+                cmtVM.ObjectId = objectId.ObjectId;
+                cmtVM.UserId = userId;
+                return await productCmtDAL.Create(cmtVM);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    
+        public async Task<List<ProductCmtVM>> CmtChildren(string parentId)
+        {
+            try
+            {
+                return await productCmtDAL.CmtChildren(parentId);
             }
             catch
             {

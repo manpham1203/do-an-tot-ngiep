@@ -62,7 +62,7 @@ function OrderList(props) {
                     Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
                   </div>
                   <div>|</div> */}
-                  <div>Trạng thái đơn hàng: {orderStatusText(item.status)}</div>
+                  <div>Trạng thái đơn hàng: {orderStatusText(item.state)}</div>
                 </div>
                 {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
               </div>

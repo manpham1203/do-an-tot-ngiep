@@ -109,6 +109,7 @@ function Checkout(props) {
     handleSubmit,
     reset,
     watch,
+    register,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({
@@ -193,6 +194,7 @@ function Checkout(props) {
   const watchPhone = watch("deliveryPhone");
   const watchFirstName = watch("firstName");
   const watchLastName = watch("lastName");
+  const watchNote = watch("note");
   const onSubmitHandler = async () => {
     var item = items;
     const data = {
@@ -203,6 +205,7 @@ function Checkout(props) {
       orderDetailVMs: item,
       firstName: watchFirstName,
       lastName: watchLastName,
+      note: watchNote,
     };
     await api({
       method: "POST",
@@ -231,7 +234,7 @@ function Checkout(props) {
         })
       );
   };
-console.log(errors)
+  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit(onSubmitHandler)}
@@ -269,12 +272,12 @@ console.log(errors)
             control={control}
           />
           <p
-              className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
-                errors?.deliveryPhone ? null : "invisible"
-              }`}
-            >
-              {errors?.deliveryPhone?.message}
-            </p>
+            className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
+              errors?.deliveryPhone ? null : "invisible"
+            }`}
+          >
+            {errors?.deliveryPhone?.message}
+          </p>
         </div>
         <div className="mt-[20px]">
           <Input
@@ -283,13 +286,13 @@ console.log(errors)
             label="Email"
             control={control}
           />
-           <p
-              className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
-                errors?.deliveryEmail ? null : "invisible"
-              }`}
-            >
-              {errors?.deliveryEmail?.message}
-            </p>
+          <p
+            className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
+              errors?.deliveryEmail ? null : "invisible"
+            }`}
+          >
+            {errors?.deliveryEmail?.message}
+          </p>
         </div>
         <div className="mt-[20px]">
           <Input
@@ -299,17 +302,18 @@ console.log(errors)
             control={control}
           />
           <p
-              className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
-                errors?.deliveryAddress ? null : "invisible"
-              }`}
-            >
-              {errors?.deliveryAddress?.message}
-            </p>
+            className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${
+              errors?.deliveryAddress ? null : "invisible"
+            }`}
+          >
+            {errors?.deliveryAddress?.message}
+          </p>
         </div>
         <div className="mt-[20px]">
           <div className="w-full relative">
             <textarea
               placeholder=" "
+              {...register("note")}
               className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
             />
             <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">

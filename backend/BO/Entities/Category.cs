@@ -17,7 +17,6 @@ namespace BO.Entities
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public int Order { get; set; }
         public List<ProductCategory> ProductCategory { get; set; }
         //public Picture Picture { get; set; }
     }

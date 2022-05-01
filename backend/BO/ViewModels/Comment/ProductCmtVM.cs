@@ -20,5 +20,7 @@ namespace BO.ViewModels.Comment
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
         public string FullName { get; set; }
+        public string ParentId { get; set; }
+        public List<ProductCmtVM> Children { get; set; }
     }
 }

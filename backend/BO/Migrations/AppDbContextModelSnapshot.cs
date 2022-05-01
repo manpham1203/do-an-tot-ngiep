@@ -34,6 +34,7 @@ namespace BO.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullDescription")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("ntext");
 
@@ -47,6 +48,7 @@ namespace BO.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(1000)");
@@ -84,6 +86,7 @@ namespace BO.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullDescription")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("ntext");
 
@@ -93,13 +96,11 @@ namespace BO.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(1000)");
@@ -125,19 +126,18 @@ namespace BO.Migrations
             modelBuilder.Entity("BO.Entities.Comment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(12)
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(500)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
 
                     b.Property<string>("ObjectId")
                         .IsRequired()
@@ -156,11 +156,17 @@ namespace BO.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("ParentId")
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
                     b.Property<int?>("Star")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -169,6 +175,8 @@ namespace BO.Migrations
                         .HasColumnType("char(12)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
@@ -192,16 +200,19 @@ namespace BO.Migrations
                         .HasColumnType("datetime2(3)");
 
                     b.Property<string>("DeliveryAddress")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("DeliveryEmail")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("DeliveryPhone")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .IsUnicode(false)
                         .HasColumnType("varchar(10)");
@@ -209,7 +220,24 @@ namespace BO.Migrations
                     b.Property<double?>("Discount")
                         .HasColumnType("float");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -312,16 +340,15 @@ namespace BO.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullDescription")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("ntext");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(1000)");
@@ -374,6 +401,7 @@ namespace BO.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullDescription")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("ntext");
 
@@ -401,6 +429,7 @@ namespace BO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(1000)");
@@ -473,15 +502,15 @@ namespace BO.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(250)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(250)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -525,26 +554,17 @@ namespace BO.Migrations
 
             modelBuilder.Entity("BO.Entities.Wishlist", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("char(12)");
-
                     b.Property<string>("ProductId")
-                        .IsRequired()
                         .HasMaxLength(12)
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasMaxLength(12)
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
+                    b.HasKey("ProductId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -553,11 +573,17 @@ namespace BO.Migrations
 
             modelBuilder.Entity("BO.Entities.Comment", b =>
                 {
+                    b.HasOne("BO.Entities.Comment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("BO.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
 
                     b.Navigation("User");
                 });
@@ -649,6 +675,11 @@ namespace BO.Migrations
             modelBuilder.Entity("BO.Entities.Category", b =>
                 {
                     b.Navigation("ProductCategory");
+                });
+
+            modelBuilder.Entity("BO.Entities.Comment", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("BO.Entities.Order", b =>

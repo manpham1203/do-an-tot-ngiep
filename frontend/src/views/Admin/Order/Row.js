@@ -153,7 +153,7 @@ function Row(props) {
         dispatch(success(res.data));
         // setOrderStatus(orderOptions[res.data.status]);
         orderOptions.map(
-          (item) => item.value === res.data.status && setOrderStatus(item)
+          (item) => item.value === res.data.state && setOrderStatus(item)
         );
       })
       .catch(() => dispatch(fail()));
@@ -169,8 +169,8 @@ function Row(props) {
   const handleChangeStatus = async (e) => {
     await api({
       method: "PUT",
-      url: `/Order/changestatus/${props.id}`,
-      params: { status: e.value },
+      url: `/Order/changestate/${props.id}`,
+      params: { state: e.value },
     })
       .then((res) => {
         if (res.status === 200) {

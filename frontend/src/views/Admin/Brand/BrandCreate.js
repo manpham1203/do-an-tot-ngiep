@@ -17,7 +17,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import AddListImage from "../../../components/AddListImage/AddListImage";
 
 const schema = yup
-  .object({
+  .object().shape({
     name: yup.string().required("Thông tin này không được để trống").trim(),
     shortDescription: yup
       .string()
@@ -27,6 +27,10 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
+    // image: yup.mixed().required("Thông tin này không được để trống"),
+    // .test("fileType", "Định dạng ảnh không hợp lệ", (value) =>
+    //   ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+    // ),
   })
   .required();
 function BrandCreate(props) {
@@ -35,16 +39,21 @@ function BrandCreate(props) {
     reset,
     setValue,
     getValues,
+    watch,
+    register,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { published: true, formFile: [], fullDescription: "" },
+    defaultValues: { published: true, fullDescription: "" },
   });
 
   const onSubmitHandler = async (values) => {
-    console.log(values);
+    if(file===undefined){
+      setFile(null);
+      return;
+    }
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
@@ -63,8 +72,8 @@ function BrandCreate(props) {
             autoClose: 3000,
           });
           setRichText("");
-          setImage();
-          setFile();
+          setImage(null);
+          setFile(undefined);
           reset({
             name: "",
             shortDescription: "",
@@ -105,11 +114,22 @@ function BrandCreate(props) {
       published: true,
     });
     setRichText("");
+    setFile(undefined);
+    setImage(null);
   };
   const [richText, setRichText] = useState();
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
+
+ 
+  // useEffect(() => {
+  //   if (watchImage) {
+  //     if (watchImage[0]) {
+  //       setImage(URL.createObjectURL(watchImage[0]));
+  //     }
+  //   }
+  // }, [watchImage]);
 
   return (
     <div className="">
@@ -195,6 +215,8 @@ function BrandCreate(props) {
               type="file"
               onChange={handlePreviewImage}
               className="hidden"
+              // {...register("image")}
+              // name="image"
               id="image"
             />
             {image && (
@@ -205,6 +227,13 @@ function BrandCreate(props) {
               />
             )}
           </label>
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              file===null ? null : "invisible"
+            }`}
+          >
+            Thông tin này không được để trống
+          </p>
         </div>
 
         <div className="flex justify-center gap-x-[25px]">

@@ -1,7 +1,7 @@
 import React from "react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 
-function ShowStar({ star }) {
+function ShowStarAvg({ star }) {
   return (
     <>
       {star === 0 && (
@@ -107,4 +107,4 @@ function ShowStar({ star }) {
   );
 }
 
-export default ShowStar;
+export default ShowStarAvg;

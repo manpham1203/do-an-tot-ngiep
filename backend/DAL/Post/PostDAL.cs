@@ -210,7 +210,7 @@ namespace DAL.Post
         {
             try
             {
-                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.ShortDescription, x.FullDescription, x.Published, x.Image }).SingleOrDefaultAsync(x => x.Id == id);
+                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.ShortDescription, x.FullDescription, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
                 if (resultFromDb == null)
                 {
                     return null;
@@ -221,7 +221,6 @@ namespace DAL.Post
                     ShortDescription = resultFromDb.ShortDescription,
                     FullDescription = resultFromDb.FullDescription,
                     Published = resultFromDb.Published,
-                    Image = resultFromDb.Image
                 };
             }
             catch
