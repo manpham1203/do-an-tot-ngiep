@@ -16,17 +16,6 @@ namespace BLL.Comment
         {
             productCmtDAL = new ProductCmtDAL();
         }
-        public async Task<List<ProductCmtVM>> ProductCmtVMs(string produtctId)
-        {
-            try
-            {
-                return await productCmtDAL.ProductCmts(produtctId);
-            }
-            catch
-            {
-                return null;
-            }
-        }
         public async Task<bool> CheckExists(string id)
         {
             try
@@ -77,7 +66,7 @@ namespace BLL.Comment
                 return null;
             }
         }
-        public async Task<ProductCmtPaginationVM> IdsOfProduct(string productId, int limit, int currentPage)
+        public async Task<CmtPagination> IdsOfProduct(string productId, int limit, int currentPage)
         {
             try
             {
@@ -86,7 +75,7 @@ namespace BLL.Comment
                 var totalPage = (int)Math.Ceiling(count / (double)limit);
                 resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
 
-                return new ProductCmtPaginationVM
+                return new CmtPagination
                 {
                     TotalResult = count,
                     TotalPage = totalPage,

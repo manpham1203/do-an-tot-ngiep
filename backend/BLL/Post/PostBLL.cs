@@ -238,7 +238,6 @@ namespace BLL.Post
                 return null;
             }
         }
-    
         public async Task<PostDetailVM> PostDetail(string slug)
         {
             try
@@ -248,6 +247,17 @@ namespace BLL.Post
             catch
             {
                 return null;
+            }
+        }
+        public async Task<bool> IncreaseView(string id)
+        {
+            try
+            {
+                return await postDAL.IncreaseView(id);
+            }
+            catch
+            {
+                return false;
             }
         }
     }

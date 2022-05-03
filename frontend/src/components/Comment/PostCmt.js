@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import api from "../../apis/api";
-import CommentItem from "./CommentItem";
-import Pagination from "../../components/Pagination/Pagination";
+import PostCmtItem from "./PostCmtItem";
+import Pagination from "../Pagination/Pagination";
 
-function Comment(props) {
+function ProductCmt(props) {
   const [data, setData] = useState({
     totalPage: 0,
     totalResult: 0,
@@ -13,7 +13,7 @@ function Comment(props) {
   const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/comment/IdsOfProduct`,
+      url: `/comment/IdsOfPost`,
       params: { id: id, currentPage: currentPage },
     })
       .then((res) => {
@@ -23,6 +23,7 @@ function Comment(props) {
           totalResult: res.data.totalResult,
           list: res.data.list,
         });
+        props.setCmtCount(res.data.totalResult);
       })
       .catch(() => console.log("fail"));
   };
@@ -33,14 +34,12 @@ function Comment(props) {
     fetchData(props.id)
   }, [currentPage])
 
-  console.log(data);
-
   return (
     <div className="flex flex-col gap-y-[25px]">
       {data.list.length > 0 &&
         data.list.map((item, index) => {
           return (
-            <CommentItem
+            <PostCmtItem          
               key={index}
               id={item}
               index={index}
@@ -62,4 +61,4 @@ function Comment(props) {
   );
 }
 
-export default Comment;
+export default ProductCmt;

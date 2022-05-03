@@ -131,7 +131,7 @@ namespace DAL.Product
             await db.Products.AddAsync(product);
             var resultProduct = await db.SaveChangesAsync();
 
-            if (resultProduct ==0 )
+            if (resultProduct == 0)
             {
                 return false;
             }
@@ -158,12 +158,12 @@ namespace DAL.Product
             }).ToList();
 
             await db.Pictures.AddRangeAsync(pictutes);
-            var resultPicture=await db.SaveChangesAsync();
+            var resultPicture = await db.SaveChangesAsync();
             if (resultPicture != pictutes.Count)
             {
                 return false;
             }
-            
+
             return true;
 
         }
@@ -198,12 +198,12 @@ namespace DAL.Product
             }).ToList();
             var listCurrentPC = await db.Product_Category_Mappings.Where(x => x.ProductId == productFromDb.Id).ToListAsync();
             db.Product_Category_Mappings.RemoveRange(listCurrentPC);
-            var resultPCDelete=await db.SaveChangesAsync();
+            var resultPCDelete = await db.SaveChangesAsync();
             if (resultPCDelete != listCurrentPC.Count)
             {
                 return false;
             }
-            
+
             await db.Product_Category_Mappings.AddRangeAsync(productCategory);
             var resultPC = await db.SaveChangesAsync();
             if (resultPC != pcVMs.Count)
@@ -596,7 +596,7 @@ namespace DAL.Product
                     BrandNameVM = new BrandNameVM(),
                     CategoryNameVMs = new List<CategoryNameVM>(),
                     PictureVMs = new List<PictureVM>(),
-                    Star=null,
+                    Star = null,
                 };
                 return result;
             }
@@ -760,7 +760,7 @@ namespace DAL.Product
                 {
                     return null;
                 }
-                var result =  new ProductOrderVM
+                var result = new ProductOrderVM
                 {
                     Id = resultFromDb.Id,
                     Name = resultFromDb.Name,
@@ -778,5 +778,55 @@ namespace DAL.Product
             }
         }
 
+        public async Task<bool> IncreaseView(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                resultFromDb.View += 1;
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<ProductCardVM>> ProductWishlist(string userId)
+        {
+            try
+            {
+                var resultFromDb = await (from w in db.Wishlists
+                                          join p in db.Products on w.ProductId equals p.Id into list
+                                          from p in list.DefaultIfEmpty()
+                                          where w.UserId == userId && p.Published==true && p.Deleted==false
+                                          select new ProductCardVM
+                                          {
+                                              Id = p.Id,
+                                              Name = p.Name,
+                                              Slug = p.Slug,
+                                              Price = p.Price,
+                                              PriceDiscount = p.PriceDiscount,
+                                              BrandNameVM = new BrandNameVM(),
+                                              ImageName = null,
+                                              ImageSrc = null,
+                                              BrandId = p.BrandId,
+                                          }).ToListAsync();
+                return resultFromDb;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

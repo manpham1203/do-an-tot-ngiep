@@ -33,32 +33,7 @@ namespace DAL.Comment
                 return true;
             }
         }
-        public async Task<List<ProductCmtVM>> ProductCmts(string productId)
-        {
-            try
-            {
-                var resultFromDb = await db.Comments.Where(x => x.ObjectId == productId).Where(x => x.ObjectType == "product").ToListAsync();
-                if (resultFromDb.Count == 0)
-                {
-                    return new List<ProductCmtVM>();
-                }
-                var result = resultFromDb.Select(x => new ProductCmtVM
-                {
-                    Id = x.Id,
-                    UserId = x.UserId,
-                    Content = x.Content,
-                    Star = x.Star,
-                    ObjectId = x.ObjectId,
-                    ObjectType = x.ObjectType,
-                    OrderDetailId = x.OrderDetailId,
-                }).ToList();
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        
         public async Task<bool> Create(ProductCmtVM model)
         {
             try

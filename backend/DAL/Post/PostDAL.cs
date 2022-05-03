@@ -269,12 +269,12 @@ namespace DAL.Post
                                           select new PostCardVM
                                           {
                                               Id = post.Id,
-                                              Title=post.Title,
-                                              Slug=post.Slug,
-                                              ShortDescription=post.ShortDescription,
-                                              View=post.View,
-                                              Image=pic.Name,
-                                              CreatedAt=post.CreatedAt,
+                                              Title = post.Title,
+                                              Slug = post.Slug,
+                                              ShortDescription = post.ShortDescription,
+                                              View = post.View,
+                                              Image = pic.Name,
+                                              CreatedAt = post.CreatedAt,
                                           }).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
@@ -304,9 +304,10 @@ namespace DAL.Post
             {
                 var resultFromDb = await (from post in db.Posts
                                           join pic in db.Pictures on post.Id equals pic.ObjectId
-                                          where post.Slug==slug && pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          where post.Slug == slug && pic.ObjectId == post.Id && pic.ObjectType == "post"
                                           select new PostDetailVM
                                           {
+                                              Id = post.Id,
                                               Title = post.Title,
                                               Slug = post.Slug,
                                               ShortDescription = post.ShortDescription,
@@ -334,6 +335,29 @@ namespace DAL.Post
             catch
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> IncreaseView(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return false;
+                }
+                resultFromDb.View += 1;
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

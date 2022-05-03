@@ -216,7 +216,7 @@ function Home() {
           );
         })}
       </ProductSlideShow>
-      <PostSlideShow />
+      <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1} textCenter={true} />
     </div>
   );
 }

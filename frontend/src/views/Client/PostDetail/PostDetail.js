@@ -6,9 +6,16 @@ import "moment/locale/nl";
 import BrandWidget from "../../../components/Widget/BrandWidget";
 import CategoryWidget from "../../../components/Widget/CategoryWidget";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
+import PostCmt from "../../../components/Comment/PostCmt";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
 function PostDetail(props) {
   const [data, setData] = useState({});
+  const [content, setContent] = useState("");
+  const { user } = useSelector((state) => state);
+  const [cmtCount, setCmtCount] = useState(0);
   const { slug } = useParams();
   const fetchData = async (slug) => {
     await api({
@@ -24,7 +31,59 @@ function PostDetail(props) {
   useEffect(() => {
     fetchData(slug);
   }, [slug]);
-  console.log(data);
+  const handleComment = async () => {
+    const cmt = {
+      userId: user.id,
+      ObjectId: data.id,
+      content: content,
+    };
+    await api({
+      method: "POST",
+      url: `/comment/createpostCmt`,
+      data: cmt,
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          toast.success(`Gửi đánh giá thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        } else {
+          toast.error(`Gửi đánh giá thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch(() => {
+        toast.error(`Gửi đánh giá thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        });
+      });
+  };
+  useEffect(() => {
+    if (data?.id !== null) {
+      var timer = setTimeout(async () => {
+        await api({
+          method: "PUT",
+          url: `/post/increaseview`,
+          params: { id: data.id },
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              console.log("increase success");
+            } else {
+              console.log("increase fail");
+            }
+          })
+          .catch(() => {
+            console.log("increase fail");
+          });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [data.id]);
   return (
     <div className="container mx-auto mt-[20px]">
       <div className="flex flex-row gap-x-[25px]">
@@ -44,13 +103,33 @@ function PostDetail(props) {
                 "-" +
                 moment(data?.createdAt).format("yyyy")}
             </span>
-            |<span>{data?.view} lượt xem</span>|<span>2 comment</span>
+            |<span>{data?.view} lượt xem</span>|<span>{cmtCount} comment</span>
           </div>
           <h2 className="font-bold text-[25px]">{data?.title}</h2>
           <div
             className="text-justify flex flex-col gap-y-[25px] mt-[20px]"
             dangerouslySetInnerHTML={{ __html: data?.fullDescription }}
           ></div>
+          <h2 className="text-[25px] mb-[25px] mt-[25px]">Bình luận</h2>
+          <div className="w-full relative mt-[50px] mb-[50px]">
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder=" "
+              className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+            />
+            <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+              Gửi phản hồi
+            </label>
+            <button
+              className="bg-second px-[30px] h-[40px] text-third"
+              onClick={handleComment}
+            >
+              Gửi
+            </button>
+          </div>
+          {data?.id && <PostCmt id={data.id} setCmtCount={setCmtCount} />}
+          <PostSlideShow slideLg={3} slideMd={3} slideSm={1} slide={1} />
         </div>
         <div className="w-[350px] flex-none">
           <BrandWidget />

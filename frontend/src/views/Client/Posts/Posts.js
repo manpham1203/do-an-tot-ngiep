@@ -31,7 +31,7 @@ function Posts(props) {
                 image={item.imageSrc}
                 createdAt={item.createdAt}
                 shortDescription={item.shortDescription}
-                view={item.views}
+                view={item.view}
               />
             );
           })}

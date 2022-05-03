@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiFillStar, AiFillHeart } from "react-icons/ai";
 import { BsFillBagFill } from "react-icons/bs";
@@ -6,11 +6,12 @@ import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cart/cartActions";
 import { toast } from "react-toastify";
+import Heart from "../Wishlist/Heart";
+
 
 function ProductCard(props) {
   const navigate = useNavigate();
-  const store = useSelector((store) => store);
-  const cart=store.cart;
+  const { cart } = useSelector((store) => store);
   const dispatch = useDispatch();
   const addCart = (id, name) => {
     var objCart = {
@@ -40,6 +41,7 @@ function ProductCard(props) {
       });
     }
   };
+  
   return (
     <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
       <div className="w-full overflow-hidden relative">
@@ -58,13 +60,11 @@ function ProductCard(props) {
           <div className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md">
             <FaRegEye />
           </div>
-          <div className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md">
-            <AiFillHeart />
-          </div>
+          <Heart id={props.id} />
         </div>
       </div>
       <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px bg-white bottom-[-44px]">
-      <h3
+        <h3
           className="cursor-pointer text-second font-normal hover:underline underline-offset-4"
           onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
         >
@@ -84,7 +84,7 @@ function ProductCard(props) {
           <AiFillStar />
         </div>
         <div className="flex flex-round gap-x-[20px]">
-          {props.priceDiscount ==null ? (
+          {props.priceDiscount == null ? (
             <span>
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",

@@ -223,5 +223,25 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+
+        [HttpPut("increaseview")]
+        public async Task<IActionResult> IncreaseView(string id)
+        {
+            try
+            {
+                var resultFromDb = await postBLL.IncreaseView(id);
+                if (resultFromDb == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
     }
 }

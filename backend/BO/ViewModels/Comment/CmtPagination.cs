@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO.ViewModels.Comment
 {
-    public class ProductCmtPaginationVM
+    public class CmtPagination
     {
         public int TotalPage { get; set; }
         public int TotalResult { get; set; }

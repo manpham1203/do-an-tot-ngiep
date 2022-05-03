@@ -18,8 +18,8 @@ import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
 import RelatedProducts from "../../../components/Product/RelatedProducts";
-import Comment from "../../../components/Comment/Comment";
 import ShowStarAvg from "../../../components/ShowStar/ShowStarAvg";
+import ProductCmt from "../../../components/Comment/ProductCmt";
 
 const initState = {
   loading: false,
@@ -151,7 +151,28 @@ function ProductDetail() {
     }
   };
 
-  console.log("check", 4 < state.data.star < 5);
+  useEffect(() => {
+    if (state?.data?.id !== null) {
+      var timer = setTimeout(async () => {
+        await api({
+          method: "PUT",
+          url: `/product/increaseview`,
+          params: { id: state.data.id },
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              console.log("increase success");
+            } else {
+              console.log("increase fail");
+            }
+          })
+          .catch(() => {
+            console.log("increase fail");
+          });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [state?.data?.id]);
 
   return (
     <div className="container mx-auto">
@@ -272,7 +293,7 @@ function ProductDetail() {
             dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
           ></div>
           <h2 className="text-[25px] mb-[25px] mt-[25px]">Đánh giá sản phẩm</h2>
-          {state?.data?.id && <Comment id={state.data.id} />}
+          {state?.data?.id && <ProductCmt id={state.data.id} />}
         </div>
         <div className="w-[350px]">
           <BrandWidget />

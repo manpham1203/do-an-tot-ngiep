@@ -380,5 +380,41 @@ namespace backend.Controllers
             }
             return Ok(resultFromBLL);
         }
+
+        [HttpPut("increaseview")]
+        public async Task<IActionResult> IncreaseView(string id)
+        {
+            try
+            {
+                var resultFromDb = await productBLL.IncreaseView(id);
+                if (resultFromDb == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
+        [HttpGet("ProductWishlist")]
+        public async Task<IActionResult> ProductWishlist(string userId)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.ProductWishlist(userId);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -7,9 +7,9 @@ import defaultuser from "../../assets/defaultuser.png";
 import ShowStarCmt from "../ShowStar/ShowStarCmt";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import CommentChildren from "./CommentChildren";
+import PostCmtChildren from "./PostCmtChildren";
 
-function CommentItem(props) {
+function ProductCmtItem(props) {
   const [data, setData] = useState([]);
   const fetchData = async (id) => {
     await api({
@@ -37,7 +37,7 @@ function CommentItem(props) {
     }
     await api({
       method: "POST",
-      url: `/comment/repcmtproduct`,
+      url: `/comment/repcmtpost`,
       params: { parentId: props.id, content: content, userId: user.id },
     })
       .then((res) => {
@@ -95,12 +95,6 @@ function CommentItem(props) {
             Trả lời
           </div>
         </div>
-        <CommentChildren
-          data={data.children}
-          openRepList={openRepList}
-          setOpenRepList={setOpenRepList}
-          id={props.id}
-        />
         {openRep === props.id && (
           <div className="w-full relative mt-[50px]">
             <textarea
@@ -120,9 +114,15 @@ function CommentItem(props) {
             </button>
           </div>
         )}
+        {data?.children?.length > 0 && (
+          <PostCmtChildren
+            data={data.children}
+            id={props.id}
+          />
+        )}
       </div>
     </div>
   );
 }
 
-export default CommentItem;
+export default ProductCmtItem;

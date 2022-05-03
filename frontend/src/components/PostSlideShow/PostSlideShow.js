@@ -27,27 +27,23 @@ function PostSlideShow(props) {
   }, []);
   return (
     <div className="container mx-auto pt-[80px]">
-      <Heading title="Tin tức" />
+      <Heading title="Tin tức" textCenter={props.textCenter} />
       <Swiper
-        slidesPerView={1}
+        slidesPerView={props.slide}
         // spaceBetween={30}
         navigation={true}
         modules={[Navigation]}
         breakpoints={{
           640: {
-            slidesPerView: 2,
+            slidesPerView: props.slideSm,
             // spaceBetween: 20,
           },
           768: {
-            slidesPerView: 3,
+            slidesPerView: props.slideMd,
             // spaceBetween: 30,
           },
           1024: {
-            slidesPerView: 4,
-            // spaceBetween: 30,
-          },
-          1280: {
-            slidesPerView: 4,
+            slidesPerView: props.slideLg,
             // spaceBetween: 30,
           },
         }}
@@ -67,7 +63,7 @@ function PostSlideShow(props) {
                 // day={moment(item?.createdAt).format("DD")}
                 createdAt={moment(item?.createdAt).format('Do MMMM YYYY')}
                 shortDescription={item?.shortDescription}
-                view={item?.views}
+                view={item?.view}
               />
             </SwiperSlide>
           );

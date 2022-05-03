@@ -1097,5 +1097,29 @@ namespace BLL.Product
                 return null;
             }
         }
+
+        public async Task<bool> IncreaseView(string id)
+        {
+            try
+            {
+                return await productDAL.IncreaseView(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    
+        public async Task<List<ProductCardVM>> ProductWishlist(string userId)
+        {
+            try
+            {
+                return await productDAL.ProductWishlist(userId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
