@@ -15,7 +15,7 @@ function ProductCmtChildren(props) {
       <div className="flex flex-col gap-y-[20px] mb-[20px]">
         {props?.data?.slice(0, visible).map((item) => {
           return (
-            <div className="flex flex-row gap-x-[20px]">
+            <div className="flex flex-row gap-x-[20px]" key={item.id}>
               <div className="w-[50px] h-[50px] border border-gray-600">
                 <img
                   src={item.imageSrc || defaultuser}

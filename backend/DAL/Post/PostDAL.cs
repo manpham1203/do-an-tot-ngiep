@@ -145,15 +145,23 @@ namespace DAL.Post
         {
             try
             {
-                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
-
-                var result = new RowAdmin
-                {
-                    Id = resultFromDb.Id,
-                    Title = resultFromDb.Title,
-                    Published = resultFromDb.Published,
-                };
-                return result;
+                //var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
+                var resultFromDb = await (from post in db.Posts join pic in db.Pictures on post.Id equals pic.ObjectId into list from pic in list.DefaultIfEmpty()
+                                          where pic.ObjectType == "post" select new RowAdmin
+                                          {
+                                              Id=post.Id,
+                                              Title=post.Title,
+                                              Published=post.Published,
+                                              ImageName=pic.Name,
+                                              ImageSrc=null,
+                                          }).SingleOrDefaultAsync();
+                //var result = new RowAdmin
+                //{
+                //    Id = resultFromDb.Id,
+                //    Title = resultFromDb.Title,
+                //    Published = resultFromDb.Published,
+                //};
+                return resultFromDb;
             }
             catch
             {
@@ -360,5 +368,75 @@ namespace DAL.Post
                 return false;
             }
         }
+
+        public async Task<bool> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Published = true;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Published = false;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Deleted = true;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Posts.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Deleted = false;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

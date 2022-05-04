@@ -47,8 +47,26 @@ function Row(props) {
   };
   return (
     <Tr>
-      <Td></Td>
-      <Td>{data.title}</Td>
+      <Td>
+        <input
+          className="w-5 h-5 border-gray-200 rounded"
+          type="checkbox"
+          id={data.id}
+          value={data.id}
+          onChange={props.handleProductSelect}
+          checked={props.productSelect.some((x) => x === data.id)}
+        />
+      </Td>
+      <Td>
+        <img
+          src={data.imageSrc}
+          alt=""
+          className="w-full h-full object-cover object-center"
+        />
+      </Td>
+      <Td>
+        <h2 className="productCard2Name">{data.title}</h2>
+      </Td>
       <Td>
         <div
           className={`w-[50px] h-[25px]  flex items-center rounded-full relative

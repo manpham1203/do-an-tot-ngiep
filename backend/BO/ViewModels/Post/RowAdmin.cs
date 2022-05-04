@@ -11,5 +11,7 @@ namespace BO.ViewModels.Post
         public string Id { get; set; }
         public string Title { get; set; }
         public bool Published { get; set; }
+        public string ImageName { get; set; }
+        public string ImageSrc { get; set; }
     }
 }

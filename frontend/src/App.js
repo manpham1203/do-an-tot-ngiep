@@ -39,6 +39,7 @@ import PostEdit from "./views/Admin/Post/PostEdit";
 import PostTrash from "./views/Admin/Post/PostTrash";
 import Posts from "./views/Client/Posts/Posts";
 import PostDetail from "./views/Client/PostDetail/PostDetail";
+import Wishlist from "./views/Client/Wishlist/Wishlist";
 
 function App() {
   const { user } = useSelector((store) => store);
@@ -76,6 +77,7 @@ function App() {
           <Route path="/san-pham/:slug" element={<ProductDetail />}></Route>
           <Route path="/tin-tuc" element={<Posts />}></Route>
           <Route path="/tin-tuc/:slug" element={<PostDetail />}></Route>
+          <Route path="/danh-sach-yeu-thich" element={<Wishlist />}></Route>
         </Route>
 
         <Route path="/admin" element={<SideBar />}>

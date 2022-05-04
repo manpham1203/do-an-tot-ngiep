@@ -14,7 +14,8 @@ import {
   DATA_CART_LOADING,
   DATA_CART_FAIL,
   SET_DATA_CART_EMPTY,
-  SET_CART_EMPTY
+  SET_CART_EMPTY,
+  SET_CART
 } from "./cartConstant";
 export const fetchProductsOfCart = () => async (dispatch) => {
   dispatch({ type: PRODUCTS_OF_CART_LOADING });
@@ -70,6 +71,12 @@ export const dataCartFail = (payload) => {
 export const addToCart = (payload) => {
   return {
     type: ADD_TO_CART,
+    payload: payload,
+  };
+};
+export const setCart = (payload) => {
+  return {
+    type: SET_CART,
     payload: payload,
   };
 };

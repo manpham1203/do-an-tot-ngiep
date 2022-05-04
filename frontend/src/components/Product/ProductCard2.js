@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import product from "../../assets/product.jpg";
 import { AiFillStar, AiFillHeart } from "react-icons/ai";
+import ShowStarAvg from "../../components/ShowStar/ShowStarAvg";
 
 function ProductCard2(props) {
   const navigate = useNavigate();
@@ -41,19 +42,27 @@ function ProductCard2(props) {
   };
   return (
     <div className="flex flex-row rounded-[8px] gap-x-[25px] shadow-md bg-white">
-      <div className="w-[200px] h-[200px]">
+      <div className="w-[200px] h-[200px] flex-none">
         <img
           src={props.image}
           alt=""
           className="w-full h-full object-cover object-center"
         />
       </div>
-      <div className="flex flex-col justify-around">
-        <div>
-          <h2 onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)} className="font-normal cursor-pointer hover:underline underline-offset-4">
-          {props.brandName}
+      <div className=" w-full">
+        <div className="w-full flex flex-col pr-[10px]">
+          <h2
+            onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
+            className="font-normal cursor-pointer hover:underline underline-offset-4"
+          >
+            {props.brandName}
           </h2>
-          <h2 onClick={() => navigate(`/san-pham/${props.slug}`)} className="mt-[10px] cursor-pointer hover:underline underline-offset-4 font-medium">{props.name}</h2>
+          <h2
+            onClick={() => navigate(`/san-pham/${props.slug}`)}
+            className="mt-[10px] cursor-pointer hover:underline underline-offset-4 font-medium productCard2Name"
+          >
+            {props.name}
+          </h2>
           <p className="mt-[10px]">
             {props.priceDiscount === null ? (
               <span>
@@ -80,11 +89,7 @@ function ProductCard2(props) {
             )}
           </p>
           <div className="flex flex-row text-[#F7BF63] mt-[10px]">
-            <AiFillStar />
-            <AiFillStar />
-            <AiFillStar />
-            <AiFillStar />
-            <AiFillStar />
+          <ShowStarAvg star={props.star} />
           </div>
         </div>
 

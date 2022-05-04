@@ -160,6 +160,7 @@ function Home() {
     setShowBrand(state.brand?.data[0]?.id);
   }, [state.brand.data]);
   document.title = "Web";
+  console.log("data", state);
 
   return (
     <div className="w-[100%]">

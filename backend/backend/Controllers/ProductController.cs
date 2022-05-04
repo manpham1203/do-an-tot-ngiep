@@ -409,7 +409,80 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
+                for (int i = 0; i < resultFromBLL.Count; i++)
+                {
+                    resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                }
                 return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+   
+        [HttpPut("PublishedTrueList")]
+        public async Task<IActionResult> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.PublishedTrueList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("PublishedFalseList")]
+        public async Task<IActionResult> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.PublishedFalseList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("DeletedFalseList")]
+        public async Task<IActionResult> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.DeletedFalseList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("DeletedTrueList")]
+        public async Task<IActionResult> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.DeletedTrueList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
             }
             catch
             {

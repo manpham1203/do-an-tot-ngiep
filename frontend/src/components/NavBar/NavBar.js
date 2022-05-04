@@ -3,8 +3,8 @@ import React, { useEffect, useState, memo, useReducer } from "react";
 import { FiUser } from "react-icons/fi";
 import { AiOutlineShopping } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FiSearch } from "react-icons/fi";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { FiHeart } from "react-icons/fi";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import MobileMenu from "../MobileMenu/MobileMenu";
@@ -19,9 +19,7 @@ function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const store = useSelector((store) => store);
-  const cart = store.cart;
-  const user = store.user;
+  const { cart, user } = useSelector((store) => store);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -80,9 +78,11 @@ function NavBar() {
             }
             `}
           >
-            {/* <button className="text-[25px]">
-              <FiSearch />
-            </button> */}
+            {user.id != null && (
+              <Link to="/danh-sach-yeu-thich" className="text-[25px]">
+                <FiHeart />
+              </Link>
+            )}
 
             <div className="relative" onClick={() => navigate("/gio-hang")}>
               <AiOutlineShopping className="cursor-pointer text-[25px]" />

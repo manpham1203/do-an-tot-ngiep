@@ -532,6 +532,7 @@ namespace DAL.Product
                     resultFromDb = resultFromDb.Where(x => x.Price <= model.PriceTo).ToList();
                 }
 
+
                 if (!string.IsNullOrEmpty(model.OrderBy))
                 {
                     switch (model.OrderBy)
@@ -701,13 +702,27 @@ namespace DAL.Product
                 {
                     resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
                 }
-                if (model.PriceFrom.HasValue)
+                if (!string.IsNullOrEmpty(model.PriceRange))
                 {
-                    resultFromDb = resultFromDb.Where(x => x.Price >= model.PriceFrom).ToList();
-                }
-                if (model.PriceTo.HasValue)
-                {
-                    resultFromDb = resultFromDb.Where(x => x.Price <= model.PriceTo).ToList();
+                    switch (model.PriceRange)
+                    {
+                        case "duoi-5-trieu":
+                            resultFromDb = resultFromDb.Where(x => x.Price < 5000000).ToList();
+                            break;
+                        case "tu-5-10-trieu":
+                            resultFromDb = resultFromDb.Where(x => x.Price >= 5000000 && x.Price <= 10000000).ToList();
+                            break;
+                        case "tu-10-15-trieu":
+                            resultFromDb = resultFromDb.Where(x => x.Price >= 10000000 && x.Price <= 15000000).ToList();
+                            break;
+                        case "tu-15-20-trieu":
+                            resultFromDb = resultFromDb.Where(x => x.Price >= 15000000 && x.Price <= 20000000).ToList();
+                            break;
+                        case "tren-20":
+                            resultFromDb = resultFromDb.Where(x => x.Price > 20000000).ToList();
+                            break;
+                        default: break;
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(model.OrderBy))
@@ -808,7 +823,7 @@ namespace DAL.Product
                 var resultFromDb = await (from w in db.Wishlists
                                           join p in db.Products on w.ProductId equals p.Id into list
                                           from p in list.DefaultIfEmpty()
-                                          where w.UserId == userId && p.Published==true && p.Deleted==false
+                                          where w.UserId == userId && p.Published == true && p.Deleted == false
                                           select new ProductCardVM
                                           {
                                               Id = p.Id,
@@ -826,6 +841,75 @@ namespace DAL.Product
             catch
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Published = true;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Published = false;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Deleted = true;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == ids[i]);
+                    resultFromDb.Deleted = false;
+                }
+                var result = await db.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

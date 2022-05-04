@@ -72,17 +72,6 @@ const reducer = (state, action) => {
   }
 };
 function ProductTable(props) {
-  const {
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
-    control,
-    register,
-  } = useForm({
-    mode: "onChange",
-    defaultValues: { brand: [], category: [] },
-  });
   const [state, dispatch] = useReducer(reducer, initState);
   const [activeFilter, setActiveFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,6 +80,15 @@ function ProductTable(props) {
   const [brand, setBrand] = useState();
   const [category, setCategory] = useState();
   const [priceRange, setPriceRange] = useState([]);
+  const [debouncePrice, setDebouncePrice] = useState([]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncePrice(priceRange);
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [priceRange]);
   const [priceRangeData, setPriceRangeData] = useState({
     maxPrice: 0,
     minPrice: 0,
@@ -101,18 +99,18 @@ function ProductTable(props) {
     priceRange: false,
   });
   const [loadingP, setLoadingP] = useState(false);
-  const watchBrand = watch("brand");
-  const watchCategory = watch("category");
-
+  const [arrBrand, setArrBrand] = useState([]);
+  const [arrCategory, setArrCategory] = useState([]);
   const fetchData = async () => {
+    console.log("vo day");
     const data = {
       currentPage: currentPage,
       limit: limit,
       search: query,
-      brandSlugs: watchBrand,
-      categorySlugs: watchCategory,
-      priceFrom: priceRange[0],
-      priceTo: priceRange[1],
+      brandSlugs: arrBrand,
+      categorySlugs: arrCategory,
+      priceFrom: debouncePrice[0],
+      priceTo: debouncePrice[1],
     };
     dispatch(loading());
     await api({
@@ -134,10 +132,10 @@ function ProductTable(props) {
       currentPage: currentPage,
       limit: limit,
       search: query,
-      brandSlugs: watchBrand,
-      categorySlugs: watchCategory,
-      from: priceRange[0],
-      to: priceRange[1],
+      brandSlugs: arrBrand,
+      categorySlugs: arrCategory,
+      from: debouncePrice[0],
+      to: debouncePrice[1],
     };
     dispatch(loading());
     await api({
@@ -194,12 +192,12 @@ function ProductTable(props) {
       .catch(() => console.log("brand fail"));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchData1();
-  }, [limit, currentPage])
+  }, [limit, currentPage]);
   useEffect(() => {
     fetchData();
-  }, [query,watchBrand, watchCategory, priceRange]);
+  }, [query, arrBrand, arrCategory, debouncePrice]);
 
   useEffect(() => {
     fetchDataBrand();
@@ -253,14 +251,171 @@ function ProductTable(props) {
   //   }
   // }, [limit, state.data?.totalResult]);
 
-  useEffect(()=>{
-    if(state.data.totalResult<=limit){
+  useEffect(() => {
+    if (state.data.totalResult <= limit) {
       setCurrentPage(1);
     }
-  }, [limit, state.data.totalResult])
-  console.log(currentPage);
+  }, [limit, state.data.totalResult]);
+
+  const handleBrandChange = (event) => {
+    let newArray = [...arrBrand, event.target.id];
+    if (arrBrand.includes(event.target.id)) {
+      newArray = newArray.filter((x) => x !== event.target.id);
+    }
+    setArrBrand(newArray);
+  };
+  const handleCategoryChange = (event) => {
+    let newArray = [...arrCategory, event.target.id];
+    if (arrCategory.includes(event.target.id)) {
+      newArray = newArray.filter((x) => x !== event.target.id);
+    }
+    setArrCategory(newArray);
+  };
+  const [productSelect, setProductSelect] = useState([]);
+  const [checkAll, setCheckAll] = useState(false);
+  const handleProductSelect = (event) => {
+    setCheckAll(false);
+    let newArray = [...productSelect, event.target.id];
+    if (productSelect.includes(event.target.id)) {
+      newArray = newArray.filter((x) => x !== event.target.id);
+    }
+    if (newArray.length === state.data.products.length) {
+      setCheckAll(true);
+    }
+    setProductSelect(newArray);
+  };
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setCheckAll(true);
+      let newArr = [];
+      for (var i = 0; i < state.data.products.length; i++) {
+        newArr.push(state.data.products[i].id);
+      }
+      setProductSelect(newArr);
+    } else {
+      setCheckAll(false);
+
+      setProductSelect([]);
+    }
+  };
+  console.log(productSelect);
+  const handlePublishedTrueList = async () => {
+    await api({
+      method: "PUT",
+      url: `/Product/PublishedTrueList`,
+      data: productSelect,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Cập nhật thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+          setShowTable(false);
+          fetchData();
+          setProductSelect([]);
+          setCheckAll(false);
+          setShowTable(true);
+        } else {
+          toast.error(`Cập nhật thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Cập nhật thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        })
+      );
+  };
+  const handlePublishedFalseList = async () => {
+    await api({
+      method: "PUT",
+      url: `/Product/PublishedFalseList`,
+      data: productSelect,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Cập nhật thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+          setShowTable(false);
+          fetchData();
+          setProductSelect([]);
+          setCheckAll(false);
+          setShowTable(true);
+        } else {
+          toast.error(`Cập nhật thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Cập nhật thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        })
+      );
+  };
+  const handleDeletedTrueList = async () => {
+    await api({
+      method: "PUT",
+      url: `/Product/DeletedTrueList`,
+      data: productSelect,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Cập nhật thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+          setShowTable(false);
+          fetchData();
+          setProductSelect([]);
+          setCheckAll(false);
+          setShowTable(true);
+        } else {
+          toast.error(`Cập nhật thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 1000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Cập nhật thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 1000,
+        })
+      );
+  };
+  const [showTable, setShowTable] = useState(true);
+  console.log(state);
   return (
     <>
+      <div className="py-[10px] shadow-admin rounded-[8px] flex flex-row items-center justify-end gap-x-[20px] px-[20px] mb-[20px]">
+        <button
+          onClick={handlePublishedTrueList}
+          className="bg-blue-600 rounded-[8px] h-[40px] px-[20px] text-third"
+        >
+          Phát hành
+        </button>
+        <button
+          onClick={handlePublishedFalseList}
+          className="bg-gray-600 rounded-[8px] h-[40px] px-[20px] text-third"
+        >
+          Dừng phát hành
+        </button>
+        <button
+          onClick={handleDeletedTrueList}
+          className="bg-yellow-400 rounded-[8px] h-[40px] px-[20px] text-third"
+        >
+          Chuyển vào thùng rác
+        </button>
+      </div>
       <div className="bg-white mb-[20px] shadow-admin rounded-[8px] overflow-hidden">
         <div
           className="h-[50px] shadow-admin rounded-[8px] flex flex-row items-center justify-between px-[20px] cursor-pointer"
@@ -297,9 +452,11 @@ function ProductTable(props) {
                       <label className="inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
-                          {...register("brand")}
                           value={item.id}
-                          className="form-checkbox hidden"
+                          id={item.id}
+                          className="form-checkbox hidden "
+                          onChange={handleBrandChange}
+                          checked={arrBrand.some((x) => x === item.id)}
                         />
                         <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-blue-500 flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -335,9 +492,11 @@ function ProductTable(props) {
                       <label className="inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
-                          {...register("category")}
                           value={item.id}
-                          className="form-checkbox hidden"
+                          id={item.id}
+                          className="form-checkbox hidden "
+                          onChange={handleCategoryChange}
+                          checked={arrCategory.some((x) => x === item.id)}
                         />
                         <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-blue-500 flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -373,19 +532,31 @@ function ProductTable(props) {
                   ""
                 ) : (
                   <>
-                    <div className="grid grid-cols-3 mb-[25px]">
-                      <div className="">Từ: {priceRange[0]} </div>
+                    <div className="flex flex-row mb-[25px]">
+                      <div className="w-full">
+                        Từ:{" "}
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(priceRange[0])}
+                      </div>
                       <div className="mx-auto border-r border-gray-500 w-[1px]"></div>
-                      <div className="">Đến: {priceRange[1]} </div>
+                      <div className="w-full text-right">
+                        Đến:{" "}
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(priceRange[1])}{" "}
+                      </div>
                     </div>
                     <Slider
                       range
                       min={priceRangeData?.minPrice}
                       max={priceRangeData?.maxPrice}
                       value={priceRange}
-                      defaultValue={priceRange}
                       onChange={setPriceRange}
-                      step={10}
+                      step={100000}
+                      className="filter"
                     />
                   </>
                 )}
@@ -432,42 +603,50 @@ function ProductTable(props) {
           </div>
         </div>
         <div className="overflow-hidden overflow-x-auto border border-gray-600 rounded-[8px]">
-          <table className="min-w-full text-sm divide-y divide-gray-600">
-            <thead>
-              <tr className="bg-white">
-                <th className="sticky left-0 px-4 py-2 text-left bg-white">
-                  <input
-                    className="w-5 h-5 border-gray-200 rounded"
-                    type="checkbox"
-                    id="row_all"
-                  />
-                </th>
-                <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                  Hình
-                </th>
-                <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                  Tên sản phẩm
-                </th>
-                <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                  Phát hành
-                </th>
-                <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                  Hành động
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-600">
-              {state.data.products.map((item) => {
-                return (
-                  <RowTable
-                    key={item.id}
-                    id={item.id}
-                    handleTrash={handleTrash}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {showTable && (
+            <table className="min-w-full text-sm divide-y divide-gray-600">
+              <thead>
+                <tr className="bg-white">
+                  <th className="sticky left-0 px-4 py-2 text-left bg-white">
+                    <input
+                      className="w-5 h-5 border-gray-200 rounded"
+                      type="checkbox"
+                      id="row_all"
+                      name="selectAll"
+                      onChange={handleSelectAll}
+                      checked={checkAll}
+                    />
+                  </th>
+                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
+                    Hình
+                  </th>
+                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
+                    Tên sản phẩm
+                  </th>
+                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
+                    Phát hành
+                  </th>
+                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
+                    Hành động
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-600">
+                {state.data.products.map((item) => {
+                  return (
+                    <RowTable
+                      key={item.id}
+                      id={item.id}
+                      handleTrash={handleTrash}
+                      handleProductSelect={handleProductSelect}
+                      productSelect={productSelect}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-600 sm:px-6">
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>

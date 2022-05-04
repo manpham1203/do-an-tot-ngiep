@@ -16,6 +16,7 @@ using System.Threading;
 using BLL.Picture;
 using BO.ViewModels.Picture;
 using BLL.Comment;
+using BLL.Wishlist;
 
 namespace BLL.Product
 {
@@ -468,6 +469,19 @@ namespace BLL.Product
             {
                 resultFromDAL.ImageName = listImg[0].Name;
             }
+
+            var cmtBLL = new ProductCmtBLL();
+            var star = await cmtBLL.Star(resultFromDAL.Id);
+
+            if (star.Count() == 0)
+            {
+                resultFromDAL.Star = 0;
+            }
+            else
+            {
+                resultFromDAL.Star = star.Sum(x => x.Value) / (float)star.Count();
+            }
+
             return resultFromDAL;
         }
 
@@ -482,6 +496,7 @@ namespace BLL.Product
             {
                 return new List<ProductCardVM>();
             }
+            var cmtBLL = new ProductCmtBLL();
             for (int i = 0; i < resultFromDAL.Count; i++)
             {
                 var brandBLL = new BrandBLL();
@@ -498,6 +513,17 @@ namespace BLL.Product
                 if (listImg.Count > 0)
                 {
                     resultFromDAL[i].ImageName = listImg[0].Name;
+                }
+
+                var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                if (star.Count() == 0)
+                {
+                    resultFromDAL[i].Star = 0;
+                }
+                else
+                {
+                    resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
                 }
             }
             return resultFromDAL;
@@ -770,7 +796,6 @@ namespace BLL.Product
             var listImg = await productImageBLL.GetByObjectId(resultFromDAL.Id, objectType);
             resultFromDAL.PictureVMs = listImg;
 
-
             var cmtBLL = new ProductCmtBLL();
 
             var star = await cmtBLL.Star(resultFromDAL.Id);
@@ -786,7 +811,10 @@ namespace BLL.Product
                 resultFromDAL.StarCount = star.Count();
             }
 
+            var wishlistBLL = new WishlistBLL();
+            var wishlist = await wishlistBLL.Count(resultFromDAL.Id);
 
+            resultFromDAL.Like = wishlist;
 
             return resultFromDAL;
         }
@@ -892,6 +920,7 @@ namespace BLL.Product
             {
                 return null;
             }
+            
             if (resultFromDAL.Count == 0)
             {
                 return new ProductPaginationVM
@@ -901,7 +930,7 @@ namespace BLL.Product
                     Products = new List<ProductCardVM>(),
                 };
             }
-
+            var cmtBLL = new ProductCmtBLL();
             for (int i = 0; i < resultFromDAL.Count; i++)
             {
                 var brandBLL = new BrandBLL();
@@ -919,6 +948,18 @@ namespace BLL.Product
                 {
                     resultFromDAL[i].ImageName = listImg[0].Name;
                 }
+
+                var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                if (star.Count() == 0)
+                {
+                    resultFromDAL[i].Star = 0;
+                }
+                else
+                {
+                    resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
+                }
+
             }
 
             var tempBrand = new ProductPaginationVM
@@ -1114,11 +1155,129 @@ namespace BLL.Product
         {
             try
             {
-                return await productDAL.ProductWishlist(userId);
+                var resultFromDAL = await productDAL.ProductWishlist(userId);
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new List<ProductCardVM>();
+                }
+                var cmtBLL = new ProductCmtBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    var brandBLL = new BrandBLL();
+                    var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
+                    if (brand != null)
+                    {
+                        resultFromDAL[i].BrandNameVM.Id = brand.Id;
+                        resultFromDAL[i].BrandNameVM.Name = brand.Name;
+                        resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
+                    }
+
+                    var productImageBLL = new PictureBLL();
+                    var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                    if (listImg.Count > 0)
+                    {
+                        resultFromDAL[i].ImageName = listImg[0].Name;
+                    }
+                    
+
+                    var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                    if (star.Count() == 0)
+                    {
+                        resultFromDAL[i].Star = 0;
+                    }
+                    else
+                    {
+                        resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
+                    }
+                }
+                return resultFromDAL;
             }
             catch
             {
                 return null;
+            }
+        }
+    
+
+        public async Task<bool> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                for(int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await productDAL.PublishedTrueList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await productDAL.PublishedFalseList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await productDAL.DeletedTrueList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await productDAL.DeletedFalseList(ids);
+            }
+            catch
+            {
+                return false;
             }
         }
     }

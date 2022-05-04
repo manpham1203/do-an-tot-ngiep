@@ -260,5 +260,81 @@ namespace BLL.Post
                 return false;
             }
         }
+        public async Task<bool> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await postDAL.PublishedTrueList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await postDAL.PublishedFalseList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await postDAL.DeletedTrueList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    var checkExists = await CheckExists(ids[i]);
+                    if (checkExists == false)
+                    {
+                        return false;
+                    }
+                }
+                return await postDAL.DeletedFalseList(ids);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

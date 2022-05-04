@@ -58,5 +58,16 @@ namespace BLL.Wishlist
             }
         }
 
+        public async Task<int> Count(string productId)
+        {
+            try
+            {
+                return await wishlistDAL.Count(productId);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }

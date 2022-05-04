@@ -14,13 +14,17 @@ function CartItem(props) {
   const { cart } = useSelector((state) => state);
 
   const handleNumber = (e) => {
-    const re = /^[0-9\b]+$/;
+    const re = /^[1-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: e.target.value }));
     }
   };
-
-  
+  const handleBlurNumber = (e) => {
+    if (e.target.value==="") {
+      dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
+    }
+  };
+  console.log(props.qty);
 
   return (
     <div
@@ -45,7 +49,10 @@ function CartItem(props) {
         </div>
       </div>
       <div className="flex justify-center w-1/5 items-center">
-        <div onClick={()=>dispatch(decrementQTY(props.cartItem.id))} className="cursor-pointer">
+        <div
+          onClick={() => dispatch(decrementQTY(props.cartItem.id))}
+          className="cursor-pointer"
+        >
           <BsDashLg />
         </div>
 
@@ -56,6 +63,7 @@ function CartItem(props) {
           min="1"
           value={props.qty}
           onChange={(e) => handleNumber(e)}
+          onBlur={(e) => handleBlurNumber(e)}
         />
         <div
           onClick={() => dispatch(incrementQTY(props.cartItem.id))}

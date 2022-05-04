@@ -110,7 +110,7 @@ function ProductCreate(props) {
       );
   };
 
-  const [image, setImage] = useState(undefined);
+  const [image, setImage] = useState([]);
   const [files, setFiles] = useState([]);
   const selectFile = (e) => {
     const file = e.target.files;
@@ -164,8 +164,6 @@ function ProductCreate(props) {
   };
   const [brandSelected, setBrandSelected] = useState(null);
   const [categorySelected, setCategorySelected] = useState([]);
-  const watchBran=watch("categoryIds")
-  console.log("b",watchBran);
   return (
     <div className="">
       <form

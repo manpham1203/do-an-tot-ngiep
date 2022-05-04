@@ -6,7 +6,7 @@ import product3 from "../../../assets/product3.jpg";
 import product2 from "../../../assets/product2.jpg";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
-import { addToCart } from "../../../redux/cart/cartActions";
+import { addToCart, adjustQty } from "../../../redux/cart/cartActions";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import ProductImageSlider from "../../../components/ProductImageSlider/ProductImageSlider";
@@ -108,11 +108,37 @@ function ProductDetail() {
       cartId: id,
       qty: qty,
     };
-    const check = cart.every((item) => {
-      return item.cartId !== objCart.cartId;
-    });
+    // const check = cart.every((item) => {
+    //   return item.cartId !== objCart.cartId;
+    // });
+    const check = cart.some((x) => x.cartId === objCart.cartId);
+    const check2 = cart.find((x) => x.cartId === objCart.cartId);
     if (cart.length < 8) {
       if (check) {
+        if (check2.qty <= 8) {
+          if (check2.qty + number > 9) {
+            dispatch(adjustQty({ cartId: check2.cartId, qty: 9 }));
+            toast.warn(`sản phẩm đã đạt số lượng tối đa`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          } else {
+            dispatch(addToCart(objCart));
+            toast.success(
+              `sản phẩm "${state.data.name}" thêm vào giỏ hàng thành công`,
+              {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+              }
+            );
+          }
+        } else {
+          toast.warn("Sản phẩm đã đạt số lượng tối đa !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      } else {
         dispatch(addToCart(objCart));
         toast.success(
           `sản phẩm "${state.data.name}" thêm vào giỏ hàng thành công`,
@@ -121,11 +147,6 @@ function ProductDetail() {
             autoClose: 3000,
           }
         );
-      } else {
-        toast.warn("sản phẩm đã tồn tại trong giỏ hàng !", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        });
       }
     } else {
       toast.warn("Giỏ hàng đã đầy !", {

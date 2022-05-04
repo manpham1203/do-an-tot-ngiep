@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useSearchParams } from "react-router-dom";
 import api from "../../../apis/api";
@@ -115,24 +115,56 @@ const colourStyles = {
     paddingTop: 0,
   }),
 };
+const colourStyles2 = {
+  dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
+  placeholder: (styles) => ({
+    ...styles,
+    color: '"#202121"',
+    left: "0%",
+    lineHeight: "1.3rem",
+    paddingLeft: "0.5rem",
+    marginLeft: "0rem",
+  }),
+  control: () => ({
+    display: "flex",
+    border: "1px solid #202121",
+    height: "40px",
+    width: "100%",
+    borderRadius: "0px",
+    background: "#fcfcfc",
+    fontSize: "14px",
+  }),
+  option: (styles) => ({
+    ...styles,
+    fontSize: "14px",
+    textAlign: "left",
+    color: "#103D56",
+    height: "40px",
+    background: "white",
+    borderBottom: "0.1rem solid #103D56",
+    ":last-of-type": {
+      borderBottom: "none",
+    },
+    ":hover": {
+      background: "#f7f7f7",
+      cursor: "pointer",
+    },
+  }),
+  menu: (styles) => ({
+    ...styles,
+    borderRadius: 0,
+    width: "100%",
+    border: "1px solid #202121",
+    paddingTop: 0,
+  }),
+};
 function Products(props) {
   const [state, dispatchProduct] = useReducer(reducer, initState);
-  const {
-    watch,
-    register,
-    setValue,
-    // formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
-  } = useForm({
-    mode: "onChange",
-    defaultValues: { brand: [], category: [] },
-  });
-  const watchBrand = watch("brand");
-  const watchCategory = watch("category");
+
   const [searchParams, setSearchPrams] = useSearchParams();
-  const brandSlugs = searchParams.getAll("brand");
-  const categorySlugs = searchParams.getAll("category");
-  const priceFrom = searchParams.get("tu");
-  const priceTo = searchParams.get("den");
+  const brandSlugs = searchParams.getAll("thuong-hieu");
+  const categorySlugs = searchParams.getAll("danh-muc");
+  const price = searchParams.get("gia");
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -141,9 +173,12 @@ function Products(props) {
     category: true,
     priceRange: true,
   });
-  const [priceRange, setPriceRange] = useState([]);
+  const [priceRange, setPriceRange] = useState(null);
   const [query, setQuery] = useState("");
-  const [loadingP, setLoadingP] = useState(false);
+  const [arrBrand, setArrBrand] = useState([]);
+  const [arrCategory, setArrCategory] = useState([]);
+  
+  
   const [priceRangeData, setPriceRangeData] = useState({
     maxPrice: 0,
     minPrice: 0,
@@ -155,6 +190,13 @@ function Products(props) {
     { value: "price_desc", label: "Giá cao nhất" },
     { value: "price_asc", label: "Giá thấp nhất" },
   ];
+  const priceOptions = [
+    { value: "duoi-5-trieu", label: "Dưới 5 triệu" },
+    { value: "tu-5-10-trieu", label: "Từ 5 - 10 triệu" },
+    { value: "tu-10-15-trieu", label: "Từ 10 - 15 triệu" },
+    { value: "tu-15-20-trieu", label: "Từ 15 - 20 triệu" },
+    { value: "tren-20", label: "Trên 20 triệu" },
+  ];
   const [orderBy, setOrderBy] = useState(orderOptions[0]);
   const fetchData = async () => {
     var data = {
@@ -162,8 +204,7 @@ function Products(props) {
       categorySlugs: categorySlugs,
       limit: 16,
       currentPage: currentPage,
-      priceTo: priceRange[1],
-      priceFrom: priceRange[0],
+      priceRange: price,
       search: query,
       orderBy: orderBy.value,
     };
@@ -181,7 +222,6 @@ function Products(props) {
       .catch(() => dispatchProduct(fail()));
   };
   const fetchDataPriceRange = async () => {
-    setLoadingP(true);
     await api({
       method: "GET",
       url: `/Product/pricerange`,
@@ -192,8 +232,6 @@ function Products(props) {
           maxPrice: res.data.maxPrice,
           minPrice: res.data.minPrice,
         });
-        setPriceRange([res.data.minPrice, res.data.maxPrice]);
-        setLoadingP(false);
       })
       .catch(() => console.log("brand fail"));
   };
@@ -217,69 +255,133 @@ function Products(props) {
       })
       .catch(() => console.log("category fail"));
   };
+
+  // useEffect(() => {
+  //   if (priceRange === null) {
+  //     setSearchPrams({
+  //       brand: arrBrand,
+  //       category: arrCategory,
+  //     });
+  //   } else {
+  //     console.log("day");
+  //     setSearchPrams({
+  //       brand: arrBrand,
+  //       category: arrCategory,
+  //       gia: priceRange.value,
+  //     });
+  //   }
+  // }, []);
+  // useEffect(() => {
+
+  // }, []);
+
   useEffect(() => {
-    setPriceRange([parseInt(priceFrom), parseInt(priceTo)]);
-  }, []);
-  useEffect(() => {
-    fetchData();
-  }, [location.search, query, priceRange, orderBy]);
-  useEffect(() => {
-    if (brandSlugs.length > 0) {
-      setValue("brand", brandSlugs);
-    }
-    if (categorySlugs.length > 0) {
-      setValue("category", categorySlugs);
-    }
-    // if (categorySlugs.length > 0 && watchCategory.length > 0) {
-    //   for (var i = 0; i < categorySlugs.length; i++) {
-    //     for (var j = 0; j < watchCategory.length; j++) {
-    //       if (categorySlugs[i] === watchCategory[j]) {
-    //         continue;
-    //       } else {
-    //         setSearchPrams({
-    //           category: watchCategory,
-    //         });
-    //       }
+    setArrBrand(brandSlugs);
+    setArrCategory(categorySlugs);
+    // if (price != null) {
+    //   for (var i = 0; i < priceOptions.length; i++) {
+    //     if (price === priceOptions[i].value) {
+    //       setPriceRange(priceOptions[i]);
     //     }
     //   }
     // }
-    // else{
-    //   setSearchPrams({
-    //     category: watchCategory,
-    //   });
-    // }
-  }, []);
-
+    fetchData();
+  }, [location]);
   useEffect(() => {
-    setValue("brand", brandSlugs);
-    setValue("category", categorySlugs);
-  }, [location.search]);
-
-  useEffect(() => {
-    setValue("brand", brandSlugs);
-    setValue("category", categorySlugs);
+    fetchData();
   }, []);
-
+  useEffect(() => {
+    fetchData();
+  }, [arrBrand, arrCategory]);
   useEffect(() => {
     fetchDataBrand();
     fetchDataCategory();
     fetchDataPriceRange();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("vo day");
-  //   setSearchPrams({brand: watchBrand, category: watchCategory });
-  // }, [watchBrand, watchCategory]);
-
-  // const handleFilter = () => {
-  //   setSearchPrams({
-  //     brand: watchBrand,
-  //     category: watchCategory,
-  //   });
-  // };
-
   const [grid, setGrid] = useState(2);
 
+  const handleBrandChange = (event) => {
+    let newArray = [...arrBrand, event.target.id];
+    if (arrBrand.includes(event.target.id)) {
+      newArray = newArray.filter((x) => x !== event.target.id);
+    }
+    setArrBrand(newArray);
+    if (price === null) {
+      setSearchPrams({
+        "thuong-hieu": newArray,
+        "danh-muc": arrCategory,
+      });
+    } else {
+      setSearchPrams({
+        "thuong-hieu": newArray,
+        "danh-muc": arrCategory,
+        gia: priceRange.value,
+      });
+    }
+  };
+  const handleCategoryChange = (event) => {
+    let newArray = [...arrCategory, event.target.id];
+    if (arrCategory.includes(event.target.id)) {
+      newArray = newArray.filter((x) => x !== event.target.id);
+    }
+    setArrCategory(newArray);
+    if (price === null) {
+      setSearchPrams({
+        "thuong-hieu": arrBrand,
+        "danh-muc": newArray,
+      });
+    } else {
+      setSearchPrams({
+        "thuong-hieu": arrBrand,
+        "danh-muc": newArray,
+        gia: priceRange.value,
+      });
+    }
+  };
+  useEffect(() => {
+    if (priceRange === null) {
+      if (arrBrand.length !== 0 || arrCategory.length !== 0) {
+        setSearchPrams({
+          "thuong-hieu": arrBrand,
+          "danh-muc": arrCategory,
+        });
+      } else {
+        if (priceRange === null) {
+          setSearchPrams({});
+        }
+      }
+    } else {
+      setSearchPrams({
+        "thuong-hieu": arrBrand,
+        "danh-muc": arrCategory,
+        gia: priceRange.value,
+      });
+    }
+  }, [priceRange]);
+  const handlePriceChange = (e) => {
+    setPriceRange(e);
+  };
+  useEffect(() => {
+    setArrBrand(brandSlugs);
+    setArrCategory(categorySlugs);
+    if (price != null) {
+      for (var i = 0; i < priceOptions.length; i++) {
+        if (price === priceOptions[i].value) {
+          setPriceRange(priceOptions[i]);
+        }
+      }
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   for (var i = 0; i < priceOptions.length; i++) {
+  //     if (price === priceOptions[i].value) {
+  //       setPriceRange(priceOptions[i]);
+  //     }
+  //   }
+  // }, [price]);
+  console.log(brandSlugs);
   console.log(state);
 
   return (
@@ -406,9 +508,11 @@ function Products(props) {
                       <label className="inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
-                          {...register("brand")}
                           value={item.slug}
+                          id={item.slug}
                           className="form-checkbox hidden "
+                          onChange={handleBrandChange}
+                          checked={arrBrand.some((x) => x === item.slug)}
                         />
                         <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -438,9 +542,11 @@ function Products(props) {
                       <label className="inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
-                          {...register("category")}
                           value={item.slug}
+                          id={item.slug}
                           className="form-checkbox hidden "
+                          onChange={handleCategoryChange}
+                          checked={arrCategory.some((x) => x === item.slug)}
                         />
                         <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -452,7 +558,7 @@ function Products(props) {
                 })}
             </ul>
           </div>
-          <div className="w-full border-t border-gray-200 border-b">
+          <div className="w-full border-t border-gray-200 ">
             <div
               className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center "
               onClick={() =>
@@ -465,7 +571,7 @@ function Products(props) {
               <span>Giá</span>
               {tabFilter.priceRange ? <IoIosArrowDown /> : <IoIosArrowUp />}
             </div>
-            <div
+            {/* <div
               className={`${
                 tabFilter.priceRange === false && "hidden"
               } mb-[25px]`}
@@ -474,64 +580,29 @@ function Products(props) {
                 ""
               ) : (
                 <>
-                  <div className="flex flex-row mb-[25px]">
-                    <div className="w-full">
-                      Từ:{" "}
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(priceRange[0])}
-                    </div>
-                    <div className="mx-auto border-r border-gray-500 w-[1px]"></div>
-                    <div className="w-full text-right">
-                      Đến:{" "}
-                      {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(priceRange[1])}{" "}
-                    </div>
-                  </div>
-                  <Slider
-                    range
-                    min={priceRangeData?.minPrice}
-                    max={priceRangeData?.maxPrice}
-                    value={priceRange}
-                    // defaultValue={[1000, 5000]}
-                    onChange={setPriceRange}
-                    step={10}
-                    // trackStyle={[
-                    //   { backgroundColor: "red" },
-                    //   { backgroundColor: "green" },
-                    // ]}
-                    // handleStyle={[
-                    //   { backgroundColor: "#202121" },
-                    //   { backgroundColor: "#202121" },
-                    // ]}
-                    // railStyle={{ backgroundColor: "black" }}
-                    className="filter"
-                  />
+                  
                 </>
               )}
+            </div> */}
+            <div
+              className={`${
+                tabFilter.priceRange === false && "hidden"
+              } mb-[25px]`}
+            >
+              <Select
+                className="min-w-[150px] cursor-pointer"
+                classNamePrefix="select"
+                // defaultValue={orderOptions[0]}
+                isClearable={true}
+                isSearchable={false}
+                name="priceRange"
+                value={priceRange}
+                onChange={handlePriceChange}
+                options={priceOptions}
+                styles={colourStyles2}
+                placeholder="Chọn khoảng giá"
+              />
             </div>
-          </div>
-          <div className="w-full flex flex-row justify-around mt-[25px]">
-            <button
-              className="border-2 border-second min-w-[100px] h-[40px] text-second transition-all duration-200"
-              onClick={() => setSearchPrams({})}
-            >
-              Bỏ lựa chọn
-            </button>
-            <button
-              className="border-2 border-second bg-second text-third min-w-[100px] h-[40px] transition-all duration-200"
-              onClick={() =>
-                setSearchPrams({
-                  brand: watchBrand,
-                  category: watchCategory,
-                })
-              }
-            >
-              Áp dụng
-            </button>
           </div>
         </div>
         <div className="w-full">
@@ -550,6 +621,7 @@ function Products(props) {
                       price={item.price}
                       priceDiscount={item.priceDiscount}
                       image={item.imageSrc}
+                      star={item.star}
                     />
                   );
                 })}
@@ -574,6 +646,7 @@ function Products(props) {
                       price={item.price}
                       priceDiscount={item.priceDiscount}
                       image={item.imageSrc}
+                      star={item.star}
                     />
                   );
                 })}

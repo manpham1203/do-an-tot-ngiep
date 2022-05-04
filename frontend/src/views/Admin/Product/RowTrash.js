@@ -97,7 +97,7 @@ function RowTrash(props) {
   const handleEdit = (slug) => {
     navigate(`/admin/san-pham/chinh-sua/${slug}`);
   };
-  
+
   return (
     <>
       {state.data.deleted === true ? (
@@ -106,10 +106,13 @@ function RowTrash(props) {
             <input
               className="w-5 h-5 border-gray-200 rounded"
               type="checkbox"
-              id="row_1"
+              id={state.data.id}
+              value={state.data.id}
+              onChange={props.handleProductSelect}
+              checked={props.productSelect.some(x=>x===state.data.id)}
             />
           </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
+          <td className="px-4 py-2 text-gray-700 ">
             <div className="w-[60px] h-[60px]">
               <img
                 src={state.data.imageSrc}
@@ -118,10 +121,10 @@ function RowTrash(props) {
               />
             </div>
           </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-            {state.data.name}
+          <td className="px-4 py-2 text-gray-700 ">
+            <h2 className="productCard2Name">{state.data.name}</h2>
           </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
+          <td className="px-4 py-2 text-gray-700 ">
             <div
               className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${state.data.published ? "bg-blue-600 " : "bg-gray-300"}
@@ -137,7 +140,7 @@ function RowTrash(props) {
               ></div>
             </div>
           </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap text-[25px]">
+          <td className="px-4 py-2 text-gray-700  text-[25px]">
             <div className="flex flex-row items-center gap-x-[20px]">
               <FaRegEdit
                 onClick={() => handleEdit(state.data.slug)}

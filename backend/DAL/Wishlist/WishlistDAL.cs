@@ -77,5 +77,16 @@ namespace DAL.Wishlist
             }
         }
     
+        public async Task<int> Count(string productId)
+        {
+            try
+            {
+                return await db.Wishlists.CountAsync(x => x.ProductId == productId);                
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }

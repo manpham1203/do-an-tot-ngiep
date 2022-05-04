@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cart/cartActions";
 import { toast } from "react-toastify";
 import Heart from "../Wishlist/Heart";
-
+import ShowStarAvg from "../../components/ShowStar/ShowStarAvg";
 
 function ProductCard(props) {
   const navigate = useNavigate();
@@ -18,18 +18,28 @@ function ProductCard(props) {
       cartId: id,
       qty: 1,
     };
-    const check = cart.every((item) => {
-      return item.cartId !== objCart.cartId;
-    });
+    // const check = cart.every((item) => {
+    //   return item.cartId !== objCart.cartId;
+    // });
+    const check = cart.some((x) => x.cartId === objCart.cartId);
+    const check2 = cart.find((x) => x.cartId === objCart.cartId);
     if (cart.length < 8) {
       if (check) {
+        if (check2.qty <= 8) {
+          dispatch(addToCart(objCart));
+          toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        } else {
+          toast.warn("Sản phẩm đã đạt số lượng tối đa !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      } else {
         dispatch(addToCart(objCart));
         toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        });
-      } else {
-        toast.warn("sản phẩm đã tồn tại trong giỏ hàng !", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
@@ -41,7 +51,7 @@ function ProductCard(props) {
       });
     }
   };
-  
+
   return (
     <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
       <div className="w-full overflow-hidden relative">
@@ -63,7 +73,7 @@ function ProductCard(props) {
           <Heart id={props.id} />
         </div>
       </div>
-      <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px bg-white bottom-[-44px]">
+      <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px] bg-white bottom-[-44px]">
         <h3
           className="cursor-pointer text-second font-normal hover:underline underline-offset-4"
           onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
@@ -71,19 +81,15 @@ function ProductCard(props) {
           {props.brandName}
         </h3>
         <h3
-          className="cursor-pointer font-primary font-normal text-[20px] hover:underline underline-offset-4 mb-[5px]"
+          className="cursor-pointer font-primary font-normal text-[20px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center"
           onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
           {props.name}
         </h3>
         <div className="flex flex-row text-[#F7BF63]">
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
-          <AiFillStar />
+          <ShowStarAvg star={props.star} />
         </div>
-        <div className="flex flex-round gap-x-[20px]">
+        <div className="flex flex-round gap-x-[20px] mt-[10px]">
           {props.priceDiscount == null ? (
             <span>
               {new Intl.NumberFormat("vi-VN", {

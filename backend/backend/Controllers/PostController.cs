@@ -103,6 +103,7 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
+                resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ImageName);
                 return Ok(resultFromBLL);
             }
             catch
@@ -242,6 +243,74 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
+        [HttpPut("PublishedTrueList")]
+        public async Task<IActionResult> PublishedTrueList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.PublishedTrueList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("PublishedFalseList")]
+        public async Task<IActionResult> PublishedFalseList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.PublishedFalseList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("DeletedFalseList")]
+        public async Task<IActionResult> DeletedFalseList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.DeletedFalseList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("DeletedTrueList")]
+        public async Task<IActionResult> DeletedTrueList(List<string> ids)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.DeletedTrueList(ids);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

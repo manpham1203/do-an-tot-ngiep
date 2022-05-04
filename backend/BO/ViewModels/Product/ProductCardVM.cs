@@ -19,6 +19,6 @@ namespace BO.ViewModels.Product
         public string ImageSrc { get; set; }
         public string BrandId { get; set; }
         public string QuantityInStock { get; set; }
-        public string Star { get; set; }
+        public float? Star { get; set; }
     }
 }
