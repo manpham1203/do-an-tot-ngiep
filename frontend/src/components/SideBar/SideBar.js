@@ -31,6 +31,10 @@ function SideBar(props) {
       icon: iconParent,
     },
     {
+      title: "Banner",
+      icon: iconParent,
+    },
+    {
       title: "Đơn hàng",
       icon: iconParent,
     },
@@ -107,6 +111,23 @@ function SideBar(props) {
     {
       title: "Thùng Rác",
       path: "tin-tuc/da-xoa",
+      icon: iconchild,
+    },
+  ];
+  const BannerTab = [
+    {
+      title: "Danh Sách",
+      path: "banner/danh-sach",
+      icon: iconchild,
+    },
+    {
+      title: "Tạo Mới",
+      path: "banner/tao-moi",
+      icon: iconchild,
+    },
+    {
+      title: "Thùng Rác",
+      path: "banner/da-xoa",
       icon: iconchild,
     },
   ];
@@ -289,7 +310,7 @@ function SideBar(props) {
                   })}
                 </ul>
               )}
-              {tab === 4 && (
+              {tab === 5 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
                   {OrderTab.map((p, i) => {
                     return (
@@ -330,6 +351,44 @@ function SideBar(props) {
               {tab === 3 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
                   {PostTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 4 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {BannerTab.map((p, i) => {
                     return (
                       <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink

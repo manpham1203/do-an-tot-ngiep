@@ -119,10 +119,6 @@ namespace backend.Controllers
                     if (result && (model.File != null))
                     {
                         var saveFile = await SaveFile(model.File, model.ImageName);
-                        if (!saveFile)
-                        {
-                            return BadRequest();
-                        }
                     }
                     return Ok();
                 }

@@ -4,7 +4,6 @@ import Thead from "../../../components/DataTable/Thead";
 import Tbody from "../../../components/DataTable/Tbody";
 import Tr from "../../../components/DataTable/Tr";
 import Th from "../../../components/DataTable/Th";
-import Td from "../../../components/DataTable/Td";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
 import Row from "./Row";

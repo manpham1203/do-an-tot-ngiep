@@ -42,7 +42,6 @@ namespace DAL.Product
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Like = x.Like,
                 View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -70,7 +69,6 @@ namespace DAL.Product
                 QuantityInStock = productFromDb.QuantityInStock,
                 Published = productFromDb.Published,
                 Deleted = productFromDb.Deleted,
-                Like = productFromDb.Like,
                 View = productFromDb.View,
                 CreatedAt = productFromDb.CreatedAt,
                 UpdatedAt = productFromDb.UpdatedAt,
@@ -99,7 +97,6 @@ namespace DAL.Product
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Like = x.Like,
                 View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -122,7 +119,6 @@ namespace DAL.Product
                 QuantityInStock = productVM.QuantityInStock,
                 Published = productVM.Published,
                 Deleted = productVM.Deleted,
-                Like = productVM.Like,
                 View = productVM.View,
                 CreatedAt = productVM.CreatedAt,
                 UpdatedAt = productVM.UpdatedAt,
@@ -181,7 +177,6 @@ namespace DAL.Product
             productFromDb.QuantityInStock = productVM.QuantityInStock;
             productFromDb.Published = productVM.Published;
             productFromDb.Deleted = productVM.Deleted;
-            productFromDb.Like = productVM.Like;
             productFromDb.View = productVM.View;
             productFromDb.UpdatedAt = productVM.UpdatedAt;
             productFromDb.BrandId = productVM.BrandId;
@@ -292,7 +287,6 @@ namespace DAL.Product
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
-                Like = x.Like,
                 View = x.View,
                 CreatedAt = x.CreatedAt,
                 UpdatedAt = x.UpdatedAt,
@@ -432,7 +426,6 @@ namespace DAL.Product
                 result.Published = resultFromDb.Published;
                 result.Deleted = resultFromDb.Deleted;
                 result.View = resultFromDb.View;
-                result.Like = resultFromDb.Like;
                 result.CreatedAt = resultFromDb.CreatedAt;
                 result.BrandId = resultFromDb.BrandId;
                 result.BrandNameVM = new BrandNameVM();
@@ -592,7 +585,6 @@ namespace DAL.Product
                     Published = resultFromDb.Published,
                     Deleted = resultFromDb.Deleted,
                     View = resultFromDb.View,
-                    Like = resultFromDb.Like,
                     BrandId = resultFromDb.BrandId,
                     BrandNameVM = new BrandNameVM(),
                     CategoryNameVMs = new List<CategoryNameVM>(),

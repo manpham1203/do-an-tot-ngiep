@@ -8,7 +8,22 @@ import ShowStarCmt from "../ShowStar/ShowStarCmt";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import ProductCmtChildren from "./ProductCmtChildren";
+import { useNavigate } from "react-router-dom";
 
+function Abc() {
+  const navigate = useNavigate();
+  return (
+    <div className="cursor-default">
+      <h2>Bạn cần phải đăng nhập để thực hiện chức năng này</h2>
+      <button
+        className="hover:underline underline-offset-4 font-semibold"
+        onClick={() => navigate("/dang-nhap")}
+      >
+        Tiến hành đăng nhập...
+      </button>
+    </div>
+  );
+}
 function ProductCmtItem(props) {
   const [data, setData] = useState([]);
   const fetchData = async (id) => {
@@ -29,9 +44,15 @@ function ProductCmtItem(props) {
   const [openRep, setOpenRep] = useState(null);
   const [content, setContent] = useState("");
   const [openRepList, setOpenRepList] = useState(null);
-
   const { user } = useSelector((state) => state);
   const handleRep = async () => {
+    if(user.id===null){
+      toast.warn(<Abc />, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      return;
+    }
     if (content === "") {
       return;
     }

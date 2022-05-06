@@ -5,6 +5,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cart/cartActions";
+import { setOpen } from "../../redux/quickView/quickViewActions";
 import { toast } from "react-toastify";
 import Heart from "../Wishlist/Heart";
 import ShowStarAvg from "../../components/ShowStar/ShowStarAvg";
@@ -23,7 +24,7 @@ function ProductCard(props) {
     // });
     const check = cart.some((x) => x.cartId === objCart.cartId);
     const check2 = cart.find((x) => x.cartId === objCart.cartId);
-    if (cart.length < 8) {
+    if (cart.length <= 8) {
       if (check) {
         if (check2.qty <= 8) {
           dispatch(addToCart(objCart));
@@ -51,6 +52,13 @@ function ProductCard(props) {
       });
     }
   };
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.slug,
+    };
+    dispatch(setOpen(obj));
+  };
 
   return (
     <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
@@ -67,7 +75,10 @@ function ProductCard(props) {
           >
             <BsFillBagFill />
           </div>
-          <div className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md">
+          <div
+            onClick={handleQuickView}
+            className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md"
+          >
             <FaRegEye />
           </div>
           <Heart id={props.id} />

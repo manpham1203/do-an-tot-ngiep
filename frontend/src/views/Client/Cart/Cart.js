@@ -7,7 +7,11 @@ import api from "../../../apis/api";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { toast } from "react-toastify";
-import { setCart, removeFromCart,setCartEmpty } from "../../../redux/cart/cartActions";
+import {
+  setCart,
+  removeFromCart,
+  setCartEmpty,
+} from "../../../redux/cart/cartActions";
 
 const initState = {
   loading: false,
@@ -102,9 +106,9 @@ function Cart() {
       newArr.push(cart[i].cartId);
     }
     fetchProducts(newArr);
-  }, [cart]);
+  }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     var newArr = [];
     for (var i = 0; i < cart.length; i++) {
       for (var j = 0; j < state.data.length; j++) {
@@ -118,21 +122,22 @@ function Cart() {
     }
     // dispatch(setCartEmpty());
     // dispatch(setCart(cartData));
-    // for (let m of cart) {
-    //   var check = newArr.find((x) => x.item.id === m.cartId);
-    //   // if (!check) {
-    //   //   console.log("check", check, m);
-    //   //   dispatch(removeFromCart(m.cartId));
-    //   // }
-    //   if (check === undefined) {
-    //     dispatch(removeFromCart(m.cartId));
-    //   }
-    //   console.log("check",check);
-    // }
+    if (newArr.length > 0) {
+      for (let m of cart) {
+        var check = newArr.find((x) => x.item.id === m.cartId);
+        // if (!check) {
+        //   console.log("check", check, m);
+        //   dispatch(removeFromCart(m.cartId));
+        // }
+        if (check === undefined) {
+          dispatch(removeFromCart(m.cartId));
+        }
+        console.log("check", check);
+      }
+    }
+
     setCartData(newArr);
   }, [cart, state.data]);
- 
-
 
   const handleCheckout = () => {
     if (user.id == null) {

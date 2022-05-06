@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../apis/api";
 import * as moment from "moment";
 import "moment/locale/nl";
@@ -11,6 +11,20 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
+function Abc() {
+  const navigate = useNavigate();
+  return (
+    <div className="cursor-default">
+      <h2>Bạn cần phải đăng nhập để thực hiện chức năng này</h2>
+      <button
+        className="hover:underline underline-offset-4 font-semibold"
+        onClick={() => navigate("/dang-nhap")}
+      >
+        Tiến hành đăng nhập...
+      </button>
+    </div>
+  );
+}
 function PostDetail(props) {
   const [data, setData] = useState({});
   const [content, setContent] = useState("");
@@ -32,6 +46,13 @@ function PostDetail(props) {
     fetchData(slug);
   }, [slug]);
   const handleComment = async () => {
+    if(user.id===null){
+      toast.warn(<Abc />, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      return;
+    }
     const cmt = {
       userId: user.id,
       ObjectId: data.id,

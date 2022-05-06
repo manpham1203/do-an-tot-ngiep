@@ -78,7 +78,7 @@ function NewProductWidget(props) {
         {state.data?.map((item) => {
           return (
             <div key={item.id} className="flex flex-row gap-x-[10px]">
-              <div className="w-[80px]">
+              <div className="w-[80px] flex-none">
                 <img
                   src={`${item.imgSrc}`}
                   alt=""
@@ -86,7 +86,7 @@ function NewProductWidget(props) {
                 />
               </div>
               <div className="">
-                <Link to={`/san-pham/${item.slug}`}>{item.name}</Link>
+                <Link to={`/san-pham/${item.slug}`} className="productCard2Name">{item.name}</Link>
        
                   {item.priceDiscount === null ? (
                     <div>
@@ -96,7 +96,7 @@ function NewProductWidget(props) {
                       }).format(item.price)}
                     </div>
                   ) : (
-                    <div className="flex flex-row gap-x-[15px]">
+                    <div className="flex flex-col gap-y-[2px]">
                       <span className="font-normal">
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",

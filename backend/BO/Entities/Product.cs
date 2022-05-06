@@ -20,7 +20,6 @@ namespace BO.Entities
         public bool Deleted { get; set; }
         public string BrandId { get; set; }
         public int View { get; set; }
-        public int Like { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Brand Brand { get; set; }

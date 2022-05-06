@@ -28,7 +28,7 @@ import CategoryTrash from "./views/Admin/Category/CategoryTrash";
 import CategoryCreate from "./views/Admin/Category/CategoryCreate";
 import ProductEdit from "./views/Admin/Product/ProductEdit";
 import ProductTrash from "./views/Admin/Product/ProductTrash";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Products from "./views/Client/Products/Products";
 import Checkout from "./views/Client/Cart/Checkout";
 import OrderTable from "./views/Admin/Order/OrderTable";
@@ -40,9 +40,23 @@ import PostTrash from "./views/Admin/Post/PostTrash";
 import Posts from "./views/Client/Posts/Posts";
 import PostDetail from "./views/Client/PostDetail/PostDetail";
 import Wishlist from "./views/Client/Wishlist/Wishlist";
+import QuickView from "./components/Modal/QuickView";
+import Overlay from "./components/Overlay/Overlay";
+import BannerTable from "./views/Admin/Banner/BannerTable";
+import BannerTrash from "./views/Admin/Banner/BannerTrash";
+import BannerCreate from "./views/Admin/Banner/BannerCreate";
+import BannerEdit from "./views/Admin/Banner/BannerEdit";
 
 function App() {
-  const { user } = useSelector((store) => store);
+  const { user, quickView } = useSelector((store) => store);
+  useEffect(() => {
+    if (quickView.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [quickView.show]);
+  console.log("q", quickView);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -50,6 +64,7 @@ function App() {
       navigate("/dang-nhap");
     }
   }, [user.id, location.pathname]);
+
   return (
     <div className="w-[100%] min-h-screen">
       <Routes>
@@ -69,8 +84,12 @@ function App() {
           ></Route>
 
           {/* {user.id===null&&location.pathname==="/tai-khoan"?()=>navigate("/dang-nhap"):null} */}
-          <Route path="/dang-nhap" element={<LoginPage />}></Route>
-          <Route path="/tai-khoan" element={<Account />} />
+          {user.id === null && (
+            <Route path="/dang-nhap" element={<LoginPage />}></Route>
+          )}
+          {user.id !== null && (
+            <Route path="/tai-khoan" element={<Account />} />
+          )}
 
           {/* admin */}
           <Route path="/san-pham" element={<Products />}></Route>
@@ -113,10 +132,20 @@ function App() {
           <Route path="/admin/tin-tuc/tao-moi" element={<PostCreate />} />
           <Route path="/admin/tin-tuc/chinh-sua/:id" element={<PostEdit />} />
           <Route path="/admin/tin-tuc/da-xoa" element={<PostTrash />} />
+          <Route path="/admin/banner/danh-sach" element={<BannerTable />} />
+          <Route path="/admin/banner/da-xoa" element={<BannerTrash />} />
+          <Route path="/admin/banner/tao-moi" element={<BannerCreate />} />
+          <Route path="/admin/banner/chinh-sua/:id" element={<BannerEdit />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <ToastContainer />
+      {quickView.show && (
+        <>
+          <Overlay />
+          <QuickView />
+        </>
+      )}
     </div>
   );
 }

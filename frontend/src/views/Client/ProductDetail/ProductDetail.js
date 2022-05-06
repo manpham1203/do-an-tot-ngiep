@@ -113,7 +113,7 @@ function ProductDetail() {
     // });
     const check = cart.some((x) => x.cartId === objCart.cartId);
     const check2 = cart.find((x) => x.cartId === objCart.cartId);
-    if (cart.length < 8) {
+    if (cart.length <= 8) {
       if (check) {
         if (check2.qty <= 8) {
           if (check2.qty + number > 9) {

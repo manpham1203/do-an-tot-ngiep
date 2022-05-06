@@ -7,6 +7,7 @@ import { productsOfBrandReducer } from "./productsOfBrand/productsOfBrandReducer
 import { productsOfCategoryReducer } from "./productsOfCategory/productsOfCategoryReducer";
 import { categoryReducer } from "./category/categoryReducer";
 import { userReducer } from "./user/userReducer";
+import { quickViewReducer } from "./quickView/quickViewReducer";
 
 
 const rootReducer=combineReducers({
@@ -18,6 +19,7 @@ const rootReducer=combineReducers({
     productsOfCategory:productsOfCategoryReducer,
     category:categoryReducer,
     user:userReducer,
+    quickView:quickViewReducer,
 })
 
 export default rootReducer;

@@ -8,6 +8,23 @@ namespace BO.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Banner",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "char(6)", unicode: false, maxLength: 6, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    SubContent = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Banner", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Brand",
                 columns: table => new
                 {
@@ -118,7 +135,6 @@ namespace BO.Migrations
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
                     BrandId = table.Column<string>(type: "char(6)", unicode: false, maxLength: 6, nullable: false),
                     View = table.Column<int>(type: "int", nullable: false),
-                    Like = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true)
                 },
@@ -139,7 +155,7 @@ namespace BO.Migrations
                 {
                     Id = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
                     UserId = table.Column<string>(type: "char(12)", unicode: false, maxLength: 12, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ObjectId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     ObjectType = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     OrderDetailId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
@@ -356,6 +372,9 @@ namespace BO.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Banner");
+
             migrationBuilder.DropTable(
                 name: "Comment");
 

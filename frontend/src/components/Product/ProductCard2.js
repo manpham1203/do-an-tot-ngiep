@@ -17,18 +17,28 @@ function ProductCard2(props) {
       cartId: id,
       qty: 1,
     };
-    const check = cart.every((item) => {
-      return item.cartId !== objCart.cartId;
-    });
-    if (cart.length < 8) {
+    // const check = cart.every((item) => {
+    //   return item.cartId !== objCart.cartId;
+    // });
+    const check = cart.some((x) => x.cartId === objCart.cartId);
+    const check2 = cart.find((x) => x.cartId === objCart.cartId);
+    if (cart.length <= 8) {
       if (check) {
+        if (check2.qty <= 8) {
+          dispatch(addToCart(objCart));
+          toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        } else {
+          toast.warn("Sản phẩm đã đạt số lượng tối đa !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      } else {
         dispatch(addToCart(objCart));
         toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        });
-      } else {
-        toast.warn("sản phẩm đã tồn tại trong giỏ hàng !", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
@@ -88,17 +98,19 @@ function ProductCard2(props) {
               </>
             )}
           </p>
-          <div className="flex flex-row text-[#F7BF63] mt-[10px]">
-          <ShowStarAvg star={props.star} />
+          <div className="flex flex-row text-[#F7BF63] mt-[10px] gap-x-[5px]">
+            <ShowStarAvg star={props.star} />
           </div>
         </div>
 
-        <button
-          onClick={() => addCart(props.id, props.name)}
-          className="w-[180px] border-2 border-second h-[35px] mt-[10px]"
-        >
-          Thêm vào giỏ hàng
-        </button>
+        <div>
+          <button
+            onClick={() => addCart(props.id, props.name)}
+            className="w-[180px] border-2 border-second h-[35px] mt-[10px]"
+          >
+            Thêm vào giỏ hàng
+          </button>
+        </div>
       </div>
     </div>
   );
