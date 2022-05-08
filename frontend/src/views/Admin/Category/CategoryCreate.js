@@ -41,8 +41,8 @@ function CategoryCreate(props) {
   });
 
   const onSubmitHandler = async (values) => {
-    if(file===undefined){
-      setFile(null);
+    if(file==null){
+      setValidImg(false);
       return;
     }
     const formData = new FormData();
@@ -64,7 +64,8 @@ function CategoryCreate(props) {
           });
           setRichText("");
           setImage(null);
-          setFile(undefined);
+          setFile(null);
+          setValidImg(true);
           reset({
             name: "",
             shortDescription: "",
@@ -91,6 +92,7 @@ function CategoryCreate(props) {
     const tempfile = e.target.files[0];
     setFile(tempfile);
     setImage(URL.createObjectURL(tempfile));
+    setValidImg(true);
   };
   useEffect(() => {
     return () => {
@@ -107,12 +109,13 @@ function CategoryCreate(props) {
     setImage(null);
     setFile(undefined);
     setRichText("");
+    setValidImg(true);
   };
   const [richText, setRichText] = useState();
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
-
+  const [validImg, setValidImg]=useState(true);
   return (
     <div className="">
       <form
@@ -190,7 +193,7 @@ function CategoryCreate(props) {
             Chọn ảnh
           </label>
           <label
-            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
+            className="w-[300px] h-[300px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
             htmlFor="image"
           >
             <input
@@ -209,7 +212,7 @@ function CategoryCreate(props) {
           </label>
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              file===null ? null : "invisible"
+              !validImg ? null : "invisible"
             }`}
           >
             Thông tin này không được để trống

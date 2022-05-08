@@ -16,5 +16,8 @@ namespace BO.ViewModels.Banner
         public DateTime CreatedAt { get; set; }
         public IFormFile File { get; set; }
         public string ImageName { get; set; }
+        public string LinkTo { get; set; }
+
+        public int Order { get; set; }
     }
 }

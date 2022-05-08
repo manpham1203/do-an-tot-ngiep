@@ -120,7 +120,6 @@ function BrandEdit(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          setImage(null);
           setFile(null);
           fetchData(state.data.slug);
         } else {
@@ -152,9 +151,10 @@ function BrandEdit(props) {
           shortDescription: res.data.shortDescription,
           published:res.data.published,
         });
-        setRichText(res.data.fullDescription)
+        setRichText(res.data.fullDescription);
+        setImage(res.data.pictureVM.imageSrc);
       })
-      .catch(dispatch(fail()));
+      .catch(()=>console.log("fail"));
   };
 
   useEffect(() => {

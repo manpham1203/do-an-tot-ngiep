@@ -46,6 +46,8 @@ namespace DAL.Banner
                     Deleted = false,
                     CreatedAt = model.CreatedAt,
                     UpdatedAt = null,
+                    Order=model.Order,
+                    LinkTo=model.LinkTo,
                 };
                 await db.Banners.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -84,6 +86,8 @@ namespace DAL.Banner
                 resultFromDb.SubContent = model.SubContent;
                 resultFromDb.Published = model.Published;
                 resultFromDb.UpdatedAt = DateTime.Now;
+                resultFromDb.Order = model.Order;
+                resultFromDb.LinkTo = model.LinkTo;
                 var result = await db.SaveChangesAsync();
                 if (result == 0)
                 {
@@ -174,6 +178,7 @@ namespace DAL.Banner
                 var resultFromDb = await (from b in db.Banners
                                           join p in db.Pictures on b.Id equals p.ObjectId into list
                                           from p in list.DefaultIfEmpty()
+                                          where b.Published==published && b.Deleted==deleted
                                           select new BannerVM
                                           {
                                               Id = b.Id,
@@ -185,7 +190,9 @@ namespace DAL.Banner
                                               UpdatedAt = b.UpdatedAt,
                                               ImageName = p.Name,
                                               ImageSrc = null,
-                                          }).ToListAsync();
+                                              Order = b.Order,
+                                              LinkTo=b.LinkTo,
+                                          }).OrderBy(x=>x.Order).ToListAsync();
                 return resultFromDb;
 
             }
@@ -218,7 +225,9 @@ namespace DAL.Banner
                                               UpdatedAt = b.UpdatedAt,
                                               ImageName = p.Name,
                                               ImageSrc = null,
-                                          }).ToListAsync();
+                                              Order=b.Order,
+                                              LinkTo=b.LinkTo
+                                          }).OrderBy(x=>x.Order).ToListAsync();
                 
                 return resultFromDb;
 
@@ -245,7 +254,8 @@ namespace DAL.Banner
                                   CreatedAt = b.CreatedAt,
                                   UpdatedAt = b.UpdatedAt,
                                   ImageName = p.Name,
-                                  ImageSrc = null
+                                  ImageSrc = null,
+                                  LinkTo=b.LinkTo,
                               }).SingleOrDefaultAsync();
             }
             catch

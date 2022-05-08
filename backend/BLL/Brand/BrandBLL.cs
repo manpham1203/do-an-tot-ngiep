@@ -233,9 +233,6 @@ namespace BLL
                     resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
                     var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL[i].Id);
                     resultFromDAL[i].ProductCardVMs = productCards;
-                }
-                for (int i = 0; i < resultFromDAL.Count; i++)
-                {
                     if (resultFromDAL[i].ProductCardVMs.Count == 0)
                     {
                         resultFromDAL.Remove(resultFromDAL[i]);

@@ -119,7 +119,6 @@ function CategoryEdit(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          setImage(null);
           setFile(null);
           fetchData(state.data.slug);
         } else {

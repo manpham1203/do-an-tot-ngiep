@@ -35,8 +35,7 @@ function BannerEdit(props) {
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      published: true,
-      fullDescription: "",
+      linkTo: "/san-pham",
     },
   });
   const handlePreviewImage = (e) => {
@@ -58,7 +57,9 @@ function BannerEdit(props) {
     formData.append("content", values.content);
     formData.append("subContent", values.subContent);
     formData.append("published", values.published);
+    formData.append("order", values.order);
     formData.append("File", file);
+    showLinkTo && formData.append("linkTo", values.linkTo);
     await api({
       method: "PUT",
       url: `/banner/update/${id}`,
@@ -94,11 +95,25 @@ function BannerEdit(props) {
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
-          reset({
-            content: res.data.content,
-            subContent: res.data.subContent,
-            published: res.data.published,
-          });
+          if (res.data.linkTo !== null) {
+            reset({
+              content: res.data.content,
+              subContent: res.data.subContent,
+              published: res.data.published,
+              order: res.data.order,
+              linkTo: res.data.linkTo,
+            });
+            setShowLinkTo(true);
+          } else {
+            reset({
+              content: res.data.content,
+              subContent: res.data.subContent,
+              published: res.data.published,
+              order: res.data.order,
+              linkTo:"/san-pham"
+            });
+            setShowLinkTo(false);
+          }
           setImage(res.data.imageSrc);
         }
       })
@@ -107,6 +122,7 @@ function BannerEdit(props) {
   useEffect(() => {
     fetchData(id);
   }, [id]);
+  const [showLinkTo, setShowLinkTo] = useState(false);
   return (
     <div>
       <form
@@ -148,9 +164,62 @@ function BannerEdit(props) {
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
 
+        <div>
+          <label
+            htmlFor="showLinkTo"
+            className="inline-flex items-center cursor-pointer"
+          >
+            <input
+              // checkedP
+              type="checkbox"
+              id="showLinkTo"
+              className="form-checkbox hidden"
+              checked={showLinkTo}
+              onChange={(e) => setShowLinkTo(e.target.checked)}
+            />
+            <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+            <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
+              Thêm liên kết
+            </span>
+          </label>
+        </div>
+        {showLinkTo && (
+          <div className="">
+            <AdminInput
+              control={control}
+              name="linkTo"
+              label="Liên kết"
+              type="text"
+            />
+            <p
+              className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+                errors?.linkTo ? null : "invisible"
+              }`}
+            >
+              {errors?.linkTo?.message}
+            </p>
+          </div>
+        )}
+
+        <div className="">
+          <AdminInput
+            control={control}
+            name="order"
+            label="Thứ tự"
+            type="number"
+          />
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              errors?.order ? null : "invisible"
+            }`}
+          >
+            {errors?.order?.message}
+          </p>
+        </div>
+
         <div className="flex flex-col">
           <div className="relative w-fit">
-            <div className="w-[200px] h-[200px] block border border-second overflow-hidden">
+            <div className="w-[300px] h-[300px] block border border-second overflow-hidden">
               <img
                 src={image}
                 alt=""

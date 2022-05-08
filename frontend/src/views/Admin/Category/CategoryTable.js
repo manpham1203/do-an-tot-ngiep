@@ -2,8 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import api from "../../../apis/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import Pagination from "../../../components/Pagination/Pagination";
 import Row from "./Row";
 
 const initState = {
@@ -109,31 +108,6 @@ function CategoryTable(props) {
     fetchData1();
   }, [limit, currentPage]);
 
-  const handlePublished = async (id) => {
-    await api({
-      method: "POST",
-      url: `/category/published/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          fetchData();
-        } else {
-          toast.error(`Thao tác thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Thao tác thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
-  const handleEdit = (slug) => {
-    navigate(`/admin/chinh-sua-danh-muc/${slug}`);
-  };
   const handleTrash = async (id) => {
     await api({
       method: "POST",
@@ -160,21 +134,7 @@ function CategoryTable(props) {
         })
       );
   };
-  const handleLimit = (value) => {
-    const re = /^[0-9\b]+$/;
-    if (value === "" || re.test(value)) {
-      if (value > state.data.totalResult) {
-        setLimit(state.data.totalResult);
-      } else {
-        setLimit(value);
-      }
-    }
-  };
-  const blurLimit = (e) => {
-    if (e.target.value === "") {
-      setLimit(state.data?.brands.length);
-    }
-  };
+  
 
   return (
     <div className="p-[20px] bg-white shadow-admin rounded-[8px]">
@@ -193,25 +153,7 @@ function CategoryTable(props) {
             className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <div className="flex flex-col">
-          <label
-            htmlFor="limit"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Số dòng
-          </label>
-          <div className="flex flex-row items-center">
-            <input
-              id="limit"
-              type="text"
-              value={limit}
-              onChange={(e) => handleLimit(e.target.value)}
-              onBlur={(e) => blurLimit(e)}
-              className="w-[50px] bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
-            <span>/{state.data?.totalResult}</span>
-          </div>
-        </div>
+        
       </div>
       <div className="overflow-hidden overflow-x-auto border border-gray-600 rounded-xl">
         <table className="min-w-full text-sm divide-y divide-gray-600">
@@ -237,10 +179,33 @@ function CategoryTable(props) {
           </thead>
           <tbody className="divide-y divide-gray-600 bg-white">
             {state.data.categories.map((item) => {
-              return <Row key={item.id} id={item.id} />;
+              return <Row key={item.id} id={item.id} handleTrash={handleTrash} />;
             })}
           </tbody>
         </table>
+        <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-600 sm:px-6">
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Hiển thị{" "}
+                <span className="font-medium">
+                  {" "}
+                  {state.data?.brands?.length}{" "}
+                </span>
+                trong
+                <span className="font-medium"> {state.data?.totalResult} </span>
+                kết quả
+              </p>
+            </div>
+            <div>
+              <Pagination
+                setCurrentPage={setCurrentPage}
+                totalPage={state.data?.totalPage}
+                itemsPerPage={state.data?.categories.length}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ import ProductSlideShow from "../../../components/ProductSlideShow/ProductSlideS
 import api from "../../../apis/api";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
-
 const initState = {
   category: {
     loading: false,
@@ -167,58 +166,69 @@ function Home() {
     <div className="w-[100%]">
       <Carousel></Carousel>
       <ProductSlideShow>
-        <Heading title="Thương Hiệu" />
+        <Heading title="Thương Hiệu" className="text-left" />
         <div className="flex flex-row justify-center gap-x-[20px] font-primary text-[20px]">
-          {state.brand.data.map((item) => {
+          {state?.brand?.data?.productCardVMs &&
+            state.brand.data.map((item) => {
+              return (
+                <ListTab
+                  key={item.id}
+                  name={item.name}
+                  id={item.id}
+                  show={showBrand}
+                  setShow={setShowBrand}
+                />
+              );
+            })}
+        </div>
+        {state?.brand?.data?.productCardVMs &&
+          state.brand.data.map((item) => {
             return (
-              <ListTab
+              <ListProductCard
                 key={item.id}
-                name={item.name}
                 id={item.id}
+                products={item.productCardVMs}
                 show={showBrand}
-                setShow={setShowBrand}
               />
             );
           })}
-        </div>
-        {state.brand.data.map((item) => {
-          return (
-            <ListProductCard
-              key={item.id}
-              id={item.id}
-              products={item.productCardVMs}
-              show={showBrand}
-            />
-          );
-        })}
       </ProductSlideShow>
       <ProductSlideShow>
-        <Heading title="Danh Mục" />
+        <Heading title="Danh Mục" className="text-left" />
         <div className="flex flex-row justify-center gap-x-[20px] font-primary font-bold text-[20px]">
-          {state.category.data.map((item) => {
+          {state?.category?.data?.productCardVMs &&
+            state.category.data.map((item) => {
+              return (
+                <ListTab
+                  key={item.id}
+                  name={item.name}
+                  id={item.id}
+                  show={showCategory}
+                  setShow={setShowCategory}
+                />
+              );
+            })}
+        </div>
+
+        {state?.category?.data?.productCardVMs &&
+          state.category.data.map((item) => {
             return (
-              <ListTab
+              <ListProductCard
                 key={item.id}
-                name={item.name}
                 id={item.id}
+                products={item.productCardVMs}
                 show={showCategory}
-                setShow={setShowCategory}
               />
             );
           })}
-        </div>
-        {state.category.data.map((item) => {
-          return (
-            <ListProductCard
-              key={item.id}
-              id={item.id}
-              products={item.productCardVMs}
-              show={showCategory}
-            />
-          );
-        })}
       </ProductSlideShow>
-      <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1} textCenter={true} />
+      <PostSlideShow
+        slideLg={4}
+        slideMd={3}
+        slideSm={2}
+        slide={1}
+        textCenter={true}
+      />
     </div>
   );
 }

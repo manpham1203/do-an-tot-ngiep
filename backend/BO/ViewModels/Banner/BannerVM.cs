@@ -15,6 +15,9 @@ namespace BO.ViewModels.Banner
         public bool Deleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public int Order { get; set; }
+        public string LinkTo { get; set; }
+
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
     }

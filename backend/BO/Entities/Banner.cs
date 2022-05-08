@@ -13,6 +13,8 @@ namespace BO.Entities
         public string SubContent { get; set; }
         public bool Published { get; set; }
         public bool Deleted { get; set; }
+        public int Order { get; set; }
+        public string LinkTo { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

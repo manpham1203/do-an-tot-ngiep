@@ -263,9 +263,12 @@ namespace backend.Controllers
                 {
                     for (int i = 0; i < resultFromBLL.Count; i++)
                     {
-                        for (int j = 0; j < resultFromBLL[i].ProductCardVMs.Count; j++)
+                        if (resultFromBLL[i].ProductCardVMs != null)
                         {
-                            resultFromBLL[i].ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ProductCardVMs[j].ImageName);
+                            for (int j = 0; j < resultFromBLL[i].ProductCardVMs.Count; j++)
+                            {
+                                resultFromBLL[i].ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ProductCardVMs[j].ImageName);
+                            }
                         }
                     }
                 }

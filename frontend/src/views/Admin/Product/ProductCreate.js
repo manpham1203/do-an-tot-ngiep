@@ -15,11 +15,34 @@ import AddListImage from "../../../components/AddListImage/AddListImage";
 const schema = yup
   .object({
     name: yup.string().required("Thông tin này không được để trống").trim(),
-    price: yup.string().required("Thông tin này không được để trống").trim(),
-    priceDiscount: yup.string().trim(),
-    quantity: yup.string().required("Thông tin này không được để trống").trim(),
-    brandId: yup.object().required("Thông tin này không được để trống").nullable(),
-    categoryIds: yup.array().required("Thông tin này không được để trống").nullable(),
+    price: yup
+      .number()
+      .transform((currentValue, originalValue) => {
+        return originalValue === "" ? null : currentValue;
+      })
+      .required("Thông tin này không được để trống")
+      .nullable(true),
+    priceDiscount: yup
+      .number()
+      .max(yup.ref("price"), "Giá giảm phải nhỏ hơn giá bán")
+      .transform((currentValue, originalValue) => {
+        return originalValue === "" ? null : currentValue;
+      })
+      .nullable(),
+    quantity: yup
+      .number()
+      .required("Thông tin này không được để trống")
+      .transform((currentValue, originalValue) => {
+        return originalValue === "" ? null : currentValue;
+      }),
+    brandId: yup
+      .object()
+      .required("Thông tin này không được để trống")
+      .nullable(),
+    categoryIds: yup
+      .array()
+      .required("Thông tin này không được để trống")
+      .nullable(),
     shortDescription: yup
       .string()
       .required("Thông tin này không được để trống")
@@ -44,14 +67,14 @@ function ProductCreate(props) {
     mode: "onChange",
     defaultValues: {
       published: true,
-      formFile: [],
       fullDescription: "",
+      quantity: 1,
     },
   });
 
   const onSubmitHandler = async (values) => {
-    if (image === undefined) {
-      setImage([])
+    if (files.length === 0) {
+      setValidImg(false);
       return;
     }
     const formData = new FormData();
@@ -82,8 +105,9 @@ function ProductCreate(props) {
             autoClose: 3000,
           });
           setRichText("");
-          setImage(undefined);
+          setImage([]);
           setFiles([]);
+          setValidImg(false);
           reset({
             name: "",
             shortDescription: "",
@@ -120,15 +144,21 @@ function ProductCreate(props) {
     });
     setImage((prevImg) => prevImg.concat(imgArr));
     setFiles((prevImg) => prevImg.concat(fileArr));
+    setValidImg(true);
   };
 
   const DeleteImg = (item, index) => {
     setImage(image.filter((e) => e !== item));
     const a1 = files.slice(0, index);
     const a2 = files.slice(index + 1, files.length);
-    setFiles(a1.concat(a2));
-  };
+    setFiles(() => a1.concat(a2));
 
+    if (a1.concat(a2).length === 0) {
+      console.log("voday");
+      setValidImg(false);
+    }
+  };
+  console.log(files);
   const onClickResetForm = () => {
     reset({
       name: "",
@@ -138,6 +168,13 @@ function ProductCreate(props) {
     setImage([]);
     setFiles([]);
     setRichText("");
+    setValidImg(true);
+    setBrandSelected(null);
+    setCategorySelected([]);
+    reset({
+      brandId: null,
+      categoryIds: null,
+    });
   };
   const [richText, setRichText] = useState();
   useEffect(() => {
@@ -164,6 +201,7 @@ function ProductCreate(props) {
   };
   const [brandSelected, setBrandSelected] = useState(null);
   const [categorySelected, setCategorySelected] = useState([]);
+  const [validImg, setValidImg] = useState(true);
   return (
     <div className="">
       <form
@@ -368,7 +406,7 @@ function ProductCreate(props) {
           />
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              image?.length === 0 ? null : "invisible"
+              !validImg ? null : "invisible"
             }`}
           >
             Thông tin này không được để trống

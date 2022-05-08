@@ -655,7 +655,7 @@ namespace BO
             {
                 entity.ToTable("Banner");
                 entity.HasKey(e => new { e.Id });
-               
+
                 entity.Property(e => e.Id)
                     .HasColumnType("char")
                     .HasMaxLength(6)
@@ -685,6 +685,13 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(false)
                     .HasPrecision(3);
+                entity.Property(e => e.Order)
+                    .HasColumnType("int")
+                    .IsRequired(true);
+                entity.Property(e => e.LinkTo)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(250)
+                    .IsRequired(false).IsUnicode(false);
             });
             #endregion
 

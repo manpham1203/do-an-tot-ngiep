@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AdminInput from "../../../components/Form/Input/AdminInput";
 import AdminCheckbox from "../../../components/Form/Checkbox/AdminCheckbox";
+import imgthumb from "../../../assets/imgthumb.jpg";
 
 const schema = yup
   .object({
@@ -14,6 +15,7 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
+    order: yup.string().required("Thông tin này không được để trống"),
   })
   .required();
 function BannerCreate(props) {
@@ -32,12 +34,15 @@ function BannerCreate(props) {
     mode: "onChange",
     defaultValues: {
       published: true,
-      fullDescription: "",
+      content: "",
+      subContent:"",
+      order: 0,
+      linkTo: "/san-pham",
     },
   });
   const handlePreviewImage = (e) => {
     const tempfile = e.target.files[0];
-    
+
     setFile(tempfile);
     setImage(URL.createObjectURL(tempfile));
     setImgValid(true);
@@ -52,6 +57,8 @@ function BannerCreate(props) {
       content: "",
       subContent: "",
       published: true,
+      linkTo: "/san-pham",
+      order: 0,
     });
     setImage(null);
     setFile(null);
@@ -66,6 +73,8 @@ function BannerCreate(props) {
     formData.append("subContent", values.subContent);
     formData.append("published", values.published);
     formData.append("File", file);
+    formData.append("order", values.order);
+    showLinkTo && formData.append("linkTo", values.linkTo);
     await api({
       method: "POST",
       url: `/banner/create`,
@@ -84,6 +93,7 @@ function BannerCreate(props) {
             content: "",
             subContent: "",
             published: true,
+            linkTo: "/san-pham",
           });
         } else {
           toast.error(`Thêm thất bại`, {
@@ -99,6 +109,8 @@ function BannerCreate(props) {
         })
       );
   };
+  const [showLinkTo, setShowLinkTo] = useState(false);
+  console.log(showLinkTo);
   return (
     <div>
       <form
@@ -139,6 +151,58 @@ function BannerCreate(props) {
         <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
+        <div>
+          <label
+            htmlFor="showLinkTo"
+            className="inline-flex items-center cursor-pointer"
+          >
+            <input
+              // checkedP
+              type="checkbox"
+              id="showLinkTo"
+              className="form-checkbox hidden"
+              value={showLinkTo}
+              onChange={(e) => setShowLinkTo(e.target.checked)}
+            />
+            <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+            <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
+              Thêm liên kết
+            </span>
+          </label>
+        </div>
+        {showLinkTo && (
+          <div className="">
+            <AdminInput
+              control={control}
+              name="linkTo"
+              label="Liên kết"
+              type="text"
+            />
+            <p
+              className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+                errors?.linkTo ? null : "invisible"
+              }`}
+            >
+              {errors?.linkTo?.message}
+            </p>
+          </div>
+        )}
+
+        <div className="">
+          <AdminInput
+            control={control}
+            name="order"
+            label="Thứ tự"
+            type="number"
+          />
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              errors?.order ? null : "invisible"
+            }`}
+          >
+            {errors?.order?.message}
+          </p>
+        </div>
 
         <div className="flex flex-col">
           <label
@@ -148,7 +212,7 @@ function BannerCreate(props) {
             Chọn ảnh
           </label>
           <label
-            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
+            className="w-[300px] h-[300px] overflow-hidden rounded-md cursor-pointer bg-gray-200"
             htmlFor="image"
           >
             <input
@@ -157,13 +221,12 @@ function BannerCreate(props) {
               className="hidden"
               id="image"
             />
-            {image && (
-              <img
-                src={image}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-            )}
+
+            <img
+              src={image || imgthumb}
+              alt=""
+              className="w-full h-full object-cover object-center"
+            />
           </label>
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${

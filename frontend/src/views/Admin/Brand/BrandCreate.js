@@ -12,12 +12,11 @@ import File from "../../../components/Form/File/File";
 import AdminInput from "../../../components/Form/Input/AdminInput";
 import AdminCheckbox from "../../../components/Form/Checkbox/AdminCheckbox";
 import AdminTextArea from "../../../components/Form/Textarea/AdminTextArea";
-import { AiOutlinePlus } from "react-icons/ai";
-import { IoMdCloseCircle } from "react-icons/io";
-import AddListImage from "../../../components/AddListImage/AddListImage";
+import imgthumb from "../../../assets/imgthumb.jpg";
 
 const schema = yup
-  .object().shape({
+  .object()
+  .shape({
     name: yup.string().required("Thông tin này không được để trống").trim(),
     shortDescription: yup
       .string()
@@ -50,8 +49,8 @@ function BrandCreate(props) {
   });
 
   const onSubmitHandler = async (values) => {
-    if(file===undefined){
-      setFile(null);
+    if(file==null){
+      setValidImg(false);
       return;
     }
     const formData = new FormData();
@@ -73,7 +72,8 @@ function BrandCreate(props) {
           });
           setRichText("");
           setImage(null);
-          setFile(undefined);
+          setFile(null);
+          setValidImg(true);
           reset({
             name: "",
             shortDescription: "",
@@ -100,6 +100,7 @@ function BrandCreate(props) {
     const tempfile = e.target.files[0];
     setFile(tempfile);
     setImage(URL.createObjectURL(tempfile));
+    setValidImg(true);
   };
   useEffect(() => {
     return () => {
@@ -114,15 +115,15 @@ function BrandCreate(props) {
       published: true,
     });
     setRichText("");
-    setFile(undefined);
+    setFile(null);
     setImage(null);
+    setValidImg(true);
   };
   const [richText, setRichText] = useState();
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
 
- 
   // useEffect(() => {
   //   if (watchImage) {
   //     if (watchImage[0]) {
@@ -130,7 +131,7 @@ function BrandCreate(props) {
   //     }
   //   }
   // }, [watchImage]);
-
+  const [validImg, setValidImg]=useState(true);
   return (
     <div className="">
       <form
@@ -208,7 +209,7 @@ function BrandCreate(props) {
             Chọn ảnh
           </label>
           <label
-            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
+            className="w-[300px] h-[300px] overflow-hidden rounded-md bg-gray-200 cursor-pointer"
             htmlFor="image"
           >
             <input
@@ -219,17 +220,15 @@ function BrandCreate(props) {
               // name="image"
               id="image"
             />
-            {image && (
-              <img
-                src={image}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-            )}
+            <img
+              src={image || imgthumb}
+              alt=""
+              className="w-full h-full object-cover object-center"
+            />
           </label>
           <p
             className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              file===null ? null : "invisible"
+              !validImg ? null : "invisible"
             }`}
           >
             Thông tin này không được để trống

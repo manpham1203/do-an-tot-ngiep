@@ -138,9 +138,6 @@ function BrandTable(props) {
         })
       );
   };
-  const handleEdit = (slug) => {
-    navigate(`/admin/chinh-sua-thuong-hieu/${slug}`);
-  };
   const handleTrash = async (id) => {
     await api({
       method: "POST",
@@ -244,7 +241,7 @@ function BrandTable(props) {
           </thead>
           <tbody className="divide-y divide-gray-600 bg-white">
             {state.data.brands.map((item) => {
-              return <Row key={item.id} id={item.id} />;
+              return <Row key={item.id} id={item.id} handleTrash={handleTrash} />;
             })}
           </tbody>
         </table>

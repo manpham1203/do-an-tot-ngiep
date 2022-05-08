@@ -39,6 +39,14 @@ namespace BO.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LinkTo")
+                        .HasMaxLength(250)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
 

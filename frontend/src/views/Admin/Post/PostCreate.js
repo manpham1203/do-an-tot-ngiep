@@ -43,8 +43,11 @@ function PostCreate(props) {
     },
   });
   const onSubmitHandler = async (values) => {
+    if(file==null){
+      setValidImg(false);
+      return;
+    }
     const formData = new FormData();
-
     formData.append("title", values.title);
     formData.append("shortDescription", values.shortDescription);
     formData.append("fullDescription", values.fullDescription);
@@ -62,8 +65,9 @@ function PostCreate(props) {
             autoClose: 3000,
           });
           setRichText("");
-          setImage();
-          setFile();
+          setImage(null);
+          setFile(null);
+          setValidImg(true);
           reset({
             name: "",
             shortDescription: "",
@@ -89,14 +93,16 @@ function PostCreate(props) {
       shortDescription: "",
       published: true,
     });
-    setImage();
-    setFile();
+    setImage(null);
+    setFile(null);
     setRichText("");
+    setValidImg(true);
   };
   const handlePreviewImage = (e) => {
     const tempfile = e.target.files[0];
     setFile(tempfile);
     setImage(URL.createObjectURL(tempfile));
+    setValidImg(true);
   };
   useEffect(() => {
     return () => {
@@ -106,7 +112,7 @@ function PostCreate(props) {
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
-  console.log(errors);
+  const [validImg, setValidImg]=useState(true);
   return (
     <div>
       <form
@@ -201,6 +207,13 @@ function PostCreate(props) {
               />
             )}
           </label>
+          <p
+            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
+              !validImg ? null : "invisible"
+            }`}
+          >
+            Thông tin này không được để trống
+          </p>
         </div>
 
         <div className="flex justify-center gap-x-[25px]">

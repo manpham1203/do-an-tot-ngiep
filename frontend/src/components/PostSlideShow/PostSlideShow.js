@@ -27,7 +27,7 @@ function PostSlideShow(props) {
   }, []);
   return (
     <div className="container mx-auto pt-[80px]">
-      <Heading title="Tin tức" textCenter={props.textCenter} />
+      <Heading title="Tin tức" text-left />
       <Swiper
         slidesPerView={props.slide}
         // spaceBetween={30}

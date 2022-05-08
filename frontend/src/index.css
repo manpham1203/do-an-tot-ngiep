@@ -14,10 +14,14 @@
   @import url("https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
   body {
-    /* font-family: 'Montserrat Alternates', sans-serif; */
+    /* font-family: 'Montserrat', sans-serif; */
     font-family: "Lexend Deca", sans-serif;
     /* font-family: 'League Spartan', sans-serif; */
     @apply text-second bg-third;
+  }
+  .haha{
+        font-family: 'Montserrat', sans-serif;
+
   }
   .list-product-card {
     padding: 20px !important;
@@ -187,7 +191,7 @@
   }
   .pagination .previous,
   .pagination .next {
-    @apply px-[20px];
+    @apply font-bold;
   }
 
   .pagination li {

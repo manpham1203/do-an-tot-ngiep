@@ -251,12 +251,6 @@ namespace BLL.Category
                             }
                         }
                     }
-
-
-
-                }
-                for (int i = 0; i < resultFromDAL.Count; i++)
-                {
                     if (resultFromDAL[i].ProductCardVMs.Count == 0)
                     {
                         resultFromDAL.Remove(resultFromDAL[i]);

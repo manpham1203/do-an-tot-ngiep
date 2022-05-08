@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 
 function Pagination(props) {
   const [itemsPerPage, setItemsPerPage] = useState();
@@ -18,11 +19,11 @@ function Pagination(props) {
   return (
     <ReactPaginate
       breakLabel="..."
-      nextLabel="Trang sau"
+      nextLabel={<IoIosArrowForward />}
       onPageChange={handlePageClick}
       pageRangeDisplayed={5}
       pageCount={pageCount}
-      previousLabel="Trang trước"
+      previousLabel={<IoIosArrowBack />}
       renderOnZeroPageCount={null}
       className="pagination"
     />
