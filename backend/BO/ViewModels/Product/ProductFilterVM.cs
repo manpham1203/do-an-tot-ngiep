@@ -17,5 +17,6 @@ namespace BO.ViewModels.Product
         public int Limit { get; set; } = 10;
         public List<string> CategorySlugs { get; set; }
         public List<string> BrandSlugs { get; set; }
+        public bool? Discount { get; set; }
     }
 }

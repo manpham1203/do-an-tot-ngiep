@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiFillStar, AiFillHeart } from "react-icons/ai";
 import { BsFillBagFill } from "react-icons/bs";
 import { FaRegEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import { setOpen } from "../../redux/quickView/quickViewActions";
 import { toast } from "react-toastify";
 import Heart from "../Wishlist/Heart";
 import ShowStarAvg from "../../components/ShowStar/ShowStarAvg";
+import imgthumb from '../../assets/imgthumb.jpg'
 
 function ProductCard(props) {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ function ProductCard(props) {
     <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
       <div className="w-full overflow-hidden relative">
         <img
-          src={props.image}
+          src={props.image || imgthumb}
           alt="alt"
           className="w-full object-center object-cover"
         />
@@ -81,7 +81,11 @@ function ProductCard(props) {
           >
             <FaRegEye />
           </div>
-          <Heart id={props.id} />
+          <Heart
+            id={props.id}
+            dislikeStyles="flex justify-center items-center w-[40px] h-[40px] text-red-600 hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md"
+            likeStyles="flex justify-center items-center w-[40px] h-[40px] text-gray-400 hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md"
+          />
         </div>
       </div>
       <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px] bg-white bottom-[-44px]">

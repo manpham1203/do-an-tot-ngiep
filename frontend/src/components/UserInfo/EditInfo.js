@@ -46,21 +46,24 @@ const schema = yup
       .required("Thông tin này không được để trống")
       .matches(/^\d+$/, "Chỉ được phép nhật số")
       .nullable()
+      .length(10)
       .trim(),
     address: yup
       .string()
       .required("Thông tin này không được để trống")
       .nullable(),
+    birthday: yup.date().required("Thông tin này không được để trống").typeError("Thông tin này không được để trống").nullable(),
   })
   .required();
 function EditInfo(props) {
   const preFill = {
     firstName: "",
     lastName: "",
-    // birthday: null,
+    birthday: null,
     email: "",
     phoneNumber: "",
     address: "",
+    
   };
   const {
     handleSubmit,
@@ -74,12 +77,13 @@ function EditInfo(props) {
     resolver: yupResolver(schema),
   });
   const onSubmitHandler = async (values) => {
+    console.log(values)
     const formData = new FormData();
     formData.append("firstName", values.firstName);
     formData.append("lastName", values.lastName);
     formData.append("email", values.email);
     formData.append("address", values.address);
-    formData.append("birthday", values.birthday);
+    formData.append("birthday", moment(values.birthday).format("yyyy-MM-DD"));
     formData.append("phoneNumber", values.phoneNumber);
     formData.append("File", file);
 
@@ -147,7 +151,7 @@ function EditInfo(props) {
       image && URL.revokeObjectURL(image);
     };
   }, [image]);
-  console.log(file);
+  console.log(watch('birthday'));
   return (
     <div className="w-full flex flex-col">
       <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
@@ -218,6 +222,7 @@ function EditInfo(props) {
             type="number"
             label="Số điện thoại"
             control={control}
+            className="hide-btn-number"
           />
           <p
             className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${

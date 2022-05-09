@@ -1,8 +1,10 @@
 import React, { useEffect, useReducer } from "react";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt,FaRegEye } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { setOpenAdminViewProduct } from "../../../redux/adminViewProduct/adminViewProductActions";
+import { useDispatch } from "react-redux";
 
 const initState = {
   loading: false,
@@ -57,6 +59,7 @@ const reducer = (state, action) => {
 function Row(props) {
   const [state, dispatch] = useReducer(reducer, initState);
   const navigate = useNavigate();
+  const dispatchQV=useDispatch();
 
   const fetchData = async (id) => {
     dispatch(loading());
@@ -96,6 +99,14 @@ function Row(props) {
   };
   const handleEdit = (slug) => {
     navigate(`/admin/san-pham/chinh-sua/${slug}`);
+  };
+
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.slug,
+    };
+    dispatchQV(setOpenAdminViewProduct(obj));
   };
 
   return (
@@ -142,6 +153,9 @@ function Row(props) {
           </td>
           <td className="px-4 py-2 text-gray-700  text-[25px]">
             <div className="flex flex-row items-center gap-x-[20px]">
+            <FaRegEye 
+            onClick={()=>handleQuickView()}
+            className="cursor-pointer"/>
               <FaRegEdit
                 onClick={() => handleEdit(state.data.slug)}
                 className="cursor-pointer"

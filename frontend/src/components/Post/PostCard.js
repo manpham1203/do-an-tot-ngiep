@@ -6,7 +6,7 @@ import "moment/locale/nl";
 
 function PostCard(props) {
   return (
-    <div className="flex flex-row gap-x-[40px]">
+    <div className="flex flex-row gap-x-[40px] ">
       <Link to={`/tin-tuc/${props.slug}`} className="flex-none w-[376px] h-[235px] block">
         <img
           src={props.image}

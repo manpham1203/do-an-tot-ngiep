@@ -5,7 +5,6 @@ import product from "../../../assets/product.jpg";
 import product3 from "../../../assets/product3.jpg";
 import product2 from "../../../assets/product2.jpg";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
-
 import { addToCart, adjustQty } from "../../../redux/cart/cartActions";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
@@ -156,19 +155,18 @@ function ProductDetail() {
     }
   };
 
-  const onHandleNumber = (e) => {
+  const handleNumber = (e) => {
     const re = /^[1-9\b]+$/;
-
-    if (e.target.value <= 1) {
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setNumber(e.target.value);
+    }
+  };
+  const handleBlurNumber = (e) => {
+    if (e.target.value === "" || e.target.value < 1) {
       setNumber(1);
     }
-    if (e.target.value >= 9) {
+    if (e.target.value > 9) {
       setNumber(9);
-    }
-    if (e.target.value <= 9 && e.target.value >= 1) {
-      if (e.target.value === "" || re.test(e.target.value)) {
-        setNumber(e.target.value);
-      }
     }
   };
 
@@ -284,7 +282,8 @@ function ProductDetail() {
                   className="number_cart-item w-[100px] text-center h-[40px] "
                   type="number"
                   value={number}
-                  onChange={(e) => onHandleNumber(e)}
+                  onChange={(e) => handleNumber(e)}
+                  onBlur={(e) => handleBlurNumber(e)}
                   min="1"
                 />
                 <div
@@ -297,7 +296,7 @@ function ProductDetail() {
                 </div>
               </div>
               <button
-                className="mt-[20px] p-[10px] border-2 border-second font-medium"
+                className="mt-[20px] p-[10px] bg-second text-third font-medium flex flex-row items-center"
                 onClick={() => addCart(state.data.id, number)}
               >
                 THÊM VÀO GIỎ HÀNG

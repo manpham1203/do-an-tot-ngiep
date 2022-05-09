@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "../../../components/Carousel/Carousel";
 import Heading from "../../../components/Heading/Heading";
 import ListProductCard from "../../../components/ProductSlideShow/ListProductCard";
@@ -7,186 +7,97 @@ import ProductSlideShow from "../../../components/ProductSlideShow/ProductSlideS
 import api from "../../../apis/api";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
-const initState = {
-  category: {
-    loading: false,
-    fail: false,
-    data: [],
-  },
-  brand: {
-    loading: false,
-    fail: false,
-    data: [],
-  },
-};
-//action
-const CATEGORY_LOADING = "CATEGORY_LOADING";
-const CATEGORY_SUCCESS = "CATEGORY_SUCCESS";
-const CATEGORY_FAIL = "CATEGORY_FAIL";
-const BRAND_LOADING = "BRAND_LOADING";
-const BRAND_SUCCESS = "BRAND_SUCCESS";
-const BRAND_FAIL = "BRAND_FAIL";
-const categoryLoading = () => {
-  return {
-    type: CATEGORY_LOADING,
-  };
-};
-const categorySuccess = (payload) => {
-  return {
-    type: CATEGORY_SUCCESS,
-    payload: payload,
-  };
-};
-const categoryFail = () => {
-  return {
-    type: CATEGORY_FAIL,
-  };
-};
-const brandLoading = () => {
-  return {
-    type: BRAND_LOADING,
-  };
-};
-const brandSuccess = (payload) => {
-  return {
-    type: BRAND_SUCCESS,
-    payload: payload,
-  };
-};
-const brandFail = () => {
-  return {
-    type: BRAND_FAIL,
-  };
-};
-const reducer = (state, action) => {
-  switch (action.type) {
-    case CATEGORY_LOADING:
-      return {
-        ...state,
-        category: {
-          ...state.category,
-          loading: true,
-          fail: false,
-        },
-      };
-    case CATEGORY_SUCCESS:
-      return {
-        ...state,
-        category: {
-          ...state.category,
-          loading: false,
-          fail: false,
-          data: action.payload,
-        },
-      };
-    case CATEGORY_FAIL:
-      return {
-        ...state,
-        category: {
-          ...state.category,
-          loading: false,
-          fail: true,
-        },
-      };
-    case BRAND_LOADING:
-      return {
-        ...state,
-        brand: {
-          ...state.brand,
-          loading: true,
-          fail: false,
-        },
-      };
-    case BRAND_SUCCESS:
-      return {
-        ...state,
-        brand: {
-          ...state.brand,
-          loading: false,
-          fail: false,
-          data: action.payload,
-        },
-      };
-    case BRAND_FAIL:
-      return {
-        ...state,
-        brand: {
-          ...state.brand,
-          loading: false,
-          fail: true,
-        },
-      };
-    default:
-      return state;
-  }
-};
 function Home() {
-  const [state, dispatch] = useReducer(reducer, initState);
+  const [brand, setBrand] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [mostBought, setMostBought] = useState([]);
+  const [newProduct, setNewProduct] = useState([]);
   const fetchProductsOfBrand = async () => {
-    dispatch(brandLoading());
     await api({
       method: "GET",
       url: `/Brand/AllBrandWithProductCard`,
       data: null,
     })
       .then((res) => {
-        dispatch(brandSuccess(res.data));
+        setBrand(res.data);
       })
-      .catch(() => dispatch(brandFail()));
+      .catch(() => console.log("fail"));
   };
   const fetchProductsOfCategory = async () => {
-    dispatch(categoryLoading());
     await api({
       method: "GET",
       url: `/Category/AllCategoryWithProductCard`,
       data: null,
     })
       .then((res) => {
-        dispatch(categorySuccess(res.data));
+        setCategory(res.data);
       })
-      .catch(() => dispatch(categoryFail()));
+      .catch(() => console.log("fail"));
+  };
+  const fetchMostBought = async () => {
+    await api({
+      method: "GET",
+      url: `/product/MostBought`,
+      params: { take: 8 },
+    })
+      .then((res) => {
+        setMostBought(res.data);
+      })
+      .catch(() => console.log("fail"));
+  };
+  const fetchNewProduct = async () => {
+    await api({
+      method: "GET",
+      url: `/product/newproduct`,
+      params: { take: 10 },
+    })
+      .then((res) => {
+        setNewProduct(res.data);
+      })
+      .catch(() => console.log("fail"));
   };
   useEffect(() => {
     fetchProductsOfCategory();
     fetchProductsOfBrand();
+    fetchMostBought();
+    fetchNewProduct();
   }, []);
   const [showBrand, setShowBrand] = useState();
   const [showCategory, setShowCategory] = useState();
 
   useEffect(() => {
-    setShowCategory(state.category?.data[0]?.id);
-  }, [state.category.data]);
+    setShowCategory(category[0]?.id);
+  }, [category]);
   useEffect(() => {
-    setShowBrand(state.brand?.data[0]?.id);
-  }, [state.brand.data]);
-  document.title = "Web";
-  console.log("data", state);
-
+    setShowBrand(brand[0]?.id);
+  }, [brand]);
+  document.title = "Trang chủ";
+  console.log("mb", mostBought);
   return (
     <div className="w-[100%]">
       <Carousel></Carousel>
       <ProductSlideShow>
-        <Heading title="Thương Hiệu" className="text-left" />
+        <Heading title="Thương Hiệu" className="text-center" />
         <div className="flex flex-row justify-center gap-x-[20px] font-primary text-[20px]">
-          {state?.brand?.data?.productCardVMs &&
-            state.brand.data.map((item) => {
+          {brand.length > 0 &&
+            brand.map((item) => {
               return (
                 <ListTab
-                  key={item.id}
-                  name={item.name}
-                  id={item.id}
+                  key={item?.id}
+                  name={item?.name}
+                  id={item?.id}
                   show={showBrand}
                   setShow={setShowBrand}
                 />
               );
             })}
         </div>
-        {state?.brand?.data?.productCardVMs &&
-          state.brand.data.map((item) => {
+        {brand.length > 0 &&
+          brand.map((item) => {
             return (
               <ListProductCard
-                key={item.id}
-                id={item.id}
+                key={item?.id}
+                id={item?.id}
                 products={item.productCardVMs}
                 show={showBrand}
               />
@@ -194,15 +105,15 @@ function Home() {
           })}
       </ProductSlideShow>
       <ProductSlideShow>
-        <Heading title="Danh Mục" className="text-left" />
+        <Heading title="Danh Mục" className="text-center" />
         <div className="flex flex-row justify-center gap-x-[20px] font-primary font-bold text-[20px]">
-          {state?.category?.data?.productCardVMs &&
-            state.category.data.map((item) => {
+          {category.length > 0 &&
+            category.map((item) => {
               return (
                 <ListTab
-                  key={item.id}
-                  name={item.name}
-                  id={item.id}
+                  key={item?.id}
+                  name={item?.name}
+                  id={item?.id}
                   show={showCategory}
                   setShow={setShowCategory}
                 />
@@ -210,25 +121,29 @@ function Home() {
             })}
         </div>
 
-        {state?.category?.data?.productCardVMs &&
-          state.category.data.map((item) => {
+        {category.length > 0 &&
+          category.map((item) => {
             return (
               <ListProductCard
-                key={item.id}
-                id={item.id}
-                products={item.productCardVMs}
+                key={item?.id}
+                id={item?.id}
+                products={item?.productCardVMs}
                 show={showCategory}
               />
             );
           })}
       </ProductSlideShow>
-      <PostSlideShow
-        slideLg={4}
-        slideMd={3}
-        slideSm={2}
-        slide={1}
-        textCenter={true}
-      />
+      <ProductSlideShow>
+        <Heading title="Mua Nhiều Nhất" className="text-center" />
+        {mostBought.length > 0 && <ListProductCard products={mostBought} />}
+      </ProductSlideShow>
+      <ProductSlideShow>
+        <Heading title="Sản Phẩm Mới" className="text-center" />
+        {newProduct.length > 0 && <ListProductCard products={newProduct} />}
+      </ProductSlideShow>
+      <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1}>
+        <Heading title="Tin tức" className="text-center" />
+      </PostSlideShow>
     </div>
   );
 }

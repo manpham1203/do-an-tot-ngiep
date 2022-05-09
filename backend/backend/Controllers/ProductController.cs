@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -376,7 +377,10 @@ namespace backend.Controllers
             }
             for (int i = 0; i < resultFromBLL.Products.Count; i++)
             {
-                resultFromBLL.Products[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Products[i].ImageName);
+                if (resultFromBLL.Products[i].ImageName != null)
+                {
+                    resultFromBLL.Products[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Products[i].ImageName);
+                }
             }
             return Ok(resultFromBLL);
         }
@@ -398,7 +402,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
         [HttpGet("ProductWishlist")]
         public async Task<IActionResult> ProductWishlist(string userId)
         {
@@ -411,7 +415,10 @@ namespace backend.Controllers
                 }
                 for (int i = 0; i < resultFromBLL.Count; i++)
                 {
-                    resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                    if (resultFromBLL[i].ImageName != null)
+                    {
+                        resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                    }
                 }
                 return Ok(resultFromBLL);
             }
@@ -420,7 +427,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-   
+
         [HttpPut("PublishedTrueList")]
         public async Task<IActionResult> PublishedTrueList(List<string> ids)
         {
@@ -483,6 +490,58 @@ namespace backend.Controllers
                     return BadRequest();
                 }
                 return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("MostBought")]
+        public async Task<IActionResult> MostBought(int take)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.MostBought(take);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Count > 0)
+                {
+                    for (int i = 0; i < resultFromBLL.Count; i++)
+                    {
+                        if (resultFromBLL[i].ImageName != null)
+                        {
+                            resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                        }
+                    }
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("NewProduct")]
+        public async Task<IActionResult> NewProduct(int take)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.ListProductCard();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                resultFromBLL = resultFromBLL.Take(take).ToList();
+                for(int i = 0; i < resultFromBLL.Count; i++)
+                {
+                    if (resultFromBLL[i].ImageName != null)
+                    {
+                        resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                    }
+                }
+                return Ok(resultFromBLL);
             }
             catch
             {

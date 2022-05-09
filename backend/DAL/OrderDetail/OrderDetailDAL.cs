@@ -14,20 +14,20 @@ namespace DAL.OrderDetail
         private AppDbContext db;
         public OrderDetailDAL()
         {
-            db= new AppDbContext();
+            db = new AppDbContext();
         }
         public async Task<bool> Create(List<OrderDetailVM> model)
         {
             try
             {
-                var obj = model.Select(x=>new BO.Entities.OrderDetail
+                var obj = model.Select(x => new BO.Entities.OrderDetail
                 {
                     Id = x.Id,
                     OrderId = x.OrderId,
-                    ProductId=x.ProductId,
-                    Quantity=x.Quantity,
-                    UnitPrice=x.UnitPrice,
-                    CreatedAt=x.CreatedAt,
+                    ProductId = x.ProductId,
+                    Quantity = x.Quantity,
+                    UnitPrice = x.UnitPrice,
+                    CreatedAt = x.CreatedAt,
                 });
                 await db.OrderDetails.AddRangeAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace DAL.OrderDetail
                 return false;
             }
         }
-    
+
         public async Task<List<OrderDetailVM>> GetListDetailByOrderId(string orderId)
         {
             try
@@ -52,18 +52,19 @@ namespace DAL.OrderDetail
                 {
                     return null;
                 }
-                if(resultFromDb.Count == 0)
+                if (resultFromDb.Count == 0)
                 {
                     return new List<OrderDetailVM>();
                 }
-                var result = resultFromDb.Select(x => new OrderDetailVM { 
-                    Id=x.Id,
-                    OrderId=x.OrderId,
-                    ProductId=x.ProductId,
-                    Quantity=x.Quantity,
-                    UnitPrice=x.UnitPrice,
-                    ProductOrderVM=null,
-                    CartRowVM=null
+                var result = resultFromDb.Select(x => new OrderDetailVM
+                {
+                    Id = x.Id,
+                    OrderId = x.OrderId,
+                    ProductId = x.ProductId,
+                    Quantity = x.Quantity,
+                    UnitPrice = x.UnitPrice,
+                    ProductOrderVM = null,
+                    CartRowVM = null
                 }).ToList();
                 return result;
             }
@@ -72,7 +73,7 @@ namespace DAL.OrderDetail
                 return null;
             }
         }
-    
+
         public async Task<bool> CheckCommented(string userId, string productId, string detailId)
         {
             try
@@ -87,6 +88,24 @@ namespace DAL.OrderDetail
             catch
             {
                 return true;
+            }
+        }
+
+        public async Task<int?> Count(string productId)
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.Where(x => x.ProductId == productId).ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return resultFromDb.Count();
+
+            }
+            catch
+            {
+                return null;
             }
         }
     }

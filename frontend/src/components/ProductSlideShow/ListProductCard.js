@@ -32,7 +32,7 @@ function ListProductCard(props) {
           },
         }}
         className={`mySwipe p-[20px] 
-        ${props.id && props.show !== props.id ? "hidden" : null}
+        ${props?.id && props?.show !== props?.id ? "hidden" : null}
         
          `}
       >

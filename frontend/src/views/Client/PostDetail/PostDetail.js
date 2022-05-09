@@ -105,6 +105,9 @@ function PostDetail(props) {
       return () => clearTimeout(timer);
     }
   }, [data.id]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
   return (
     <div className="container mx-auto mt-[20px]">
       <div className="flex flex-row gap-x-[25px]">

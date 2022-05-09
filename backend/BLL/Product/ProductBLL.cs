@@ -395,31 +395,63 @@ namespace BLL.Product
 
         public async Task<List<ProductCardVM>> ListProductCard()
         {
-            var resultFromDAL = await productDAL.ListProductCard();
-            if (resultFromDAL == null)
+            try
+            {
+                var resultFromDAL = await productDAL.ListProductCard();
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                var cmtBLL = new ProductCmtBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    var brandBLL = new BrandBLL();
+                    var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
+                    if (brand != null)
+                    {
+                        resultFromDAL[i].BrandNameVM.Id = brand.Id;
+                        resultFromDAL[i].BrandNameVM.Name = brand.Name;
+                        resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
+                    }
+
+                    var productImageBLL = new PictureBLL();
+                    var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                    if (listImg.Count > 0)
+                    {
+                        resultFromDAL[i].ImageName = listImg[0].Name;
+                    }
+
+                    var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                    if (star.Count() == 0)
+                    {
+                        resultFromDAL[i].Star = 0;
+                    }
+                    else
+                    {
+                        resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
+                    }
+                }
+                return resultFromDAL;
+            }
+            catch
             {
                 return null;
             }
-            for (int i = 0; i < resultFromDAL.Count; i++)
-            {
-                var brandBLL = new BrandBLL();
-                var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
-                if (brand != null)
-                {
-                    resultFromDAL[i].BrandNameVM.Id = brand.Id;
-                    resultFromDAL[i].BrandNameVM.Name = brand.Name;
-                    resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
-                }
-
-                var productImageBLL = new PictureBLL();
-                var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
-                if (listImg.Count > 0)
-                {
-                    resultFromDAL[i].ImageName = listImg[0].Name;
-                }
-            }
-            return resultFromDAL;
         }
+
+        //public async Task<List<ProductCardVM>> ListProductCardNew(int take)
+        //{
+        //    try
+        //    {
+        //        var result = await ListProductCard();
+        //        return result.Take(10).OrderBy(x=>x.cre).ToList();
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
         public async Task<ProductCardVM> ProductCard(string id)
         {
             var resultFromDAL = await productDAL.ProductCard(id);
@@ -670,20 +702,21 @@ namespace BLL.Product
                         }
                     }
                 }
-                for (int i = 0; i < tempCategory.Products.Count; i++)
-                {
-                    for (int j = 0; j < tempCategory.Products.Count; j++)
-                    {
-                        if (i == j)
-                        {
-                            continue;
-                        }
-                        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
-                        {
-                            tempCategory.Products.Remove(tempCategory.Products[j]);
-                        }
-                    }
-                }
+                //for (int i = 0; i < tempCategory.Products.Count; i++)
+                //{
+                //    for (int j = 0; j < tempCategory.Products.Count; j++)
+                //    {
+                //        if (i == j)
+                //        {
+                //            continue;
+                //        }
+                //        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
+                //        {
+                //            tempCategory.Products.Remove(tempCategory.Products[j]);
+                //        }
+                //    }
+                //}
+                tempCategory.Products = tempCategory.Products.GroupBy(x => x.Id).Select(x => x.First()).ToList();
             }
 
             var tempFinal = new ProductPaginationAdminVM
@@ -920,7 +953,7 @@ namespace BLL.Product
             {
                 return null;
             }
-            
+
             if (resultFromDAL.Count == 0)
             {
                 return new ProductPaginationVM
@@ -1017,20 +1050,21 @@ namespace BLL.Product
                         }
                     }
                 }
-                for (int i = 0; i < tempCategory.Products.Count; i++)
-                {
-                    for (int j = 0; j < tempCategory.Products.Count; j++)
-                    {
-                        if (i == j)
-                        {
-                            continue;
-                        }
-                        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
-                        {
-                            tempCategory.Products.Remove(tempCategory.Products[j]);
-                        }
-                    }
-                }
+                //for (int i = 0; i < tempCategory.Products.Count; i++)
+                //{
+                //    for (int j = 0; j < tempCategory.Products.Count; j++)
+                //    {
+                //        if (i == j)
+                //        {
+                //            continue;
+                //        }
+                //        if (tempCategory.Products[i].Id == tempCategory.Products[j].Id)
+                //        {
+                //            tempCategory.Products.Remove(tempCategory.Products[j]);
+                //        }
+                //    }
+                //}
+                tempCategory.Products = tempCategory.Products.GroupBy(x => x.Id).Select(x => x.First()).ToList();
             }
 
             var tempFinal = new ProductPaginationVM
@@ -1150,7 +1184,7 @@ namespace BLL.Product
                 return false;
             }
         }
-    
+
         public async Task<List<ProductCardVM>> ProductWishlist(string userId)
         {
             try
@@ -1182,7 +1216,7 @@ namespace BLL.Product
                     {
                         resultFromDAL[i].ImageName = listImg[0].Name;
                     }
-                    
+
 
                     var star = await cmtBLL.Star(resultFromDAL[i].Id);
 
@@ -1202,13 +1236,13 @@ namespace BLL.Product
                 return null;
             }
         }
-    
+
 
         public async Task<bool> PublishedTrueList(List<string> ids)
         {
             try
             {
-                for(int i = 0; i < ids.Count; i++)
+                for (int i = 0; i < ids.Count; i++)
                 {
                     var checkExists = await CheckExists(ids[i]);
                     if (checkExists == false)
@@ -1280,5 +1314,60 @@ namespace BLL.Product
                 return false;
             }
         }
+
+        public async Task<List<ProductCardVM>> MostBought(int take)
+        {
+            try
+            {
+                var resultFromDAL = await productDAL.MostBought();
+                resultFromDAL = resultFromDAL.Take(8).ToList();
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new List<ProductCardVM>();
+                }
+                var cmtBLL = new ProductCmtBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    var brandBLL = new BrandBLL();
+                    var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
+                    if (brand != null)
+                    {
+                        resultFromDAL[i].BrandNameVM.Id = brand.Id;
+                        resultFromDAL[i].BrandNameVM.Name = brand.Name;
+                        resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
+                    }
+
+                    var productImageBLL = new PictureBLL();
+                    var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                    if (listImg.Count > 0)
+                    {
+                        resultFromDAL[i].ImageName = listImg[0].Name;
+                    }
+
+
+                    var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                    if (star.Count() == 0)
+                    {
+                        resultFromDAL[i].Star = 0;
+                    }
+                    else
+                    {
+                        resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
+                    }
+                }
+                return resultFromDAL;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
+
 }

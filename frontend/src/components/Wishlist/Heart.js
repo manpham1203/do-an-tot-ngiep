@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../apis/api";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { AiFillStar, AiFillHeart } from "react-icons/ai";
+import { FaHeart } from "react-icons/fa";
 
 
 function Heart(props) {
@@ -84,17 +84,17 @@ function Heart(props) {
       {data && (
         <div
           onClick={() => deleteWishlist()}
-          className="flex justify-center items-center w-[40px] h-[40px] text-red-600 hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md"
+          className={`${props.dislikeStyles}`}
         >
-          <AiFillHeart />
+          <FaHeart /> {props?.titleDislike}
         </div>
       )}
       {!data && (
         <div
           onClick={() => create()}
-          className="flex justify-center items-center w-[40px] h-[40px] text-gray-400 hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md"
+          className={`${props.likeStyles}`}
         >
-          <AiFillHeart />
+          <FaHeart /> {props?.titleLike}
         </div>
       )}
     </>

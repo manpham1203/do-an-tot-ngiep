@@ -299,7 +299,7 @@ namespace DAL.Product
         {
             try
             {
-                var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).ToListAsync();
+                var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).OrderByDescending(x=>x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<ProductCardVM>();
@@ -694,6 +694,17 @@ namespace DAL.Product
                 {
                     resultFromDb = resultFromDb.Where(x => x.Name.ToLower().Contains(model.Search)).ToList();
                 }
+                if (model.Discount != null)
+                {
+                    if (model.Discount == false)
+                    {
+                        resultFromDb = resultFromDb.Where(x => x.PriceDiscount == null).ToList();
+                    }
+                    else
+                    {
+                        resultFromDb = resultFromDb.Where(x => x.PriceDiscount != null).ToList();
+                    }
+                }
                 if (!string.IsNullOrEmpty(model.PriceRange))
                 {
                     switch (model.PriceRange)
@@ -902,6 +913,38 @@ namespace DAL.Product
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<List<ProductCardVM>> MostBought()
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.ToListAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = resultFromDb.Join(db.Products, d => d.ProductId, p => p.Id, (d, p) => new { d, p })
+                    .GroupBy(x => x.d.ProductId)
+                    .Where(x => x.Sum(m => m.d.Quantity) > 10 && x.First().p.Deleted==false && x.First().p.Published == true)
+                    .Select(x => new ProductCardVM
+                    {
+                        Id = x.Key,
+                        Name = x.First().p.Name,
+                        Slug = x.First().p.Slug,
+                        Price = x.First().p.Price,
+                        PriceDiscount = x.First().p.PriceDiscount,
+                        BrandNameVM = new BrandNameVM(),
+                        ImageName = null,
+                        ImageSrc = null,
+                        BrandId = x.First().p.BrandId,
+                    }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

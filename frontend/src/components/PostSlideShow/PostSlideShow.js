@@ -26,8 +26,8 @@ function PostSlideShow(props) {
     fetchData();
   }, []);
   return (
-    <div className="container mx-auto pt-[80px]">
-      <Heading title="Tin tức" text-left />
+    <div className="container mx-auto pt-[80px] ">
+      {props.children}
       <Swiper
         slidesPerView={props.slide}
         // spaceBetween={30}
@@ -47,13 +47,15 @@ function PostSlideShow(props) {
             // spaceBetween: 30,
           },
         }}
-        className={`mySwipe p-[20px]`}
+        className={`mySwipe p-[20px] h-[344px]`}
       >
         {data.map((item) => {
           return (
             <SwiperSlide
               key={item?.slug}
-              className="rounded-[8px]  list-product-card"
+              className="rounded-[8px]  list-product-card flex"
+              
+              
             >
               <PostCard2
                 key={item?.id}
@@ -61,7 +63,7 @@ function PostSlideShow(props) {
                 slug={item?.slug}
                 image={item?.imageSrc}
                 // day={moment(item?.createdAt).format("DD")}
-                createdAt={moment(item?.createdAt).format('Do MMMM YYYY')}
+                createdAt={moment(item?.createdAt).format("Do MMMM YYYY")}
                 shortDescription={item?.shortDescription}
                 view={item?.view}
               />

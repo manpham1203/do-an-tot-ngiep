@@ -26,7 +26,6 @@ function Carousel(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(data);
   return (
     <div className="w-[100%] hero ">
       <Swiper

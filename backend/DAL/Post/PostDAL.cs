@@ -154,7 +154,7 @@ namespace DAL.Post
                                               Published=post.Published,
                                               ImageName=pic.Name,
                                               ImageSrc=null,
-                                          }).SingleOrDefaultAsync();
+                                          }).Where(x=>x.Id==id).SingleOrDefaultAsync();
                 //var result = new RowAdmin
                 //{
                 //    Id = resultFromDb.Id,

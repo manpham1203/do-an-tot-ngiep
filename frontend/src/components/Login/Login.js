@@ -39,7 +39,8 @@ function Login(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          dispatch(login(res.data.id));
+          const obj={id:res.data.id, role:res.data.role}
+          dispatch(login(obj));
           navigate(`/`);
         } else {
           toast.warn(`Sai tên đăng nhập hoặc mật khẩu`, {
@@ -67,7 +68,6 @@ function Login(props) {
           label="Tên đăng nhập"
           control={control}
         />
-
         <p
           className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
             errors?.username ? null : "invisible"

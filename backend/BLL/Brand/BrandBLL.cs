@@ -22,7 +22,7 @@ namespace BLL
     {
         private BrandDAL brandDAL;
         private CommonBLL cm;
-        private string objectType="brand";
+        private string objectType = "brand";
 
         public BrandBLL()
         {
@@ -111,7 +111,7 @@ namespace BLL
                 Id = pictureId,
                 Name = model.ImageName,
                 ObjectId = brandId,
-                ObjectType= objectType,
+                ObjectType = objectType,
                 Published = true,
             };
 
@@ -225,21 +225,25 @@ namespace BLL
             {
                 return new List<BrandNameVM>();
             }
+            resultFromDAL = resultFromDAL.Take(10).ToList();
             if (resultFromDAL.Count > 0)
             {
                 var productBLL = new ProductBLL();
-                for (int i = 0; i < resultFromDAL.Count; i++)
+                for (int i = 0; i < resultFromDAL.Count(); i++)
                 {
-                    resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
                     var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL[i].Id);
-                    resultFromDAL[i].ProductCardVMs = productCards;
-                    if (resultFromDAL[i].ProductCardVMs.Count == 0)
+                    if (productCards != null)
                     {
-                        resultFromDAL.Remove(resultFromDAL[i]);
+                        if (productCards.Count > 0)
+                        {
+                            resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
+                            resultFromDAL[i].ProductCardVMs = productCards;
+                        }
                     }
                 }
+
             }
-            return resultFromDAL;
+            return resultFromDAL.Where(x=>x.ProductCardVMs!=null).ToList();
         }
 
         public async Task<BrandNameVM> BrandWithProductCard(string id)

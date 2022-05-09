@@ -11,6 +11,7 @@ using System;
 using BLL.Brand;
 using BO.ViewModels.Product;
 using BO.ViewModels.ProductImage;
+using System.Linq;
 
 namespace backend.Controllers
 {
@@ -298,6 +299,7 @@ namespace backend.Controllers
                 {
                     return Ok(new List<BrandNameVM>());
                 }
+                
                 if (resultFromBLL.Count > 0)
                 {
                     for (int i = 0; i < resultFromBLL.Count; i++)
@@ -306,7 +308,10 @@ namespace backend.Controllers
                         {
                             for (int j = 0; j < resultFromBLL[i].ProductCardVMs.Count; j++)
                             {
-                                resultFromBLL[i].ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ProductCardVMs[j].ImageName);
+                                if (resultFromBLL[i].ProductCardVMs[j].ImageName != null)
+                                {
+                                    resultFromBLL[i].ProductCardVMs[j].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ProductCardVMs[j].ImageName);
+                                }
                             }
                         }
                     }

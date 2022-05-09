@@ -393,7 +393,6 @@ function ProductTable(props) {
       );
   };
   const [showTable, setShowTable] = useState(true);
-  console.log(state);
   return (
     <>
       <div className="py-[10px] shadow-admin rounded-[8px] flex flex-row items-center justify-end gap-x-[20px] px-[20px] mb-[20px]">
@@ -640,6 +639,7 @@ function ProductTable(props) {
                       handleTrash={handleTrash}
                       handleProductSelect={handleProductSelect}
                       productSelect={productSelect}
+                      slug={item.slug}
                     />
                   );
                 })}

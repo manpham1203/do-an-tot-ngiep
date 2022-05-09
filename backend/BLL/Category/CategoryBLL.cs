@@ -106,7 +106,7 @@ namespace BLL.Category
                 Name = model.ImageName,
                 ObjectId = categoryId,
                 Published = true,
-                ObjectType= objectType,
+                ObjectType = objectType,
             };
 
             var saveCategory = await categoryDAL.Create(categoryVM, pictureVM);
@@ -232,6 +232,7 @@ namespace BLL.Category
             {
                 return new List<CategoryNameVM>();
             }
+            resultFromDAL = resultFromDAL.Take(10).ToList();
             if (resultFromDAL.Count > 0)
             {
                 var productBLL = new ProductBLL();
@@ -240,25 +241,25 @@ namespace BLL.Category
                 {
                     var listPC = await pcBLL.GetById(resultFromDAL[i].Id, "CategoryId");
                     resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
-                    if (listPC.Count > 0)
+                    if (listPC != null)
                     {
-                        for (int j = 0; j < listPC.Count(); j++)
+                        if (listPC.Count > 0)
                         {
-                            var productCard = await productBLL.ProductCardById(listPC[j].ProductId);
-                            if (productCard != null)
+                            for (int j = 0; j < listPC.Count(); j++)
                             {
-                                resultFromDAL[i].ProductCardVMs.Add(productCard);
+                                var productCard = await productBLL.ProductCardById(listPC[j].ProductId);
+                                if (productCard != null)
+                                {
+                                    resultFromDAL[i].ProductCardVMs.Add(productCard);
+                                }
                             }
                         }
                     }
-                    if (resultFromDAL[i].ProductCardVMs.Count == 0)
-                    {
-                        resultFromDAL.Remove(resultFromDAL[i]);
-                    }
+
                 }
             }
 
-            return resultFromDAL;
+            return resultFromDAL.Where(x => x.ProductCardVMs.Count() != 0).ToList();
         }
 
         public async Task<List<CategoryNameVM>> AllCategoryName()

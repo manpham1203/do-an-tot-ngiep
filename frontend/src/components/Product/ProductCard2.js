@@ -4,8 +4,11 @@ import { addToCart } from "../../redux/cart/cartActions";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import product from "../../assets/product.jpg";
-import { AiFillStar, AiFillHeart } from "react-icons/ai";
+import { AiFillShopping, AiFillHeart } from "react-icons/ai";
+import { FaHeart, FaRegEye } from "react-icons/fa";
 import ShowStarAvg from "../../components/ShowStar/ShowStarAvg";
+import Heart from "../Wishlist/Heart";
+import { setOpen } from "../../redux/quickView/quickViewActions";
 
 function ProductCard2(props) {
   const navigate = useNavigate();
@@ -49,6 +52,13 @@ function ProductCard2(props) {
         autoClose: 3000,
       });
     }
+  };
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.slug,
+    };
+    dispatch(setOpen(obj));
   };
   return (
     <div className="flex flex-row rounded-[8px] gap-x-[25px] shadow-md bg-white">
@@ -103,13 +113,26 @@ function ProductCard2(props) {
           </div>
         </div>
 
-        <div>
+        <div className="w-full flex flex-row text-[20px] justify-evenly mt-[20px] h-[30px]">
           <button
             onClick={() => addCart(props.id, props.name)}
-            className="w-[180px] border-2 border-second h-[35px] mt-[10px]"
+            className="w-fit"
           >
-            Thêm vào giỏ hàng
+            <AiFillShopping />
           </button>
+          <div className="border-r border-gray-400" />
+          <button
+            onClick={handleQuickView}
+            className=" w-fit"
+          >
+            <FaRegEye />
+          </button>
+          <div className="border-r border-gray-400" />
+          <Heart
+            id={props.id}
+            dislikeStyles="text-red-600 flex items-center cursor-pointer"
+            likeStyles="text-gray-400 flex items-center cursor-pointer"
+          />
         </div>
       </div>
     </div>

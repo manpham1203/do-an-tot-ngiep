@@ -247,7 +247,7 @@ namespace backend.Controllers
 
         [HttpGet("AllCategoryWithProductCard")]
         public async Task<IActionResult> AllCategoryWithProductCard()
-        {
+       {
             try
             {
                 var resultFromBLL = await categoryBLL.AllCategoryWithProductCard();
@@ -259,7 +259,7 @@ namespace backend.Controllers
                 {
                     return Ok(new List<CategoryNameVM>());
                 }
-                if (resultFromBLL.Count > 0)
+                if (resultFromBLL!=null)
                 {
                     for (int i = 0; i < resultFromBLL.Count; i++)
                     {

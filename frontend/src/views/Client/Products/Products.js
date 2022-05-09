@@ -165,6 +165,7 @@ function Products(props) {
   const brandSlugs = searchParams.getAll("thuong-hieu");
   const categorySlugs = searchParams.getAll("danh-muc");
   const price = searchParams.get("gia");
+  const discount = searchParams.get("dang-giam-gia");
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -172,13 +173,14 @@ function Products(props) {
     brand: true,
     category: true,
     priceRange: true,
+    other: true,
   });
   const [priceRange, setPriceRange] = useState(null);
   const [query, setQuery] = useState("");
   const [arrBrand, setArrBrand] = useState([]);
   const [arrCategory, setArrCategory] = useState([]);
-  
-  
+  const [disc, setDisc] = useState();
+
   const [priceRangeData, setPriceRangeData] = useState({
     maxPrice: 0,
     minPrice: 0,
@@ -199,14 +201,16 @@ function Products(props) {
   ];
   const [orderBy, setOrderBy] = useState(orderOptions[0]);
   const fetchData = async () => {
+    
     var data = {
       brandSlugs: brandSlugs,
       categorySlugs: categorySlugs,
       limit: 16,
       currentPage: currentPage,
-      priceRange: price,
+      priceRange: priceRange?.value,
       search: query,
       orderBy: orderBy.value,
+      // discount: disc,
     };
     dispatchProduct(loading());
     await api({
@@ -278,21 +282,30 @@ function Products(props) {
   useEffect(() => {
     setArrBrand(brandSlugs);
     setArrCategory(categorySlugs);
-    // if (price != null) {
-    //   for (var i = 0; i < priceOptions.length; i++) {
-    //     if (price === priceOptions[i].value) {
-    //       setPriceRange(priceOptions[i]);
-    //     }
-    //   }
-    // }
+    // setPriceRange(price);
+    if (price != null) {
+      for (var i = 0; i < priceOptions.length; i++) {
+        if (price === priceOptions[i].value) {
+          setPriceRange(priceOptions[i]);
+        }
+      }
+    } else {
+      setPriceRange(null);
+    }
+    if (discount === "true") {
+      setDisc(true);
+    }
+    if (discount === "false") {
+      setDisc(false);
+    }
     fetchData();
   }, [location]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     fetchData();
-  }, []);
-  useEffect(() => {
-    fetchData();
-  }, [arrBrand, arrCategory]);
+  }, [arrBrand, arrCategory, priceRange, orderBy]);
   useEffect(() => {
     fetchDataBrand();
     fetchDataCategory();
@@ -339,51 +352,54 @@ function Products(props) {
       });
     }
   };
-  useEffect(() => {
-    if (priceRange === null) {
-      if (arrBrand.length !== 0 || arrCategory.length !== 0) {
-        setSearchPrams({
-          "thuong-hieu": arrBrand,
-          "danh-muc": arrCategory,
-        });
-      } else {
-        if (priceRange === null) {
-          setSearchPrams({});
-        }
-      }
-    } else {
-      setSearchPrams({
-        "thuong-hieu": arrBrand,
-        "danh-muc": arrCategory,
-        gia: priceRange.value,
-      });
-    }
-  }, [priceRange]);
+  // useEffect(() => {
+  //   if (priceRange === null) {
+  //     if (arrBrand.length !== 0 || arrCategory.length !== 0) {
+  //       setSearchPrams({
+  //         "thuong-hieu": arrBrand,
+  //         "danh-muc": arrCategory,
+  //       });
+  //     } else {
+  //       if (priceRange === null) {
+  //         setSearchPrams({});
+  //       }
+  //     }
+  //   } else {
+  //     setSearchPrams({
+  //       "thuong-hieu": arrBrand,
+  //       "danh-muc": arrCategory,
+  //       gia: priceRange.value,
+  //     });
+  //   }
+  // }, [priceRange]);
   const handlePriceChange = (e) => {
+    console.log("nay", e);
     setPriceRange(e);
+    setSearchPrams({
+      "thuong-hieu": arrBrand,
+      "danh-muc": arrCategory,
+      gia: e?.value,
+    });
   };
+  // const handleDiscountChange = (e) => {
+  //   setSearchPrams({
+  //     "thuong-hieu": arrBrand,
+  //     "danh-muc": arrCategory,
+  //     gia: priceRange,
+  //   });
+  // };
   useEffect(() => {
     setArrBrand(brandSlugs);
     setArrCategory(categorySlugs);
-    if (price != null) {
-      for (var i = 0; i < priceOptions.length; i++) {
-        if (price === priceOptions[i].value) {
-          setPriceRange(priceOptions[i]);
-        }
-      }
+    setPriceRange(price);
+    if (discount === "true") {
+      setDisc(true);
+    }
+    if (discount === "false") {
+      setDisc(false);
     }
   }, []);
-
-  // useEffect(() => {
-  //   for (var i = 0; i < priceOptions.length; i++) {
-  //     if (price === priceOptions[i].value) {
-  //       setPriceRange(priceOptions[i]);
-  //     }
-  //   }
-  // }, [price]);
-  console.log(brandSlugs);
-  console.log(state);
-
+  console.log(discount);
   return (
     <div className="container mx-auto flex flex-col">
       <div className="h-[60px] flex items-center gap-x-[20px]">
@@ -492,7 +508,7 @@ function Products(props) {
 
           <div className="w-full border-t border-gray-200">
             <div
-              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center"
+              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center mb-[15px]"
               onClick={() =>
                 setTabFilter({ ...tabFilter, brand: !tabFilter.brand })
               }
@@ -526,7 +542,7 @@ function Products(props) {
           </div>
           <div className="w-full border-t border-gray-200">
             <div
-              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center"
+              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center  mb-[15px]"
               onClick={() =>
                 setTabFilter({ ...tabFilter, category: !tabFilter.category })
               }
@@ -560,7 +576,7 @@ function Products(props) {
           </div>
           <div className="w-full border-t border-gray-200 ">
             <div
-              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center "
+              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center  mb-[15px]"
               onClick={() =>
                 setTabFilter({
                   ...tabFilter,
@@ -604,6 +620,44 @@ function Products(props) {
               />
             </div>
           </div>
+          {/* <div className="w-full border-t border-gray-200 ">
+            <div
+              className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center "
+              onClick={() =>
+                setTabFilter({
+                  ...tabFilter,
+                  other: !tabFilter.other,
+                })
+              }
+            >
+              <span>Khác</span>
+              {tabFilter.other ? <IoIosArrowDown /> : <IoIosArrowUp />}
+            </div>
+
+            <div
+              className={`${tabFilter.other === false && "hidden"} mb-[25px]`}
+            >
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="other"
+                  className="form-checkbox hidden "
+                  checked={
+                    discount === null
+                      ? false
+                      : discount === "true"
+                      ? true
+                      : discount === "false" && false
+                  }
+                  // onChange={handleDiscountChange}
+                />
+                <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+                <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Đang giảm giá
+                </span>
+              </label>
+            </div>
+          </div> */}
         </div>
         <div className="w-full">
           {grid === 0 && (

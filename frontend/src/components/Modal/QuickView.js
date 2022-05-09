@@ -8,13 +8,20 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper";
 import { Link } from "react-router-dom";
 import ShowStarAvg from "../ShowStar/ShowStarAvg";
+import { toast } from "react-toastify";
+import { addToCart, adjustQty } from "../../redux/cart/cartActions";
+import { BsPlusLg, BsDashLg } from "react-icons/bs";
+import Heart from "../Wishlist/Heart";
 
 function QuickView(props) {
   const dispatch = useDispatch();
   const { quickView } = useSelector((store) => store);
+  const [number, setNumber] = useState(1);
   const [scroll, setScroll] = useState();
   const [data, setData] = useState();
   const [active, setActive] = useState(null);
+  const { cart } = useSelector((store) => store);
+
   const fetchData = async (slug) => {
     await api({
       method: "GET",
@@ -29,7 +36,70 @@ function QuickView(props) {
   useEffect(() => {
     fetchData(quickView.id);
   }, [quickView.id]);
-  console.log("data", data);
+  const addCart = (id, qty) => {
+    var objCart = {
+      cartId: id,
+      qty: qty,
+    };
+    // const check = cart.every((item) => {
+    //   return item.cartId !== objCart.cartId;
+    // });
+    const check = cart.some((x) => x.cartId === objCart.cartId);
+    const check2 = cart.find((x) => x.cartId === objCart.cartId);
+    if (cart.length <= 8) {
+      if (check) {
+        if (check2.qty <= 8) {
+          if (check2.qty + number > 9) {
+            dispatch(adjustQty({ cartId: check2.cartId, qty: 9 }));
+            toast.warn(`sản phẩm đã đạt số lượng tối đa`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          } else {
+            dispatch(addToCart(objCart));
+            toast.success(
+              `sản phẩm "${data.name}" thêm vào giỏ hàng thành công`,
+              {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+              }
+            );
+          }
+        } else {
+          toast.warn("Sản phẩm đã đạt số lượng tối đa !", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      } else {
+        dispatch(addToCart(objCart));
+        toast.success(`sản phẩm "${data.name}" thêm vào giỏ hàng thành công`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+      }
+    } else {
+      toast.warn("Giỏ hàng đã đầy !", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+    }
+  };
+
+  const handleNumber = (e) => {
+    const re = /^[1-9\b]+$/;
+    if (e.target.value === "" || re.test(e.target.value)) {
+      setNumber(e.target.value);
+    }
+  };
+  const handleBlurNumber = (e) => {
+    if (e.target.value === "" || e.target.value < 1) {
+      setNumber(1);
+    }
+    if (e.target.value > 9) {
+      setNumber(9);
+    }
+  };
   return (
     <div className="bg-third fixed w-[80%] h-[500px] rounded-xl top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[2000]">
       <div className="text-right w-fit absolute right-0 top-0">
@@ -108,67 +178,79 @@ function QuickView(props) {
           <div className="mt-[10px]">
             <div className="">
               <span className="font-medium">Loại sản phẩm: </span>
-              {data?.categoryNameVMs?.map((item,index) => {
-                return (
-                  index=1===data?.categoryNameVMs.length?
-                  <span
-                    key={item.id}
-                    className="cursor-pointer hover:underline underline-offset-4"
-                    // onClick={() =>
-                    //   navigate(`/san-pham?&category=${item.slug}`)
-                    // }
-                  >
-                    {item.name}
-                  </span>
-                  :
-                  <span
-                    key={item.id}
-                    className="cursor-pointer hover:underline underline-offset-4"
-                    // onClick={() =>
-                    //   navigate(`/san-pham?&category=${item.slug}`)
-                    // }
-                  >
-                    {item.name},&nbsp;
-                  </span>
-                );
+              {data?.categoryNameVMs?.map((item, index) => {
+                return (index =
+                  1 === data?.categoryNameVMs.length ? (
+                    <span
+                      key={item.id}
+                      className="cursor-pointer hover:underline underline-offset-4"
+                      // onClick={() =>
+                      //   navigate(`/san-pham?&category=${item.slug}`)
+                      // }
+                    >
+                      {item.name}
+                    </span>
+                  ) : (
+                    <span
+                      key={item.id}
+                      className="cursor-pointer hover:underline underline-offset-4"
+                      // onClick={() =>
+                      //   navigate(`/san-pham?&category=${item.slug}`)
+                      // }
+                    >
+                      {item.name},&nbsp;
+                    </span>
+                  ));
               })}
             </div>
           </div>
 
-          <div className="flex flex-row items-center mt-[20px] border border-gray-400">
+          <div className="flex flex-row items-center mt-[20px] border border-gray-400 w-fit">
             <div
-              className="cursor-pointer px-[10px] border-r border-gray-400 h-[40px] flex items-center"
-              // onClick={() =>
-              //   setNumber((number) => (number <= 1 ? 1 : number - 1))
-              // }
+              className={` px-[10px] border-r border-gray-400 h-[40px] flex items-center w-fit ${
+                number === 1 ? "text-gray-200 " : "text-second cursor-pointer"
+              }`}
+              onClick={() =>
+                setNumber((number) => {
+                  return number <= 1 ? 1 : number - 1;
+                })
+              }
             >
-              {/* <BsDashLg /> */}
+              <BsDashLg />
             </div>
             <input
               className="number_cart-item w-[100px] text-center h-[40px] "
               type="number"
-              // value={number}
-              // onChange={(e) => onHandleNumber(e)}
+              value={number}
+              onChange={(e) => handleNumber(e)}
+              onBlur={(e) => handleBlurNumber(e)}
               min="1"
             />
             <div
-              className="cursor-pointer px-[10px] border-l border-gray-400 h-[40px] flex items-center"
-              // onClick={() =>
-              //   setNumber((number) => (number >= 9 ? 9 : number + 1))
-              // }
+              className={`px-[10px] border-l border-gray-400 h-[40px] flex items-center w-fit ${
+                number === 9 ? "text-gray-200 " : "text-second cursor-pointer"
+              }`}
+              onClick={() =>
+                setNumber((number) => (number >= 9 ? 9 : number + 1))
+              }
             >
-              {/* <BsPlusLg /> */}
+              <BsPlusLg />
             </div>
           </div>
           <button
-            className="mt-[20px] p-[10px] bg-second text-third font-medium"
-            // onClick={() => addCart(data?.id, number)}
+            className="mt-[20px] p-[10px] bg-second text-third font-medium mb-[20px]"
+            onClick={() => addCart(data?.id, number)}
           >
             THÊM VÀO GIỎ HÀNG
           </button>
-          <span className="mt-[20px] hover:underline underline-offset-4 cursor-pointer">
-            Thêm vào danh sách yêu thích
-          </span>
+
+          <Heart
+            id={data?.id}
+            titleDislike="Xoá khỏi danh sách yêu thích"
+            titleLike="Thêm vào danh sách yêu thích"
+            dislikeStyles="text-red-600 cursor-pointer flex flex-row hover:underline underline-offset-4 items-center gap-x-[10px]"
+            likeStyles="text-gray-400 cursor-pointer flex flex-row hover:underline underline-offset-4 items-center gap-x-[10px]"
+          />
         </div>
       </div>
     </div>

@@ -41,14 +41,16 @@ import Posts from "./views/Client/Posts/Posts";
 import PostDetail from "./views/Client/PostDetail/PostDetail";
 import Wishlist from "./views/Client/Wishlist/Wishlist";
 import QuickView from "./components/Modal/QuickView";
+import AdminViewProduct from "./components/Modal/AdminViewProduct";
 import Overlay from "./components/Overlay/Overlay";
+import OverlayAdminViewProduct from "./components/Overlay/OverlayAdminViewProduct";
 import BannerTable from "./views/Admin/Banner/BannerTable";
 import BannerTrash from "./views/Admin/Banner/BannerTrash";
 import BannerCreate from "./views/Admin/Banner/BannerCreate";
 import BannerEdit from "./views/Admin/Banner/BannerEdit";
 
 function App() {
-  const { user, quickView } = useSelector((store) => store);
+  const { user, quickView, adminViewProduct } = useSelector((store) => store);
   useEffect(() => {
     if (quickView.show) {
       document.body.style.overflowY = "hidden";
@@ -56,7 +58,13 @@ function App() {
       document.body.style.overflowY = "scroll";
     }
   }, [quickView.show]);
-  console.log("q", quickView);
+  useEffect(() => {
+    if (adminViewProduct.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewProduct.show]);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -64,7 +72,18 @@ function App() {
       navigate("/dang-nhap");
     }
   }, [user.id, location.pathname]);
+  useEffect(() => {
+    if (user.id === null && location.pathname === "/tai-khoan") {
+      navigate("/dang-nhap");
+    }
+  }, [user.id, location.pathname]);
+  useEffect(() => {
+    if (user.role !== 1 && location.pathname.slice(0, 6) === "/admin") {
+      navigate("/admin-login");
+    }
+  }, [user.role, location.pathname]);
 
+  console.log("av",adminViewProduct)
   return (
     <div className="w-[100%] min-h-screen">
       <Routes>
@@ -99,44 +118,78 @@ function App() {
           <Route path="/danh-sach-yeu-thich" element={<Wishlist />}></Route>
         </Route>
 
-        <Route path="/admin" element={<SideBar />}>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+        {user.role !== 1 && (
+          <Route path="/admin-login" element={<div>haha</div>}></Route>
+        )}
 
-          <Route
-            path="/admin/san-pham/chinh-sua/:slug"
-            element={<ProductEdit />}
-          />
-          <Route path="/admin/san-pham/tao-moi" element={<ProductCreate />} />
-          <Route path="/admin/san-pham/thung-rac" element={<ProductTrash />} />
-          <Route path="/admin/san-pham/danh-sach" element={<ProductTable />} />
-          <Route path="/admin/thuong-hieu/danh-sach" element={<BrandTable />} />
-          <Route path="/admin/thuong-hieu/tao-moi" element={<BrandCreate />} />
-          <Route
-            path="/admin/thuong-hieu/chinh-sua/:slug"
-            element={<BrandEdit />}
-          />
-          <Route path="/admin/thuong-hieu/thung-rac" element={<BrandTrash />} />
-          <Route path="/admin/danh-muc/danh-sach" element={<CategoryTable />} />
-          <Route path="/admin/danh-muc/tao-moi" element={<CategoryCreate />} />
-          <Route
-            path="/admin/danh-muc/chinh-sua/:slug"
-            element={<CategoryEdit />}
-          />
-          <Route path="/admin/danh-muc/thung-rac" element={<CategoryTrash />} />
-          <Route path="/admin/don-hang/danh-sach" element={<OrderTable />} />
-          <Route
-            path="/admin/don-hang/chinh-sua/:slug"
-            element={<OrderEdit />}
-          />
-          <Route path="/admin/tin-tuc/danh-sach" element={<PostTable />} />
-          <Route path="/admin/tin-tuc/tao-moi" element={<PostCreate />} />
-          <Route path="/admin/tin-tuc/chinh-sua/:id" element={<PostEdit />} />
-          <Route path="/admin/tin-tuc/da-xoa" element={<PostTrash />} />
-          <Route path="/admin/banner/danh-sach" element={<BannerTable />} />
-          <Route path="/admin/banner/da-xoa" element={<BannerTrash />} />
-          <Route path="/admin/banner/tao-moi" element={<BannerCreate />} />
-          <Route path="/admin/banner/chinh-sua/:id" element={<BannerEdit />} />
-        </Route>
+        {user.role === 1 && (
+          <Route path="/admin" element={<SideBar />}>
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+
+            <Route
+              path="/admin/san-pham/chinh-sua/:slug"
+              element={<ProductEdit />}
+            />
+            <Route path="/admin/san-pham/tao-moi" element={<ProductCreate />} />
+            <Route
+              path="/admin/san-pham/thung-rac"
+              element={<ProductTrash />}
+            />
+            <Route
+              path="/admin/san-pham/danh-sach"
+              element={<ProductTable />}
+            />
+            <Route
+              path="/admin/thuong-hieu/danh-sach"
+              element={<BrandTable />}
+            />
+            <Route
+              path="/admin/thuong-hieu/tao-moi"
+              element={<BrandCreate />}
+            />
+            <Route
+              path="/admin/thuong-hieu/chinh-sua/:slug"
+              element={<BrandEdit />}
+            />
+            <Route
+              path="/admin/thuong-hieu/thung-rac"
+              element={<BrandTrash />}
+            />
+            <Route
+              path="/admin/danh-muc/danh-sach"
+              element={<CategoryTable />}
+            />
+            <Route
+              path="/admin/danh-muc/tao-moi"
+              element={<CategoryCreate />}
+            />
+            <Route
+              path="/admin/danh-muc/chinh-sua/:slug"
+              element={<CategoryEdit />}
+            />
+            <Route
+              path="/admin/danh-muc/thung-rac"
+              element={<CategoryTrash />}
+            />
+            <Route path="/admin/don-hang/danh-sach" element={<OrderTable />} />
+            <Route
+              path="/admin/don-hang/chinh-sua/:slug"
+              element={<OrderEdit />}
+            />
+            <Route path="/admin/tin-tuc/danh-sach" element={<PostTable />} />
+            <Route path="/admin/tin-tuc/tao-moi" element={<PostCreate />} />
+            <Route path="/admin/tin-tuc/chinh-sua/:id" element={<PostEdit />} />
+            <Route path="/admin/tin-tuc/da-xoa" element={<PostTrash />} />
+            <Route path="/admin/banner/danh-sach" element={<BannerTable />} />
+            <Route path="/admin/banner/da-xoa" element={<BannerTrash />} />
+            <Route path="/admin/banner/tao-moi" element={<BannerCreate />} />
+            <Route
+              path="/admin/banner/chinh-sua/:id"
+              element={<BannerEdit />}
+            />
+          </Route>
+        )}
+
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <ToastContainer />
@@ -144,6 +197,12 @@ function App() {
         <>
           <Overlay />
           <QuickView />
+        </>
+      )}
+      {adminViewProduct.show && (
+        <>
+          <OverlayAdminViewProduct />
+          <AdminViewProduct />
         </>
       )}
     </div>
