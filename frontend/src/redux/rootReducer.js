@@ -10,6 +10,7 @@ import { userReducer } from "./user/userReducer";
 import { quickViewReducer } from "./quickView/quickViewReducer";
 import { adminViewProductReducer } from "./adminViewProduct/adminViewProductReducer";
 import { adminViewBrandReducer } from "./adminViewBrand/adminViewBrandReducer";
+import { adminViewOrderReducer } from "./adminViewOrder/adminViewOrderReducer";
 
 
 const rootReducer=combineReducers({
@@ -23,7 +24,8 @@ const rootReducer=combineReducers({
     user:userReducer,
     quickView:quickViewReducer,
     adminViewProduct:adminViewProductReducer,
-    adminViewBrand:adminViewBrandReducer
+    adminViewBrand:adminViewBrandReducer,
+    adminViewOrder:adminViewOrderReducer
 })
 
 export default rootReducer;

@@ -92,10 +92,20 @@ function SideBar(props) {
   ];
   const OrderTab = [
     {
-      title: "Danh Sách",
+      title: "Dơn Hàng",
       path: "don-hang/danh-sach",
       icon: iconchild,
     },
+    // {
+    //   title: "Đơn Hàng Chưa Xử Lý",
+    //   path: "don-hang/chua-xu-li",
+    //   icon: iconchild,
+    // },
+    // {
+    //   title: "Đơn Hàng Đã huỷ",
+    //   path: "don-hang/da-huy",
+    //   icon: iconchild,
+    // },
   ];
   const PostTab = [
     {

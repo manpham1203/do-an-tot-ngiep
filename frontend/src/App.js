@@ -48,9 +48,13 @@ import BannerTable from "./views/Admin/Banner/BannerTable";
 import BannerTrash from "./views/Admin/Banner/BannerTrash";
 import BannerCreate from "./views/Admin/Banner/BannerCreate";
 import BannerEdit from "./views/Admin/Banner/BannerEdit";
+import OverlayAdminViewOrder from "./components/Overlay/OverlayAdminViewOrder";
+import AdminViewOrder from "./components/Modal/AdminViewOrder";
+import OrderPending from "./views/Admin/Order/OrderPending";
+import OrderCancel from "./views/Admin/Order/OrderCancel";
 
 function App() {
-  const { user, quickView, adminViewProduct } = useSelector((store) => store);
+  const { user, quickView, adminViewProduct,adminViewOrder } = useSelector((store) => store);
   useEffect(() => {
     if (quickView.show) {
       document.body.style.overflowY = "hidden";
@@ -172,6 +176,8 @@ function App() {
               element={<CategoryTrash />}
             />
             <Route path="/admin/don-hang/danh-sach" element={<OrderTable />} />
+            <Route path="/admin/don-hang/chua-xu-li" element={<OrderPending />} />
+            <Route path="/admin/don-hang/da-huy" element={<OrderCancel />} />
             <Route
               path="/admin/don-hang/chinh-sua/:slug"
               element={<OrderEdit />}
@@ -203,6 +209,12 @@ function App() {
         <>
           <OverlayAdminViewProduct />
           <AdminViewProduct />
+        </>
+      )}
+      {adminViewOrder.show && (
+        <>
+          <OverlayAdminViewOrder />
+          <AdminViewOrder />
         </>
       )}
     </div>

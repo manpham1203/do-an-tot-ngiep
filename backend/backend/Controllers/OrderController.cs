@@ -184,6 +184,74 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-
+        [HttpGet("AdminGetByState")]
+        public async Task<IActionResult> AdminGetByState(int currentPage, int limit, string id, int? state)
+        {
+            try
+            {
+                var resultFromBLL = await orderBLL.AdminGetByState(currentPage, limit, id, state);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                //if (resultFromBLL.Count == 0)
+                //{
+                //    return Ok(new List<OrderVM>());
+                //}
+                //for (int i = 0; i < resultFromBLL.Count; i++)
+                //{
+                //    for (int j = 0; j < resultFromBLL[i].OrderDetailVMs.Count; j++)
+                //    {
+                //        resultFromBLL[i].OrderDetailVMs[j].ProductOrderVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].OrderDetailVMs[j].ProductOrderVM.ImageName);
+                //    }
+                //}
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        [HttpGet("GetFullById")]
+        public async Task<IActionResult> GetFullById(string id)
+        {
+            try
+            {
+                var resultFromBLL = await orderBLL.GetFullById(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                for (int i = 0; i < resultFromBLL.OrderDetailVMs.Count; i++)
+                {
+                    if (resultFromBLL.OrderDetailVMs[i].ProductOrderVM.ImageName != null)
+                    {
+                        resultFromBLL.OrderDetailVMs[i].ProductOrderVM.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.OrderDetailVMs[i].ProductOrderVM.ImageName);
+                    }
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("OrderToday")]
+        public async Task<IActionResult> OrderToday(int? state, int currentPage=1, int limit=10)
+        {
+            try
+            {
+                var resultFromBLL=await orderBLL.OrderToday(state, currentPage, limit);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

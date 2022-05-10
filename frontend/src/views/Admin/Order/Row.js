@@ -1,9 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegEye } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Select, { StylesConfig } from "react-select";
+import { setOpenAdminViewOrder } from "../../../redux/adminViewOrder/adminViewOrderActions";
+import { useDispatch } from "react-redux";
 
 const initState = {
   loading: false,
@@ -62,25 +64,12 @@ const orderOptions = [
   { value: 4, label: "Đã nhận hàng", color: "#9EBC4B" },
   { value: 0, label: "Đã huỷ", color: "#ED553B" },
 ];
-const dot = (color = "transparent") => ({
-  alignItems: "center",
-  display: "flex",
 
-  ":before": {
-    backgroundColor: color,
-    borderRadius: 10,
-    content: '" "',
-    display: "block",
-    marginRight: 8,
-    height: 10,
-    width: 10,
-  },
-});
 const colourStyles = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles, { data, isDisabled, isFocused, isSelected }) => ({
     ...styles,
-    color: data.color,
+    color: data?.color,
     borderLeft: "0.1rem solid black",
     left: "0%",
     lineHeight: "1.3rem",
@@ -109,7 +98,7 @@ const colourStyles = {
       background: "#f7f7f7",
       cursor: "pointer",
     },
-    color: data.color,
+    color: data?.color,
   }),
   menu: (styles) => ({
     ...styles,
@@ -120,18 +109,19 @@ const colourStyles = {
   }),
   input: (styles, { data, isDisabled, isFocused, isSelected }) => ({
     ...styles,
-    color: data.color,
+    color: data?.color,
   }),
   singleValue: (styles, { data }) => {
     return {
       ...styles,
-      color: data.color,
+      color: data?.color,
     };
   },
 };
 
 function Row(props) {
   const [state, dispatch] = useReducer(reducer, initState);
+  const dispatchQV = useDispatch();
   //   const statusOptions = [
   //       { value: 1, label: "Chờ xác nhận" },
   //       { value: 2, label: "Đang chuẩn bị hàng" },
@@ -180,11 +170,18 @@ function Row(props) {
           });
           setOrderStatus(e);
           fetchData(props.id);
+          props.fetchData();
         }
       })
       .catch(() => dispatch(fail()));
   };
-
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.id,
+    };
+    dispatchQV(setOpenAdminViewOrder(obj));
+  };
   return (
     <tr>
       <td className="sticky left-0 px-4 py-2 ">
@@ -213,6 +210,10 @@ function Row(props) {
       </td>
       <td className="px-4 py-2 text-gray-700 whitespace-nowrap text-[25px]">
         <div className="flex flex-row items-center gap-x-[20px]">
+          <FaRegEye
+            onClick={() => handleQuickView()}
+            className="cursor-pointer"
+          />
           <FaRegEdit
             onClick={() => handleEdit(state.data.id)}
             className="cursor-pointer"

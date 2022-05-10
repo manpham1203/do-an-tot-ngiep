@@ -212,7 +212,7 @@ namespace BLL.User
             {
                 var picBLL = new PictureBLL();
                 var pic = await picBLL.GetByObjectId(user.Id, "user");
-                if (pic != null && pic.Count>0)
+                if (pic != null && pic.Count > 0)
                 {
                     user.ImageName = pic[0].Name;
                 }
@@ -316,6 +316,30 @@ namespace BLL.User
             userVM.UpdatedAt = DateTime.Now;
 
             return await userDAL.ChangePass(userVM);
+        }
+
+        public async Task<UserPaginationVM> GetListBirthday(int? type, int currentPage, int limit)
+        {
+            try
+            {
+                var resultFromDAL = await userDAL.GetListBirthday(type);
+
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+
+                return new UserPaginationVM
+                {
+                    Data = resultFromDAL,
+                    TotalPage = totalPage,
+                    TotalResult = count,
+                };
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

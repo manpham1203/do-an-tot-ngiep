@@ -947,5 +947,33 @@ namespace DAL.Product
                 return null;
             }
         }
+        public async Task<List<ProductCardVM>> OnSale(int take)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.Take(take).Where(x => x.PriceDiscount !=null && x.Published == true && x.Deleted == false).OrderBy(x => x.PriceDiscount).ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<ProductCardVM>();
+                }
+                var productCards = resultFromDb.Select(x => new ProductCardVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    Price = x.Price,
+                    PriceDiscount = x.PriceDiscount,
+                    BrandNameVM = new BrandNameVM(),
+                    ImageName = null,
+                    ImageSrc = null,
+                    BrandId = x.BrandId,
+                }).ToList();
+                return productCards;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

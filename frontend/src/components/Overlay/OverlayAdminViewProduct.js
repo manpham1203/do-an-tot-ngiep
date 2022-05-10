@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCloseAdminViewProduct } from "../../redux/adminViewProduct/adminViewProductActions";
 
-function Overlay(props) {
+function OverlayAdminViewProduct(props) {
     const dispatch=useDispatch();
 
     return (
@@ -12,4 +12,4 @@ function Overlay(props) {
     );
 }
 
-export default Overlay;
+export default OverlayAdminViewProduct;

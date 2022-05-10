@@ -32,9 +32,9 @@ namespace DAL.Order
                     DeliveryEmail = model.DeliveryEmail,
                     DeliveryPhone = model.DeliveryPhone,
                     CreatedAt = model.CreatedAt,
-                    FirstName=model.FirstName,
-                    LastName=model.LastName,
-                    Note=model.Note,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Note = model.Note,
                 };
                 await db.Orders.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -144,7 +144,7 @@ namespace DAL.Order
                 var resultFromDb = await db.Orders.OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (!string.IsNullOrEmpty(query))
                 {
-                    resultFromDb=resultFromDb.Where(x => x.Id.ToLower() == query.ToLower()).ToList();
+                    resultFromDb = resultFromDb.Where(x => x.Id.ToLower() == query.ToLower()).ToList();
                 }
                 if (resultFromDb == null)
                 {
@@ -224,6 +224,117 @@ namespace DAL.Order
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<List<OrderVM>> AdminGetByState(int? state)
+        {
+            try
+            {
+                var resultFromDb = await db.Orders
+                    .OrderByDescending(x => x.CreatedAt).ToListAsync();
+                if (state.HasValue)
+                {
+                    resultFromDb = await db.Orders.Where(x => x.State == state)
+                    .OrderByDescending(x => x.CreatedAt).ToListAsync();
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<OrderVM>();
+                }
+                var order = resultFromDb.Select(x => new OrderVM
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    Amount = x.Amount,
+                    State = x.State,
+                    Discount = x.Discount,
+                    DeliveryAddress = x.DeliveryAddress,
+                    DeliveryEmail = x.DeliveryEmail,
+                    DeliveryPhone = x.DeliveryPhone,
+                    CreatedAt = x.CreatedAt,
+                    OrderDetailVMs = new List<OrderDetailVM>()
+                }).ToList();
+                return order;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<OrderVM> GetFullById(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Orders.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var order = new OrderVM
+                {
+                    Id = resultFromDb.Id,
+                    UserId = resultFromDb.UserId,
+                    Amount = resultFromDb.Amount,
+                    State = resultFromDb.State,
+                    Discount = resultFromDb.Discount,
+                    DeliveryAddress = resultFromDb.DeliveryAddress,
+                    DeliveryEmail = resultFromDb.DeliveryEmail,
+                    DeliveryPhone = resultFromDb.DeliveryPhone,
+                    CreatedAt = resultFromDb.CreatedAt,
+                    FirstName = resultFromDb.FirstName,
+                    LastName = resultFromDb.LastName,
+                    Note = resultFromDb.Note,
+                    OrderDetailVMs = new List<OrderDetailVM>()
+                };
+                return order;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<OrderVM>> OrderToday(int? state)
+        {
+            try
+            {
+                //var todaysDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+                var resultFromDb = await db.Orders
+                    .Where(x => x.CreatedAt.Year == DateTime.Today.Year
+                        && x.CreatedAt.Month == DateTime.Today.Month
+                        && x.CreatedAt.Day == DateTime.Today.Day)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToListAsync();
+                if (state.HasValue)
+                {
+                    resultFromDb = resultFromDb.Where(x => x.State == state).ToList();
+                }
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<OrderVM>();
+                }
+                var result = resultFromDb.Select(x => new OrderVM
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    Amount = x.Amount,
+                    State = x.State,
+                    Discount = x.Discount,
+                    DeliveryAddress = x.DeliveryAddress,
+                    DeliveryEmail = x.DeliveryEmail,
+                    DeliveryPhone = x.DeliveryPhone,
+                    CreatedAt = x.CreatedAt,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Note = x.Note,
+                    OrderDetailVMs = new List<OrderDetailVM>()
+                }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

@@ -296,5 +296,22 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("GetListBirthday")]
+        public async Task<IActionResult> GetListBirthday(int? type, int currentPage=1, int limit=10)
+        {
+            try
+            {
+                var resultFromBLL = await userBLL.GetListBirthday(type, currentPage, limit);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

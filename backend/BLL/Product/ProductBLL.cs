@@ -1367,7 +1367,57 @@ namespace BLL.Product
                 return null;
             }
         }
+        public async Task<List<ProductCardVM>> OnSale(int take)
+        {
+            try
+            {
+                var resultFromDAL = await productDAL.OnSale(take);
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new List<ProductCardVM>();
+                }
+                var cmtBLL = new ProductCmtBLL();
+                for (int i = 0; i < resultFromDAL.Count; i++)
+                {
+                    var brandBLL = new BrandBLL();
+                    var brand = await brandBLL.GetById(resultFromDAL[i].BrandId);
+                    if (brand != null)
+                    {
+                        resultFromDAL[i].BrandNameVM.Id = brand.Id;
+                        resultFromDAL[i].BrandNameVM.Name = brand.Name;
+                        resultFromDAL[i].BrandNameVM.Slug = brand.Slug;
+                    }
 
+                    var productImageBLL = new PictureBLL();
+                    var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                    if (listImg.Count > 0)
+                    {
+                        resultFromDAL[i].ImageName = listImg[0].Name;
+                    }
+
+
+                    var star = await cmtBLL.Star(resultFromDAL[i].Id);
+
+                    if (star.Count() == 0)
+                    {
+                        resultFromDAL[i].Star = 0;
+                    }
+                    else
+                    {
+                        resultFromDAL[i].Star = star.Sum(x => x.Value) / (float)star.Count();
+                    }
+                }
+                return resultFromDAL;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import Pagination from "../../../components/Pagination/Pagination";
 import Row from "./Row";
 import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
+import Select, { StylesConfig } from "react-select";
 
 const initState = {
   loading: false,
@@ -64,20 +65,90 @@ const reducer = (state, action) => {
       return state;
   }
 };
+const orderOptions = [
+  { value: 1, label: "Chờ xác nhận", color: "#2F4B60" },
+  { value: 2, label: "Đang chuẩn bị hàng", color: "#2DCCBF" },
+  { value: 3, label: "Đang vận chuyển", color: "#1A9487" },
+  { value: 4, label: "Đã nhận hàng", color: "#9EBC4B" },
+  { value: 0, label: "Đã huỷ", color: "#ED553B" },
+];
+
+const colourStyles = {
+  dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
+  placeholder: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+    ...styles,
+    color: data?.color,
+    left: "0%",
+    lineHeight: "1.3rem",
+    marginLeft: "0rem",
+  }),
+  control: () => ({
+    display: "flex",
+    border: "1px solid #202121",
+    height: "30px",
+    width: "250px",
+    borderRadius: "0px",
+    background: "#fcfcfc",
+    fontSize: "14px",
+  }),
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+    ...styles,
+    fontSize: "14px",
+    textAlign: "left",
+    background: "white",
+    borderBottom: "0.1rem solid #103D56",
+    ":last-of-type": {
+      borderBottom: "none",
+    },
+    ":hover": {
+      background: "#f7f7f7",
+      cursor: "pointer",
+    },
+    color: data?.color,
+  }),
+  menu: (styles) => ({
+    ...styles,
+    borderRadius: 0,
+    width: "200px",
+    border: "1px solid #202121",
+    paddingTop: 0,
+  }),
+  input: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+    ...styles,
+    color: data?.color,
+  }),
+  singleValue: (styles, { data }) => {
+    return {
+      ...styles,
+      color: data?.color,
+    };
+  },
+};
 function OrderTable(props) {
   const [state, dispatch] = useReducer(reducer, initState);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [stateOrder, setStateOrder] = useState(null);
   const fetchData = async () => {
+    if (limit == null) {
+      return;
+    }
     dispatch(loading());
     await api({
       method: "GET",
-      url: `/Order/getall`,
-      params: { currentPage: currentPage, limit: limit, query: query },
+      url: `/Order/AdminGetByState`,
+      params: {
+        currentPage: currentPage,
+        limit: limit,
+        id: query,
+        state: stateOrder?.value,
+      },
     })
       .then((res) => {
-        dispatch(success(res.data));
+        if (res.status === 200) {
+          dispatch(success(res.data));
+        }
       })
       .catch(() => dispatch(fail()));
   };
@@ -86,7 +157,33 @@ function OrderTable(props) {
   }, []);
   useEffect(() => {
     fetchData();
-  }, [currentPage, limit, query]);
+  }, [currentPage, query, stateOrder]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (limit == "") {
+        return;
+      }
+      dispatch(loading());
+      await api({
+        method: "GET",
+        url: `/Order/AdminGetByState`,
+        params: {
+          currentPage: 1,
+          limit: limit,
+          id: query,
+          state: stateOrder?.value,
+        },
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(success(res.data));
+            setCurrentPage(1);
+          }
+        })
+        .catch(() => dispatch(fail()));
+    };
+    fetchData();
+  }, [limit]);
   const handleLimit = (value) => {
     const re = /^[0-9\b]+$/;
     if (value === "" || re.test(value)) {
@@ -109,6 +206,7 @@ function OrderTable(props) {
   useEffect(() => {
     fetchData();
   }, [count]);
+  console.log(currentPage);
   return (
     <>
       <div className="bg-white rounded-[8px] p-[20px] shadow-admin">
@@ -150,6 +248,21 @@ function OrderTable(props) {
                   <span>/{state.data?.totalResult}</span>
                 </div>
               </div>
+              <div>
+                <Select
+                  className="w-[200px] cursor-pointer "
+                  classNamePrefix="select"
+                  // defaultValue={orderOptions[0]}
+                  isClearable={true}
+                  isSearchable={false}
+                  name="orderStatus"
+                  // value={null}
+                  onChange={(e) => setStateOrder(e)}
+                  options={orderOptions}
+                  styles={colourStyles}
+                  placeholder="Tình Trạng Đơn Hàng"
+                />
+              </div>
             </div>
             <button
               onClick={handleClick}
@@ -182,7 +295,7 @@ function OrderTable(props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-600">
-              {state.data.orders.map((item) => {
+              {state?.data?.orders?.map((item) => {
                 return <Row key={item.id} id={item.id} />;
               })}
             </tbody>
@@ -205,13 +318,11 @@ function OrderTable(props) {
                 </p>
               </div>
               <div>
-                {currentPage > 0 && (
-                  <Pagination
-                    setCurrentPage={setCurrentPage}
-                    totalPage={state.data?.totalPage}
-                    itemsPerPage={state.data?.orders.length}
-                  />
-                )}
+                <Pagination
+                  setCurrentPage={setCurrentPage}
+                  totalPage={state.data?.totalPage}
+                  itemsPerPage={state.data?.orders?.length}
+                />
               </div>
             </div>
           </div>

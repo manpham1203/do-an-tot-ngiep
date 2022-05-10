@@ -12,6 +12,7 @@ function Home() {
   const [category, setCategory] = useState([]);
   const [mostBought, setMostBought] = useState([]);
   const [newProduct, setNewProduct] = useState([]);
+  const [onSale, setOnSale] = useState([]);
   const fetchProductsOfBrand = async () => {
     await api({
       method: "GET",
@@ -56,11 +57,23 @@ function Home() {
       })
       .catch(() => console.log("fail"));
   };
+  const fetchOnSale = async () => {
+    await api({
+      method: "GET",
+      url: `/product/onsale`,
+      params: { take: 10 },
+    })
+      .then((res) => {
+        setOnSale(res.data);
+      })
+      .catch(() => console.log("fail"));
+  };
   useEffect(() => {
     fetchProductsOfCategory();
     fetchProductsOfBrand();
     fetchMostBought();
     fetchNewProduct();
+    fetchOnSale();
   }, []);
   const [showBrand, setShowBrand] = useState();
   const [showCategory, setShowCategory] = useState();
@@ -134,9 +147,14 @@ function Home() {
           })}
       </ProductSlideShow>
       <ProductSlideShow>
+        <Heading title="Đang Giảm Giá" className="text-center" />
+        {onSale.length > 0 && <ListProductCard products={onSale} />}
+      </ProductSlideShow>
+      <ProductSlideShow>
         <Heading title="Mua Nhiều Nhất" className="text-center" />
         {mostBought.length > 0 && <ListProductCard products={mostBought} />}
       </ProductSlideShow>
+      
       <ProductSlideShow>
         <Heading title="Sản Phẩm Mới" className="text-center" />
         {newProduct.length > 0 && <ListProductCard products={newProduct} />}

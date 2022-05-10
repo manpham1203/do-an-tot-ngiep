@@ -375,5 +375,87 @@ namespace DAL.User
             }
             return false;
         }
+
+        public async Task<List<UserVM>> GetListBirthday(int? type)
+        {
+            try
+            {
+                var dateToday = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+                var dateStart = dateToday.AddDays(-30);
+                var dateEnd = dateToday.AddDays(+30);
+
+                var resultFromDb = await db.Users.ToListAsync();
+                var a = resultFromDb.Select(x => new UserVM
+                {
+                    Id = x.Id,
+                    Birthday = new DateTime(DateTime.Today.Year, x.CreatedAt.Month, x.CreatedAt.Day),
+                }).ToList();
+                //.Select(x=>new UserVM { 
+                //    x.Birthday = new DateTime(DateTime.Today.Year, x.CreatedAt.Month, x.CreatedAt.Day) 
+                //})
+                //.Where(
+                //x => 
+                //x.Birthday.Value >= dateStart
+                //&& x.Birthday.Value <= dateEnd
+                //)
+                //.ToListAsync();
+
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<UserVM>();
+                }
+                //if (type.HasValue)
+                //{
+                //    switch (type)
+                //    {
+                //        case 1:
+                //            resultFromDb = resultFromDb
+                //                .Where(x => x.Birthday.Value.Day >= dateStart.Day 
+                //                && x.Birthday.Value.Month >= dateStart.Month 
+                //                && x.Birthday.Value.Day < dateToday.Day 
+                //                && x.Birthday.Value.Day <= dateToday.Month)
+                //                .ToList();
+                //            break;
+                //        case 2:
+                //            resultFromDb = resultFromDb
+                //                .Where(x => x.Birthday.Value.Day == dateToday.Day 
+                //                && x.Birthday.Value.Month == dateToday.Month
+                //                )
+                //                .ToList();
+                //            break;
+                //        case 3:
+                //            resultFromDb = resultFromDb
+                //                .Where(x => x.Birthday.Value.Day > dateToday.Day 
+                //                && x.Birthday.Value.Month >= dateToday.Month 
+                //                && x.Birthday.Value.Day < dateEnd.Day
+                //                &&x.Birthday.Value.Month<=dateEnd.Month)
+                //                .ToList();
+                //            break;
+
+                //        default: break;
+                //    }
+                //}
+                //var result = resultFromDb.Select(x => new UserVM
+                //{
+                //    Id = x.Id,
+                //    Username = x.Username,
+                //    FirstName = x.FirstName,
+                //    LastName = x.LastName,
+                //    Birthday = x.Birthday,
+                //    Email = x.Email,
+                //    PhoneNumber = x.PhoneNumber,
+                //    Address = x.Address,
+                //    Role = x.Role,
+                //    CreatedAt = x.CreatedAt,
+                //    Image = null,
+                //    ImageSrc = null,
+                //}).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

@@ -548,5 +548,33 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("OnSale")]
+        public async Task<IActionResult> OnSale(int take)
+        {
+            try
+            {
+                var resultFromBLL = await productBLL.OnSale(take);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Count == 0)
+                {
+                    return Ok(new List<ProductCardVM>());
+                }
+                for(int i = 0; i < resultFromBLL.Count(); i++)
+                {
+                    if (resultFromBLL[i].ImageName != null)
+                    {
+                        resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImageName);
+                    }
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

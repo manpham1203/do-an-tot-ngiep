@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { FaRegEdit, FaRegTrashAlt,FaRegEye } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt, FaRegEye } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +59,7 @@ const reducer = (state, action) => {
 function Row(props) {
   const [state, dispatch] = useReducer(reducer, initState);
   const navigate = useNavigate();
-  const dispatchQV=useDispatch();
+  const dispatchQV = useDispatch();
 
   const fetchData = async (id) => {
     dispatch(loading());
@@ -120,7 +120,7 @@ function Row(props) {
               id={state.data.id}
               value={state.data.id}
               onChange={props.handleProductSelect}
-              checked={props.productSelect.some(x=>x===state.data.id)}
+              checked={props.productSelect.some((x) => x === state.data.id)}
             />
           </td>
           <td className="px-4 py-2 text-gray-700 ">
@@ -153,9 +153,10 @@ function Row(props) {
           </td>
           <td className="px-4 py-2 text-gray-700  text-[25px]">
             <div className="flex flex-row items-center gap-x-[20px]">
-            <FaRegEye 
-            onClick={()=>handleQuickView()}
-            className="cursor-pointer"/>
+              <FaRegEye
+                onClick={() => handleQuickView()}
+                className="cursor-pointer"
+              />
               <FaRegEdit
                 onClick={() => handleEdit(state.data.slug)}
                 className="cursor-pointer"
