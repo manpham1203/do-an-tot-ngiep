@@ -3,6 +3,7 @@ using BO.ViewModels.Comment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -236,5 +237,55 @@ namespace backend.Controllers
             }
         }
 
+        //[HttpGet("ProductCmtListId")]
+        //public async Task<IActionResult> ProductCmtListId(int? star, int currentPage=1, int limit=10)
+        //{
+        //    try
+        //    {
+        //        var resultFromBLL = await productCmtBLL.ListId(star, currentPage,limit);
+        //        if (resultFromBLL == null)
+        //        {
+        //            return BadRequest();
+        //        }
+        //        return Ok(resultFromBLL);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+        [HttpGet("CmtPagination")]
+        public async Task<IActionResult> CmtPagination(int? star, string objectType, int currentPage = 1, int limit = 10)
+        {
+            try
+            {
+                var resultFromBLL = await productCmtBLL.CmtPagination(star, objectType, currentPage, limit);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.List.Count == 0)
+                {
+                    return Ok(new CmtPagination2
+                    {
+                        TotalPage=0,
+                        TotalResult=0,
+                        List=new List<CmtRowAminVM>(),
+                    });;
+                }
+                for(int i = 0; i < resultFromBLL.List.Count; i++)
+                {
+                    if (resultFromBLL.List[i].ImageName != null)
+                    {
+                        resultFromBLL.List[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.List[i].ImageName);
+                    }
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

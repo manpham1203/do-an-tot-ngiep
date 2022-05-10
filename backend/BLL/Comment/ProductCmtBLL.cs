@@ -56,9 +56,9 @@ namespace BLL.Comment
         {
             try
             {
-                var resultFromDAL= await productCmtDAL.CommentItem(id);
+                var resultFromDAL = await productCmtDAL.CommentItem(id);
                 var children = await CmtChildren(id);
-                resultFromDAL.Children=children;
+                resultFromDAL.Children = children;
                 return resultFromDAL;
             }
             catch
@@ -99,9 +99,9 @@ namespace BLL.Comment
                 return null;
             }
         }
-    
 
-        public async Task<bool> RepCmt(string parentId, string content,string userId)
+
+        public async Task<bool> RepCmt(string parentId, string content, string userId)
         {
             try
             {
@@ -129,12 +129,115 @@ namespace BLL.Comment
                 return false;
             }
         }
-    
+
         public async Task<List<ProductCmtVM>> CmtChildren(string parentId)
         {
             try
             {
                 return await productCmtDAL.CmtChildren(parentId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        //public async Task<CmtPagination> ListId(int? star, int currentPage, int limit)
+        //{
+        //    try
+        //    {
+        //        var resultFromDAL = await productCmtDAL.GetListCmtId();
+
+
+        //        if (star.HasValue)
+        //        {
+        //            var newList = new List<string>();
+        //            for (int i = 0; i < resultFromDAL.Count; i++)
+        //            {
+        //                var checkStar = await GetStarByCmtId(resultFromDAL[i]);
+        //                if (checkStar == star)
+        //                {
+        //                    newList.Add(resultFromDAL[i]);
+        //                }
+        //            }
+        //            var newCount = newList.Count();
+        //            var newTotalPage = (int)Math.Ceiling(newCount / (double)limit);
+        //            newList = newList.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+        //            return new CmtPagination
+        //            {
+        //                TotalResult = newCount,
+        //                TotalPage = newTotalPage,
+        //                List = newList,
+        //            };
+        //        }
+
+
+        //        var count = resultFromDAL.Count();
+        //        var totalPage = (int)Math.Ceiling(count / (double)limit);
+        //        resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+        //        return new CmtPagination
+        //        {
+        //            TotalResult = count,
+        //            TotalPage = totalPage,
+        //            List = resultFromDAL,
+        //        };
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+        public async Task<CmtPagination2> CmtPagination(int? star, string objectType, int currentPage, int limit)
+        {
+            try
+            {
+                var resultFromDAL = await productCmtDAL.GetListCmtId(objectType);
+                if (star.HasValue)
+                {
+                    var newList = new List<CmtRowAminVM>();
+                    for (int i = 0; i < resultFromDAL.Count; i++)
+                    {
+                        var checkStar = await GetStarByCmtId(resultFromDAL[i].Id);
+                        if (checkStar == star)
+                        {
+                            newList.Add(resultFromDAL[i]);
+                        }
+                    }
+                    var newCount = newList.Count();
+                    var newTotalPage = (int)Math.Ceiling(newCount / (double)limit);
+                    newList = newList.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+                    return new CmtPagination2
+                    {
+                        TotalResult = newCount,
+                        TotalPage = newTotalPage,
+                        List = newList,
+                    };
+                }
+
+
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+                return new CmtPagination2
+                {
+                    TotalResult = count,
+                    TotalPage = totalPage,
+                    List = resultFromDAL,
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<int?> GetStarByCmtId(string id)
+        {
+            try
+            {
+                return await productCmtDAL.GetStarByCmtId(id);
             }
             catch
             {

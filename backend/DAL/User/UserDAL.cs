@@ -384,72 +384,54 @@ namespace DAL.User
                 var dateStart = dateToday.AddDays(-30);
                 var dateEnd = dateToday.AddDays(+30);
 
-                var resultFromDb = await db.Users.ToListAsync();
-                var a = resultFromDb.Select(x => new UserVM
-                {
-                    Id = x.Id,
-                    Birthday = new DateTime(DateTime.Today.Year, x.CreatedAt.Month, x.CreatedAt.Day),
-                }).ToList();
-                //.Select(x=>new UserVM { 
-                //    x.Birthday = new DateTime(DateTime.Today.Year, x.CreatedAt.Month, x.CreatedAt.Day) 
-                //})
-                //.Where(
-                //x => 
-                //x.Birthday.Value >= dateStart
-                //&& x.Birthday.Value <= dateEnd
-                //)
-                //.ToListAsync();
 
+                var resultFromDb = await db.Users
+
+                    .Where(x => x.Birthday.Value.DayOfYear > dateStart.DayOfYear
+                    && x.Birthday.Value.DayOfYear < dateEnd.DayOfYear
+                    )
+                    .ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<UserVM>();
                 }
-                //if (type.HasValue)
-                //{
-                //    switch (type)
-                //    {
-                //        case 1:
-                //            resultFromDb = resultFromDb
-                //                .Where(x => x.Birthday.Value.Day >= dateStart.Day 
-                //                && x.Birthday.Value.Month >= dateStart.Month 
-                //                && x.Birthday.Value.Day < dateToday.Day 
-                //                && x.Birthday.Value.Day <= dateToday.Month)
-                //                .ToList();
-                //            break;
-                //        case 2:
-                //            resultFromDb = resultFromDb
-                //                .Where(x => x.Birthday.Value.Day == dateToday.Day 
-                //                && x.Birthday.Value.Month == dateToday.Month
-                //                )
-                //                .ToList();
-                //            break;
-                //        case 3:
-                //            resultFromDb = resultFromDb
-                //                .Where(x => x.Birthday.Value.Day > dateToday.Day 
-                //                && x.Birthday.Value.Month >= dateToday.Month 
-                //                && x.Birthday.Value.Day < dateEnd.Day
-                //                &&x.Birthday.Value.Month<=dateEnd.Month)
-                //                .ToList();
-                //            break;
+                if (type.HasValue)
+                {
+                    switch (type)
+                    {
+                        case 1:
+                            resultFromDb = resultFromDb
+                                .Where(x=>x.Birthday.Value.DayOfYear >= dateStart.DayOfYear
+                                && x.Birthday.Value.DayOfYear < dateToday.DayOfYear)
+                                .ToList();
+                            break;
+                        case 2:
+                            resultFromDb = resultFromDb.Where(x => x.Birthday.Value.Day == dateToday.Day && x.Birthday.Value.Month==dateToday.Month).ToList();
+                            break;
+                        case 3:
+                            resultFromDb = resultFromDb
+                                .Where(x => x.Birthday.Value.DayOfYear > dateToday.DayOfYear
+                                && x.Birthday.Value.DayOfYear <= dateEnd.DayOfYear).ToList();
+                            break;
 
-                //        default: break;
-                //    }
-                //}
-                //var result = resultFromDb.Select(x => new UserVM
-                //{
-                //    Id = x.Id,
-                //    Username = x.Username,
-                //    FirstName = x.FirstName,
-                //    LastName = x.LastName,
-                //    Birthday = x.Birthday,
-                //    Email = x.Email,
-                //    PhoneNumber = x.PhoneNumber,
-                //    Address = x.Address,
-                //    Role = x.Role,
-                //    CreatedAt = x.CreatedAt,
-                //    Image = null,
-                //    ImageSrc = null,
-                //}).ToList();
+                        default: break;
+                    }
+                }
+                var result = resultFromDb.Select(x => new UserVM
+                {
+                    Id = x.Id,
+                    Username = x.Username,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Birthday = x.Birthday,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Address = x.Address,
+                    Role = x.Role,
+                    CreatedAt = x.CreatedAt,
+                    Image = null,
+                    ImageSrc = null,
+                }).ToList();
                 return result;
             }
             catch

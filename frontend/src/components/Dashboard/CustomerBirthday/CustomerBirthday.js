@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../apis/api";
 import Pagination from "../../Pagination/Pagination";
-import Row from "./Row";
 import Select from "react-select";
 import Table from "../../Table/Table";
 import Thead from "../../Table/Thead";
 import Tr from "../../Table/Tr";
 import Th from "../../Table/Th";
 import Tbody from "../../Table/Tbody";
+import Td from "../../Table/Td";
+import * as moment from "moment";
+import "moment/locale/nl";
 
 const dateOptions = [
   { value: 1, label: "Sinh nhật vừa qua" },
@@ -18,6 +20,7 @@ const colourStyles = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles, { data, isDisabled, isFocused, isSelected }) => ({
     ...styles,
+    color: "#202121",
     left: "0%",
     lineHeight: "1.3rem",
     marginLeft: "0rem",
@@ -57,7 +60,6 @@ const colourStyles = {
 };
 function CustomerBirthday(props) {
   const [data, setData] = useState([]);
-  const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [dateType, setDateType] = useState(null);
 
@@ -65,11 +67,10 @@ function CustomerBirthday(props) {
     await api({
       method: "GET",
       url: `/user/GetListBirthday`,
-      //   params: {
-      //     currentPage: currentPage,
-      //     limit: limit,
-      //     type: dateType.value,
-      //   },
+        params: {
+          currentPage: currentPage,
+          type: dateType?.value,
+        },
     })
       .then((res) => {
         if (res.status === 200) {
@@ -80,7 +81,7 @@ function CustomerBirthday(props) {
   };
   useEffect(() => {
     fetchData();
-  }, [currentPage, limit, dateType]);
+  }, [currentPage, dateType]);
   return (
     <div className="w-full p-[20px] bg-white shadow-admin rounded-[8px]">
       <div className="flex flex-row justify-between items-center  mb-[20px]">
@@ -107,16 +108,31 @@ function CustomerBirthday(props) {
         <Thead>
           <Tr>
             <Th>Tên khách hàng</Th>
+            <Th>Email</Th>
             <Th>Ngày sinh</Th>
             <Th>Hành động</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {data?.map((item) => {
-            return <Row key={item.id} id={item.id} />;
+          {data?.data?.map((item) => {
+            return (
+              <Tr>
+                <Td className="pl-[20px]">{item.lastName+" "+item.firstName}</Td>
+                <Td className="text-center">{item.email}</Td>
+                <Td className="text-center">{moment(item.birthday).format("DD-MM-yyyy")}</Td>
+                <Td></Td>
+              </Tr>
+            );
           })}
         </Tbody>
       </Table>
+      <div className="mt-[20px]">
+        <Pagination
+          setCurrentPage={setCurrentPage}
+          totalPage={data?.totalPage}
+          itemsPerPage={data?.data?.length}
+        />
+      </div>
     </div>
   );
 }

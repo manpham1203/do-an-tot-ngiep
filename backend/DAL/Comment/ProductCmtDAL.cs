@@ -33,7 +33,7 @@ namespace DAL.Comment
                 return true;
             }
         }
-        
+
         public async Task<bool> Create(ProductCmtVM model)
         {
             try
@@ -124,7 +124,7 @@ namespace DAL.Comment
                                               ImageName = pic.Name,
                                               ImageSrc = null,
                                               FullName = u.LastName + " " + u.FirstName,
-                                              Children=null,
+                                              Children = null,
                                           }).SingleOrDefaultAsync();
                 if (resultFromDb == null)
                 {
@@ -201,9 +201,51 @@ namespace DAL.Comment
                                   ImageName = pic.Name,
                                   ImageSrc = null,
                                   FullName = u.LastName + " " + u.FirstName,
-                                  Children=null,
+                                  Children = null,
                               }).OrderByDescending(x => x.CreatedAt).ToListAsync();
 
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<CmtRowAminVM>> GetListCmtId(string objectType)
+        {
+            try
+            {
+                var resultFromDb = await (from cmt in db.Comments
+                                          join pic in db.Pictures on cmt.UserId equals pic.ObjectId into list
+                                          from pic in list.DefaultIfEmpty()
+                                          join u in db.Users on cmt.UserId equals u.Id
+                                          where cmt.ObjectType== objectType && cmt.ParentId==null
+                                          orderby cmt.CreatedAt descending
+                                          select new CmtRowAminVM
+                                          {
+                                              Id = cmt.Id,                                              
+                                              Star = cmt.Star,
+                                              Content=cmt.Content,
+                                              ImageName = pic.Name,
+                                              ImageSrc = null,
+                                          }).ToListAsync();
+                return resultFromDb;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<int?> GetStarByCmtId(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Comments.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return resultFromDb.Star;
             }
             catch
             {

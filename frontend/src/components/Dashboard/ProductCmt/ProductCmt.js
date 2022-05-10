@@ -8,13 +8,19 @@ import Thead from "../../Table/Thead";
 import Tr from "../../Table/Tr";
 import Th from "../../Table/Th";
 import Tbody from "../../Table/Tbody";
+import { FaRegEdit, FaRegEye } from "react-icons/fa";
+import Td from "../../Table/Td";
+import defaultuser from "../../../assets/defaultuser.png";
+import ShowStarCmt from "../../ShowStar/ShowStarCmt";
+import { setOpenadminViewCmt } from "../../../redux/adminViewCmt/adminViewCmtActions";
+import { useDispatch } from "react-redux";
 
-const orderOptions = [
-  { value: 1, label: "Chờ xác nhận", color: "#2F4B60" },
-  { value: 2, label: "Đang chuẩn bị hàng", color: "#2DCCBF" },
-  { value: 3, label: "Đang vận chuyển", color: "#1A9487" },
-  { value: 4, label: "Đã nhận hàng", color: "#9EBC4B" },
-  { value: 0, label: "Đã huỷ", color: "#ED553B" },
+const starOptions = [
+  { value: 1, label: "1 Sao" },
+  { value: 2, label: "2 Sao" },
+  { value: 3, label: "3 Sao" },
+  { value: 4, label: "4 Sao" },
+  { value: 5, label: "5 Sao" },
 ];
 
 const colourStyles = {
@@ -68,19 +74,19 @@ const colourStyles = {
     };
   },
 };
-function ProductCmt(props) {
+function OrderToday(props) {
   const [data, setData] = useState();
-  const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [orderStatus, setOrderStatus] = useState(null);
+  const [star, setStar] = useState(null);
   const fetchData = async () => {
     await api({
       method: "GET",
-      url: `/Order/OrderToday`,
+      url: `/comment/CmtPagination`,
       params: {
         currentPage: currentPage,
-        limit: limit,
-        state: orderStatus?.value,
+        limit: 5,
+        star: star?.value,
+        objectType:"product"
       },
     })
       .then((res) => {
@@ -92,13 +98,22 @@ function ProductCmt(props) {
   };
   useEffect(() => {
     fetchData();
-  }, [currentPage, limit, orderStatus]);
+  }, [currentPage, star]);
+  const dispatchQV = useDispatch();
+  const handleQuickView = (id) => {
+    const obj = {
+      show: true,
+      id: id,
+    };
+    dispatchQV(setOpenadminViewCmt(obj));
+  };
+  console.log(data);
   return (
     <div className="w-full p-[20px] bg-white shadow-admin rounded-[8px]">
       <div className="flex flex-row justify-between items-center  mb-[20px]">
-        <h2 className="text-[20px]">Đơn hàng hôm nay</h2>
+        <h2 className="text-[20px]">Đánh Giá Sản phẩm</h2>
         <div className="flex flex-row gap-x-[20px] items-center">
-          <span>Lọc Đơn Hàng: </span>
+          <span>Lọc Đánh Giá: </span>
           <Select
             className=" cursor-pointer "
             classNamePrefix="select"
@@ -106,11 +121,11 @@ function ProductCmt(props) {
             isClearable={true}
             isSearchable={false}
             name="orderStatus"
-            value={orderStatus}
-            onChange={(e) => setOrderStatus(e)}
-            options={orderOptions}
+            value={star}
+            onChange={(e) => setStar(e)}
+            options={starOptions}
             styles={colourStyles}
-            placeholder="Tình trạng đơn hàng"
+            placeholder="Lọc đánh giá"
           />
         </div>
       </div>
@@ -118,18 +133,49 @@ function ProductCmt(props) {
       <Table className="border-collapse w-full ">
         <Thead>
           <Tr>
-            <Th className="">Mã Đơn hàng</Th>
-            <Th className="w-[300px] ">
-              Tình trạng
-            </Th>
-            <Th >
-              Hành động
-            </Th>
+            <Th className="w-[80px]">Avatar</Th>
+            <Th className="full">Bình luận</Th>
+            <Th className="w-[120px]">Đánh giá</Th>
+            <Th className="w-[150px]">Hành động</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {data?.orderVMs?.map((item) => {
-            return <Row key={item.id} id={item.id} />;
+          {data?.list?.map((item) => {
+            return (
+              <Tr>
+                <Td className="py-[10px]">
+                  <div className="w-full flex justify-center">
+                    <div className="w-[60px] h-[60px]">
+                      <img
+                        src={item?.imageSrc || defaultuser}
+                        alt=""
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                  </div>
+                </Td>
+                <Td className="full">
+                  <div className="w-full px-[20px] short-desc-postcard2">
+                    {item?.content}
+                  </div>
+                </Td>
+                <Td>
+                  <ShowStarCmt star={item?.star} />
+                </Td>
+                <Td>
+                  <div className="flex flex-row justify-center text-[25px] gap-x-[20px] w-full">
+                    <FaRegEye
+                      onClick={() => handleQuickView(item?.id)}
+                      className="cursor-pointer"
+                    />
+                    <FaRegEdit
+                      // onClick={() => handleEdit(state.data.id)}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </Td>
+              </Tr>
+            );
           })}
         </Tbody>
       </Table>
@@ -137,11 +183,11 @@ function ProductCmt(props) {
         <Pagination
           setCurrentPage={setCurrentPage}
           totalPage={data?.totalPage}
-          itemsPerPage={data?.orders?.length}
+          itemsPerPage={data?.list?.length}
         />
       </div>
     </div>
   );
 }
 
-export default ProductCmt;
+export default OrderToday;

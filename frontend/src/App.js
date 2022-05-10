@@ -52,9 +52,12 @@ import OverlayAdminViewOrder from "./components/Overlay/OverlayAdminViewOrder";
 import AdminViewOrder from "./components/Modal/AdminViewOrder";
 import OrderPending from "./views/Admin/Order/OrderPending";
 import OrderCancel from "./views/Admin/Order/OrderCancel";
+import OverlayAdminViewCmt from "./components/Overlay/OverlayAdminVieưCmt";
+import AdminViewCmt from "./components/Modal/AdminViewCmt";
 
 function App() {
-  const { user, quickView, adminViewProduct,adminViewOrder } = useSelector((store) => store);
+  const { user, quickView, adminViewProduct, adminViewOrder, adminViewCmt } =
+    useSelector((store) => store);
   useEffect(() => {
     if (quickView.show) {
       document.body.style.overflowY = "hidden";
@@ -63,12 +66,26 @@ function App() {
     }
   }, [quickView.show]);
   useEffect(() => {
+    if (adminViewOrder.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewOrder.show]);
+  useEffect(() => {
     if (adminViewProduct.show) {
       document.body.style.overflowY = "hidden";
     } else {
       document.body.style.overflowY = "scroll";
     }
   }, [adminViewProduct.show]);
+  useEffect(() => {
+    if (adminViewCmt.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewCmt.show]);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -87,7 +104,7 @@ function App() {
     }
   }, [user.role, location.pathname]);
 
-  console.log("av",adminViewProduct)
+  console.log("av", adminViewProduct);
   return (
     <div className="w-[100%] min-h-screen">
       <Routes>
@@ -176,7 +193,10 @@ function App() {
               element={<CategoryTrash />}
             />
             <Route path="/admin/don-hang/danh-sach" element={<OrderTable />} />
-            <Route path="/admin/don-hang/chua-xu-li" element={<OrderPending />} />
+            <Route
+              path="/admin/don-hang/chua-xu-li"
+              element={<OrderPending />}
+            />
             <Route path="/admin/don-hang/da-huy" element={<OrderCancel />} />
             <Route
               path="/admin/don-hang/chinh-sua/:slug"
@@ -215,6 +235,12 @@ function App() {
         <>
           <OverlayAdminViewOrder />
           <AdminViewOrder />
+        </>
+      )}
+      {adminViewCmt.show && (
+        <>
+          <OverlayAdminViewCmt />
+          <AdminViewCmt />
         </>
       )}
     </div>

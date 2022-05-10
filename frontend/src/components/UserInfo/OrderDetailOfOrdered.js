@@ -7,7 +7,7 @@ function OrderDetailOfOrdered(props) {
   const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/OrderDetail/GetListDetailByOrderId`,
+      url: `/OrderDetail/GetListDetailByOrderIdUserId`,
       params: { orderId: id, userId:props.userId },
     })
       .then((res) => {
