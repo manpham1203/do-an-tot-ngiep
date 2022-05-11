@@ -4,15 +4,14 @@ import api from "../../apis/api";
 import { FaTimes } from "react-icons/fa";
 import { setCloseAdminViewProduct } from "../../redux/adminViewProduct/adminViewProductActions";
 
-function AdminViewProduct(props) {
+function AdminViewBrand(props) {
   const dispatch=useDispatch();
   const { adminViewProduct } = useSelector((s) => s);
   const [data, setData] = useState();
-  const [dataArr, setDataArr] = useState([]);
   const fetchData = async (slug) => {
     await api({
       method: "GET",
-      url: `/Product/productdetail/${slug}`,
+      url: `/${adminViewProduct.type}/${adminViewProduct.type}detail/${slug}`,
       data: null,
     })
       .then((res) => {
@@ -28,17 +27,6 @@ function AdminViewProduct(props) {
       setDataArr(Object.entries(data));
     }
   }, [data]);
-  const row = () => {
-    for (var item in data) {
-      return (
-        <tr>
-          <th className="text-left border border-slate-300">{item}</th>
-          <td className="border border-slate-300">{data[item]}</td>
-        </tr>
-      );
-    }
-  };
-  console.log(dataArr);
   return (
     <div className="flex  p-[30px] bg-third fixed w-[80%] h-[500px] rounded-xl top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[2000]">
      <div className="w-fit absolute right-0 top-0">
@@ -189,4 +177,4 @@ function AdminViewProduct(props) {
   );
 }
 
-export default AdminViewProduct;
+export default AdminViewBrand;

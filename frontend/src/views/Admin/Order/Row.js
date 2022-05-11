@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import Select, { StylesConfig } from "react-select";
 import { setOpenAdminViewOrder } from "../../../redux/adminViewOrder/adminViewOrderActions";
 import { useDispatch } from "react-redux";
+import Tr from "../../../components/Table/Tr";
+import Td from "../../../components/Table/Td";
 
 const initState = {
   loading: false,
@@ -183,33 +185,35 @@ function Row(props) {
     dispatchQV(setOpenAdminViewOrder(obj));
   };
   return (
-    <tr>
-      <td className="sticky left-0 px-4 py-2 ">
-        <input
-          className="w-5 h-5 border-gray-200 rounded"
-          type="checkbox"
-          id="row_1"
-        />
-      </td>
-      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-        {state.data.id}
-      </td>
-      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-        <Select
-          className="w-[200px] cursor-pointer "
-          classNamePrefix="select"
-          // defaultValue={orderOptions[0]}
-          isClearable={false}
-          isSearchable={false}
-          name="orderStatus"
-          value={orderStatus}
-          onChange={(e) => handleChangeStatus(e)}
-          options={orderOptions}
-          styles={colourStyles}
-        />
-      </td>
-      <td className="px-4 py-2 text-gray-700 whitespace-nowrap text-[25px]">
-        <div className="flex flex-row items-center gap-x-[20px]">
+    <Tr>
+      <Td>
+        <div className="w-full flex justify-center">
+          <input
+            className="w-5 h-5 border-gray-200 rounded"
+            type="checkbox"
+            id="row_1"
+          />
+        </div>
+      </Td>
+      <Td className="px-[20px]">{state.data.id}</Td>
+      <Td>
+        <div className="w-full flex justify-center">
+          <Select
+            className="cursor-pointer "
+            classNamePrefix="select"
+            // defaultValue={orderOptions[0]}
+            isClearable={false}
+            isSearchable={false}
+            name="orderStatus"
+            value={orderStatus}
+            onChange={(e) => handleChangeStatus(e)}
+            options={orderOptions}
+            styles={colourStyles}
+          />
+        </div>
+      </Td>
+      <Td>
+        <div className="flex flex-row justify-center text-[25px] gap-x-[20px]">
           <FaRegEye
             onClick={() => handleQuickView()}
             className="cursor-pointer"
@@ -219,8 +223,8 @@ function Row(props) {
             className="cursor-pointer"
           />
         </div>
-      </td>
-    </tr>
+      </Td>
+    </Tr>
   );
 }
 

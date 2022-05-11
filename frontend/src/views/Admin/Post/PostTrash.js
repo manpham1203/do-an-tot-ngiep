@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../../components/DataTable/Table";
-import Thead from "../../../components/DataTable/Thead";
-import Tbody from "../../../components/DataTable/Tbody";
-import Tr from "../../../components/DataTable/Tr";
-import Th from "../../../components/DataTable/Th";
-import Td from "../../../components/DataTable/Td";
+import Table from "../../../components/Table/Table";
+import Thead from "../../../components/Table/Thead";
+import Th from "../../../components/Table/Th";
+import Tbody from "../../../components/Table/Tbody";
+import Tr from "../../../components/Table/Tr";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
 import RowTrash from "./RowTrash";
@@ -176,20 +175,22 @@ function PostTrash(props) {
           />
         </div>
         {showTable && (
-          <Table>
+          <Table className="w-full">
             <Thead>
               <Tr>
                 <Th className="w-[60px]">
-                <input
-                  className="w-5 h-5 border-gray-200 rounded"
-                  type="checkbox"
-                  onChange={handleSelectAll}
-                  checked={checkAll}
-                />
+                  <div className="w-full justify-center">
+                    <input
+                      className="w-5 h-5 border-gray-200 rounded"
+                      type="checkbox"
+                      onChange={handleSelectAll}
+                      checked={checkAll}
+                    />
+                  </div>
                 </Th>
                 <Th className="w-[100px]">Hình</Th>
                 <Th>Tiêu đề</Th>
-                <Th className="w-[200px]">Phát hành</Th>
+                <Th className="w-[150px]">Phát hành</Th>
                 <Th className="w-[200px]">Hành động</Th>
               </Tr>
             </Thead>
@@ -203,7 +204,7 @@ function PostTrash(props) {
                       handleTrash={handleTrash}
                       handleDelete={handleDelete}
                       handleProductSelect={handleProductSelect}
-                    productSelect={productSelect}
+                      productSelect={productSelect}
                     />
                   );
                 })}

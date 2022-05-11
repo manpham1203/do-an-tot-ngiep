@@ -16,6 +16,7 @@ namespace BO
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=DESKTOP-ABENUK5\\SQLEXPRESS;Database=KhoaLuanTotNghiep;User Id=sa;Password=123456;");
+            //optionsBuilder.UseSqlServer("Data Source=SQL8003.site4now.net;Initial Catalog=db_a86b73_khoaluantotnghiejp;User Id=db_a86b73_khoaluantotnghiejp_admin;Password=m1232001");
         }
         #region DbSet
         public DbSet<Product> Products { get; set; }

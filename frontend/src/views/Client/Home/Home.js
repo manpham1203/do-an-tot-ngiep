@@ -154,7 +154,7 @@ function Home() {
         <Heading title="Mua Nhiều Nhất" className="text-center" />
         {mostBought.length > 0 && <ListProductCard products={mostBought} />}
       </ProductSlideShow>
-      
+
       <ProductSlideShow>
         <Heading title="Sản Phẩm Mới" className="text-center" />
         {newProduct.length > 0 && <ListProductCard products={newProduct} />}
@@ -162,7 +162,7 @@ function Home() {
       <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1}>
         <Heading title="Tin tức" className="text-center" />
       </PostSlideShow>
-    </div>
+      </div>
   );
 }
 

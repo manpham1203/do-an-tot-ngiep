@@ -2,9 +2,15 @@ import React, { useEffect, useReducer, useState } from "react";
 import api from "../../../apis/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Pagination from "../../../components/Pagination/Pagination";
 
 import { FaRegEdit, FaTrashRestoreAlt, FaTimes } from "react-icons/fa";
 import RowTrash from "./RowTrash";
+import Table from "../../../components/Table/Table";
+import Thead from "../../../components/Table/Thead";
+import Th from "../../../components/Table/Th";
+import Tbody from "../../../components/Table/Tbody";
+import Tr from "../../../components/Table/Tr";
 
 const initState = {
   loading: false,
@@ -63,31 +69,12 @@ const reducer = (state, action) => {
 function CategoryTrash(props) {
   const [state, dispatch] = useReducer(reducer, initState);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
   const fetchData = async () => {
     const data = {
       currentPage: currentPage,
       search: query,
-    };
-    dispatch(loading());
-    await api({
-      method: "POST",
-      url: `/Category/allcategorynameadmindeleted`,
-      params: { deleted: true },
-      data: data,
-    })
-      .then((res) => {
-        dispatch(success(res.data));
-        setLimit(res.data.categories.length);
-      })
-      .catch(dispatch(fail()));
-  };
-  const fetchData1 = async () => {
-    const data = {
-      currentPage: currentPage,
-      search: query,
-      limit: limit,
+      limit: 10,
     };
     dispatch(loading());
     await api({
@@ -103,11 +90,7 @@ function CategoryTrash(props) {
   };
   useEffect(() => {
     fetchData();
-  }, [query]);
-  useEffect(() => {
-    fetchData1();
-  }, [limit, currentPage]);
-  const navigate = useNavigate();
+  }, [currentPage, query]);
 
   const handleDelete = async (id) => {
     await api({
@@ -135,21 +118,6 @@ function CategoryTrash(props) {
         })
       );
   };
-  const handleLimit = (value) => {
-    const re = /^[0-9\b]+$/;
-    if (value === "" || re.test(value)) {
-      if (value > state.data.totalResult) {
-        setLimit(state.data.totalResult);
-      } else {
-        setLimit(value);
-      }
-    }
-  };
-  const blurLimit = (e) => {
-    if (e.target.value === "") {
-      setLimit(state.data?.brands.length);
-    }
-  };
   return (
     <div className="p-[20px] bg-white shadow-admin rounded-[8px]">
       <div className="p-[10px] gap-x-[25px] flex">
@@ -167,49 +135,27 @@ function CategoryTrash(props) {
             className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <div className="flex flex-col">
-          <label
-            htmlFor="limit"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Số dòng
-          </label>
-          <div className="flex flex-row items-center">
-            <input
-              id="limit"
-              type="text"
-              value={limit}
-              onChange={(e) => handleLimit(e.target.value)}
-              onBlur={(e) => blurLimit(e)}
-              className="w-[50px] bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            />
-            <span>/{state.data?.totalResult}</span>
-          </div>
-        </div>
       </div>
-      <div className="overflow-hidden overflow-x-auto border border-gray-600 rounded-xl">
-        <table className="min-w-full text-sm divide-y divide-gray-600">
-          <thead>
-            <tr className="bg-white">
-              <th className="sticky left-0 px-4 py-2 text-left bg-white">
-                <input
-                  className="w-5 h-5 border-gray-600 rounded"
-                  type="checkbox"
-                  id="row_all"
-                />
-              </th>
-              <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                Tên thương hiệu
-              </th>
-              <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                Phát hành
-              </th>
-              <th className="px-4 py-2 font-medium text-left text-gray-900 whitespace-nowrap">
-                Hành động
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-600 bg-white">
+      <div className="w-full">
+        <Table className="w-full">
+          <Thead>
+            <Tr className="">
+              <Th className="w-[50px]">
+                <div className="flex justify-center">
+                  <input
+                    className="w-5 h-5 border-gray-200 rounded"
+                    type="checkbox"
+                    id="row_1"
+                    disabled
+                  />
+                </div>
+              </Th>
+              <Th>Tên thương hiệu</Th>
+              <Th>Phát hành</Th>
+              <Th>Hành động</Th>
+            </Tr>
+          </Thead>
+          <Tbody className="divide-y divide-gray-600 bg-white">
             {state.data.categories.map((item) => {
               return (
                 <RowTrash
@@ -219,8 +165,31 @@ function CategoryTrash(props) {
                 />
               );
             })}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
+        <div className="bg-white px-4 py-3 flex items-center justify-between sm:px-6">
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Hiển thị{" "}
+                <span className="font-medium">
+                  {" "}
+                  {state.data?.brands?.length}{" "}
+                </span>
+                trong
+                <span className="font-medium"> {state.data?.totalResult} </span>
+                kết quả
+              </p>
+            </div>
+            <div>
+              <Pagination
+                setCurrentPage={setCurrentPage}
+                totalPage={state.data?.totalPage}
+                itemsPerPage={state.data?.categories?.length}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

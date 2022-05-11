@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../../components/DataTable/Table";
-import Thead from "../../../components/DataTable/Thead";
-import Tbody from "../../../components/DataTable/Tbody";
-import Tr from "../../../components/DataTable/Tr";
-import Th from "../../../components/DataTable/Th";
+import Table from "../../../components/Table/Table";
+import Thead from "../../../components/Table/Thead";
+import Th from "../../../components/Table/Th";
+import Tbody from "../../../components/Table/Tbody";
+import Tr from "../../../components/Table/Tr";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
 import Row from "./Row";
@@ -82,12 +82,12 @@ function BannerTable(props) {
             className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <Table>
+        <Table className="w-full">
           <Thead>
             <Tr>
               <Th className="w-[100px]">Hình</Th>
               <Th>Nội dung</Th>
-              <Th className="w-[200px]">Phát hành</Th>
+              <Th className="w-[150px]">Phát hành</Th>
               <Th className="w-[200px]">Hành động</Th>
             </Tr>
           </Thead>

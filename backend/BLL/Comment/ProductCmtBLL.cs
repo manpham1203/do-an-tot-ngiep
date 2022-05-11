@@ -141,58 +141,12 @@ namespace BLL.Comment
                 return null;
             }
         }
-        //public async Task<CmtPagination> ListId(int? star, int currentPage, int limit)
-        //{
-        //    try
-        //    {
-        //        var resultFromDAL = await productCmtDAL.GetListCmtId();
-
-
-        //        if (star.HasValue)
-        //        {
-        //            var newList = new List<string>();
-        //            for (int i = 0; i < resultFromDAL.Count; i++)
-        //            {
-        //                var checkStar = await GetStarByCmtId(resultFromDAL[i]);
-        //                if (checkStar == star)
-        //                {
-        //                    newList.Add(resultFromDAL[i]);
-        //                }
-        //            }
-        //            var newCount = newList.Count();
-        //            var newTotalPage = (int)Math.Ceiling(newCount / (double)limit);
-        //            newList = newList.Skip((currentPage - 1) * limit).Take(limit).ToList();
-
-        //            return new CmtPagination
-        //            {
-        //                TotalResult = newCount,
-        //                TotalPage = newTotalPage,
-        //                List = newList,
-        //            };
-        //        }
-
-
-        //        var count = resultFromDAL.Count();
-        //        var totalPage = (int)Math.Ceiling(count / (double)limit);
-        //        resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
-
-        //        return new CmtPagination
-        //        {
-        //            TotalResult = count,
-        //            TotalPage = totalPage,
-        //            List = resultFromDAL,
-        //        };
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
+        
         public async Task<CmtPagination2> CmtPagination(int? star, string objectType, int currentPage, int limit)
         {
             try
             {
-                var resultFromDAL = await productCmtDAL.GetListCmtId(objectType);
+                var resultFromDAL = await productCmtDAL.GetListCmt(objectType);
                 if (star.HasValue)
                 {
                     var newList = new List<CmtRowAminVM>();

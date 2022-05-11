@@ -445,6 +445,33 @@ namespace DAL.Brand
             }
 
         }
-
+        public async Task<BrandVM> BrandDetail(string id)
+        {
+            try
+            {
+                var resultFromDb = await (from b in db.Brands
+                                          join p in db.Pictures on b.Id equals p.ObjectId
+                                          where b.Id == id && p.ObjectType=="brand"
+                                          select new BrandVM
+                                          {
+                                              Id=b.Id,
+                                              Name=b.Name,
+                                              Slug=b.Slug,
+                                              FullDescription=b.FullDescription,
+                                              ShortDescription=b.ShortDescription,
+                                              Published=b.Published,
+                                              Deleted=b.Deleted,
+                                              CreatedAt=b.CreatedAt,
+                                              UpdatedAt=b.UpdatedAt,
+                                              Image=p.Name,
+                                              ImageSrc=null,
+                                          }).SingleOrDefaultAsync();
+                return resultFromDb;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

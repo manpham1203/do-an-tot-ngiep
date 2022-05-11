@@ -1,16 +1,16 @@
 import React, { useEffect, useReducer, useState } from "react";
 import api from "../../../apis/api";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useForm, Controller } from "react-hook-form";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import RowTable from "./Row";
-import MultiRangeSlider from "../../../components/MultiRangeSlider/MultiRangeSlider";
 import Pagination from "../../../components/Pagination/Pagination";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import useDebounce from "../../../hooks/useDebounce";
+import Table from "../../../components/Table/Table";
+import Thead from "../../../components/Table/Thead";
+import Th from "../../../components/Table/Th";
+import Tbody from "../../../components/Table/Tbody";
+import Tr from "../../../components/Table/Tr";
 
 const initState = {
   loading: false,
@@ -75,7 +75,6 @@ function ProductTable(props) {
   const [state, dispatch] = useReducer(reducer, initState);
   const [activeFilter, setActiveFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
   const [brand, setBrand] = useState();
   const [category, setCategory] = useState();
@@ -105,7 +104,7 @@ function ProductTable(props) {
     console.log("vo day");
     const data = {
       currentPage: currentPage,
-      limit: limit,
+      limit: 10,
       search: query,
       brandSlugs: arrBrand,
       categorySlugs: arrCategory,
@@ -124,30 +123,6 @@ function ProductTable(props) {
       .then((res) => {
         dispatch(success(res.data));
         // setLimit(res.data.products.length);
-      })
-      .catch(() => dispatch(fail()));
-  };
-  const fetchData1 = async () => {
-    const data = {
-      currentPage: currentPage,
-      limit: limit,
-      search: query,
-      brandSlugs: arrBrand,
-      categorySlugs: arrCategory,
-      from: debouncePrice[0],
-      to: debouncePrice[1],
-    };
-    dispatch(loading());
-    await api({
-      method: "POST",
-      url: `/Product/AllProductNameadmin`,
-      params: {
-        deleted: false,
-      },
-      data: data,
-    })
-      .then((res) => {
-        dispatch(success(res.data));
       })
       .catch(() => dispatch(fail()));
   };
@@ -193,32 +168,14 @@ function ProductTable(props) {
   };
 
   useEffect(() => {
-    fetchData1();
-  }, [limit, currentPage]);
-  useEffect(() => {
     fetchData();
-  }, [query, arrBrand, arrCategory, debouncePrice]);
+  }, [query, arrBrand, arrCategory, debouncePrice, currentPage]);
 
   useEffect(() => {
     fetchDataBrand();
     fetchDataCategory();
     fetchDataPriceRange();
   }, []);
-  const handleLimit = (value) => {
-    const re = /^[0-9\b]+$/;
-    if (value === "" || re.test(value)) {
-      if (value > state.data.totalResult) {
-        setLimit(state.data.totalResult);
-        return;
-      }
-      setLimit(value);
-    }
-  };
-  const blurLimit = (e) => {
-    if (e.target.value === "") {
-      setLimit(5);
-    }
-  };
   const handleTrash = async (id) => {
     await api({
       method: "POST",
@@ -245,18 +202,6 @@ function ProductTable(props) {
         })
       );
   };
-  // useEffect(() => {
-  //   if (state.data?.totalResult < limit) {
-  //     setCurrentPage(1);
-  //   }
-  // }, [limit, state.data?.totalResult]);
-
-  useEffect(() => {
-    if (state.data.totalResult <= limit) {
-      setCurrentPage(1);
-    }
-  }, [limit, state.data.totalResult]);
-
   const handleBrandChange = (event) => {
     let newArray = [...arrBrand, event.target.id];
     if (arrBrand.includes(event.target.id)) {
@@ -580,57 +525,31 @@ function ProductTable(props) {
               className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="limit"
-              className="block mb-2 text-sm font-medium text-gray-900 "
-            >
-              Số dòng
-            </label>
-            <div className="flex flex-row items-center">
-              <input
-                id="limit"
-                type="text"
-                // value={state.data.products.length}
-                value={limit}
-                onChange={(e) => handleLimit(e.target.value)}
-                onBlur={(e) => blurLimit(e)}
-                className="w-[50px] bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              />
-              <span>/{state.data?.totalResult}</span>
-            </div>
-          </div>
         </div>
-        <div className="overflow-hidden overflow-x-auto border border-gray-600 rounded-[8px]">
+        <div className="w-full">
           {showTable && (
-            <table className="min-w-full text-sm divide-y divide-gray-600">
-              <thead>
-                <tr className="bg-white">
-                  <th className="sticky left-0 px-4 py-2 text-left bg-white">
-                    <input
-                      className="w-5 h-5 border-gray-200 rounded"
-                      type="checkbox"
-                      id="row_all"
-                      name="selectAll"
-                      onChange={handleSelectAll}
-                      checked={checkAll}
-                    />
-                  </th>
-                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
-                    Hình
-                  </th>
-                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
-                    Tên sản phẩm
-                  </th>
-                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
-                    Phát hành
-                  </th>
-                  <th className="px-4 py-2 font-medium text-left text-gray-900 ">
-                    Hành động
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-600">
+            <Table className="w-full">
+              <Thead>
+                <Tr>
+                  <Th className="w-[60px]">
+                    <div className="w-full flex justify-center">
+                      <input
+                        className="w-5 h-5 border-gray-200 rounded"
+                        type="checkbox"
+                        id="row_all"
+                        name="selectAll"
+                        onChange={handleSelectAll}
+                        checked={checkAll}
+                      />
+                    </div>
+                  </Th>
+                  <Th className="w-[100px]">Hình</Th>
+                  <Th>Tên sản phẩm</Th>
+                  <Th className="w-[150px]">Phát hành</Th>
+                  <Th className="w-[200px]">Hành động</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
                 {state.data.products.map((item) => {
                   return (
                     <RowTable
@@ -643,11 +562,11 @@ function ProductTable(props) {
                     />
                   );
                 })}
-              </tbody>
-            </table>
+              </Tbody>
+            </Table>
           )}
 
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-600 sm:px-6">
+          <div className="bg-white px-4 py-3 flex items-center justify-between sm:px-6">
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">

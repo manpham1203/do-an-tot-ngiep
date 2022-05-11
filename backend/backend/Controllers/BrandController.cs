@@ -299,7 +299,7 @@ namespace backend.Controllers
                 {
                     return Ok(new List<BrandNameVM>());
                 }
-                
+
                 if (resultFromBLL.Count > 0)
                 {
                     for (int i = 0; i < resultFromBLL.Count; i++)
@@ -390,5 +390,27 @@ namespace backend.Controllers
             return Ok(resultFromBLL);
         }
 
+        [HttpGet("BrandDetail")]
+        public async Task<IActionResult> BrandDetail(string id)
+        {
+            try
+            {
+                var resultFromBLL = await brandBLL.BrandDetail(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
+
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

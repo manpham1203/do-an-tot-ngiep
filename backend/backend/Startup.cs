@@ -75,10 +75,11 @@ namespace backend
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Path.Combine(env.ContentRootPath), "Photos")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Photos")),
                 RequestPath = "/Photos"
             });
             //app.UseStaticFiles();
+            app.UseHttpsRedirection();
         }
     }
 }

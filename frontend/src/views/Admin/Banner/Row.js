@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Td from "../../../components/DataTable/Td";
-import Tr from "../../../components/DataTable/Tr";
+import Tr from "../../../components/Table/Tr";
+import Td from "../../../components/Table/Td";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
@@ -49,34 +49,36 @@ function Row(props) {
   console.log(data);
   return (
     <Tr>
-      <Td>
+      <Td className="bg-gray-200" style={{height:"100px"}}>
         <img
           src={data.imageSrc}
           alt=""
           className="w-full h-full object-cover object-center"
         />
       </Td>
-      <Td>
-        <h2 className="productCard2Name">{data.content}</h2>
+      <Td style={{height:"100px"}}>
+        <h2 className="short-desc-post px-[20px]">{data.content}</h2>
       </Td>
-      <Td>
-        <div
-          className={`w-[50px] h-[25px]  flex items-center rounded-full relative
+      <Td style={{height:"100px"}}>
+        <div className="w-full flex justify-center">
+          <div
+            className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${data?.published ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
-          onClick={() => handlePublished(data?.id)}
-        >
-          <div
-            className={`w-[18px] h-[18px] bg-white rounded-full  absolute
+            onClick={() => handlePublished(data?.id)}
+          >
+            <div
+              className={`w-[18px] h-[18px] bg-white rounded-full  absolute
                     ${data?.published ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
-          ></div>
+            ></div>
+          </div>
         </div>
       </Td>
-      <Td>
-        <div className="flex flex-row items-center gap-x-[20px] text-[25px]">
+      <Td style={{height:"100px"}}>
+        <div className="flex flex-row justify-center gap-x-[20px] text-[25px]">
           <FaRegEdit
             onClick={() => navigate(`/admin/banner/chinh-sua/${data.id}`)}
             className="cursor-pointer"

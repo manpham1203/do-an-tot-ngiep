@@ -331,6 +331,16 @@ namespace BLL
             }
             return resultFromDAL;
         }
-
+        public async Task<BrandVM> BrandDetail(string id)
+        {
+            try
+            {
+                return await brandDAL.BrandDetail(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

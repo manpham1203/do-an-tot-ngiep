@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Td from "../../../components/DataTable/Td";
-import Tr from "../../../components/DataTable/Tr";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Tr from "../../../components/Table/Tr";
+import Td from "../../../components/Table/Td";
 
 function Row(props) {
   const [data, setData] = useState({});
@@ -47,44 +47,48 @@ function Row(props) {
   };
   return (
     <Tr>
-      <Td>
-        <input
-          className="w-5 h-5 border-gray-200 rounded"
-          type="checkbox"
-          id={data.id}
-          value={data.id}
-          onChange={props.handleProductSelect}
-          checked={props.productSelect.some((x) => x === data.id)}
-        />
+      <Td style={{ height: "60px" }}>
+        <div className="w-full flex justify-center">
+          <input
+            className="w-5 h-5 border-gray-200 rounded"
+            type="checkbox"
+            id={data.id}
+            value={data.id}
+            onChange={props.handleProductSelect}
+            checked={props.productSelect.some((x) => x === data.id)}
+          />
+        </div>
       </Td>
-      <Td>
+      <Td style={{ height: "60px" }}>
         <img
           src={data.imageSrc}
           alt=""
           className="w-full h-full object-cover object-center"
         />
       </Td>
-      <Td>
-        <h2 className="productCard2Name">{data.title}</h2>
+      <Td style={{ height: "60px" }}>
+        <h2 className="short-desc-postcard2 px-[20px]">{data.title}</h2>
       </Td>
-      <Td>
-        <div
-          className={`w-[50px] h-[25px]  flex items-center rounded-full relative
+      <Td className="w-[150px]" style={{ height: "60px" }}>
+        <div className="w-full flex justify-center">
+          <div
+            className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${data?.published ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
-          onClick={() => handlePublished(data?.id)}
-        >
-          <div
-            className={`w-[18px] h-[18px] bg-white rounded-full  absolute
+            onClick={() => handlePublished(data?.id)}
+          >
+            <div
+              className={`w-[18px] h-[18px] bg-white rounded-full  absolute
                     ${data?.published ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
-          ></div>
+            ></div>
+          </div>
         </div>
       </Td>
-      <Td>
-        <div className="flex flex-row items-center gap-x-[20px] text-[25px]">
+      <Td className="w-[200px]" style={{ height: "60px" }}>
+        <div className="w-full flex justify-center gap-x-[20px] text-[25px]">
           <FaRegEdit
             onClick={() => navigate(`/admin/tin-tuc/chinh-sua/${data.id}`)}
             className="cursor-pointer"

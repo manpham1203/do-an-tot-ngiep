@@ -211,7 +211,7 @@ namespace DAL.Comment
             }
         }
 
-        public async Task<List<CmtRowAminVM>> GetListCmtId(string objectType)
+        public async Task<List<CmtRowAminVM>> GetListCmt(string objectType)
         {
             try
             {

@@ -3,6 +3,8 @@ import { FaRegEdit, FaTrashRestoreAlt, FaTimes } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Tr from "../../../components/Table/Tr";
+import Td from "../../../components/Table/Td";
 
 const initState = {
   loading: false,
@@ -123,80 +125,61 @@ function RowTrash(props) {
         })
       );
   };
-  const handleDelete = async (id) => {
-    await api({
-      method: "Delete",
-      url: `/category/${id}`,
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          toast.warn(`Xoá thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData(id);
-        } else {
-          toast.error(`Xoá thất bại`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
-      })
-      .catch(() =>
-        toast.error(`Xoá thất bại`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 3000,
-        })
-      );
-  };
   return (
     <>
       {state.data.deleted === true ? (
-        <tr>
-          <td className="sticky left-0 px-4 py-2 ">
-            <input
-              className="w-5 h-5 border-gray-200 rounded"
-              type="checkbox"
-              id="row_1"
-            />
-          </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-            {state.data.name}
-          </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
-            <div
-              className={`w-[50px] h-[25px]  flex items-center rounded-full relative
+        <Tr>
+          <Td className="w-[50px]">
+            <div className="flex justify-center">
+              <input
+                className="w-5 h-5 border-gray-200 rounded"
+                type="checkbox"
+                id="row_1"
+                disabled
+              />
+            </div>
+          </Td>
+          <Td>
+            <h2 className="productCard2Name px-[20px]">{state.data.name}</h2>
+          </Td>
+          <Td className="w-[150px]">
+            <div className="w-full flex justify-center">
+              <div
+                className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${state.data.published ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
-              onClick={() => handlePublished(state.data.id)}
-            >
-              <div
-                className={`w-[18px] h-[18px] bg-white rounded-full  absolute
+                onClick={() => handlePublished(state.data.id)}
+              >
+                <div
+                  className={`w-[18px] h-[18px] bg-white rounded-full  absolute
                     ${state.data.published ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
-              ></div>
+                ></div>
+              </div>
             </div>
-          </td>
-          <td className="px-4 py-2 text-gray-700 whitespace-nowrap flex flex-row text-[25px] gap-x-[20px]">
-            <FaRegEdit
-              onClick={() => handleEdit(state.data.slug)}
-              className="cursor-pointer"
-            />
-            <FaTrashRestoreAlt
-              onClick={() => handleTrash(state.data.id)}
-              className="cursor-pointer"
-            />
-            <button
-              onClick={() => props.handleDelete(state.data.id)}
-              type="button"
-              className="bg-danger text-white p-[2px] rounded-md"
-            >
-              <FaTimes />
-            </button>
-          </td>
-        </tr>
+          </Td>
+          <Td className="w-[200px]">
+            <div className="w-full flex justify-center gap-x-[20px] text-[25px]">
+              <FaRegEdit
+                onClick={() => handleEdit(state.data.slug)}
+                className="cursor-pointer"
+              />
+              <FaTrashRestoreAlt
+                onClick={() => handleTrash(state.data.id)}
+                className="cursor-pointer"
+              />
+              <button
+                onClick={() => props.handleDelete(state.data.id)}
+                type="button"
+                className="bg-danger text-white p-[2px] rounded-md"
+              >
+                <FaTimes />
+              </button>
+            </div>
+          </Td>
+        </Tr>
       ) : null}
     </>
   );

@@ -82,7 +82,7 @@ function AdminViewCmt(props) {
               className="h-full w-full object-cover object-center"
             />
             <h2 className="text-center my-[10px]">{data?.fullName}</h2>
-            <ShowStarCmt star={data?.star} />
+            {data?.star != null && <ShowStarCmt star={data?.star} />}
           </div>
           <div className="flex-[1]">
             <p className="text-gray-400 font-light italic ">

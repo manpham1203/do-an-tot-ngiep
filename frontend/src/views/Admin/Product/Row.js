@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setOpenAdminViewProduct } from "../../../redux/adminViewProduct/adminViewProductActions";
 import { useDispatch } from "react-redux";
+import Tr from "../../../components/Table/Tr";
+import Td from "../../../components/Table/Td";
 
 const initState = {
   loading: false,
@@ -112,47 +114,51 @@ function Row(props) {
   return (
     <>
       {state.data.deleted === false ? (
-        <tr>
-          <td className="sticky left-0 px-4 py-2 ">
-            <input
-              className="w-5 h-5 border-gray-200 rounded"
-              type="checkbox"
-              id={state.data.id}
-              value={state.data.id}
-              onChange={props.handleProductSelect}
-              checked={props.productSelect.some((x) => x === state.data.id)}
-            />
-          </td>
-          <td className="px-4 py-2 text-gray-700 ">
-            <div className="w-[60px] h-[60px]">
-              <img
-                src={state.data.imageSrc}
-                alt=""
-                className="w-full h-full object-cover object-center"
+        <Tr>
+          <Td style={{ height: "100px" }}>
+            <div className="w-full flex justify-center">
+              <input
+                className="w-5 h-5 border-gray-200 rounded"
+                type="checkbox"
+                id={state.data.id}
+                value={state.data.id}
+                onChange={props.handleProductSelect}
+                checked={props.productSelect.some((x) => x === state.data.id)}
               />
             </div>
-          </td>
-          <td className="px-4 py-2 text-gray-700">
-            <h2 className="productCard2Name">{state.data.name}</h2>
-          </td>
-          <td className="px-4 py-2 text-gray-700 ">
-            <div
-              className={`w-[50px] h-[25px]  flex items-center rounded-full relative
+          </Td>
+          <Td style={{ height: "100px" }} className="w-[100px]">
+            <img
+              src={state.data.imageSrc}
+              alt=""
+              className="w-full h-full object-cover object-center"
+            />
+          </Td>
+          <Td style={{ height: "100px" }}>
+            <h2 className="short-desc-postcard2 px-[20px]">
+              {state.data.name}
+            </h2>
+          </Td>
+          <Td style={{ height: "100px" }}>
+            <div className="w-full flex justify-center">
+              <div
+                className={`w-[50px] h-[25px]  flex items-center rounded-full relative
                   ${state.data.published ? "bg-blue-600 " : "bg-gray-300"}
                   transition-all duration-200 cursor-pointer
                   `}
-              onClick={() => handlePublished(state.data.id)}
-            >
-              <div
-                className={`w-[18px] h-[18px] bg-white rounded-full  absolute
+                onClick={() => handlePublished(state.data.id)}
+              >
+                <div
+                  className={`w-[18px] h-[18px] bg-white rounded-full  absolute
                     ${state.data.published ? "ml-[28px]" : "ml-[4px]"}
                     transition-all duration-200
                     `}
-              ></div>
+                ></div>
+              </div>
             </div>
-          </td>
-          <td className="px-4 py-2 text-gray-700  text-[25px]">
-            <div className="flex flex-row items-center gap-x-[20px]">
+          </Td>
+          <Td style={{ height: "100px" }}>
+            <div className="flex flex-row justify-center text-[25px] gap-x-[20px]">
               <FaRegEye
                 onClick={() => handleQuickView()}
                 className="cursor-pointer"
@@ -166,8 +172,8 @@ function Row(props) {
                 className="cursor-pointer"
               />
             </div>
-          </td>
-        </tr>
+          </Td>
+        </Tr>
       ) : null}
     </>
   );

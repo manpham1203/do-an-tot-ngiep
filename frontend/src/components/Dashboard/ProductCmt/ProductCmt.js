@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../apis/api";
 import Pagination from "../../Pagination/Pagination";
-import Row from "./Row";
 import Select from "react-select";
 import Table from "../../Table/Table";
 import Thead from "../../Table/Thead";
@@ -74,7 +73,7 @@ const colourStyles = {
     };
   },
 };
-function OrderToday(props) {
+function ProductCmt(props) {
   const [data, setData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [star, setStar] = useState(null);
@@ -190,4 +189,4 @@ function OrderToday(props) {
   );
 }
 
-export default OrderToday;
+export default ProductCmt;
