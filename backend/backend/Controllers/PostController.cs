@@ -195,7 +195,7 @@ namespace backend.Controllers
                 }
                 for (int i = 0; i < resultFromBLL.Count; i++)
                 {
-                    resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase,resultFromBLL[i].Image);
+                    resultFromBLL[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].Image);
                 }
 
                 return Ok(resultFromBLL);
@@ -205,7 +205,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
         [HttpGet("postdetail")]
         public async Task<IActionResult> PostDetail(string slug)
         {
@@ -224,7 +224,7 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
+
 
         [HttpPut("increaseview")]
         public async Task<IActionResult> IncreaseView(string id)
@@ -312,5 +312,29 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("postdetailId")]
+        public async Task<IActionResult> PostDetailId(string id)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.PostDetailId(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Image != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
+
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

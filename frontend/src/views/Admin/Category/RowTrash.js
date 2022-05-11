@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from "react";
-import { FaRegEdit, FaTrashRestoreAlt, FaTimes } from "react-icons/fa";
+import { FaRegEdit, FaTrashRestoreAlt, FaTimes, FaRegEye } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Tr from "../../../components/Table/Tr";
 import Td from "../../../components/Table/Td";
+import { setOpenadminViewBrand } from "../../../redux/adminViewBrand/adminViewBrandActions";
+import { useDispatch } from "react-redux";
 
 const initState = {
   loading: false,
@@ -125,9 +127,17 @@ function RowTrash(props) {
         })
       );
   };
+  const dispatchQV = useDispatch();
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: state.data.id,
+      type: "category",
+    };
+    dispatchQV(setOpenadminViewBrand(obj));
+  };
   return (
     <>
-      {state.data.deleted === true ? (
         <Tr>
           <Td className="w-[50px]">
             <div className="flex justify-center">
@@ -162,6 +172,10 @@ function RowTrash(props) {
           </Td>
           <Td className="w-[200px]">
             <div className="w-full flex justify-center gap-x-[20px] text-[25px]">
+            <FaRegEye
+              onClick={() => handleQuickView()}
+              className="cursor-pointer"
+            />
               <FaRegEdit
                 onClick={() => handleEdit(state.data.slug)}
                 className="cursor-pointer"
@@ -180,7 +194,6 @@ function RowTrash(props) {
             </div>
           </Td>
         </Tr>
-      ) : null}
     </>
   );
 }

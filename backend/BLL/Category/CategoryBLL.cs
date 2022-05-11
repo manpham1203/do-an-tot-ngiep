@@ -341,7 +341,17 @@ namespace BLL.Category
             }
             return resultFromDAL;
         }
-
+        public async Task<CategoryVM> CategoryDetail(string id)
+        {
+            try
+            {
+                return await categoryDAL.CategoryDetail(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
     }
 }

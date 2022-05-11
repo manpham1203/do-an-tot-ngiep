@@ -91,7 +91,7 @@ function OrderList(props) {
                       {item.orderDetailVMs.map((detail) => {
                         return (
                           <div key={detail.id} className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third">
-                            <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
+                            <div className="w-[150px] h-[150px] flex-none rounded-md overflow-hidden">
                               <img
                                 src={detail.productOrderVM.imageSrc}
                                 alt={detail.productOrderVM.imageName}
@@ -106,6 +106,7 @@ function OrderList(props) {
                               </Link>
                               <Link
                                 to={`/san-pham/${detail.productOrderVM.slug}`}
+                                className="productCard2Name"
                               >
                                 {detail.productOrderVM.name}
                               </Link>

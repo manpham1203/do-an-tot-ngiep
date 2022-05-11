@@ -52,12 +52,37 @@ import OverlayAdminViewOrder from "./components/Overlay/OverlayAdminViewOrder";
 import AdminViewOrder from "./components/Modal/AdminViewOrder";
 import OrderPending from "./views/Admin/Order/OrderPending";
 import OrderCancel from "./views/Admin/Order/OrderCancel";
-import OverlayAdminViewCmt from "./components/Overlay/OverlayAdminVieưCmt";
+import OverlayAdminViewCmt from "./components/Overlay/OverlayAdminViewCmt";
+import OverlayAdminViewBrand from "./components/Overlay/OverlayAdminViewBrand";
+import OverlayAdminViewPost from "./components/Overlay/OverlayAdminViewPost";
 import AdminViewCmt from "./components/Modal/AdminViewCmt";
+import AdminViewBrand from "./components/Modal/AdminViewBrand";
+import AdminViewPost from "./components/Modal/AdminViewPost";
 
 function App() {
-  const { user, quickView, adminViewProduct, adminViewOrder, adminViewCmt } =
-    useSelector((store) => store);
+  const {
+    user,
+    quickView,
+    adminViewProduct,
+    adminViewOrder,
+    adminViewCmt,
+    adminViewBrand,
+    adminViewPost,
+  } = useSelector((store) => store);
+  useEffect(() => {
+    if (adminViewBrand.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewBrand.show]);
+  useEffect(() => {
+    if (adminViewPost.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewPost.show]);
   useEffect(() => {
     if (quickView.show) {
       document.body.style.overflowY = "hidden";
@@ -104,7 +129,6 @@ function App() {
     }
   }, [user.role, location.pathname]);
 
-  console.log("av", adminViewProduct);
   return (
     <div className="w-[100%] min-h-screen">
       <Routes>
@@ -241,6 +265,18 @@ function App() {
         <>
           <OverlayAdminViewCmt />
           <AdminViewCmt />
+        </>
+      )}
+      {adminViewBrand.show && (
+        <>
+          <OverlayAdminViewBrand />
+          <AdminViewBrand />
+        </>
+      )}
+      {adminViewPost.show && (
+        <>
+          <OverlayAdminViewPost />
+          <AdminViewPost />
         </>
       )}
     </div>

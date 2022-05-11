@@ -3,8 +3,15 @@ import Tr from "../../../components/Table/Tr";
 import Td from "../../../components/Table/Td";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
-import { FaRegEdit, FaTrashRestoreAlt, FaTimes } from "react-icons/fa";
+import {
+  FaRegEdit,
+  FaTrashRestoreAlt,
+  FaTimes,
+  FaRegEye,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { setOpenAdminViewPost } from "../../../redux/adminViewPost/adminViewPostActions";
+import { useDispatch } from "react-redux";
 
 function RowTrash(props) {
   const [data, setData] = useState({});
@@ -44,6 +51,14 @@ function RowTrash(props) {
           autoClose: 3000,
         })
       );
+  };
+  const dispatchQV = useDispatch();
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.id,
+    };
+    dispatchQV(setOpenAdminViewPost(obj));
   };
   return (
     <Tr>
@@ -89,6 +104,10 @@ function RowTrash(props) {
       </Td>
       <Td className="w-[200px]" style={{ height: "60px" }}>
         <div className="flex justify-center gap-x-[20px] text-[25px]">
+          <FaRegEye
+            onClick={() => handleQuickView()}
+            className="cursor-pointer"
+          />
           <FaRegEdit
             onClick={() => navigate(`/admin/tin-tuc/chinh-sua/${data.id}`)}
             className="cursor-pointer"

@@ -2,17 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../../apis/api";
 import { FaTimes } from "react-icons/fa";
-import { setCloseAdminViewProduct } from "../../redux/adminViewProduct/adminViewProductActions";
+import { setCloseadminViewBrand } from "../../redux/adminViewBrand/adminViewBrandActions";
+import Table from "../Table/Table";
+import Tr from "../Table/Tr";
+import Td from "../Table/Td";
+import Th from "../Table/Th";
+import * as moment from "moment";
+import "moment/locale/nl";
 
 function AdminViewBrand(props) {
-  const dispatch=useDispatch();
-  const { adminViewProduct } = useSelector((s) => s);
+  const dispatch = useDispatch();
+  const { adminViewBrand } = useSelector((s) => s);
   const [data, setData] = useState();
-  const fetchData = async (slug) => {
+  const fetchData = async (id) => {
     await api({
       method: "GET",
-      url: `/${adminViewProduct.type}/${adminViewProduct.type}detail/${slug}`,
-      data: null,
+      url: `/${adminViewBrand.type}/${adminViewBrand.type}detail/`,
+      params: { id: id },
     })
       .then((res) => {
         setData(res.data);
@@ -20,158 +26,70 @@ function AdminViewBrand(props) {
       .catch(() => console.log("fail"));
   };
   useEffect(() => {
-    fetchData(adminViewProduct.id);
-  }, [adminViewProduct.id]);
-  useEffect(() => {
-    if (data?.id != null) {
-      setDataArr(Object.entries(data));
-    }
-  }, [data]);
+    fetchData(adminViewBrand.id);
+  }, [adminViewBrand.id]);
+  console.log(data);
   return (
     <div className="flex  p-[30px] bg-third fixed w-[80%] h-[500px] rounded-xl top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[2000]">
-     <div className="w-fit absolute right-0 top-0">
+      <div className="w-fit absolute right-0 top-0">
         <FaTimes
-          onClick={() => dispatch(setCloseAdminViewProduct())}
+          onClick={() => dispatch(setCloseadminViewBrand())}
           className="inline-block text-[30px] text-second cursor-pointer"
         />
       </div>
-      <div className="overflow-auto w-full h-full border border-gray-200">
-        <table className="border-separate w-full">
-          <tr>
-            <th className="text-left border border-slate-300 w-[300px]">Id</th>
-            <td className="border border-slate-300 w-[70%]">{data?.id}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Tên sản phẩm
-            </th>
-            <td className="border border-slate-300 w-[70%]">{data?.name}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Slug
-            </th>
-            <td className="border border-slate-300 w-[70%]">{data?.slug}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Thương hiệu
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.brandNameVM?.name}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Danh mục
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.categoryNameVMs?.map((item, i) =>
-                i + 1 === data.categoryNameVMs.length ? (
-                  <span>{item.name}</span>
-                ) : (
-                  <span>{item.name}, </span>
-                )
-              )}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">Giá</th>
-            <td className="border border-slate-300 w-[70%]">{data?.price}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Giảm giá
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.priceDiscount}
-            </td>
-          </tr>
-
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Lượt xem
-            </th>
-            <td className="border border-slate-300 w-[70%]">{data?.view}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Lượt thích
-            </th>
-            <td className="border border-slate-300 w-[70%]">{data?.like}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Lượt đánh giá
-            </th>
-            <td className="border border-slate-300 w-[70%]">{data?.star}</td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Số lượng tồn
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.quantityInStock}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Phát hành
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.published === true ? "true" : "false"}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Thùng rác
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.deleted === true ? "true" : "false"}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Mô tả ngắn
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              {data?.shortDescription}
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Mô tả đầy đủ
-            </th>
-            <td className="border border-slate-300 w-[70%]">
+      <div className="overflow-auto w-full h-full ">
+        <Table className="border-separate w-full border border-gray-200">
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Id</Th>
+            <Td className=" px-[20px]">{data?.id}</Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Tên</Th>
+            <Td className=" px-[20px]">{data?.name}</Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Slug</Th>
+            <Td className=" px-[20px]">{data?.slug}</Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Phát hành</Th>
+            <Td className=" px-[20px]">{data?.publish ? "True" : "False"}</Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Cập nhật lần cuối</Th>
+            <Td className=" px-[20px]">
+              {data?.updateAt == null
+                ? "Chưa có"
+                : moment(data?.updateAt).format("DD-MM-yyyy, h:mm:ss a")}
+            </Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Ngày tạo</Th>
+            <Td className=" px-[20px]">
+              {moment(data?.createdAt).format("DD-MM-yyyy, h:mm:ss")}
+            </Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Mô tả ngắn</Th>
+            <Td className=" px-[20px]">{data?.shortDescription}</Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Mô tả đầy đủ</Th>
+            <Td className=" px-[20px]">
               <div
                 dangerouslySetInnerHTML={{ __html: data?.fullDescription }}
               ></div>
-            </td>
-          </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Hình
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              <div className="flex flex-row gap-x-[20px]">
-                {data?.pictureVMs.map((item) => {
-                  return (
-                    <div
-                      key={item.id}
-                      className="h-[100px] w-[100px] inline-block border border-gray-200"
-                    >
-                      <img
-                        src={item.imageSrc}
-                        alt=""
-                        className="h-full w-full object-cover object-center"
-                      />
-                    </div>
-                  );
-                })}
+            </Td>
+          </Tr>
+          <Tr>
+            <Th className="text-left px-[20px] w-[300px]">Hình</Th>
+            <Td className=" px-[20px]">
+              <div className="w-[100px] h-[100px]">
+                <img src={data?.imageSrc} alt="" className="w-full h-full object-cover object-center" />
               </div>
-            </td>
-          </tr>
-        </table>
+            </Td>
+          </Tr>
+        </Table>
       </div>
     </div>
   );

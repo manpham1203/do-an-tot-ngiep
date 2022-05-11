@@ -69,7 +69,9 @@ namespace DAL.Order
                     DeliveryEmail = x.DeliveryEmail,
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
-                    OrderDetailVMs = new List<OrderDetailVM>()
+                    OrderDetailVMs = new List<OrderDetailVM>(),
+                    FirstName=x.FirstName,
+                    LastName=x.LastName,
                 }).ToList();
                 return order;
             }
@@ -98,7 +100,9 @@ namespace DAL.Order
                     DeliveryEmail = x.DeliveryEmail,
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
-                    OrderDetailVMs = new List<OrderDetailVM>()
+                    OrderDetailVMs = new List<OrderDetailVM>(),
+                    FirstName=x.FirstName,
+                    LastName=x.FirstName,
                 }).ToList();
                 return order;
             }
@@ -128,6 +132,8 @@ namespace DAL.Order
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
                     OrderDetailVMs = null,
+                    FirstName=x.FirstName,
+                    LastName=x.LastName,
                 }).ToList();
                 return order;
             }
@@ -165,7 +171,9 @@ namespace DAL.Order
                     DeliveryEmail = x.DeliveryEmail,
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
-                    OrderDetailVMs = null
+                    OrderDetailVMs = null,
+                    FirstName=x.FirstName,
+                    LastName=x.LastName
                 }).ToList();
                 return result;
             }
@@ -194,7 +202,9 @@ namespace DAL.Order
                     DeliveryEmail = resultFromDb.DeliveryEmail,
                     DeliveryPhone = resultFromDb.DeliveryPhone,
                     CreatedAt = resultFromDb.CreatedAt,
-                    OrderDetailVMs = null
+                    OrderDetailVMs = null,
+                    FirstName=resultFromDb.FirstName,
+                    LastName=resultFromDb.LastName,
                 };
                 return result;
             }
@@ -253,7 +263,9 @@ namespace DAL.Order
                     DeliveryEmail = x.DeliveryEmail,
                     DeliveryPhone = x.DeliveryPhone,
                     CreatedAt = x.CreatedAt,
-                    OrderDetailVMs = new List<OrderDetailVM>()
+                    OrderDetailVMs = new List<OrderDetailVM>(),
+                    FirstName=x.FirstName,
+                    LastName=x.LastName,
                 }).ToList();
                 return order;
             }
@@ -285,7 +297,8 @@ namespace DAL.Order
                     FirstName = resultFromDb.FirstName,
                     LastName = resultFromDb.LastName,
                     Note = resultFromDb.Note,
-                    OrderDetailVMs = new List<OrderDetailVM>()
+                    OrderDetailVMs = new List<OrderDetailVM>(),
+                    
                 };
                 return order;
             }

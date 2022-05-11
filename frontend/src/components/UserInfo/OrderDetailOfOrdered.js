@@ -32,7 +32,7 @@ function OrderDetailOfOrdered(props) {
               className="flex flex-col  gap-y-[10px] rounded-md bg-third "
             >
               <div className="flex flex-row  p-[10px] gap-x-[10px]">
-                <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
+                <div className="w-[150px] h-[150px] flex-none rounded-md overflow-hidden">
                   <img
                     src={item.productOrderVM.imageSrc}
                     alt={item.productOrderVM.imageName}
@@ -45,7 +45,7 @@ function OrderDetailOfOrdered(props) {
                   >
                     {item.productOrderVM.brandNameVM.name}
                   </Link>
-                  <Link to={`/san-pham/${item.productOrderVM.slug}`}>
+                  <Link to={`/san-pham/${item.productOrderVM.slug}`} className="productCard2Name">
                     {item.productOrderVM.name}
                   </Link>
                   <p>Số lượng: {item.quantity}</p>

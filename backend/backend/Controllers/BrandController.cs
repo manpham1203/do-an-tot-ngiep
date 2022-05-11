@@ -400,7 +400,7 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
-                if (resultFromBLL != null)
+                if (resultFromBLL.Image != null)
                 {
                     resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
 

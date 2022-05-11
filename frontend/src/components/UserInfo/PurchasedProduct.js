@@ -32,7 +32,7 @@ function PurchasedProduct(props) {
               key={item.id}
               className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third shadow-md h-fit"
             >
-              <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
+              <div className="w-[150px] h-[150px] flex-none rounded-md overflow-hidden">
                 <img
                   src={item.cartRowVM.imageSrc}
                   alt={item.cartRowVM.imageName}
@@ -43,7 +43,7 @@ function PurchasedProduct(props) {
                 <Link to={`/san-pham?brand=${item.cartRowVM.brandNameVM.slug}`}>
                   {item.cartRowVM.brandNameVM.name}
                 </Link>
-                <Link to={`/san-pham/${item.cartRowVM.slug}`}>
+                <Link to={`/san-pham/${item.cartRowVM.slug}`} className="productCard2Name">
                   {item.cartRowVM.name}
                 </Link>
                 <p>

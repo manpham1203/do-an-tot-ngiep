@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../../apis/api";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt, FaRegEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Tr from "../../../components/Table/Tr";
 import Td from "../../../components/Table/Td";
+import { setOpenAdminViewPost } from "../../../redux/adminViewPost/adminViewPostActions";
+import { useDispatch } from "react-redux";
 
 function Row(props) {
   const [data, setData] = useState({});
@@ -44,6 +46,14 @@ function Row(props) {
           autoClose: 3000,
         })
       );
+  };
+  const dispatchQV = useDispatch();
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: props.id,
+    };
+    dispatchQV(setOpenAdminViewPost(obj));
   };
   return (
     <Tr>
@@ -89,6 +99,10 @@ function Row(props) {
       </Td>
       <Td className="w-[200px]" style={{ height: "60px" }}>
         <div className="w-full flex justify-center gap-x-[20px] text-[25px]">
+          <FaRegEye
+            onClick={() => handleQuickView()}
+            className="cursor-pointer"
+          />
           <FaRegEdit
             onClick={() => navigate(`/admin/tin-tuc/chinh-sua/${data.id}`)}
             className="cursor-pointer"

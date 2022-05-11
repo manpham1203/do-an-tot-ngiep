@@ -336,5 +336,16 @@ namespace BLL.Post
                 return false;
             }
         }
+        public async Task<PostDetailVM> PostDetailId(string id)
+        {
+            try
+            {
+                return await postDAL.PostDetailId(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

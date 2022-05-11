@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from "react";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt, FaRegEye } from "react-icons/fa";
 import api from "../../../apis/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Tr from "../../../components/Table/Tr";
 import Td from "../../../components/Table/Td";
+import { setOpenadminViewBrand } from "../../../redux/adminViewBrand/adminViewBrandActions";
+import { useDispatch } from "react-redux";
 
 const initState = {
   loading: false,
@@ -99,6 +101,15 @@ function Row(props) {
   const handleEdit = (slug) => {
     navigate(`/admin/thuong-hieu/chinh-sua/${slug}`);
   };
+  const dispatchQV = useDispatch();
+  const handleQuickView = () => {
+    const obj = {
+      show: true,
+      id: state.data.id,
+      type:"brand"
+    };
+    dispatchQV(setOpenadminViewBrand(obj));
+  };
 
   return (
     <>
@@ -137,6 +148,10 @@ function Row(props) {
           </Td>
           <Td className="w-[200px]">
             <div className="w-full flex flex-row justify-center gap-x-[20px] text-[25px]">
+              <FaRegEye
+                onClick={() => handleQuickView()}
+                className="cursor-pointer"
+              />
               <FaRegEdit
                 onClick={() => handleEdit(state.data.slug)}
                 className="cursor-pointer"

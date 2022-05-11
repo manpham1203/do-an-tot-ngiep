@@ -105,7 +105,6 @@ function Register(props) {
             password: "",
             repassword: "",
           });
-          //   navigate(`/dang-nhap`);
         } else {
           toast.error(`Đăng ký thất bại`, {
             position: toast.POSITION.TOP_RIGHT,

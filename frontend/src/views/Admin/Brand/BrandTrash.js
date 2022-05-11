@@ -104,7 +104,7 @@ function BrandTrash(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          fetchData(id);
+          fetchData();
         } else {
           toast.error(`Xoá thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -114,6 +114,32 @@ function BrandTrash(props) {
       })
       .catch(() =>
         toast.error(`Xoá thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
+  const handleTrash = async (id) => {
+    await api({
+      method: "POST",
+      url: `/brand/deleted/${id}`,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.warn(`Chuyển vào thùng rác thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData();
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         })
@@ -160,6 +186,7 @@ function BrandTrash(props) {
             {state.data.brands.map((item) => {
               return (
                 <RowTrash
+                  handleTrash={handleTrash}
                   key={item.id}
                   id={item.id}
                   handleDelete={handleDelete}

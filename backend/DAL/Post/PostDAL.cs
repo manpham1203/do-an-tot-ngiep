@@ -345,6 +345,39 @@ namespace DAL.Post
                 return null;
             }
         }
+        public async Task<PostDetailVM> PostDetailId(string id)
+        {
+            try
+            {
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId
+                                          where post.Id == id && pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          select new PostDetailVM
+                                          {
+                                              Id = post.Id,
+                                              Title = post.Title,
+                                              Slug = post.Slug,
+                                              ShortDescription = post.ShortDescription,
+                                              FullDescription = post.FullDescription,
+                                              View = post.View,
+                                              Image = pic.Name,
+                                              ImageSrc=null,
+                                              Published=post.Published,
+                                              CreatedAt = post.CreatedAt,
+                                              UpdatedAt= post.UpdatedAt,
+                                          }).SingleOrDefaultAsync();
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                
+                return resultFromDb;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public async Task<bool> IncreaseView(string id)
         {

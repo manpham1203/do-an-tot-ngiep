@@ -61,7 +61,7 @@ function AdminViewOrder() {
                     className="flex flex-col  gap-y-[10px] rounded-md bg-third "
                   >
                     <div className="flex flex-row  p-[10px] gap-x-[10px]">
-                      <div className="w-[150px] h-[150px]  rounded-md overflow-hidden">
+                      <div className="w-[150px] h-[150px] flex-none rounded-md overflow-hidden">
                         <img
                           src={item.productOrderVM.imageSrc}
                           alt={item.productOrderVM.imageName}
@@ -70,7 +70,7 @@ function AdminViewOrder() {
                       </div>
                       <div className="flex flex-col grow-[1] bg-white rounded-md p-[10px] gap-y-[2px]">
                         <p>{item.productOrderVM.brandNameVM.name}</p>
-                        <p>{item.productOrderVM.name}</p>
+                        <p className="productCard2Name">{item.productOrderVM.name}</p>
                         <p>Số lượng: {item.quantity}</p>
                         <p>
                           Đơn giá:{" "}

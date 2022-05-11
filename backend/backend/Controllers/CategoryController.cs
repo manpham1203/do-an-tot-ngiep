@@ -324,6 +324,27 @@ namespace backend.Controllers
             }
             return Ok(resultFromBLL);
         }
+        [HttpGet("CategoryDetail")]
+        public async Task<IActionResult> CategoryDetail(string id)
+        {
+            try
+            {
+                var resultFromBLL = await categoryBLL.CategoryDetail(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Image != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
 
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
