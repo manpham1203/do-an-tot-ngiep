@@ -1,7 +1,9 @@
 ﻿using BO.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +12,24 @@ namespace BO
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext() { }
+        //string conStr;
+        public AppDbContext()
+        {
+
+        }
         //public AppDbContext(DbContextOptions options) : base(options) { }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-ABENUK5\\SQLEXPRESS;Database=KhoaLuanTotNghiep;User Id=sa;Password=123456;");
+            IConfigurationBuilder config = new ConfigurationBuilder();
+            config.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"));
+            var root = config.Build();
+            var conStr = root.GetConnectionString("MyDb");
+            optionsBuilder.UseSqlServer(conStr);
+            //conStr = ConfigurationManager.ConnectionStrings["MyDb"].ConnectionString;
+            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-ABENUK5\\SQLEXPRESS;Database=KhoaLuanTotNghiep;User Id=sa;Password=123456;");
             //optionsBuilder.UseSqlServer("Data Source=SQL8003.site4now.net;Initial Catalog=db_a86b73_khoaluantotnghiejp;User Id=db_a86b73_khoaluantotnghiejp_admin;Password=m1232001");
         }
         #region DbSet
@@ -30,6 +44,7 @@ namespace BO
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Banner> Banners { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         //public DbSet<Role> Roles { get; set; }
 
         public DbSet<ProductCategory> Product_Category_Mappings { get; set; }
@@ -411,6 +426,12 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(false)
                     .HasPrecision(3);
+                entity.Property(e => e.Published)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
+                entity.Property(e => e.Deleted)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
 
                 entity.HasMany<Order>(b => b.Orders)
                 .WithOne(i => i.User)
@@ -693,6 +714,38 @@ namespace BO
                     .HasColumnType("varchar")
                     .HasMaxLength(250)
                     .IsRequired(false).IsUnicode(false);
+            });
+            #endregion
+            #region Contact
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.ToTable("Contact");
+                entity.HasKey(e => new { e.Id });
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(12)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(250)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Name)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Email)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true)
+                    .HasPrecision(3);
             });
             #endregion
 

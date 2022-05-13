@@ -312,3 +312,7 @@ D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\sdf
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\timex220508213257849.png
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\vz1iinfao2sk220509092144584.webp
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\wqwqwe220508215324674.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\suxyl5x3t2id220513215258986.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\suxyl5x3t2id220513222830223.png
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\suxyl5x3t2id220513222843320.jpg

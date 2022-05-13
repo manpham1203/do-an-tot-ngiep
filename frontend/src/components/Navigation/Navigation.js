@@ -1,14 +1,12 @@
 import React, { useEffect, useReducer } from "react";
 import { NavLink } from "react-router-dom";
-import api from "../../apis/api";
-import { FaHeart, FaTimes } from "react-icons/fa";
-import { TiArrowSortedDown } from "react-icons/ti";
-import { menuData } from "../menuData";
+import { useSelector } from "react-redux";
 
 function Navigation(props) {
+  const {menu} = useSelector(s=>s);
   return (
     <ul className={`lg:flex flex-row items-center justify-center hidden `}>
-      {menuData.map((item, index) => {
+      {menu.map((item, index) => {
         return (
           <li className="group relative flex flex-row" key={item.id}>
             <NavLink

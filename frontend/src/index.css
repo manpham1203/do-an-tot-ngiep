@@ -18,7 +18,7 @@
     font-family: "Lexend Deca", sans-serif;
     /* font-family: 'League Spartan', sans-serif; */
     @apply text-second bg-third;
-    user-select: none;
+    /* user-select: none; */
   }
   .haha{
         font-family: 'Montserrat', sans-serif;

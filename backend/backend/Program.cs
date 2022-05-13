@@ -20,8 +20,7 @@ namespace backend
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseIIS();                    
+                    webBuilder.UseStartup<Startup>();                 
                 });        
     }
 }

@@ -1,10 +1,16 @@
 ﻿using BLL.User;
 using BO.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace backend.Controllers
@@ -14,11 +20,13 @@ namespace backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserBLL userBLL;
-        private IWebHostEnvironment iwebHostEnvironment;
-        public UserController(IWebHostEnvironment _iwebHostEnvironment)
+        private IWebHostEnvironment _iwebHostEnvironment;
+        private IConfiguration _config;
+        public UserController(IWebHostEnvironment iwebHostEnvironment, IConfiguration config)
         {
             userBLL = new UserBLL();
-            this.iwebHostEnvironment = _iwebHostEnvironment;
+            _iwebHostEnvironment = iwebHostEnvironment;
+           _config = config;
         }
         //[HttpGet]
         //public async Task<IActionResult> GetAll()
@@ -120,7 +128,7 @@ namespace backend.Controllers
         {
             try
             {
-                var imagePath = Path.Combine(iwebHostEnvironment.ContentRootPath, "Photos", imgName);
+                var imagePath = Path.Combine(_iwebHostEnvironment.ContentRootPath, "Photos", imgName);
                 using (var fileStream = new FileStream(imagePath, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
@@ -218,16 +226,18 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+        
+  
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginVM model)
         {
 
             try
             {
-                var user = await userBLL.Login(model);
-                if (user != null)
+                var resultFromBLL = await userBLL.Login(model);
+                if (resultFromBLL != null)
                 {
-                    return Ok(user);
+                    return Ok(resultFromBLL);
                 }
                 return Content("notfound");
             }
@@ -237,6 +247,9 @@ namespace backend.Controllers
             }
 
         }
+
+        
+
         [HttpPost("findUsername")]
         public async Task<IActionResult> FindUsername(string username)
         {
@@ -309,6 +322,126 @@ namespace backend.Controllers
                 return Ok(resultFromBLL);
             }
             catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("userpagination")]
+        public async Task<IActionResult> UserPagination(bool deleted, int limit=10, int currentPage=1)
+        {
+            try
+            {
+                var resultFromDb = await userBLL.UserPagination(limit, currentPage, deleted);
+                if (resultFromDb == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromDb);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
+        [HttpGet("userdetail")]
+        public async Task<IActionResult> UserDetail(string id)
+        {
+            try
+            {
+                var resultFromBLL = await userBLL.UserDetail(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Image != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
+
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("deleted")]
+        public async Task<IActionResult> Deleted(string id)
+        {
+            try
+            {
+                var resultFromBLL=await userBLL.Deleted(id);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("published")]
+        public async Task<IActionResult> Published(string id)
+        {
+            try
+            {
+                var resultFromBLL = await userBLL.Published(id);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var reusltFromBLL = await userBLL.Delete(id);
+                if (reusltFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update(string id, [FromForm] UpdateUserVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await userBLL.Update(id, model);
+                    if (user == false)
+                    {
+                        return BadRequest();
+                    }
+                    if (user && (model.File != null))
+                    {
+                        var saveFile = await SaveFile(model.File, model.Image);
+                    }
+                    return Ok();
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            else
             {
                 return BadRequest();
             }

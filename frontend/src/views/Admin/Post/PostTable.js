@@ -12,7 +12,6 @@ import Tr from "../../../components/Table/Tr";
 function PostTable(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
   const fetchData = async () => {
     await api({
@@ -20,7 +19,7 @@ function PostTable(props) {
       url: `/Post/RowsAdminDeleted`,
       params: {
         deleted: false,
-        limit: limit,
+        limit: 10,
         currentPage: currentPage,
         query: query,
       },
@@ -37,7 +36,7 @@ function PostTable(props) {
   };
   useEffect(() => {
     fetchData();
-  }, [limit, query, currentPage]);
+  }, [query, currentPage]);
 
   const handleTrash = async (id) => {
     await api({

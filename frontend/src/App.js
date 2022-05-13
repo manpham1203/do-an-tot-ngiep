@@ -55,9 +55,15 @@ import OrderCancel from "./views/Admin/Order/OrderCancel";
 import OverlayAdminViewCmt from "./components/Overlay/OverlayAdminViewCmt";
 import OverlayAdminViewBrand from "./components/Overlay/OverlayAdminViewBrand";
 import OverlayAdminViewPost from "./components/Overlay/OverlayAdminViewPost";
+import OverlayAdminViewUser from "./components/Overlay/OverlayAdminViewUser";
 import AdminViewCmt from "./components/Modal/AdminViewCmt";
 import AdminViewBrand from "./components/Modal/AdminViewBrand";
 import AdminViewPost from "./components/Modal/AdminViewPost";
+import AdminViewUser from "./components/Modal/AdminViewUser";
+import UserTable from './views/Admin/User/UserTable'
+import UserEdit from './views/Admin/User/UserEdit'
+import UserTrash from './views/Admin/User/UserTrash'
+
 
 function App() {
   const {
@@ -68,7 +74,15 @@ function App() {
     adminViewCmt,
     adminViewBrand,
     adminViewPost,
+    adminViewUser
   } = useSelector((store) => store);
+  useEffect(() => {
+    if (adminViewUser.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewUser.show]);
   useEffect(() => {
     if (adminViewBrand.show) {
       document.body.style.overflowY = "hidden";
@@ -169,8 +183,7 @@ function App() {
 
         {user.role === 1 && (
           <Route path="/admin" element={<SideBar />}>
-            <Route path="/admin/dashboard" element={<Dashboard />} />
-
+            <Route path="/admin" element={<Dashboard />} />
             <Route
               path="/admin/san-pham/chinh-sua/:slug"
               element={<ProductEdit />}
@@ -233,6 +246,9 @@ function App() {
             <Route path="/admin/banner/danh-sach" element={<BannerTable />} />
             <Route path="/admin/banner/da-xoa" element={<BannerTrash />} />
             <Route path="/admin/banner/tao-moi" element={<BannerCreate />} />
+            <Route path="/admin/nguoi-dung/danh-sach" element={<UserTable />} />
+            <Route path="/admin/nguoi-dung/chinh-sua/:id" element={<UserEdit />} />
+            <Route path="/admin/nguoi-dung/da-xoa" element={<UserTrash />} />
             <Route
               path="/admin/banner/chinh-sua/:id"
               element={<BannerEdit />}
@@ -277,6 +293,12 @@ function App() {
         <>
           <OverlayAdminViewPost />
           <AdminViewPost />
+        </>
+      )}
+      {adminViewUser.show && (
+        <>
+          <OverlayAdminViewUser />
+          <AdminViewUser />
         </>
       )}
     </div>

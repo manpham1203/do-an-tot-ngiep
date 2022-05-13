@@ -181,6 +181,8 @@ namespace BLL.User
                 Password = ToSHA256(model.Password),
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
+                Deleted=false,
+                Published=true,
             };
             var result = await userDAL.Register(userVM);
             if (result)
@@ -192,7 +194,8 @@ namespace BLL.User
         public async Task<UserInfoClientVM> Login(LoginVM model)
         {
 
-            model.Username.ToLower();
+            model.Username=model.Username.ToLower();
+            model.Password=model.Password.ToLower();
             if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
             {
                 return null;
@@ -340,6 +343,146 @@ namespace BLL.User
             {
                 return null;
             }
+        }
+    
+        public async Task<List<string>> ListUserId(bool deleted)
+        {
+            try
+            {
+                return await userDAL.ListUserId(deleted);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<UserVM> UserDetail(string id)
+        {
+            try
+            {
+                return await userDAL.UserDetail(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<UserPagination2VM> UserPagination(int limit, int currentPage, bool deleted)
+        {
+            try
+            {
+                var resultFromDAL = await ListUserId(deleted);
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new UserPagination2VM
+                    {
+                        TotalPage = 0,
+                        TotalResult = 0,
+                        Ids = new List<string>(),
+                    };
+                }
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+
+
+                return new UserPagination2VM
+                {
+                    Ids = resultFromDAL,
+                    TotalPage = totalPage,
+                    TotalResult = count,
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<bool> Published(string id)
+        {
+            try
+            {
+                return await userDAL.Published(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Deleted(string id)
+        {
+            try
+            {
+                return await userDAL.Deleted(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Delete(string id)
+        {
+            var checkExists = await CheckExists(id);
+            if (checkExists == false)
+            {
+                return false;
+            }
+            return await userDAL.Delete(id);
+        }
+        public async Task<bool> Update(string id, UpdateUserVM model)
+        {
+            var checkExists = await CheckExists(id);
+            if (checkExists == false)
+            {
+                return false;
+            }
+
+            cm = new CommonBLL();
+            if (model.File != null)
+            {
+                string imageName = Regex.Replace(cm.RemoveUnicode(id).Trim().ToLower(), @"\s+", "-");
+                imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(model.File.FileName);
+                model.Image = imageName;
+            }
+
+            var pictureBLL = new PictureBLL();
+            var picId = cm.RandomString(16);
+            var check = await pictureBLL.CheckExists(picId);
+            if (check)
+            {
+                picId = cm.RandomString(16);
+                check = await pictureBLL.CheckExists(picId);
+            }
+
+            var userVM = new UserVM();
+            userVM.Id = id;
+            userVM.FirstName = model.FirstName;
+            userVM.LastName = model.LastName;
+            userVM.Birthday = model.Birthday;
+            userVM.Email = model.Email;
+            userVM.PhoneNumber = model.PhoneNumber;
+            userVM.Address = model.Address;
+            userVM.Role = 0;
+            userVM.Username = null;
+            userVM.Password = null;
+            userVM.UpdatedAt = DateTime.Now;
+            userVM.Published = model.Published;
+
+
+            var picVM = new PictureVM
+            {
+                Id = picId,
+                Name = model.Image,
+                Published = true,
+                ObjectId = id,
+                ObjectType = "user",
+            };
+
+            return await userDAL.Update(userVM, picVM);
         }
     }
 }

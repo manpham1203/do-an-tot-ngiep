@@ -20,5 +20,6 @@ namespace BO.ViewModels.User
         public string Password { get; set; }
         public string Image { get; set; }
         public IFormFile File { get; set; }
+        public bool Published { get; set; }
     }
 }

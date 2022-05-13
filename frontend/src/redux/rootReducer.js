@@ -13,23 +13,26 @@ import { adminViewBrandReducer } from "./adminViewBrand/adminViewBrandReducer";
 import { adminViewOrderReducer } from "./adminViewOrder/adminViewOrderReducer";
 import { adminViewCmtReducer } from "./adminViewCmt/adminViewCmtReducer";
 import { adminViewPostReducer } from "./adminViewPost/adminViewPostReducer";
+import { adminViewUserReducer } from "./adminViewUser/adminViewUserReducer";
+import { menuReducer } from "./menu/menuReducer";
 
-
-const rootReducer=combineReducers({
-    products:productsReducer,
-    productDetail:productDetailReducer,
-    brands:brandsReducer,
-    cart:cartReducer,
-    productsOfBrand:productsOfBrandReducer,
-    productsOfCategory:productsOfCategoryReducer,
-    category:categoryReducer,
-    user:userReducer,
-    quickView:quickViewReducer,
-    adminViewProduct:adminViewProductReducer,
-    adminViewBrand:adminViewBrandReducer,
-    adminViewOrder:adminViewOrderReducer,
-    adminViewCmt:adminViewCmtReducer,
-    adminViewPost:adminViewPostReducer
-})
+const rootReducer = combineReducers({
+  products: productsReducer,
+  productDetail: productDetailReducer,
+  brands: brandsReducer,
+  cart: cartReducer,
+  productsOfBrand: productsOfBrandReducer,
+  productsOfCategory: productsOfCategoryReducer,
+  category: categoryReducer,
+  user: userReducer,
+  quickView: quickViewReducer,
+  adminViewProduct: adminViewProductReducer,
+  adminViewBrand: adminViewBrandReducer,
+  adminViewOrder: adminViewOrderReducer,
+  adminViewCmt: adminViewCmtReducer,
+  adminViewPost: adminViewPostReducer,
+  adminViewUser: adminViewUserReducer,
+  menu:menuReducer
+});
 
 export default rootReducer;

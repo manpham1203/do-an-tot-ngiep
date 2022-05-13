@@ -113,6 +113,8 @@ namespace BO.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     Username = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "varchar(64)", unicode: false, maxLength: 64, nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    Published = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: true)
                 },

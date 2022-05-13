@@ -14,6 +14,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace backend
 {
@@ -29,6 +32,7 @@ namespace backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -38,15 +42,16 @@ namespace backend
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("http://localhost:3000")
-                                          .AllowAnyHeader()
-                                          .AllowAnyMethod();
-                                  });
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
             });
 
-            //services.AddDbContext<AppDbContext>(option => {
+            //services.AddDbContext<AppDbContext>(option =>
+            //{
             //    option.UseSqlServer(Configuration.GetConnectionString("MyDB"));
             //});
 
@@ -62,24 +67,27 @@ namespace backend
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "backend v1"));
             }
 
-            app.UseRouting();
-
-            app.UseCors();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Photos")),
                 RequestPath = "/Photos"
             });
-            //app.UseStaticFiles();
-            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors();
+
+            //app.UseAuthentication();
+
+            //app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
         }
     }
 }
