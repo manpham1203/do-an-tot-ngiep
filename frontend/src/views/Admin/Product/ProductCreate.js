@@ -77,22 +77,25 @@ function ProductCreate(props) {
       setValidImg(false);
       return;
     }
+    console.log(values);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
     formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
-    formData.append("price", values.price);
-    formData.append("priceDiscount", values.priceDiscount);
+    formData.append("price", parseFloat(values.price));
+    values.priceDiscount != null &&
+      formData.append("priceDiscount", values.priceDiscount);
     formData.append("brandId", values.brandId.id);
     for (var j = 0; j < values.categoryIds.length; j++) {
       formData.append("categoryIds", values.categoryIds[j].id);
     }
     // formData.append("categoryIds", values.categoryIds[0]);
-    formData.append("quantityInStock", values.quantity);
+    formData.append("quantityInStock", parseInt(values.quantity));
     for (var i = 0; i < files.length; i++) {
       formData.append("Files", files[i]);
     }
+    console.log("a");
     await api({
       method: "POST",
       url: `/product`,
@@ -107,7 +110,7 @@ function ProductCreate(props) {
           setRichText("");
           setImage([]);
           setFiles([]);
-          setValidImg(false);
+          setValidImg(true);
           reset({
             name: "",
             shortDescription: "",

@@ -11,16 +11,16 @@ namespace BO.ViewModels.Product
 {
     public class CreateProductVM
     {
-        [Required]
+
         public string Name { get; set; }
-        [Required]
+
         public decimal Price { get; set; }
         public decimal? PriceDiscount { get; set; }
         public string FullDescription { get; set; }
         public string ShortDescription { get; set; }
         public int QuantityInStock { get; set; }
         public bool Published { get; set; }
-        [Required]
+
         public string BrandId { get; set; }
         public List<string> CategoryIds { get; set; }
 

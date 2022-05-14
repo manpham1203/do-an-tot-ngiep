@@ -6,11 +6,11 @@ const initialState = [
     title: "TRANG CHỦ",
     slug: "/",
   },
-  {
-    id: 5,
-    title: "GIỚI THIỆU",
-    slug: "/gioi-thieu",
-  },
+  // {
+  //   id: 5,
+  //   title: "GIỚI THIỆU",
+  //   slug: "/gioi-thieu",
+  // },
   {
     id: 6,
     title: "SẢN PHẨM",

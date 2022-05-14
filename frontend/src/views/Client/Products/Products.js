@@ -177,8 +177,7 @@ function Products(props) {
   const [query, setQuery] = useState("");
   const [arrBrand, setArrBrand] = useState([]);
   const [arrCategory, setArrCategory] = useState([]);
-  
-  
+
   const [priceRangeData, setPriceRangeData] = useState({
     maxPrice: 0,
     minPrice: 0,
@@ -468,28 +467,30 @@ function Products(props) {
         </div>
       </div>
       <div className="flex flex-row gap-x-[20px]">
-        <div className="flex flex-col w-[350px]">
-          <div className="relative mb-[20px]">
-            <div className="w-full relative">
-              <input
-                placeholder=" "
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
-              />
-              <label className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
-                Tìm kiếm
-              </label>
-              <span
-                className="absolute right-[8px] top-[50%] translate-y-[-50%] cursor-pointer text-second"
-                onClick={() => setQuery("")}
-              >
-                <FaTimesCircle />
-              </span>
+        <div className="flex-none w-[280px]">
+          <div className="flex flex-col">
+            <div className="relative mb-[20px]">
+              <div className="w-full relative">
+                <input
+                  placeholder=" "
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+                />
+                <label className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+                  Tìm kiếm
+                </label>
+                <span
+                  className="absolute right-[8px] top-[50%] translate-y-[-50%] cursor-pointer text-second"
+                  onClick={() => setQuery("")}
+                >
+                  <FaTimesCircle />
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="w-full border-t border-gray-200">
+          <div className="flex-[1] border-t border-gray-200">
             <div
               className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center"
               onClick={() =>

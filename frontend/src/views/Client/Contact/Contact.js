@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -33,6 +33,7 @@ function Contact(props) {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
   } = useForm({
     mode: "onChange",
@@ -41,7 +42,7 @@ function Contact(props) {
   const onSubmitHandler = async (values) => {
     console.log(values);
     await api({
-      method: "CREATE",
+      method: "POST",
       url: `contact/create`,
       data: values,
     })
@@ -52,6 +53,11 @@ function Contact(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000,
           });
+          reset({
+            name:"",
+            email:"",
+            content:"",
+          })
         } else {
           toast.error(`Thao tác thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -66,6 +72,10 @@ function Contact(props) {
         })
       );
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="mt-[50px] container mx-auto">
       <div className="w-full flex flex-row gap-x-[25px]">

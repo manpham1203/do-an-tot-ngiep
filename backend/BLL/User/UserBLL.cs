@@ -223,6 +223,42 @@ namespace BLL.User
 
             return user;
         }
+        public async Task<UserInfoClientVM> LoginAdmin(LoginVM model)
+        {
+
+            model.Username = model.Username.ToLower();
+            model.Password = model.Password.ToLower();
+            if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+            {
+                return null;
+            }
+            var userPass = await GetPasswordByUsername(model.Username);
+            if (userPass == null)
+            {
+                return null;
+            }
+
+            if (ToSHA256(model.Password) != userPass)
+            {
+                return null;
+            }
+            var user = await GetByUsername(model.Username);
+            if (user != null)
+            {
+                var picBLL = new PictureBLL();
+                var pic = await picBLL.GetByObjectId(user.Id, "user");
+                if (pic != null && pic.Count > 0)
+                {
+                    user.ImageName = pic[0].Name;
+                }
+            }
+            if (user.Role != 1)
+            {
+                return null;
+            }
+
+            return user;
+        }
         public async Task<bool> Edit(string id, UpdateUserVM model)
         {
             var checkExists = await CheckExists(id);

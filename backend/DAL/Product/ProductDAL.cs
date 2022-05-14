@@ -927,7 +927,7 @@ namespace DAL.Product
                 }
                 var result = resultFromDb.Join(db.Products, d => d.ProductId, p => p.Id, (d, p) => new { d, p })
                     .GroupBy(x => x.d.ProductId)
-                    .Where(x => x.Sum(m => m.d.Quantity) > 10 && x.First().p.Deleted==false && x.First().p.Published == true)
+                    .Where(x => x.Sum(m => m.d.Quantity) >= 10 && x.First().p.Deleted==false && x.First().p.Published == true)
                     .Select(x => new ProductCardVM
                     {
                         Id = x.Key,

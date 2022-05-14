@@ -28,7 +28,7 @@ import CategoryTrash from "./views/Admin/Category/CategoryTrash";
 import CategoryCreate from "./views/Admin/Category/CategoryCreate";
 import ProductEdit from "./views/Admin/Product/ProductEdit";
 import ProductTrash from "./views/Admin/Product/ProductTrash";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Products from "./views/Client/Products/Products";
 import Checkout from "./views/Client/Cart/Checkout";
 import OrderTable from "./views/Admin/Order/OrderTable";
@@ -63,6 +63,8 @@ import AdminViewUser from "./components/Modal/AdminViewUser";
 import UserTable from './views/Admin/User/UserTable'
 import UserEdit from './views/Admin/User/UserEdit'
 import UserTrash from './views/Admin/User/UserTrash'
+import ContactTable from './views/Admin/Contact/ContactTable'
+import LoginAdmin from "./views/Admin/Login/LoginAdmin";
 
 
 function App() {
@@ -148,7 +150,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/gioi-thieu" element={<About />}></Route>
+          {/* <Route path="/gioi-thieu" element={<About />}></Route> */}
           <Route path="/lien-he" element={<Contact />}></Route>
           <Route path="/gio-hang" element={<Cart />}></Route>
           <Route path="/thanh-toan" element={<Checkout />}></Route>
@@ -178,7 +180,7 @@ function App() {
         </Route>
 
         {user.role !== 1 && (
-          <Route path="/admin-login" element={<div>haha</div>}></Route>
+          <Route path="/admin-login" element={<LoginAdmin />}></Route>
         )}
 
         {user.role === 1 && (
@@ -249,6 +251,7 @@ function App() {
             <Route path="/admin/nguoi-dung/danh-sach" element={<UserTable />} />
             <Route path="/admin/nguoi-dung/chinh-sua/:id" element={<UserEdit />} />
             <Route path="/admin/nguoi-dung/da-xoa" element={<UserTrash />} />
+            <Route path="/admin/lien-he/danh-sach" element={<ContactTable />} />
             <Route
               path="/admin/banner/chinh-sua/:id"
               element={<BannerEdit />}

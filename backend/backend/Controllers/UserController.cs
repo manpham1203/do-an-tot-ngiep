@@ -247,8 +247,26 @@ namespace backend.Controllers
             }
 
         }
+        [HttpPost("LoginAdmin")]
+        public async Task<IActionResult> LoginAdmin(LoginVM model)
+        {
 
-        
+            try
+            {
+                var resultFromBLL = await userBLL.Login(model);
+                if (resultFromBLL != null)
+                {
+                    return Ok(resultFromBLL);
+                }
+                return Content("notfound");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
 
         [HttpPost("findUsername")]
         public async Task<IActionResult> FindUsername(string username)

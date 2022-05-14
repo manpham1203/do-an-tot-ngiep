@@ -11,7 +11,7 @@ import Ordered from "../../../components/UserInfo/Ordered";
 import PurchasedProduct from "../../../components/UserInfo/PurchasedProduct";
 
 const data = [
-  "thông tin cá nhân",
+  // "thông tin cá nhân",
   "sửa thông tin",
   "đổi mật khẩu",
   "quản lý đơn hàng",
@@ -60,7 +60,7 @@ function Account(props) {
             </div>
           </div>
           <div className="w-full flex">
-            {tab === 0 && <Info />}
+            {/* {tab === 0 && <Info />} */}
             {tab === 1 && <EditInfo />}
             {tab === 2 && <ChangePassword />}
             {tab === 3 && <OrderList userId={user.id} />}

@@ -42,6 +42,10 @@ function SideBar(props) {
       title: "Người dùng",
       icon: iconParent,
     },
+    {
+      title: "Liên Hệ",
+      icon: iconParent,
+    },
   ];
   const ProductTab = [
     {
@@ -157,6 +161,13 @@ function SideBar(props) {
       icon: iconchild,
     },
   ];
+  const ContactTab = [
+    {
+      title: "Danh Sách",
+      path: "lien-he/danh-sach",
+      icon: iconchild,
+    },
+  ];
   const handleClick = (i) => {
     if (tab === i) {
       return setTab(null);
@@ -188,7 +199,7 @@ function SideBar(props) {
           </h1>
         </div>
         <NavLink
-          to="/admin/dashboard"
+          to="/admin"
           className={`text-[#343a40] bg-[#EBECEC] mt-6 relative flex justify-between h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointertext-gray-300 text-sm items-center gap-x-4`}
         >
           <div className="flex flex-row items-center">
@@ -453,6 +464,44 @@ function SideBar(props) {
               {tab === 4 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
                   {BannerTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 7 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {ContactTab.map((p, i) => {
                     return (
                       <li key={i} onClick={() => setTabMenu(i)}>
                         <NavLink
