@@ -353,5 +353,16 @@ namespace BLL.Category
             }
         }
 
+        public async Task<List<CategoryChartVM>> CategoryChart()
+        {
+            try
+            {
+                return await categoryDAL.CategoryChart();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

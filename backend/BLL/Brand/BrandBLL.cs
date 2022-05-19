@@ -342,5 +342,17 @@ namespace BLL
                 return null;
             }
         }
+    
+        public async Task<List<BrandChartVM>> BrandChart()
+        {
+            try
+            {
+                return await brandDAL.BrandChart();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

@@ -81,5 +81,29 @@ namespace DAL.Contact
                 return null;
             }
         }
+    
+        public async Task<List<ContactVM>> ContactToday()
+        {
+            try
+            {
+                var resultFromDb = await db.Contacts
+                    .Where(x => x.CreatedAt.Day == DateTime.Today.Day 
+                        && x.CreatedAt.Month == DateTime.Today.Month 
+                        && x.CreatedAt.Year == DateTime.Today.Year)
+                    .OrderByDescending(x => x.CreatedAt).ToListAsync();
+                return resultFromDb.Select(x => new ContactVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Content = x.Content,
+                    Email = x.Email,
+                    CreatedAt = x.CreatedAt,
+                }).ToList();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

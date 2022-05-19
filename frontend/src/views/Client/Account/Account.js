@@ -61,12 +61,12 @@ function Account(props) {
           </div>
           <div className="w-full flex">
             {/* {tab === 0 && <Info />} */}
-            {tab === 1 && <EditInfo />}
-            {tab === 2 && <ChangePassword />}
-            {tab === 3 && <OrderList userId={user.id} />}
-            {tab === 4 && <OrderCancel userId={user.id} />}
-            {tab === 5 && <Ordered userId={user.id} />}
-            {tab === 6 && <PurchasedProduct userId={user.id} />}
+            {tab === 0 && <EditInfo />}
+            {tab === 1 && <ChangePassword />}
+            {tab === 2 && <OrderList userId={user.id} />}
+            {tab === 3 && <OrderCancel userId={user.id} />}
+            {tab === 4 && <Ordered userId={user.id} />}
+            {tab === 5 && <PurchasedProduct userId={user.id} />}
           </div>
         </div>
       )}

@@ -3,6 +3,8 @@ using BLL.Product;
 using BO.ViewModels.Order;
 using BO.ViewModels.OrderDetail;
 using DAL.Order;
+using MailKit.Net.Smtp;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -236,6 +238,7 @@ namespace BLL.Order
             try
             {
                 var checkId = await GetbyId(id);
+
                 if (checkId == null)
                 {
                     return false;
@@ -244,6 +247,57 @@ namespace BLL.Order
                 if (result == false)
                 {
                     return false;
+                }
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Admin", "datn.test1@gmail.com"));
+                message.To.Add(new MailboxAddress("Client", checkId.DeliveryEmail));
+                message.Subject = "Trạng thái đơn hàng thay đổi";
+                //message.Body = new TextPart("plain")
+                //{
+                //    Text="hello",                    
+                //};
+                message.Body = new TextPart();
+                switch (State)
+                {
+                    case 0:
+                        message.Body = new TextPart()
+                        {
+                            Text = "Đơn hàng của bạn đã bị huỷ",
+                        };
+                        break;
+                    case 1:
+                        message.Body = new TextPart()
+                        {
+                            Text = "Đơn hàng của bạn đang chờ xác nhận",
+                        };
+                        break;
+                    case 2:
+                        message.Body = new TextPart()
+                        {
+                            Text = "Đơn hàng của bạn đã được xác nhận, đang chuẩn bị hàng",
+                        };
+                        break;
+                    case 3:
+                        message.Body = new TextPart()
+                        {
+                            Text = "Đơn hàng của bạn đã giao cho đơn vị vận chuyển",
+                        };
+                        break;
+                    case 4:
+                        message.Body = new TextPart()
+                        {
+                            Text = "Đơn hàng của bạn đã giao thành công",
+                        };
+                        break;
+                    default:
+                        break;
+                }
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("datn.test1@gmail.com", "phamminhman");
+                    client.Send(message);
+                    client.Disconnect(true);
                 }
                 return true;
             }
@@ -258,7 +312,7 @@ namespace BLL.Order
             try
             {
                 var resultFromDAL = await orderDAL.AdminGetByState(state);
-                
+
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -349,6 +403,54 @@ namespace BLL.Order
                     TotalPage = totalPage,
                     TotalResult = count,
                 };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<OrderChartVM>> OrderChart()
+        {
+            try
+            {
+                var resultFromDAL = await orderDAL.OrderChart();
+                var chart = new List<OrderChartVM>();
+
+                for (int i = 1; i <= 12; i++)
+                {
+                    var t1 = resultFromDAL.Where(x => x.CreatedAt.Month == i).ToList();
+                    //var now = t1.Where(x => x.CreatedAt.Year == DateTime.Today.Year
+                    //&& x.CreatedAt.Month==DateTime.Today.Month).ToList();
+                    
+                    if (t1.Count == 0)
+                    {
+
+                        chart.Add(new OrderChartVM
+                        {
+                            Id = i,
+                            Name = "Tháng " + i,
+                            Value = null
+                        });
+                    }
+                    else
+                    {
+                        //var now = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+                        //var check = t1.Where(x => x.CreatedAt.Month > now.Month && x.CreatedAt.Year >= now.Year).ToList();
+                        //if (check.Count == 0)
+                        //{
+                        //    continue;
+                        //}
+                        chart.Add(new OrderChartVM
+                        {
+                            Id = i,
+                            Name = "Tháng " + i,
+                            Value = t1.Sum(x => x.Amount)
+                        });
+                    }
+
+                }
+                return chart;
             }
             catch
             {

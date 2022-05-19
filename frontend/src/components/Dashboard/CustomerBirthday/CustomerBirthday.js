@@ -10,6 +10,7 @@ import Tbody from "../../Table/Tbody";
 import Td from "../../Table/Td";
 import * as moment from "moment";
 import "moment/locale/nl";
+import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
 const dateOptions = [
   { value: 1, label: "Sinh nhật vừa qua" },
@@ -59,7 +60,7 @@ const colourStyles = {
   }),
 };
 function CustomerBirthday(props) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
   const [dateType, setDateType] = useState(null);
 
@@ -67,14 +68,19 @@ function CustomerBirthday(props) {
     await api({
       method: "GET",
       url: `/user/GetListBirthday`,
-        params: {
-          currentPage: currentPage,
-          type: dateType?.value,
-        },
+      params: {
+        currentPage: currentPage,
+        type: dateType?.value,
+      },
     })
       .then((res) => {
         if (res.status === 200) {
-          setData(res.data);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.data,
+          });
         }
       })
       .catch(() => console.log("fail"));
@@ -82,12 +88,24 @@ function CustomerBirthday(props) {
   useEffect(() => {
     fetchData();
   }, [currentPage, dateType]);
+  const [tab, setTab] = useState(true);
   return (
-    <div className="w-full p-[20px] bg-white shadow-admin rounded-[8px]">
-      <div className="flex flex-row justify-between items-center  mb-[20px]">
-        <h2 className="text-[20px]">Khách Hàng Có Sinh Nhật Gần Đây</h2>
-        <div className="flex flex-row gap-x-[20px] items-center">
-          <span>Lọc Sinh Nhật: </span>
+    <div className="w-full  bg-white shadow-admin rounded-[8px]">
+      <div
+        className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
+          tab && "shadow-admin"
+        }`}
+        onClick={() => setTab(!tab)}
+      >
+        <h2 className="text-[20px]">
+          Khách hàng có sinh nhật gần đây{" "}
+          <span className="text-red-500">({data.totalResult})</span>
+        </h2>{" "}
+        {tab ? <BsDashLg /> : <BsPlusLg />}
+      </div>
+      <div className={`w-full p-[20px] ${!tab && "hidden"}`}>
+        <div className="flex flex-row gap-x-[20px] items-center mb-[20px]">
+          <span>Lọc sinh nhật: </span>
           <Select
             className=" cursor-pointer "
             classNamePrefix="select"
@@ -102,36 +120,39 @@ function CustomerBirthday(props) {
             placeholder="Lọc sinh nhật"
           />
         </div>
-      </div>
-
-      <Table className="w-full">
-        <Thead>
-          <Tr>
-            <Th>Tên khách hàng</Th>
-            <Th>Email</Th>
-            <Th>Ngày sinh</Th>
-            <Th>Hành động</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data?.data?.map((item) => {
-            return (
-              <Tr>
-                <Td className="pl-[20px]">{item.lastName+" "+item.firstName}</Td>
-                <Td className="text-center">{item.email}</Td>
-                <Td className="text-center">{moment(item.birthday).format("DD-MM-yyyy")}</Td>
-                <Td></Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-      <div className="mt-[20px]">
-        <Pagination
-          setCurrentPage={setCurrentPage}
-          totalPage={data?.totalPage}
-          itemsPerPage={data?.data?.length}
-        />
+        <Table className="w-full">
+          <Thead>
+            <Tr>
+              <Th>Tên khách hàng</Th>
+              <Th>Email</Th>
+              <Th>Ngày sinh</Th>
+              <Th>Hành động</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.data?.map((item) => {
+              return (
+                <Tr>
+                  <Td className="pl-[20px]">
+                    {item.lastName + " " + item.firstName}
+                  </Td>
+                  <Td className="text-center">{item.email}</Td>
+                  <Td className="text-center">
+                    {moment(item.birthday).format("DD-MM-yyyy")}
+                  </Td>
+                  <Td></Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+        <div className="mt-[20px]">
+          <Pagination
+            setCurrentPage={setCurrentPage}
+            totalPage={data?.totalPage}
+            itemsPerPage={data?.data?.length}
+          />
+        </div>
       </div>
     </div>
   );

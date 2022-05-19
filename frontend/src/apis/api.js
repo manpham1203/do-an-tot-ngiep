@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 export default axios.create({
-    baseURL:"https://datn-manpham.herokuapp.com/api"
-})
+  baseURL: "http://localhost:23983/api",
+});

@@ -253,5 +253,23 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("orderchart")]
+        public async Task<IActionResult> OrderChart()
+        {
+            try
+            {
+                var resultFromBLL = await orderBLL.OrderChart();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -105,5 +105,53 @@ namespace BLL.Contact
                 return null;
             }
         }
+    
+        public async Task<ContactPaginationVM> ContactToday(int currentPage, int limit, string email, string name, string content)
+        {
+            try
+            {
+                var resultFromDAL = await contactDAL.ContactToday();
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new ContactPaginationVM
+                    {
+                        TotalPage = 0,
+                        TotalResult = 0,
+                        ContactVMs = new List<ContactVM>(),
+                    };
+                }
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    resultFromDAL = resultFromDAL.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+                }
+                if (!string.IsNullOrEmpty(name))
+                {
+                    resultFromDAL = resultFromDAL.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+                }
+                if (!string.IsNullOrEmpty(content))
+                {
+                    resultFromDAL = resultFromDAL.Where(x => x.Content.ToLower().Contains(content.ToLower())).ToList();
+                }
+
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+                return new ContactPaginationVM
+                {
+                    TotalResult = count,
+                    TotalPage = totalPage,
+                    ContactVMs = resultFromDAL,
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

@@ -412,5 +412,23 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("brandchart")]
+        public async Task<IActionResult> BrandChart()
+        {
+            try
+            {
+                var resultFromBLL = await brandBLL.BrandChart();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

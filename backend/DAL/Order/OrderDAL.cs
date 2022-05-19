@@ -312,13 +312,13 @@ namespace DAL.Order
         {
             try
             {
-                //var todaysDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
                 var resultFromDb = await db.Orders
                     .Where(x => x.CreatedAt.Year == DateTime.Today.Year
                         && x.CreatedAt.Month == DateTime.Today.Month
                         && x.CreatedAt.Day == DateTime.Today.Day)
                     .OrderByDescending(x => x.CreatedAt)
                     .ToListAsync();
+
                 if (state.HasValue)
                 {
                     resultFromDb = resultFromDb.Where(x => x.State == state).ToList();
@@ -344,6 +344,33 @@ namespace DAL.Order
                     OrderDetailVMs = new List<OrderDetailVM>()
                 }).ToList();
                 return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
+        public async Task<List<OrderVM>> OrderChart()
+        {
+            try
+            {
+                var resultFromDb = await db.Orders.Where(x => x.CreatedAt.Year == DateTime.Today.Year).ToListAsync();
+                return resultFromDb.Select(x => new OrderVM
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    Amount = x.Amount,
+                    State = x.State,
+                    Discount = x.Discount,
+                    DeliveryAddress = x.DeliveryAddress,
+                    DeliveryEmail = x.DeliveryEmail,
+                    DeliveryPhone = x.DeliveryPhone,
+                    CreatedAt = x.CreatedAt,
+                    OrderDetailVMs = null,
+                    FirstName = x.FirstName,
+                    LastName = x.FirstName,
+                }).ToList();
             }
             catch
             {

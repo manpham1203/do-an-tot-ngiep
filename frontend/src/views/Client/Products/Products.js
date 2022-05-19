@@ -291,7 +291,7 @@ function Products(props) {
   }, []);
   useEffect(() => {
     fetchData();
-  }, [arrBrand, arrCategory]);
+  }, [arrBrand, arrCategory, query]);
   useEffect(() => {
     fetchDataBrand();
     fetchDataCategory();
@@ -490,7 +490,7 @@ function Products(props) {
             </div>
           </div>
 
-          <div className="flex-[1] border-t border-gray-200">
+          <div className="flex-[1] border-t border-gray-200 ">
             <div
               className="cursor-pointer w-full flex flex-row justify-between h-[50px] items-center"
               onClick={() =>
@@ -522,6 +522,9 @@ function Products(props) {
                     </li>
                   );
                 })}
+              <li className="hover:underline underline-offset-4 cursor-pointer mb-[25px]">
+                <p className="text-right font-light">Bỏ các lựa chọn</p>
+              </li>
             </ul>
           </div>
           <div className="w-full border-t border-gray-200">

@@ -12,15 +12,8 @@ namespace BO
 {
     public class AppDbContext : DbContext
     {
-        //string conStr;
-        public AppDbContext()
-        {
-
-        }
-        //public AppDbContext(DbContextOptions options) : base(options) { }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
+        public AppDbContext() { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfigurationBuilder config = new ConfigurationBuilder();
@@ -28,9 +21,6 @@ namespace BO
             var root = config.Build();
             var conStr = root.GetConnectionString("MyDb");
             optionsBuilder.UseSqlServer(conStr);
-            //conStr = ConfigurationManager.ConnectionStrings["MyDb"].ConnectionString;
-            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-ABENUK5\\SQLEXPRESS;Database=KhoaLuanTotNghiep;User Id=sa;Password=123456;");
-            //optionsBuilder.UseSqlServer("Data Source=SQL8003.site4now.net;Initial Catalog=db_a86b73_khoaluantotnghiejp;User Id=db_a86b73_khoaluantotnghiejp_admin;Password=m1232001");
         }
         #region DbSet
         public DbSet<Product> Products { get; set; }
@@ -45,7 +35,6 @@ namespace BO
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        //public DbSet<Role> Roles { get; set; }
 
         public DbSet<ProductCategory> Product_Category_Mappings { get; set; }
         #endregion

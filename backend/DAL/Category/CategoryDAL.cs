@@ -444,5 +444,24 @@ namespace DAL.Category
             }
         }
 
+        public async Task<List<CategoryChartVM>> CategoryChart()
+        {
+            try
+            {
+                var resultFromDb = await db.Categories.Where(x => x.Deleted == false).ToListAsync();
+                var result = resultFromDb.Join(db.Product_Category_Mappings, c => c.Id, pc => pc.CategoryId, (c, pc) => new { c, pc })
+                    .GroupBy(x => x.c.Id).Select(x => new CategoryChartVM
+                    {
+                        Id = x.Key,
+                        Name = x.First().c.Name,
+                        ProductQty = x.Count()
+                    }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

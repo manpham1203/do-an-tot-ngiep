@@ -53,5 +53,27 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("ContactToday")]
+        public async Task<IActionResult> ContactToday(string email, string name, string content, int currentPage = 1, int limit = 10)
+        {
+            try
+            {
+                var resultFromBLL = await contactBLL.ContactToday(currentPage, limit, email, name, content);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.TotalResult >= 0)
+                {
+                    return Ok(resultFromBLL);
+                }
+                return BadRequest();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

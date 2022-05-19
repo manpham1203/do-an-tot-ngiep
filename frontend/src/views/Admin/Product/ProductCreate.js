@@ -47,10 +47,10 @@ const schema = yup
       .string()
       .required("Thông tin này không được để trống")
       .trim(),
-    fullDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
+    // fullDescription: yup
+    //   .string()
+    //   .required("Thông tin này không được để trống")
+    //   .trim(),
   })
   .required();
 function ProductCreate(props) {
@@ -60,6 +60,7 @@ function ProductCreate(props) {
     reset,
     setValue,
     getValues,
+    register,
     formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
     control,
   } = useForm({
@@ -73,11 +74,11 @@ function ProductCreate(props) {
   });
 
   const onSubmitHandler = async (values) => {
+    
     if (files.length === 0) {
       setValidImg(false);
       return;
     }
-    console.log(values);
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("FullDescription", values.fullDescription);
@@ -170,7 +171,7 @@ function ProductCreate(props) {
     });
     setImage([]);
     setFiles([]);
-    setRichText("");
+    setRichText();
     setValidImg(true);
     setBrandSelected(null);
     setCategorySelected([]);
@@ -183,6 +184,8 @@ function ProductCreate(props) {
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
+  console.log(richText);
+  console.log(errors);
 
   const fetchDataCategory = async () => {
     return await api({
@@ -393,13 +396,6 @@ function ProductCreate(props) {
               data={richText}
             />
           </div>
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
         </div>
         <div>
           <AddListImage

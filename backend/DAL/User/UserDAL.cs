@@ -228,11 +228,11 @@ namespace DAL.User
                 var dateStart = dateToday.AddDays(-10);
                 var dateEnd = dateToday.AddDays(+30);
 
-
                 var resultFromDb = await db.Users
                     .Where(x => x.Birthday.Value.DayOfYear > dateStart.DayOfYear
                     && x.Birthday.Value.DayOfYear < dateEnd.DayOfYear)
                     .ToListAsync();
+
                 if (resultFromDb.Count == 0)
                 {
                     return new List<UserVM>();

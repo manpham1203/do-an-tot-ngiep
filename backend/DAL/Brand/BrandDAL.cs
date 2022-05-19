@@ -473,5 +473,36 @@ namespace DAL.Brand
                 return null;
             }
         }
+    
+        public async Task<List<BrandChartVM>> BrandChart()
+        {
+            try
+            {
+                //var resultFromDb = await (from b in db.Brands join p in db.Products on b.Id equals p.BrandId
+                //                          where b.Deleted==false
+                //                          select new BrandChartVM
+                //                          {
+                //                              Id=b.Id,
+                //                              Name=b.Name,
+                //                              ProductQty=p.
+                //                          }
+                //                          ).ToListAsync();
+                var resultFromDb = await db.Brands.Where(x => x.Deleted == false).ToListAsync();
+
+                var result = resultFromDb.Where(x => x.Deleted == false)
+                    .Join(db.Products, b=>b.Id, p=>p.BrandId,(b,p)=>new {b,p})
+                    .GroupBy(x=>x.b.Id).Select(x=>new BrandChartVM
+                    {
+                        Id=x.Key,
+                        Name=x.First().b.Name,
+                        ProductQty=x.Count()
+                    }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

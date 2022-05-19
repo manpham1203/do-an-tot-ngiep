@@ -346,5 +346,23 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("categorychart")]
+        public async Task<IActionResult> CategoryChart()
+        {
+            try
+            {
+                var resultFromBLL = await categoryBLL.CategoryChart();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

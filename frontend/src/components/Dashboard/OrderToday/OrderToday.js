@@ -8,6 +8,7 @@ import Thead from "../../Table/Thead";
 import Tr from "../../Table/Tr";
 import Th from "../../Table/Th";
 import Tbody from "../../Table/Tbody";
+import { BsPlusLg, BsDashLg } from "react-icons/bs";
 
 const orderOptions = [
   { value: 1, label: "Chờ xác nhận", color: "#2F4B60" },
@@ -69,7 +70,7 @@ const colourStyles = {
   },
 };
 function ProductCmt(props) {
-  const [data, setData] = useState();
+  const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [orderStatus, setOrderStatus] = useState(null);
@@ -85,7 +86,12 @@ function ProductCmt(props) {
     })
       .then((res) => {
         if (res.status === 200) {
-          setData(res.data);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.orderVMs,
+          });
         }
       })
       .catch(() => console.log("fail"));
@@ -93,11 +99,22 @@ function ProductCmt(props) {
   useEffect(() => {
     fetchData();
   }, [currentPage, limit, orderStatus]);
+  const [tab, setTab] = useState(true);
+  console.log("ff", data);
+
   return (
-    <div className="w-full p-[20px] bg-white shadow-admin rounded-[8px]">
-      <div className="flex flex-row justify-between items-center  mb-[20px]">
-        <h2 className="text-[20px]">Đơn hàng hôm nay</h2>
-        <div className="flex flex-row gap-x-[20px] items-center">
+    <div className="w-full bg-white shadow-admin rounded-[8px]">
+      <div
+        className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
+          tab && "shadow-admin"
+        }`}
+        onClick={() => setTab(!tab)}
+      >
+        <h2 className="text-[20px]">Đơn hàng hôm nay <span className="text-red-500">({data.totalResult})</span></h2>
+        {tab ? <BsDashLg /> : <BsPlusLg />}
+      </div>
+      <div className={`w-full p-[20px] ${!tab && "hidden"}`}>
+        <div className="flex flex-row gap-x-[20px] items-center mb-[20px]">
           <span>Lọc Đơn Hàng: </span>
           <Select
             className=" cursor-pointer "
@@ -113,32 +130,27 @@ function ProductCmt(props) {
             placeholder="Tình trạng đơn hàng"
           />
         </div>
-      </div>
-
-      <Table className="border-collapse w-full ">
-        <Thead>
-          <Tr>
-            <Th className="">Mã Đơn hàng</Th>
-            <Th className="w-[300px] ">
-              Tình trạng
-            </Th>
-            <Th >
-              Hành động
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data?.orderVMs?.map((item) => {
-            return <Row key={item.id} id={item.id} />;
-          })}
-        </Tbody>
-      </Table>
-      <div className="mt-[20px]">
-        <Pagination
-          setCurrentPage={setCurrentPage}
-          totalPage={data?.totalPage}
-          itemsPerPage={data?.orders?.length}
-        />
+        <Table className="border-collapse w-full ">
+          <Thead>
+            <Tr>
+              <Th className="">Mã Đơn hàng</Th>
+              <Th className="w-[300px] ">Tình trạng</Th>
+              <Th>Hành động</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.data?.map((item) => {
+              return <Row key={item.id} id={item.id} />;
+            })}
+          </Tbody>
+        </Table>
+        <div className="mt-[20px]">
+          <Pagination
+            setCurrentPage={setCurrentPage}
+            totalPage={data?.totalPage}
+            itemsPerPage={data?.orders?.length}
+          />
+        </div>
       </div>
     </div>
   );
