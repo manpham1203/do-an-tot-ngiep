@@ -46,20 +46,20 @@ function PostCmt(props) {
     };
     dispatchQV(setOpenadminViewCmt(obj));
   };
-  const [tab, setTab] = useState(true);
+  const [show, setShow] = useState(true);
   return (
     <div className="w-full bg-white shadow-admin rounded-[8px]">
       <div
         className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
-          tab && "shadow-admin"
+          show && "shadow-admin"
         }`}
-        onClick={() => setTab(!tab)}
+        onClick={() => setShow(!show)}
       >
         <h2 className="text-[20px]">Bình luận bài viết</h2>
-        {tab ? <BsDashLg /> : <BsPlusLg />}
+        {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
 
-      <div className={`w-full p-[20px] ${!tab && "hidden"}`}>
+      <div className={`w-full p-[20px] ${!show && "hidden"}`}>
         <Table className="border-collapse w-full ">
           <Thead>
             <Tr>

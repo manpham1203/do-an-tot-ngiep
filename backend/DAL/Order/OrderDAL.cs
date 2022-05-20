@@ -351,11 +351,11 @@ namespace DAL.Order
             }
         }
     
-        public async Task<List<OrderVM>> OrderChart()
+        public async Task<List<OrderVM>> OrderChart(int year)
         {
             try
             {
-                var resultFromDb = await db.Orders.Where(x => x.CreatedAt.Year == DateTime.Today.Year).ToListAsync();
+                var resultFromDb = await db.Orders.Where(x => x.CreatedAt.Year == year && x.State==4).ToListAsync();
                 return resultFromDb.Select(x => new OrderVM
                 {
                     Id = x.Id,
@@ -377,5 +377,7 @@ namespace DAL.Order
                 return null;
             }
         }
+    
+        
     }
 }

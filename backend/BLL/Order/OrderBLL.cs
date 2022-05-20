@@ -409,48 +409,116 @@ namespace BLL.Order
                 return null;
             }
         }
-
-        public async Task<List<OrderChartVM>> OrderChart()
+        //public async Task<List<int?>> ListYear()
+        //{
+        //    try
+        //    {
+        //        var resultFromDb=await orderDAL.FirstYear();
+        //        if (resultFromDb == 0)
+        //        {
+        //            return new List<int?>();
+        //        }
+        //        if (resultFromDb == null)
+        //        {
+        //            return null;
+        //        }
+        //        var listYear = new List<int?>();
+        //        for(int? i = resultFromDb; i <= DateTime.Today.Year; i++)
+        //        {
+        //            listYear.Add(i);
+        //        }
+        //        return listYear;
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+        public async Task<List<OrderChartVM>> OrderChart(int year)
         {
             try
             {
-                var resultFromDAL = await orderDAL.OrderChart();
+                var currentYear = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+                var resultFromDAL = await orderDAL.OrderChart(year);//all order in current year
                 var chart = new List<OrderChartVM>();
 
                 for (int i = 1; i <= 12; i++)
                 {
                     var t1 = resultFromDAL.Where(x => x.CreatedAt.Month == i).ToList();
-                    //var now = t1.Where(x => x.CreatedAt.Year == DateTime.Today.Year
-                    //&& x.CreatedAt.Month==DateTime.Today.Month).ToList();
-                    
-                    if (t1.Count == 0)
-                    {
 
+                    if (i < 4 && year == 2020)
+                    {
                         chart.Add(new OrderChartVM
                         {
                             Id = i,
-                            Name = "Tháng " + i,
+                            Month = "Th " + i,
                             Value = null
+                        });
+                        continue;
+                    }
+
+                    if (i > currentYear.Month && year == currentYear.Year)
+                    {
+                        chart.Add(new OrderChartVM
+                        {
+                            Id = i,
+                            Month = "Th " + i,
+                            Value = null
+                        });
+                        continue;
+                    }
+
+                    if (t1.Count == 0)
+                    {
+                        chart.Add(new OrderChartVM
+                        {
+                            Id = i,
+                            Month = "Th " + i,
+                            Value = 0
                         });
                     }
                     else
                     {
-                        //var now = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
-                        //var check = t1.Where(x => x.CreatedAt.Month > now.Month && x.CreatedAt.Year >= now.Year).ToList();
-                        //if (check.Count == 0)
-                        //{
-                        //    continue;
-                        //}
                         chart.Add(new OrderChartVM
                         {
                             Id = i,
-                            Name = "Tháng " + i,
+                            Month = "Th " + i,
                             Value = t1.Sum(x => x.Amount)
                         });
                     }
 
                 }
                 return chart;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    
+        public async Task<List<CompareOrderChartVM>> CompareOrderChart(List<int> years)
+        {
+            try
+            {
+                if (years.Count > 0)
+                {
+                    var tempList = years.Distinct().ToList();
+                    tempList = tempList.OrderBy(x => x).ToList();
+                    var list=new List<CompareOrderChartVM>();
+                    for(int i=0; i < tempList.Count(); i++)
+                    {
+                        var data = await OrderChart(tempList[i]);
+                        var name = tempList[i].ToString();
+                        list.Add(new CompareOrderChartVM
+                        {
+                            Id=i,
+                            Year = name,
+                            Data = data,
+                        });
+                    }
+                    return list;
+                }
+                return new List<CompareOrderChartVM>();
             }
             catch
             {

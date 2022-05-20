@@ -195,7 +195,7 @@ function SideBar(props) {
               !open && "scale-0"
             }`}
           >
-            Designer
+            Phạm Minh Mẫn
           </h1>
         </div>
         <NavLink

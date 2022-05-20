@@ -28,14 +28,19 @@ function BrandChart(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  const [tab, setTab] = useState(false);
+  const [show, setShow] = useState(false);
   return (
     <div className="w-full  bg-white shadow-admin rounded-[8px]">
-      <div className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${tab&&"shadow-admin"}`} onClick={()=>setTab(!tab)}>
+      <div
+        className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
+          show && "shadow-admin"
+        }`}
+        onClick={() => setShow(!show)}
+      >
         <h2 className="text-[20px]">Sản phẩm theo thương hiệu</h2>{" "}
-        {tab ? <BsDashLg /> : <BsPlusLg />}
+        {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
-      <div className={`${!tab&&"hidden"} p-[20px]`}>
+      <div className={`${!show && "hidden"} p-[20px]`}>
         <ResponsiveContainer width={500} height={300}>
           <PieChart layout="horizontal">
             <Pie

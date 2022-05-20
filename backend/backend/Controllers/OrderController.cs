@@ -255,11 +255,11 @@ namespace backend.Controllers
         }
     
         [HttpGet("orderchart")]
-        public async Task<IActionResult> OrderChart()
+        public async Task<IActionResult> OrderChart(int year)
         {
             try
             {
-                var resultFromBLL = await orderBLL.OrderChart();
+                var resultFromBLL = await orderBLL.OrderChart(year);
                 if (resultFromBLL == null)
                 {
                     return BadRequest();
@@ -271,5 +271,24 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("CompareOrderChart")]
+        public async Task<IActionResult> CompareOrderChart(List<int> years)
+        {
+            try
+            {
+                var resultFromBLL = await orderBLL.CompareOrderChart(years);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

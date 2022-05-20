@@ -31,49 +31,48 @@ function CategoryChart(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  const [tab, setTab] = useState(false);
+  const [show, setShow] = useState(false);
   return (
     <div className="w-full bg-white shadow-admin rounded-[8px]">
-      <div className={`p-[20px] ${tab&&"shadow-admin"}  rounded-[8px] flex flex-row justify-between items-center cursor-pointer`} onClick={()=>setTab(!tab)}>
+      <div
+        className={`p-[20px] ${
+          show && "shadow-admin"
+        }  rounded-[8px] flex flex-row justify-between items-center cursor-pointer`}
+        onClick={() => setShow(!show)}
+      >
         <h2 className="text-[20px]">Sản phẩm theo danh mục</h2>{" "}
-        {tab ? <BsDashLg /> : <BsPlusLg />}
+        {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
-      <div className={`${!tab&&"hidden"} p-[20px]`}>
+      <div className={`${!show && "hidden"} p-[20px]`}>
         <ResponsiveContainer width="100%" height={400}>
-        <BarChart
-          layout="horizontal"
-          data={data}
-          barSize={10}
-        >
-          <XAxis type="category" dataKey="name" hide />
-          <YAxis type="number" />
-          <Tooltip />
-          <Legend
-            layout="vertical"
-            verticalAlign="middle"
-            align="right"
-            payload={data.map((item, index) => ({
-              id: item.id,
-              type: "square",
-              value: `${item.name} (${item.productQty})`,
-              color: Colors[index],
-            }))}
-          />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Bar
-            
-            dataKey="productQty"
-            fill="#8884d8"
-            background={{ fill: "#eee" }}
-          >
-            {data.map((item, index) => {
-              return <Cell key={`cell-${index}`} fill={Colors[index]} />;
-            })}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+          <BarChart layout="horizontal" data={data} barSize={10}>
+            <XAxis type="category" dataKey="name" hide />
+            <YAxis type="number" />
+            <Tooltip />
+            <Legend
+              layout="vertical"
+              verticalAlign="middle"
+              align="right"
+              payload={data.map((item, index) => ({
+                id: item.id,
+                type: "square",
+                value: `${item.name} (${item.productQty})`,
+                color: Colors[index],
+              }))}
+            />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Bar
+              dataKey="productQty"
+              fill="#8884d8"
+              background={{ fill: "#eee" }}
+            >
+              {data.map((item, index) => {
+                return <Cell key={`cell-${index}`} fill={Colors[index]} />;
+              })}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-      
     </div>
   );
 }

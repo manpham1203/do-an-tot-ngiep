@@ -88,22 +88,22 @@ function CustomerBirthday(props) {
   useEffect(() => {
     fetchData();
   }, [currentPage, dateType]);
-  const [tab, setTab] = useState(true);
+  const [show, setShow] = useState(true);
   return (
     <div className="w-full  bg-white shadow-admin rounded-[8px]">
       <div
         className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
-          tab && "shadow-admin"
+          show && "shadow-admin"
         }`}
-        onClick={() => setTab(!tab)}
+        onClick={() => setShow(!show)}
       >
         <h2 className="text-[20px]">
           Khách hàng có sinh nhật gần đây{" "}
           <span className="text-red-500">({data.totalResult})</span>
         </h2>{" "}
-        {tab ? <BsDashLg /> : <BsPlusLg />}
+        {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
-      <div className={`w-full p-[20px] ${!tab && "hidden"}`}>
+      <div className={`w-full p-[20px] ${!show && "hidden"}`}>
         <div className="flex flex-row gap-x-[20px] items-center mb-[20px]">
           <span>Lọc sinh nhật: </span>
           <Select

@@ -46,19 +46,19 @@ function ContactToday(props) {
   useEffect(() => {
     fetchData();
   }, [query, currentPage]);
-  const [tab, setTab] = useState(false);
+  const [show, setShow] = useState(false);
   return (
     <div className="w-full  bg-white shadow-admin rounded-[8px]">
       <div
         className={`p-[20px] flex flex-row justify-between items-center cursor-pointer rounded-[8px] ${
-          tab && "shadow-admin"
+          show && "shadow-admin"
         }`}
-        onClick={() => setTab(!tab)}
+        onClick={() => setShow(!show)}
       >
         <h2 className="text-[20px]">Liên hệ hôm nay <span className="text-red-500">({data.totalResult})</span></h2>
-        {tab ? <BsDashLg /> : <BsPlusLg />}
+        {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
-      <div className={`${!tab&&"hidden"} p-[20px]`}>
+      <div className={`${!show&&"hidden"} p-[20px]`}>
         <div className="flex flex-row gap-x-[20px]">
           <div className="inline-flex flex-col w-[250px] mb-[20px]">
             <label

@@ -9,7 +9,7 @@ namespace BO.ViewModels.Order
     public class OrderChartVM
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Month { get; set; }
         public Decimal? Value { get; set; }
     }
 }

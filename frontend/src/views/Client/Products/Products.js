@@ -255,25 +255,6 @@ function Products(props) {
       .catch(() => console.log("category fail"));
   };
 
-  // useEffect(() => {
-  //   if (priceRange === null) {
-  //     setSearchPrams({
-  //       brand: arrBrand,
-  //       category: arrCategory,
-  //     });
-  //   } else {
-  //     console.log("day");
-  //     setSearchPrams({
-  //       brand: arrBrand,
-  //       category: arrCategory,
-  //       gia: priceRange.value,
-  //     });
-  //   }
-  // }, []);
-  // useEffect(() => {
-
-  // }, []);
-
   useEffect(() => {
     setArrBrand(brandSlugs);
     setArrCategory(categorySlugs);
@@ -372,15 +353,6 @@ function Products(props) {
       }
     }
   }, []);
-
-  // useEffect(() => {
-  //   for (var i = 0; i < priceOptions.length; i++) {
-  //     if (price === priceOptions[i].value) {
-  //       setPriceRange(priceOptions[i]);
-  //     }
-  //   }
-  // }, [price]);
-  console.log(priceRange);
 
   return (
     <div className="container mx-auto flex flex-col">

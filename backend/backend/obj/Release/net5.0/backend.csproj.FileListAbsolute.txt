@@ -224,3 +224,8 @@ D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Photos\w
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Photos\ydw4w3vaw6es220514071622705.jpg
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Photos\adssds220514103315457.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Photos\12312220516123709610.jpeg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\Photos\adadadada220516122816299.jpeg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\MailKit.dll
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\MimeKit.dll
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Release\net5.0\BouncyCastle.Crypto.dll
