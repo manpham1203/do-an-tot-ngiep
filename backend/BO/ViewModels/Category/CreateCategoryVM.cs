@@ -12,8 +12,6 @@ namespace BO.ViewModels.Category
     {
         [Required]
         public string Name { get; set; }
-        public string FullDescription { get; set; }
-        public string ShortDescription { get; set; }
         public bool Published { get; set; }
         public IFormFile File { get; set; }
         public string ImageName { get; set; }

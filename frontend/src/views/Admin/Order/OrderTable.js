@@ -10,6 +10,7 @@ import Thead from "../../../components/Table/Thead";
 import Th from "../../../components/Table/Th";
 import Tbody from "../../../components/Table/Tbody";
 import Tr from "../../../components/Table/Tr";
+import ExportExcel from '../../../components/ExportFile/ExportExcel'
 
 const initState = {
   loading: false,
@@ -157,7 +158,7 @@ function OrderTable(props) {
     };
     fetchData();
   }, [query, stateOrder, currentPage]);
-  console.log(currentPage);
+  console.log(state.data);
   return (
     <>
       <div className="bg-white rounded-[8px] p-[20px] shadow-admin">
@@ -256,6 +257,7 @@ function OrderTable(props) {
           </div>
         </div>
       </div>
+      <ExportExcel data={state.data.orders} fileName="DonHang" />
     </>
   );
 }

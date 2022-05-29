@@ -23,13 +23,24 @@ namespace DAL.Contact
                 var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == id);
                 if (resultFromDb == null)
                 {
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             }
             catch
             {
                 return false;
+            }
+        }
+        public async Task<List<string>> GetListId(bool deleted)
+        {
+            try
+            {
+                return await db.Contacts.Where(x=>x.Deleted==deleted).Select(x=>x.Id).ToListAsync();
+            }
+            catch
+            {
+                return null;
             }
         }
         public async Task<bool> Create(ContactVM model)
@@ -39,12 +50,75 @@ namespace DAL.Contact
                 var obj = new BO.Entities.Contact
                 {
                     Id = model.Id,
-                    Name = model.Name,
                     Content = model.Content,
-                    CreatedAt = model.CreatedAt,
-                    Email = model.Email,
+                    Type=model.Type,
+                    Published=model.Published,
+                    Deleted=model.Deleted,
+                    CreatedAt=model.CreatedAt,
+                    UpdatedAt=model.UpdatedAt,
                 };
                 await db.Contacts.AddAsync(obj);
+                var result = await db.SaveChangesAsync();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<ContactVM> GetById(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                return new ContactVM
+                {
+                    Id=resultFromDb.Id,
+                    Content=resultFromDb.Content,
+                    Type=resultFromDb.Type,
+                    Published=resultFromDb.Published,
+                    Deleted=resultFromDb.Deleted,
+                    CreatedAt=resultFromDb.CreatedAt,
+                    UpdatedAt=resultFromDb.UpdatedAt,
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<bool> Delete(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == id);
+                db.Contacts.Remove(resultFromDb);
+                var result = await db.SaveChangesAsync();
+                if (result == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Published(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == id);
+                resultFromDb.Published = !resultFromDb.Published;
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {
@@ -57,52 +131,44 @@ namespace DAL.Contact
                 return false;
             }
         }
-        public async Task<List<ContactVM>> GetAll()
+        public async Task<bool> Deleted(string id)
         {
             try
             {
-                var resultFromDb = await db.Contacts.OrderByDescending(x => x.CreatedAt).ToListAsync();
-                if (resultFromDb.Count == 0)
+                var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == id);
+                resultFromDb.Deleted = !resultFromDb.Deleted;
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
                 {
-                    return new List<ContactVM>();
+                    return true;
                 }
-                var result = resultFromDb.Select(x => new ContactVM
-                {
-                    Id = x.Id,
-                    Name=x.Name,
-                    Content=x.Content,
-                    Email=x.Email,
-                    CreatedAt = x.CreatedAt,
-                }).ToList();
-                return result;
+                return false;
             }
             catch
             {
-                return null;
+                return false;
             }
         }
-    
-        public async Task<List<ContactVM>> ContactToday()
+
+        public async Task<bool> Update(ContactVM model)
         {
             try
             {
-                var resultFromDb = await db.Contacts
-                    .Where(x => x.CreatedAt.Day == DateTime.Today.Day 
-                        && x.CreatedAt.Month == DateTime.Today.Month 
-                        && x.CreatedAt.Year == DateTime.Today.Year)
-                    .OrderByDescending(x => x.CreatedAt).ToListAsync();
-                return resultFromDb.Select(x => new ContactVM
+                var resultFromDb = await db.Contacts.SingleOrDefaultAsync(x => x.Id == model.Id);
+                resultFromDb.Content = model.Content;
+                resultFromDb.Published = model.Published;
+                resultFromDb.UpdatedAt = model.UpdatedAt;
+                resultFromDb.Type = model.Type;
+                var result = await db.SaveChangesAsync();
+                if (result == 0)
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Content = x.Content,
-                    Email = x.Email,
-                    CreatedAt = x.CreatedAt,
-                }).ToList();
+                    return false;
+                }
+                return true;
             }
             catch
             {
-                return null;
+                return false;
             }
         }
     }

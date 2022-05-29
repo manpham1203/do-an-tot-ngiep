@@ -17,6 +17,7 @@ namespace BLL.Post
         private readonly PostDAL postDAL;
         private CommonBLL cm;
         private string objectType="post";
+        private string regex = @"[`!@#$%^&*()_+|\-=\\{}\[\]:"";'<>?,./]";
         public PostBLL()
         {
             postDAL = new PostDAL();
@@ -42,8 +43,8 @@ namespace BLL.Post
                 postId = cm.RandomString(9);
                 checkExists = await CheckExists(postId);
             }
-            var slug = Regex.Replace(model.Title, @"[$&+,:;=?@#|'<>.-^*()%!]", string.Empty);
-            slug = Regex.Replace(cm.RemoveUnicode(model.Title).Trim().ToLower(), @"\s+", "-");
+            var slug = Regex.Replace(model.Title, regex, string.Empty);
+            slug = Regex.Replace(cm.RemoveUnicode(slug).Trim().ToLower(), @"\s+", "-");
 
             if (model.File != null)
             {
@@ -96,7 +97,7 @@ namespace BLL.Post
             {
                 return false;
             }
-            var slug = Regex.Replace(model.Title, @"`!@#$%^&*()-_=+[{]}\\|;:',<.>/?""", string.Empty);
+            var slug = Regex.Replace(model.Title, regex, string.Empty);
             slug = Regex.Replace(cm.RemoveUnicode(model.Title).Trim().ToLower(), @"\s+", "-");
 
 

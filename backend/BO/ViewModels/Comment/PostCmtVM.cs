@@ -15,6 +15,7 @@ namespace BO.ViewModels.Comment
         public string ObjectType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public bool Published { get; set; }
         public string ParentId { get; set; }
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }

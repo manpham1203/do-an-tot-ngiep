@@ -49,6 +49,7 @@ namespace DAL.Comment
                     OrderDetailId = null,
                     CreatedAt = model.CreatedAt,
                     ParentId = model.ParentId,
+                    Published=model.Published,
                 };
                 await db.Comments.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -85,6 +86,7 @@ namespace DAL.Comment
                                               ImageSrc = null,
                                               FullName = u.LastName + " " + u.FirstName,
                                               Children = null,
+                                              Published=cmt.Published
                                           }).SingleOrDefaultAsync();
                 return resultFromDb;
             }
@@ -132,6 +134,7 @@ namespace DAL.Comment
                                   ImageSrc = null,
                                   FullName = u.LastName + " " + u.FirstName,
                                   Children = null,
+                                  Published=cmt.Published
                               }).OrderByDescending(x => x.CreatedAt).ToListAsync();
 
             }

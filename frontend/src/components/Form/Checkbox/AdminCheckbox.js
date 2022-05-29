@@ -22,7 +22,7 @@ function AdminCheckbox({ control, text, ...props }) {
           checked={field.value}
           className="form-checkbox hidden"
         />
-        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-blue-500 flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
           {props.label}
         </span>

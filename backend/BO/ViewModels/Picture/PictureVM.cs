@@ -14,5 +14,6 @@ namespace BO.ViewModels.Picture
         public string ObjectId { get; set; }
         public string ObjectType { get; set; }
         public bool Published { get; set; }
+        public int Order { get; set; }
     }
 }

@@ -72,7 +72,7 @@ function ProductCard2(props) {
       <div className=" w-full">
         <div className="w-full flex flex-col pr-[10px]">
           <h2
-            onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
+            onClick={() => navigate(`/san-pham?thuong-hieu=${props.brandSlug}`)}
             className="font-normal cursor-pointer hover:underline underline-offset-4"
           >
             {props.brandName}

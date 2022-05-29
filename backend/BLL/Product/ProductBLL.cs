@@ -25,6 +25,7 @@ namespace BLL.Product
         private ProductDAL productDAL;
         private CommonBLL cm;
         private string objectType = "product";
+        private string regex = @"[`!@#$%^&*()_+|\-=\\{}\[\]:"";'<>?,./]";
         public ProductBLL()
         {
             productDAL = new ProductDAL();
@@ -71,7 +72,8 @@ namespace BLL.Product
                 productId = cm.RandomString(12);
                 checkIdExists = await GetById(productId);
             }
-            var slug = Regex.Replace(cm.RemoveUnicode(createProductVM.Name).Trim().ToLower(), @"\s+", "-");
+            var slug = Regex.Replace(createProductVM.Name, regex, string.Empty);
+            slug = Regex.Replace(cm.RemoveUnicode(slug).Trim().ToLower(), @"\s+", "-");
 
 
             if (createProductVM.Files != null)
@@ -146,6 +148,7 @@ namespace BLL.Product
                         ObjectId = productId,
                         ObjectType = objectType,
                         Published = true,
+                        Order = i,
                     };
                     pictures.Add(pictureVM);
                 }
@@ -190,7 +193,8 @@ namespace BLL.Product
                 return false;
             }
 
-            var slug = Regex.Replace(cm.RemoveUnicode(updateProductVM.Name).Trim().ToLower(), @"\s+", "-");
+            var slug = Regex.Replace(updateProductVM.Name, regex, string.Empty);
+            slug = Regex.Replace(cm.RemoveUnicode(slug).Trim().ToLower(), @"\s+", "-");
 
 
             if (updateProductVM.Files != null)
@@ -250,6 +254,7 @@ namespace BLL.Product
                         ObjectId = id,
                         ObjectType = objectType,
                         Published = true,
+                        Order = i,
                     };
                     pictures.Add(pictureVM);
                 }
@@ -1418,7 +1423,7 @@ namespace BLL.Product
                 return null;
             }
         }
-    
+
     }
 
 }

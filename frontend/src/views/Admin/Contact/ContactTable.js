@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from "react";
-import api from "../../../apis/api";
-import Pagination from "../../../components/Pagination/Pagination";
 import Table from "../../../components/Table/Table";
 import Thead from "../../../components/Table/Thead";
 import Th from "../../../components/Table/Th";
 import Tbody from "../../../components/Table/Tbody";
 import Tr from "../../../components/Table/Tr";
-import Td from "../../../components/Table/Td";
+import { toast } from "react-toastify";
+import api from "../../../apis/api";
+import Row from "./Row";
+import Pagination from "../../../components/Pagination/Pagination";
 
 function ContactTable(props) {
-  const [data, setData] = useState({
-    totalPage: 0,
-    totalResult: 0,
-    contactVMs: [],
-  });
+  const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
-  const [query, setQuery] = useState({
-    email: "",
-    name: "",
-    content: "",
-  });
   const fetchData = async () => {
     await api({
       method: "GET",
       url: `/contact/contactpagination`,
       params: {
+        deleted: false,
         limit: 10,
         currentPage: currentPage,
-        email:query.email,
-        name:query.name,
-        content:query.content,
       },
     })
       .then((res) => {
@@ -37,103 +27,90 @@ function ContactTable(props) {
           ...data,
           totalPage: res.data.totalPage,
           totalResult: res.data.totalResult,
-          contactVMs: res.data.contactVMs,
+          data: res.data.data,
         });
       })
       .catch(() => console.log("fail"));
   };
   useEffect(() => {
     fetchData();
-  }, [query, currentPage]);
+  }, []);
+  const handleTrash = async (id) => {
+    await api({
+      method: "PUT",
+      url: `/contact/deleted`,
+      params: { id: id },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.warn(`Chuyển vào thùng rác thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData();
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
   return (
-    <div className="bg-white mb-[20px] shadow-admin rounded-[8px] overflow-hidden p-[20px]">
-      <div className="flex flex-row gap-x-[20px]">
-        <div className="inline-flex flex-col w-[250px] mb-[20px]">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Tìm theo email
-          </label>
-          <input
-            id="email"
-            value={query.email}
-            onChange={(e) => setQuery({ ...query, email: e.target.value })}
-            className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="inline-flex flex-col w-[250px] mb-[20px]">
-          <label
-            htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Tìm theo tên
-          </label>
-          <input
-            id="name"
-            value={query.name}
-            onChange={(e) => setQuery({ ...query, name: e.target.value })}
-            className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="inline-flex flex-col w-[250px] mb-[20px]">
-          <label
-            htmlFor="content"
-            className="block mb-2 text-sm font-medium text-gray-900 "
-          >
-            Tìm theo nội dung
-          </label>
-          <input
-            id="content"
-            value={query.content}
-            onChange={(e) => setQuery({ ...query, content: e.target.value })}
-            className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-      </div>
+    <div>
+      <div className="bg-white mb-[20px] shadow-admin rounded-[8px] overflow-hidden p-[20px]">
+        <Table className="w-full">
+          <Thead>
+            <Tr>
+              <Th className="w-[50px]">
+                <div className="flex justify-center">
+                  <input
+                    className="w-5 h-5 border-gray-200 rounded"
+                    type="checkbox"
+                    id="row_1"
+                    disabled
+                  />
+                </div>
+              </Th>
+              <Th>Nội dung</Th>
+              <Th className="w-[150px]">Phát hành</Th>
+              <Th className="w-[200px]">Hành động</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.data?.length > 0 &&
+              data?.data.map((item) => {
+                return <Row key={item} id={item} handleTrash={handleTrash} />;
+              })}
+          </Tbody>
+        </Table>
 
-      <Table className="w-full">
-        <Thead>
-          <Tr>
-            <Th className="w-[250px]">Họ và Tên</Th>
-            <Th className="w-[250px]">Email</Th>
-            <Th className="">Nội dung</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data?.contactVMs?.map((item) => {
-            return (
-              <Tr key={item.id}>
-                <Td className="pl-[20px]">{item.name}</Td>
-                <Td className="pl-[20px]">{item.email}</Td>
-                <Td className="pl-[20px] ">
-                  <p className="productCard2Name">{item.content}</p>
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-
-      <div className="bg-white px-4 py-3 flex items-center justify-betweensm:px-6">
-        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm text-gray-700">
-              Hiển thị{" "}
-              <span className="font-medium"> {data?.contactVMs?.length} </span>
-              trong
-              <span className="font-medium"> {data?.totalResult} </span>
-              kết quả
-            </p>
-          </div>
-          <div>
-            {currentPage > 0 && (
-              <Pagination
-                setCurrentPage={setCurrentPage}
-                totalPage={data?.totalPage}
-                itemsPerPage={data?.contactVMs?.length}
-              />
-            )}
+        <div className="bg-white px-4 py-3 flex items-center justify-betweensm:px-6">
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Hiển thị{" "}
+                <span className="font-medium"> {data?.data?.length} </span>
+                trong
+                <span className="font-medium"> {data?.totalResult} </span>
+                kết quả
+              </p>
+            </div>
+            <div>
+              {data?.data?.length > 0 && (
+                <Pagination
+                  setCurrentPage={setCurrentPage}
+                  totalPage={data?.totalPage}
+                  itemsPerPage={data?.data.length}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

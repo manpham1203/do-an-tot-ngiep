@@ -43,7 +43,11 @@ function SideBar(props) {
       icon: iconParent,
     },
     {
-      title: "Liên Hệ",
+      title: "Câu hỏi",
+      icon: iconParent,
+    },
+    {
+      title: "Liên hệ",
       icon: iconParent,
     },
   ];
@@ -161,10 +165,27 @@ function SideBar(props) {
       icon: iconchild,
     },
   ];
-  const ContactTab = [
+  const QuestionTab = [
     {
       title: "Danh Sách",
+      path: "cau-hoi/danh-sach",
+      icon: iconchild,
+    },
+  ];
+  const ContactTab = [
+    {
+      title: "Danh sách",
       path: "lien-he/danh-sach",
+      icon: iconchild,
+    },
+    {
+      title: "Tạo mới",
+      path: "lien-he/tao-moi",
+      icon: iconchild,
+    },
+    {
+      title: "Thùng Rác",
+      path: "lien-he/da-xoa",
       icon: iconchild,
     },
   ];
@@ -500,6 +521,44 @@ function SideBar(props) {
                 </ul>
               )}
               {tab === 7 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {QuestionTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`
+                          
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 8 && (
                 <ul className={`${index === tab ? null : "hidden"}`}>
                   {ContactTab.map((p, i) => {
                     return (

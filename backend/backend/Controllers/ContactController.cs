@@ -15,12 +15,66 @@ namespace backend.Controllers
         {
             contactBLL = new ContactBLL();
         }
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> Create(ContactVM model)
         {
             try
             {
                 var resultFromBLL=await contactBLL.Create(model);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return StatusCode(StatusCodes.Status201Created);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
+        [HttpGet("contactpagination")]
+        public async Task<IActionResult> ContactPagination(bool deleted, int limit=10, int currentPage=1)
+        {
+            try
+            {
+                var resultFromBLL=await contactBLL.ContactPagination(deleted, limit, currentPage);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+    
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            try
+            {
+                var resultFromBLL = await contactBLL.GetById(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var resultFromBLL = await contactBLL.Delete(id);
                 if (resultFromBLL == false)
                 {
                     return BadRequest();
@@ -32,21 +86,34 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet("contactpagination")]
-        public async Task<IActionResult> ContactPagination(string email, string name, string content, int currentPage=1, int limit =10)
+        [HttpPut("published")]
+        public async Task<IActionResult> Published(string id)
         {
             try
             {
-                var resultFromBLL=await contactBLL.ContactPagination(currentPage, limit, email, name, content);
-                if (resultFromBLL == null)
+                var resultFromBLL = await contactBLL.Published(id);
+                if (resultFromBLL == false)
                 {
                     return BadRequest();
                 }
-                if (resultFromBLL.TotalResult >= 0)
-                {
-                    return Ok(resultFromBLL);
-                }
+                return Ok();
+            }
+            catch
+            {
                 return BadRequest();
+            }
+        }
+        [HttpPut("deleted")]
+        public async Task<IActionResult> Deleted(string id)
+        {
+            try
+            {
+                var resultFromBLL = await contactBLL.Deleted(id);
+                if (resultFromBLL == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
             }
             catch
             {
@@ -54,21 +121,17 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet("ContactToday")]
-        public async Task<IActionResult> ContactToday(string email, string name, string content, int currentPage = 1, int limit = 10)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update(string id, ContactVM model)
         {
             try
             {
-                var resultFromBLL = await contactBLL.ContactToday(currentPage, limit, email, name, content);
-                if (resultFromBLL == null)
+                var resultFromBLL = await contactBLL.Update(id, model);
+                if (resultFromBLL == false)
                 {
                     return BadRequest();
                 }
-                if (resultFromBLL.TotalResult >= 0)
-                {
-                    return Ok(resultFromBLL);
-                }
-                return BadRequest();
+                return Ok();
             }
             catch
             {

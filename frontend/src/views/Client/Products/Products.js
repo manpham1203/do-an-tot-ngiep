@@ -267,9 +267,9 @@ function Products(props) {
     // }
     fetchData();
   }, [location]);
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     fetchData();
   }, [arrBrand, arrCategory, query]);
@@ -319,15 +319,38 @@ function Products(props) {
       });
     }
   };
-  useEffect(() => {
-    if (priceRange === null) {
+  //nay
+  // useEffect(() => {
+  //   if (priceRange === null) {
+  //     if (arrBrand.length !== 0 || arrCategory.length !== 0) {
+  //       setSearchPrams({
+  //         "thuong-hieu": arrBrand,
+  //         "danh-muc": arrCategory,
+  //       });
+  //     } else {
+  //       if (priceRange === null) {
+  //         setSearchPrams({});
+  //       }
+  //     }
+  //   } else {
+  //     setSearchPrams({
+  //       "thuong-hieu": arrBrand,
+  //       "danh-muc": arrCategory,
+  //       gia: priceRange.value,
+  //     });
+  //   }
+  // }, [priceRange]);
+  const handlePriceChange = (e) => {
+    setPriceRange(e);
+    console.log(e);
+    if (e === null) {
       if (arrBrand.length !== 0 || arrCategory.length !== 0) {
         setSearchPrams({
           "thuong-hieu": arrBrand,
           "danh-muc": arrCategory,
         });
       } else {
-        if (priceRange === null) {
+        if (e === null) {
           setSearchPrams({});
         }
       }
@@ -335,12 +358,9 @@ function Products(props) {
       setSearchPrams({
         "thuong-hieu": arrBrand,
         "danh-muc": arrCategory,
-        gia: priceRange.value,
+        gia: e.value,
       });
     }
-  }, [priceRange]);
-  const handlePriceChange = (e) => {
-    setPriceRange(e);
   };
   useEffect(() => {
     setArrBrand(brandSlugs);
@@ -354,10 +374,11 @@ function Products(props) {
     }
   }, []);
 
+  console.log(location)
   return (
     <div className="container mx-auto flex flex-col">
       <div className="h-[60px] flex items-center gap-x-[20px]">
-        <div className="w-[350px]">Lọc sản phẩm</div>
+        <div className="w-[280px] flex-none">Lọc sản phẩm</div>
         <div className=" w-full flex justify-between items-center">
           <div className="text-gray-500">
             Tìm thấy{" "}

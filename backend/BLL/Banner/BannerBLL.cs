@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Banner
 {
@@ -19,6 +20,16 @@ namespace BLL.Banner
         public BannerBLL()
         {
             bannerDAL = new BannerDAL();
+        }
+        public async Task<bool> SaveFile(IFormFile file, string imgName)
+        {
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Photos", imgName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return true;
         }
         public async Task<bool> CheckExists(string id)
         {
@@ -68,6 +79,11 @@ namespace BLL.Banner
                     ObjectType = "banner",
                     Published = true,
                 };
+                var a= await SaveFile(model.File, model.ImageName);
+                if(a != true)
+                {
+                    return true;
+                }
                 return await bannerDAL.Create(model, pictureVM);
             }
             catch

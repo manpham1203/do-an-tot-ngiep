@@ -104,7 +104,7 @@ namespace DAL.Picture
         {
             try
             {
-                var resultFromDb = await db.Pictures.Where(x => x.ObjectId == objectId).Where(x => x.ObjectType == objectType).ToListAsync();
+                var resultFromDb = await db.Pictures.Where(x => x.ObjectId == objectId).Where(x => x.ObjectType == objectType).OrderBy(x=>x.Order).ToListAsync();
                 if (resultFromDb .Count==0)
                 {
                     return new List<PictureVM>();
@@ -124,5 +124,17 @@ namespace DAL.Picture
                 return null;
             }
         }
+    
+        //public async Task<bool> ChangeOrder(string id, int order)
+        //{
+        //    try
+        //    {
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
     }
 }

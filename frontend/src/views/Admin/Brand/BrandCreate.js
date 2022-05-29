@@ -18,18 +18,7 @@ const schema = yup
   .object()
   .shape({
     name: yup.string().required("Thông tin này không được để trống").trim(),
-    shortDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-    fullDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-    // image: yup.mixed().required("Thông tin này không được để trống"),
-    // .test("fileType", "Định dạng ảnh không hợp lệ", (value) =>
-    //   ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
-    // ),
+    
   })
   .required();
 function BrandCreate(props) {
@@ -45,7 +34,7 @@ function BrandCreate(props) {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { published: true, fullDescription: "" },
+    defaultValues: { published: true, },
   });
 
   const onSubmitHandler = async (values) => {
@@ -55,8 +44,6 @@ function BrandCreate(props) {
     }
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("FullDescription", values.fullDescription);
-    formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
     formData.append("File", file);
     await api({
@@ -70,13 +57,11 @@ function BrandCreate(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          setRichText("");
           setImage(null);
           setFile(null);
           setValidImg(true);
           reset({
             name: "",
-            shortDescription: "",
             published: true,
           });
         } else {
@@ -111,18 +96,13 @@ function BrandCreate(props) {
   const onClickResetForm = () => {
     reset({
       name: "",
-      shortDescription: "",
       published: true,
     });
-    setRichText("");
     setFile(null);
     setImage(null);
     setValidImg(true);
   };
-  const [richText, setRichText] = useState();
-  useEffect(() => {
-    setValue("fullDescription", richText);
-  }, [richText]);
+  
 
   // useEffect(() => {
   //   if (watchImage) {
@@ -155,52 +135,8 @@ function BrandCreate(props) {
           </p>
         </div>
         <div className="">
-          <AdminTextArea
-            control={control}
-            name="shortDescription"
-            label="Mô tả ngắn"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
-        <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
-
-        <div>
-          {/* <Controller
-            control={control}
-            name="fullDescription"
-            defaultValue=""
-            render={({ field }) => <RichText label="Mô tả đầy đủ" {...field} />}
-          /> */}
-          <div>
-            <label
-              htmlFor="fullDescription"
-              className="block mb-2 text-sm font-medium text-gray-900 "
-            >
-              Mô tả đầy đủ
-            </label>
-            <CKEditor
-              onChange={(e) => setRichText(e.editor.getData())}
-              data={richText}
-            />
-          </div>
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
-
         <div className="flex flex-col">
           <label
             htmlFor="image"

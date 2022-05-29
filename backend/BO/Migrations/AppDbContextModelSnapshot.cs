@@ -79,11 +79,6 @@ namespace BO.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullDescription")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("ntext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -92,12 +87,6 @@ namespace BO.Migrations
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -131,11 +120,6 @@ namespace BO.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullDescription")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("ntext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -144,12 +128,6 @@ namespace BO.Migrations
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -207,6 +185,9 @@ namespace BO.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(12)");
 
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("Star")
                         .HasColumnType("int");
 
@@ -232,9 +213,9 @@ namespace BO.Migrations
             modelBuilder.Entity("BO.Entities.Contact", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(12)
+                        .HasMaxLength(6)
                         .IsUnicode(false)
-                        .HasColumnType("char(12)");
+                        .HasColumnType("char(6)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -246,17 +227,21 @@ namespace BO.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
 
-                    b.Property<string>("Email")
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
 
                     b.HasKey("Id");
 
@@ -372,6 +357,56 @@ namespace BO.Migrations
                     b.ToTable("OrderDetail");
                 });
 
+            modelBuilder.Entity("BO.Entities.Page", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .IsUnicode(false)
+                        .HasColumnType("char(6)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Page");
+                });
+
             modelBuilder.Entity("BO.Entities.Picture", b =>
                 {
                     b.Property<string>("Id")
@@ -396,6 +431,9 @@ namespace BO.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
@@ -551,6 +589,40 @@ namespace BO.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("ProductCategory");
+                });
+
+            modelBuilder.Entity("BO.Entities.Question", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("char(12)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("BO.Entities.User", b =>

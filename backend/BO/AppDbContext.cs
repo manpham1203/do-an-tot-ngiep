@@ -34,7 +34,9 @@ namespace BO
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
         public DbSet<Banner> Banners { get; set; }
+        public DbSet<Question> Questions { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Page> Pages { get; set; }
 
         public DbSet<ProductCategory> Product_Category_Mappings { get; set; }
         #endregion
@@ -218,15 +220,7 @@ namespace BO
                     .HasMaxLength(250)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.ShortDescription)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(1000)
-                    .IsRequired(true)
-                    .IsUnicode(true);
-                entity.Property(e => e.FullDescription)
-                    .HasColumnType("ntext")
-                    .IsRequired(true)
-                    .IsUnicode(true);
+                
                 entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
@@ -269,15 +263,7 @@ namespace BO
                     .HasMaxLength(250)
                     .IsRequired(true)
                     .IsUnicode(false);
-                entity.Property(e => e.ShortDescription)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(1000)
-                    .IsRequired(true)
-                    .IsUnicode(true);
-                entity.Property(e => e.FullDescription)
-                    .HasColumnType("ntext")
-                    .IsRequired(true)
-                    .IsUnicode(true);
+               
                 entity.Property(e => e.Published)
                     .HasColumnType("bit")
                     .IsRequired(true);
@@ -594,7 +580,9 @@ namespace BO
                     .HasMaxLength(500)
                     .IsRequired(false)
                     .IsUnicode(true);
-
+                entity.Property(e => e.Published)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
                 entity.Property(e => e.ParentId)
                     .HasColumnType("char")
                     .HasMaxLength(12)
@@ -705,10 +693,10 @@ namespace BO
                     .IsRequired(false).IsUnicode(false);
             });
             #endregion
-            #region Contact
-            modelBuilder.Entity<Contact>(entity =>
+            #region Question
+            modelBuilder.Entity<Question>(entity =>
             {
-                entity.ToTable("Contact");
+                entity.ToTable("Question");
                 entity.HasKey(e => new { e.Id });
 
                 entity.Property(e => e.Id)
@@ -737,8 +725,90 @@ namespace BO
                     .HasPrecision(3);
             });
             #endregion
+            #region Contact
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.ToTable("Contact");
+                entity.HasKey(e => new { e.Id });
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(6)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(250)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Type)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Published)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
+                entity.Property(e => e.Deleted)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true)
+                    .HasPrecision(3);
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(false)
+                    .HasPrecision(3);
+            });
+            #endregion
+            #region Page
+            modelBuilder.Entity<Page>(entity =>
+            {
+                entity.ToTable("Page");
+                entity.HasKey(e => new { e.Id });
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("char")
+                    .HasMaxLength(6)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Title)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(250)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Slug)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(250)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Content)
+                    .HasColumnType("nvarchar")
+                    .HasMaxLength(250)
+                    .IsRequired(true)
+                    .IsUnicode(true);
+                entity.Property(e => e.Type)
+                    .HasColumnType("varchar")
+                    .HasMaxLength(50)
+                    .IsRequired(true)
+                    .IsUnicode(false);
+                entity.Property(e => e.Published)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
+                entity.Property(e => e.Deleted)
+                    .HasColumnType("bit")
+                    .IsRequired(true);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(true)
+                    .HasPrecision(3);
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(false)
+                    .HasPrecision(3);
+            });
+            #endregion
         }
     }
 }

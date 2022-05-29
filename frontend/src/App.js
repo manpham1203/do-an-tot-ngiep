@@ -2,7 +2,6 @@ import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Home from "./views/Client/Home/Home";
 import About from "./views/Client/About/About";
-import Contact from "./views/Client/Contact/Contact";
 import Cart from "./views/Client/Cart/Cart";
 import ProductDetail from "./views/Client/ProductDetail/ProductDetail";
 import NotFound from "./views/Client/NotFound/NotFound";
@@ -63,8 +62,13 @@ import AdminViewUser from "./components/Modal/AdminViewUser";
 import UserTable from './views/Admin/User/UserTable'
 import UserEdit from './views/Admin/User/UserEdit'
 import UserTrash from './views/Admin/User/UserTrash'
-import ContactTable from './views/Admin/Contact/ContactTable'
+import QuestionTable from './views/Admin/Question/QuestionTable'
 import LoginAdmin from "./views/Admin/Login/LoginAdmin";
+import Question from "./views/Client/Question/Question";
+import ContactCreate from "./views/Admin/Contact/ContactCreate";
+import ContactTable from "./views/Admin/Contact/ContactTable";
+import ContactTrash from "./views/Admin/Contact/ContactTrash";
+import ContactEdit from "./views/Admin/Contact/ContactEdit";
 
 
 function App() {
@@ -151,7 +155,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
           {/* <Route path="/gioi-thieu" element={<About />}></Route> */}
-          <Route path="/lien-he" element={<Contact />}></Route>
+          <Route path="/lien-he" element={<Question />}></Route>
           <Route path="/gio-hang" element={<Cart />}></Route>
           <Route path="/thanh-toan" element={<Checkout />}></Route>
           <Route
@@ -251,7 +255,11 @@ function App() {
             <Route path="/admin/nguoi-dung/danh-sach" element={<UserTable />} />
             <Route path="/admin/nguoi-dung/chinh-sua/:id" element={<UserEdit />} />
             <Route path="/admin/nguoi-dung/da-xoa" element={<UserTrash />} />
+            <Route path="/admin/cau-hoi/danh-sach" element={<QuestionTable />} />
+            <Route path="/admin/lien-he/tao-moi" element={<ContactCreate />} />
             <Route path="/admin/lien-he/danh-sach" element={<ContactTable />} />
+            <Route path="/admin/lien-he/da-xoa" element={<ContactTrash />} />
+            <Route path="/admin/lien-he/chinh-sua/:id" element={<ContactEdit />} />
             <Route
               path="/admin/banner/chinh-sua/:id"
               element={<BannerEdit />}

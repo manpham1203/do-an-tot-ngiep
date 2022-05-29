@@ -14,6 +14,7 @@ namespace BO.Entities
         public string ObjectId { get; set; }
         public string ObjectType { get; set; }
         public string OrderDetailId { get; set; }
+        public bool Published { get; set; }
         public int? Star { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

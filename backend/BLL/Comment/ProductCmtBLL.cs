@@ -44,6 +44,7 @@ namespace BLL.Comment
                 productCmtVM.ObjectType = "product";
                 productCmtVM.CreatedAt = DateTime.Now;
                 productCmtVM.ParentId = null;
+                productCmtVM.Published = true;
                 return await productCmtDAL.Create(productCmtVM);
             }
             catch
@@ -122,6 +123,7 @@ namespace BLL.Comment
                 cmtVM.ParentId = parentId;
                 cmtVM.ObjectId = objectId.ObjectId;
                 cmtVM.UserId = userId;
+                cmtVM.Published = true;
                 return await productCmtDAL.Create(cmtVM);
             }
             catch

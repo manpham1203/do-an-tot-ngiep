@@ -91,7 +91,7 @@ function ProductCard(props) {
       <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px] bg-white bottom-[-44px]">
         <h3
           className="cursor-pointer text-second font-normal hover:underline underline-offset-4"
-          onClick={() => navigate(`/san-pham?brand=${props.brandSlug}`)}
+          onClick={() => navigate(`/san-pham?thuong-hieu=${props.brandSlug}`)}
         >
           {props.brandName}
         </h3>

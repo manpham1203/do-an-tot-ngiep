@@ -44,6 +44,7 @@ namespace BLL.Comment
                 model.ObjectType = "post";
                 model.CreatedAt = DateTime.Now;
                 model.ParentId = null;
+                model.Published = true;
                 return await postCmtDAL.Create(model);
             }
             catch
@@ -118,6 +119,7 @@ namespace BLL.Comment
                 cmtVM.ParentId = parentId;
                 cmtVM.ObjectId = objectId.ObjectId;
                 cmtVM.UserId = userId;
+                cmtVM.Published = true;
                 return await postCmtDAL.Create(cmtVM);
             }
             catch

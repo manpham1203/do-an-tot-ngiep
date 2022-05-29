@@ -53,8 +53,6 @@ namespace DAL.Category
             categoryVM.Id = categoryFromDb.Id;
             categoryVM.Name = categoryFromDb.Name;
             categoryVM.Slug = categoryFromDb.Slug;
-            categoryVM.FullDescription = categoryFromDb.FullDescription;
-            categoryVM.ShortDescription = categoryFromDb.ShortDescription;
             categoryVM.Published = categoryFromDb.Published;
             categoryVM.Deleted = categoryFromDb.Deleted;
             categoryVM.CreatedAt = categoryFromDb.CreatedAt;
@@ -74,8 +72,6 @@ namespace DAL.Category
             categoryVM.Id = categoryFromDb.Id;
             categoryVM.Name = categoryFromDb.Name;
             categoryVM.Slug = categoryFromDb.Slug;
-            categoryVM.FullDescription = categoryFromDb.FullDescription;
-            categoryVM.ShortDescription = categoryFromDb.ShortDescription;
             categoryVM.Published = categoryFromDb.Published;
             categoryVM.Deleted = categoryFromDb.Deleted;
             categoryVM.CreatedAt = categoryFromDb.CreatedAt;
@@ -122,8 +118,6 @@ namespace DAL.Category
                 Id = categoryVM.Id,
                 Name = categoryVM.Name,
                 Slug = categoryVM.Slug,
-                FullDescription = categoryVM.FullDescription,
-                ShortDescription = categoryVM.ShortDescription,
                 Published = categoryVM.Published,
                 Deleted = categoryVM.Deleted,
                 CreatedAt = categoryVM.CreatedAt,
@@ -165,8 +159,6 @@ namespace DAL.Category
             var categoryFromDb = await db.Categories.SingleOrDefaultAsync(x => x.Id == categoryVM.Id);
             categoryFromDb.Name = categoryVM.Name;
             categoryFromDb.Slug = categoryVM.Slug;
-            categoryFromDb.FullDescription = categoryVM.FullDescription;
-            categoryFromDb.ShortDescription = categoryVM.ShortDescription;
             categoryFromDb.Published = categoryVM.Published;
             categoryFromDb.Deleted = categoryVM.Deleted;
             categoryFromDb.UpdatedAt = categoryVM.UpdatedAt;
@@ -250,8 +242,6 @@ namespace DAL.Category
                 Id = x.Id,
                 Name = x.Name,
                 Slug = x.Slug,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
                 Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
@@ -427,8 +417,6 @@ namespace DAL.Category
                                               Id = b.Id,
                                               Name = b.Name,
                                               Slug = b.Slug,
-                                              FullDescription = b.FullDescription,
-                                              ShortDescription = b.ShortDescription,
                                               Published = b.Published,
                                               Deleted = b.Deleted,
                                               CreatedAt = b.CreatedAt,

@@ -60,8 +60,6 @@ namespace DAL.Brand
             brandVM.Id = brandFromDb.Id;
             brandVM.Name = brandFromDb.Name;
             brandVM.Slug = brandFromDb.Slug;
-            brandVM.FullDescription = brandFromDb.FullDescription;
-            brandVM.ShortDescription = brandFromDb.ShortDescription;
             brandVM.Published = brandFromDb.Published;
             brandVM.Deleted = brandFromDb.Deleted;
             brandVM.CreatedAt = brandFromDb.CreatedAt;
@@ -150,8 +148,6 @@ namespace DAL.Brand
                     Id = brandVM.Id,
                     Name = brandVM.Name,
                     Slug = brandVM.Slug,
-                    FullDescription = brandVM.FullDescription,
-                    ShortDescription = brandVM.ShortDescription,
                     Published = brandVM.Published,
                     Deleted = brandVM.Deleted,
                     CreatedAt = brandVM.CreatedAt,
@@ -194,8 +190,6 @@ namespace DAL.Brand
             var brandFromDb = await db.Brands.SingleOrDefaultAsync(x => x.Id == brandVM.Id);
             brandFromDb.Name = brandVM.Name;
             brandFromDb.Slug = brandVM.Slug;
-            brandFromDb.FullDescription = brandVM.FullDescription;
-            brandFromDb.ShortDescription = brandVM.ShortDescription;
             brandFromDb.Published = brandVM.Published;
             brandFromDb.Deleted = brandVM.Deleted;
             brandFromDb.UpdatedAt = brandVM.UpdatedAt;
@@ -279,8 +273,6 @@ namespace DAL.Brand
                 Id = x.Id,
                 Name = x.Name,
                 Slug = x.Slug,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
                 Published = x.Published,
                 Deleted = x.Deleted,
                 CreatedAt = x.CreatedAt,
@@ -457,8 +449,6 @@ namespace DAL.Brand
                                               Id=b.Id,
                                               Name=b.Name,
                                               Slug=b.Slug,
-                                              FullDescription=b.FullDescription,
-                                              ShortDescription=b.ShortDescription,
                                               Published=b.Published,
                                               Deleted=b.Deleted,
                                               CreatedAt=b.CreatedAt,

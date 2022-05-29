@@ -13,14 +13,6 @@ import AddListImage from "../../../components/AddListImage/AddListImage";
 const schema = yup
   .object({
     name: yup.string().required("Thông tin này không được để trống").trim(),
-    shortDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-    fullDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
   })
   .required();
 function CategoryCreate(props) {
@@ -36,7 +28,6 @@ function CategoryCreate(props) {
     mode: "onChange",
     defaultValues: {
       published: true,
-      fullDescription: "",
     },
   });
 
@@ -47,8 +38,6 @@ function CategoryCreate(props) {
     }
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("FullDescription", values.fullDescription);
-    formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
     formData.append("File", file);
     await api({
@@ -62,7 +51,6 @@ function CategoryCreate(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          setRichText("");
           setImage(null);
           setFile(null);
           setValidImg(true);
@@ -103,18 +91,12 @@ function CategoryCreate(props) {
   const onClickResetForm = () => {
     reset({
       name: "",
-      shortDescription: "",
       published: true,
     });
     setImage(null);
     setFile(undefined);
-    setRichText("");
     setValidImg(true);
   };
-  const [richText, setRichText] = useState();
-  useEffect(() => {
-    setValue("fullDescription", richText);
-  }, [richText]);
   const [validImg, setValidImg]=useState(true);
   return (
     <div className="">
@@ -139,51 +121,10 @@ function CategoryCreate(props) {
           </p>
         </div>
         <div className="">
-          <AdminTextArea
-            control={control}
-            name="shortDescription"
-            label="Mô tả ngắn"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
-        <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
         
-        <div>
-          {/* <Controller
-            control={control}
-            name="fullDescription"
-            defaultValue=""
-            render={({ field }) => <RichText label="Mô tả đầy đủ" {...field} />}
-          /> */}
-          <div>
-            <label
-              htmlFor="fullDescription"
-              className="block mb-2 text-sm font-medium text-gray-900 "
-            >
-              Mô tả đầy đủ
-            </label>
-            <CKEditor
-              onChange={(e) => setRichText(e.editor.getData())}
-              data={richText}
-            />
-          </div>
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
+        
 
         <div className="flex flex-col">
           <label

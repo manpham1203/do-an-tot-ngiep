@@ -46,7 +46,6 @@ function RowTrash(props) {
         })
       );
   };
-  console.log(data);
   return (
     <Tr>
       <Td className="bg-gray-200" style={{ height: "100px" }}>

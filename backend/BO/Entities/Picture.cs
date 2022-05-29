@@ -13,6 +13,7 @@ namespace BO.Entities
         public bool Published { get; set; }
         public string ObjectId { get; set; }
         public string ObjectType { get; set; }
+        public int Order { get; set; }
         //public Product Product { get; set; }
         //public Post Post { get; set; }
         //public Brand Brand { get; set; }

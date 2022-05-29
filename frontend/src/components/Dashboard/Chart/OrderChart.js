@@ -3,7 +3,6 @@ import { Colors } from "./dataColor";
 import api from "../../../apis/api";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import Select from "react-select";
-
 import {
   Brush,
   LineChart,
@@ -16,38 +15,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data1 = [
-  {
-    id: 1,
-    name: "Tháng 1",
-    value: null,
-  },
-  {
-    id: 2,
-    name: "Tháng 2",
-    value: null,
-  },
-  {
-    id: 3,
-    name: "Tháng 3",
-    value: 0,
-  },
-  {
-    id: 4,
-    name: "Tháng 4",
-    value: 5,
-  },
-  {
-    id: 5,
-    name: "Tháng 5",
-    value: 4,
-  },
-  {
-    id: 5,
-    name: "Tháng 5",
-    value: null,
-  },
-];
 const colourStyles = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles, { data, isDisabled, isFocused, isSelected }) => ({

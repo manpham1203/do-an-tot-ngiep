@@ -70,15 +70,7 @@ const reducer = (state, action) => {
 const schema = yup
   .object({
     name: yup.string().required("Thông tin này không được để trống").trim(),
-    shortDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-     
-    // fullDescription: yup
-    //   .string()
-    //   .required("Thông tin này không được để trống")
-    //   .trim(),
+    
   })
   .required();
 function BrandEdit(props) {
@@ -100,13 +92,8 @@ function BrandEdit(props) {
   const { slug } = useParams();
 
   const onSubmitHandler = async (values) => {
-    if(richText===""){
-      return;
-    }
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("FullDescription", richText);
-    formData.append("ShortDescription", values.shortDescription);
     formData.append("published", values.published);
       formData.append("File", file);
     await api({
@@ -148,10 +135,8 @@ function BrandEdit(props) {
         dispatch(success(res.data));
         reset({
           name: res.data.name,
-          shortDescription: res.data.shortDescription,
           published:res.data.published,
         });
-        setRichText(res.data.fullDescription);
         setImage(res.data.pictureVM.imageSrc);
       })
       .catch(()=>console.log("fail"));
@@ -177,10 +162,7 @@ function BrandEdit(props) {
     setImage(state.data.pictureVM.imageSrc);
     setFile(undefined);
   };
-  useEffect(()=>{
-    setRichText(state.data.fullDescription)
-  }, [state.data])
-  const [richText, setRichText]=useState();
+  
   console.log(state);
   return (
     <div className="">
@@ -205,35 +187,7 @@ function BrandEdit(props) {
           </p>
         </div>
         <div className="">
-          <AdminTextArea
-            control={control}
-            name="shortDescription"
-            label="Mô tả ngắn"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
-        <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
-        </div>
-        
-        <div>
-          <CKEditor
-            onChange={(e) => setRichText(e.editor.getData())}
-            data={richText}
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              richText==="" ? null : "invisible"
-            }`}
-          >
-            Thông tin này không được để trống
-          </p>
         </div>
         <div className="flex flex-col">
           <div className="relative w-fit">

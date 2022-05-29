@@ -13,7 +13,7 @@ import Navigation from "../Navigation/Navigation";
 import MenuOverlay from "../MobileMenu/MenuOverlay";
 import Footer from "../Footer/Footer";
 
-function NavBar() {
+function NavBar(props) {
   const [scroll, setScroll] = useState(false);
   const [navHome, setNavHome] = useState(true);
   const [openMenu, setOpenMenu] = useState(false);
@@ -45,6 +45,7 @@ function NavBar() {
         className={`w-[100%] h-[50px] lg:h-[70px] z-[6] transition-all duration-[300ms] font-primary fixed font-medium flex items-center
       ${navHome && scroll ? "bg-third border-b border-b-[#161a2133] " : ""}
       ${navHome === false ? "border-b border-b-[#161a2133] bg-third" : ""}
+      ${props.className}
       `}
       >
         <div className={`container mx-auto flex justify-between`}>

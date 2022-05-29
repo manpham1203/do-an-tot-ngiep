@@ -13,5 +13,6 @@ namespace BO.ViewModels.Comment
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
         public int? Star { get; set; }
+        public bool Published { get; set; }
     }
 }

@@ -122,7 +122,7 @@ namespace DAL.Product
                 View = productVM.View,
                 CreatedAt = productVM.CreatedAt,
                 UpdatedAt = productVM.UpdatedAt,
-                BrandId = productVM.BrandId
+                BrandId = productVM.BrandId,
             };
             await db.Products.AddAsync(product);
             var resultProduct = await db.SaveChangesAsync();
@@ -151,6 +151,7 @@ namespace DAL.Product
                 ObjectId = x.ObjectId,
                 ObjectType = x.ObjectType,
                 Published = x.Published,
+                Order=x.Order
             }).ToList();
 
             await db.Pictures.AddRangeAsync(pictutes);
@@ -214,6 +215,7 @@ namespace DAL.Product
                 ObjectId = x.ObjectId,
                 ObjectType = x.ObjectType,
                 Published = x.Published,
+                Order=x.Order,
             }).ToList();
 
             await db.Pictures.AddRangeAsync(pictutes);

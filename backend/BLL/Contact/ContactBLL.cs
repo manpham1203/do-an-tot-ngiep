@@ -31,15 +31,18 @@ namespace BLL.Contact
         {
             try
             {
-                cm=new CommonBLL();
-                model.Id = cm.RandomString(12);
-                var checkExists=await CheckExists(model.Id);
+                cm = new CommonBLL();
+                var id = cm.RandomString(6);
+                var checkExists = await CheckExists(id);
                 if (checkExists)
                 {
-                    model.Id = cm.RandomString(12);
-                    checkExists = await CheckExists(model.Id);
+                    id = cm.RandomString(6);
+                    checkExists = await CheckExists(id);
                 }
+                model.Id = id;
                 model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = null;
+                model.Deleted = false;
                 return await contactDAL.Create(model);
             }
             catch
@@ -47,22 +50,22 @@ namespace BLL.Contact
                 return false;
             }
         }
-        public async Task<List<ContactVM>> GetAll()
+        public async Task<List<string>> GetListId(bool deleted, bool published)
         {
             try
             {
-                return await contactDAL.GetAll();
+                return await contactDAL.GetListId(deleted);
             }
             catch
             {
                 return null;
             }
         }
-        public async Task<ContactPaginationVM> ContactPagination(int currentPage, int limit, string email, string name, string content)
+        public async Task<ContactPaginationVM> ContactPagination(bool deleted, int limit, int currentPage)
         {
             try
             {
-                var resultFromDAL = await GetAll();
+                var resultFromDAL = await contactDAL.GetListId(deleted);
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -73,23 +76,9 @@ namespace BLL.Contact
                     {
                         TotalPage = 0,
                         TotalResult = 0,
-                        ContactVMs = new List<ContactVM>(),
+                        Data = new List<string>(),
                     };
                 }
-
-                if (!string.IsNullOrEmpty(email))
-                {
-                    resultFromDAL =resultFromDAL.Where(x=>x.Email.ToLower().Contains(email.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(name))
-                {
-                    resultFromDAL = resultFromDAL.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(content))
-                {
-                    resultFromDAL = resultFromDAL.Where(x => x.Content.ToLower().Contains(content.ToLower())).ToList();
-                }
-
                 var count = resultFromDAL.Count();
                 var totalPage = (int)Math.Ceiling(count / (double)limit);
                 resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
@@ -97,7 +86,7 @@ namespace BLL.Contact
                 {
                     TotalResult = count,
                     TotalPage = totalPage,
-                    ContactVMs = resultFromDAL,
+                    Data = resultFromDAL,
                 };
             }
             catch
@@ -106,51 +95,88 @@ namespace BLL.Contact
             }
         }
     
-        public async Task<ContactPaginationVM> ContactToday(int currentPage, int limit, string email, string name, string content)
+        public async Task<ContactVM> GetById(string id)
         {
             try
             {
-                var resultFromDAL = await contactDAL.ContactToday();
-                if (resultFromDAL == null)
-                {
-                    return null;
-                }
-                if (resultFromDAL.Count == 0)
-                {
-                    return new ContactPaginationVM
-                    {
-                        TotalPage = 0,
-                        TotalResult = 0,
-                        ContactVMs = new List<ContactVM>(),
-                    };
-                }
-
-                if (!string.IsNullOrEmpty(email))
-                {
-                    resultFromDAL = resultFromDAL.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(name))
-                {
-                    resultFromDAL = resultFromDAL.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
-                }
-                if (!string.IsNullOrEmpty(content))
-                {
-                    resultFromDAL = resultFromDAL.Where(x => x.Content.ToLower().Contains(content.ToLower())).ToList();
-                }
-
-                var count = resultFromDAL.Count();
-                var totalPage = (int)Math.Ceiling(count / (double)limit);
-                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
-                return new ContactPaginationVM
-                {
-                    TotalResult = count,
-                    TotalPage = totalPage,
-                    ContactVMs = resultFromDAL,
-                };
+                return await contactDAL.GetById(id);
             }
             catch
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> Delete(string id)
+        {
+            try
+            {
+                var checkExists = await CheckExists(id);
+                if (checkExists == false)
+                {
+                    return false;
+                }
+
+                return await contactDAL.Delete(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Published(string id)
+        {
+            try
+            {
+                var checkExists = await CheckExists(id);
+                if (checkExists == false)
+                {
+                    return false;
+                }
+
+                return await contactDAL.Published(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> Deleted(string id)
+        {
+            try
+            {
+                var checkExists = await CheckExists(id);
+                if (checkExists == false)
+                {
+                    return false;
+                }
+
+                return await contactDAL.Deleted(id);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> Update(string id, ContactVM model)
+        {
+            try
+            {
+                cm = new CommonBLL();
+                var checkExists = await CheckExists(id);
+                if (checkExists == false)
+                {
+                    return false;
+                }
+                model.Id = id;
+                model.UpdatedAt = DateTime.Now;
+                
+                return await contactDAL.Update(model);
+            }
+            catch
+            {
+                return false;
             }
         }
     }
