@@ -69,6 +69,11 @@ import ContactCreate from "./views/Admin/Contact/ContactCreate";
 import ContactTable from "./views/Admin/Contact/ContactTable";
 import ContactTrash from "./views/Admin/Contact/ContactTrash";
 import ContactEdit from "./views/Admin/Contact/ContactEdit";
+import PageCreate from "./views/Admin/Page/PageCreate";
+import PageTable from "./views/Admin/Page/PageTable";
+import PageEdit from "./views/Admin/Page/PageEdit";
+import PageTrash from "./views/Admin/Page/PageTrash";
+import Page from "./views/Client/Page/Page";
 
 
 function App() {
@@ -181,6 +186,7 @@ function App() {
           <Route path="/tin-tuc" element={<Posts />}></Route>
           <Route path="/tin-tuc/:slug" element={<PostDetail />}></Route>
           <Route path="/danh-sach-yeu-thich" element={<Wishlist />}></Route>
+          <Route path="/trang/:slug" element={<Page />}></Route>
         </Route>
 
         {user.role !== 1 && (
@@ -260,6 +266,10 @@ function App() {
             <Route path="/admin/lien-he/danh-sach" element={<ContactTable />} />
             <Route path="/admin/lien-he/da-xoa" element={<ContactTrash />} />
             <Route path="/admin/lien-he/chinh-sua/:id" element={<ContactEdit />} />
+            <Route path="/admin/trang/tao-moi" element={<PageCreate />} />
+            <Route path="/admin/trang/danh-sach" element={<PageTable />} />
+            <Route path="/admin/trang/chinh-sua/:id" element={<PageEdit />} />
+            <Route path="/admin/trang/da-xoa" element={<PageTrash />} />
             <Route
               path="/admin/banner/chinh-sua/:id"
               element={<BannerEdit />}

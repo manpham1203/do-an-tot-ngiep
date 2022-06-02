@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function FooterNav(props) {
+function FooterListLink(props) {
   return (
     <div>
       <h2 className="font-medium text-[18px]">{props.title}</h2>
@@ -20,4 +20,4 @@ function FooterNav(props) {
   );
 }
 
-export default FooterNav;
+export default FooterListLink;

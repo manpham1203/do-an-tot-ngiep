@@ -36,7 +36,7 @@ namespace DAL.Contact
         {
             try
             {
-                return await db.Contacts.Where(x=>x.Deleted==deleted).Select(x=>x.Id).ToListAsync();
+                return await db.Contacts.Where(x => x.Deleted == deleted).Select(x => x.Id).ToListAsync();
             }
             catch
             {
@@ -51,11 +51,11 @@ namespace DAL.Contact
                 {
                     Id = model.Id,
                     Content = model.Content,
-                    Type=model.Type,
-                    Published=model.Published,
-                    Deleted=model.Deleted,
-                    CreatedAt=model.CreatedAt,
-                    UpdatedAt=model.UpdatedAt,
+                    Type = model.Type,
+                    Published = model.Published,
+                    Deleted = model.Deleted,
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt,
                 };
                 await db.Contacts.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -81,13 +81,13 @@ namespace DAL.Contact
                 }
                 return new ContactVM
                 {
-                    Id=resultFromDb.Id,
-                    Content=resultFromDb.Content,
-                    Type=resultFromDb.Type,
-                    Published=resultFromDb.Published,
-                    Deleted=resultFromDb.Deleted,
-                    CreatedAt=resultFromDb.CreatedAt,
-                    UpdatedAt=resultFromDb.UpdatedAt,
+                    Id = resultFromDb.Id,
+                    Content = resultFromDb.Content,
+                    Type = resultFromDb.Type,
+                    Published = resultFromDb.Published,
+                    Deleted = resultFromDb.Deleted,
+                    CreatedAt = resultFromDb.CreatedAt,
+                    UpdatedAt = resultFromDb.UpdatedAt,
                 };
             }
             catch
@@ -169,6 +169,32 @@ namespace DAL.Contact
             catch
             {
                 return false;
+            }
+        }
+        public async Task<List<ContactVM>> GetListByType(string type)
+        {
+            try
+            {
+                var resultFromDb = await db.Contacts.Where(x => x.Deleted == false && x.Published == true && x.Type == type).ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<ContactVM>();
+                }
+                return resultFromDb.Select(x => new ContactVM
+                {
+                    Id=x.Id,
+                    Content=x.Content,
+                    Type=x.Type,
+                    Published=x.Published,
+                    Deleted=x.Deleted,
+                    CreatedAt=x.CreatedAt,
+                    UpdatedAt=x.UpdatedAt,
+                    
+                }).ToList();
+            }
+            catch
+            {
+                return null;
             }
         }
     }

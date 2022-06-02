@@ -96,7 +96,6 @@ function ProductCreate(props) {
     for (var i = 0; i < files.length; i++) {
       formData.append("Files", files[i]);
     }
-    console.log("a");
     await api({
       method: "POST",
       url: `/product`,

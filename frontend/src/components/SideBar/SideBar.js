@@ -50,6 +50,10 @@ function SideBar(props) {
       title: "Liên hệ",
       icon: iconParent,
     },
+    {
+      title: "Trang",
+      icon: iconParent,
+    },
   ];
   const ProductTab = [
     {
@@ -186,6 +190,23 @@ function SideBar(props) {
     {
       title: "Thùng Rác",
       path: "lien-he/da-xoa",
+      icon: iconchild,
+    },
+  ];
+  const PageTab = [
+    {
+      title: "Danh sách",
+      path: "trang/danh-sach",
+      icon: iconchild,
+    },
+    {
+      title: "Tạo mới",
+      path: "trang/tao-moi",
+      icon: iconchild,
+    },
+    {
+      title: "Thùng Rác",
+      path: "trang/da-xoa",
       icon: iconchild,
     },
   ];
@@ -575,6 +596,43 @@ function SideBar(props) {
                           }
                           className={`
                           
+                  relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
+                    hover:bg-[#494E53]
+                    text-gray-300 text-sm gap-x-4 mt-2
+                                `}
+                        >
+                          <div className="flex flex-row items-center">
+                            {p.icon}
+                            <span
+                              className={`${
+                                !open && "hidden"
+                              } origin-left duration-200`}
+                            >
+                              {p.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              {tab === 9 && (
+                <ul className={`${index === tab ? null : "hidden"}`}>
+                  {PageTab.map((p, i) => {
+                    return (
+                      <li key={i} onClick={() => setTabMenu(i)}>
+                        <NavLink
+                          to={p.path}
+                          style={({ isActive }) =>
+                            isActive
+                              ? {
+                                  backgroundColor: "#494E53",
+                                  color: "#D1D5DB",
+                                }
+                              : undefined
+                          }
+                          className={`                          
                   relative flex justify-between items-center h-[40px] font-semibold text-[16px] rounded-md p-2 cursor-pointer
                     hover:bg-[#494E53]
                     text-gray-300 text-sm gap-x-4 mt-2

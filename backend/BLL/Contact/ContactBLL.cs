@@ -94,7 +94,7 @@ namespace BLL.Contact
                 return null;
             }
         }
-    
+
         public async Task<ContactVM> GetById(string id)
         {
             try
@@ -171,12 +171,81 @@ namespace BLL.Contact
                 }
                 model.Id = id;
                 model.UpdatedAt = DateTime.Now;
-                
+
                 return await contactDAL.Update(model);
             }
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<List<ContactVM>> GetListByType(string type)
+        {
+            try
+            {
+                return await contactDAL.GetListByType(type);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<ContactFooterVM>> GetList()
+        {
+            try
+            {
+                var list = new List<ContactFooterVM>();
+                var listNumber = await GetListByType("number");
+                var listEmail = await GetListByType("email");
+                var listAddress = await GetListByType("address");
+                if (listNumber != null)
+                {
+                    if (listNumber.Count > 0)
+                    {
+                        var temp = new List<ContactFooterVM>();
+                        temp = listNumber.Select(x => new ContactFooterVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Name = "Số điện thoại"
+                        }).ToList();
+                        list.AddRange(temp);
+                    }
+                }
+                if (listEmail != null)
+                {
+                    if (listEmail.Count > 0)
+                    {
+                        var temp = new List<ContactFooterVM>();
+                        temp = listEmail.Select(x => new ContactFooterVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Name = "Email"
+                        }).ToList();
+                        list.AddRange(temp);
+                    }
+                }
+                if (listAddress != null)
+                {
+                    if (listAddress.Count > 0)
+                    {
+                        var temp = new List<ContactFooterVM>();
+                        temp = listAddress.Select(x => new ContactFooterVM
+                        {
+                            Id = x.Id,
+                            Content = x.Content,
+                            Name = "Địa chỉ"
+                        }).ToList();
+                        list.AddRange(temp);
+                    }
+                }
+                return list;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

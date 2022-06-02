@@ -138,5 +138,23 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
+    
+        [HttpGet("GetList")]
+        public async Task<IActionResult> GetList()
+        {
+            try
+            {
+                var resultFromBLL = await contactBLL.GetList();
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
