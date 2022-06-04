@@ -82,9 +82,8 @@ namespace BLL.Product
                 for (int i = 0; i < createProductVM.Files.Count; i++)
                 {
                     string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(createProductVM.Files[i].FileName);
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + "_" + i + Path.GetExtension(createProductVM.Files[i].FileName);
                     createProductVM.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
                 }
             }
 
@@ -96,8 +95,7 @@ namespace BLL.Product
                 Slug = slug,
                 Price = createProductVM.Price,
                 PriceDiscount = createProductVM.PriceDiscount,
-                FullDescription = createProductVM.FullDescription,
-                ShortDescription = createProductVM.ShortDescription,
+                Description = createProductVM.Description,
                 QuantityInStock = createProductVM.QuantityInStock,
                 Published = createProductVM.Published,
                 Deleted = false,
@@ -203,9 +201,8 @@ namespace BLL.Product
                 for (int i = 0; i < updateProductVM.Files.Count; i++)
                 {
                     string imageName = slug;
-                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + Path.GetExtension(updateProductVM.Files[i].FileName);
+                    imageName += DateTime.Now.ToString("yyMMddHHmmssfff") + "_" + i + Path.GetExtension(updateProductVM.Files[i].FileName);
                     updateProductVM.ImageNames.Add(imageName);
-                    Thread.Sleep(200);
                 }
             }
 
@@ -217,8 +214,7 @@ namespace BLL.Product
                 Slug = slug,
                 Price = updateProductVM.Price,
                 PriceDiscount = updateProductVM.PriceDiscount,
-                FullDescription = updateProductVM.FullDescription,
-                ShortDescription = updateProductVM.ShortDescription,
+                Description = updateProductVM.Description,
                 QuantityInStock = updateProductVM.QuantityInStock,
                 Published = updateProductVM.Published,
                 Deleted = updateProductVM.Deleted,
@@ -801,6 +797,64 @@ namespace BLL.Product
         public async Task<ProductDetailVM> ProductDetail(string slug)
         {
             var resultFromDAL = await productDAL.ProductDetail(slug);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            var brandBLL = new BrandBLL();
+            var brand = await brandBLL.GetById(resultFromDAL.BrandId);
+            if (brand != null)
+            {
+                resultFromDAL.BrandNameVM.Id = brand.Id;
+                resultFromDAL.BrandNameVM.Name = brand.Name;
+                resultFromDAL.BrandNameVM.Slug = brand.Slug;
+            }
+
+            var pcBLL = new ProductCategoryBLL();
+            var listCategoryProduct = await pcBLL.GetById(resultFromDAL.Id, "ProductId");
+            if (listCategoryProduct.Count > 0)
+            {
+                for (int j = 0; j < listCategoryProduct.Count(); j++)
+                {
+                    var categoryBLL = new CategoryBLL();
+                    var category = await categoryBLL.CategoryNameById(listCategoryProduct[j].CategoryId);
+                    if (category == null)
+                    {
+                        continue;
+                    }
+                    resultFromDAL.CategoryNameVMs.Add(category);
+                }
+            }
+
+            var productImageBLL = new PictureBLL();
+            var listImg = await productImageBLL.GetByObjectId(resultFromDAL.Id, objectType);
+            resultFromDAL.PictureVMs = listImg;
+
+            var cmtBLL = new ProductCmtBLL();
+
+            var star = await cmtBLL.Star(resultFromDAL.Id);
+
+            if (star.Count() == 0)
+            {
+                resultFromDAL.Star = 0;
+                resultFromDAL.StarCount = 0;
+            }
+            else
+            {
+                resultFromDAL.Star = star.Sum(x => x.Value) / (float)star.Count();
+                resultFromDAL.StarCount = star.Count();
+            }
+
+            var wishlistBLL = new WishlistBLL();
+            var wishlist = await wishlistBLL.Count(resultFromDAL.Id);
+
+            resultFromDAL.Like = wishlist;
+
+            return resultFromDAL;
+        }
+        public async Task<ProductDetailVM> ProductDetailAdmin(string slug)
+        {
+            var resultFromDAL = await productDAL.ProductDetailAdmin(slug);
             if (resultFromDAL == null)
             {
                 return null;

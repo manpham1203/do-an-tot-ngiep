@@ -267,12 +267,13 @@ function Products(props) {
     // }
     fetchData();
   }, [location]);
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     fetchData();
-  }, [arrBrand, arrCategory, query]);
+  }, [currentPage]);
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchData();
+  }, [arrBrand, arrCategory, query, orderBy]);
   useEffect(() => {
     fetchDataBrand();
     fetchDataCategory();
@@ -319,27 +320,7 @@ function Products(props) {
       });
     }
   };
-  //nay
-  // useEffect(() => {
-  //   if (priceRange === null) {
-  //     if (arrBrand.length !== 0 || arrCategory.length !== 0) {
-  //       setSearchPrams({
-  //         "thuong-hieu": arrBrand,
-  //         "danh-muc": arrCategory,
-  //       });
-  //     } else {
-  //       if (priceRange === null) {
-  //         setSearchPrams({});
-  //       }
-  //     }
-  //   } else {
-  //     setSearchPrams({
-  //       "thuong-hieu": arrBrand,
-  //       "danh-muc": arrCategory,
-  //       gia: priceRange.value,
-  //     });
-  //   }
-  // }, [priceRange]);
+
   const handlePriceChange = (e) => {
     setPriceRange(e);
     console.log(e);
@@ -373,8 +354,34 @@ function Products(props) {
       }
     }
   }, []);
+  const handleUncheckedBrand = () => {
+    setArrBrand([]);
+    if (price === null) {
+      setSearchPrams({
+        "danh-muc": arrCategory,
+      });
+    } else {
+      setSearchPrams({
+        "danh-muc": arrCategory,
+        gia: priceRange.value,
+      });
+    }
+  };
+  const handleUncheckedCategory = () => {
+    setArrBrand([]);
+    if (price === null) {
+      setSearchPrams({
+        "thuong-hieu": arrBrand,
+      });
+    } else {
+      setSearchPrams({
+        "thuong-hieu": arrBrand,
+        gia: priceRange.value,
+      });
+    }
+  };
 
-  console.log(location)
+ 
   return (
     <div className="container mx-auto flex flex-col">
       <div className="h-[60px] flex items-center gap-x-[20px]">
@@ -515,9 +522,16 @@ function Products(props) {
                     </li>
                   );
                 })}
-              <li className="hover:underline underline-offset-4 cursor-pointer mb-[25px]">
-                <p className="text-right font-light">Bỏ các lựa chọn</p>
-              </li>
+              {arrBrand?.length > 0 && (
+                <li className=" mb-[25px] text-right">
+                  <span
+                    className="font-light hover:underline underline-offset-4 cursor-pointer"
+                    onClick={handleUncheckedBrand}
+                  >
+                    Bỏ các lựa chọn
+                  </span>
+                </li>
+              )}
             </ul>
           </div>
           <div className="w-full border-t border-gray-200">
@@ -552,6 +566,16 @@ function Products(props) {
                     </li>
                   );
                 })}
+              {arrCategory?.length > 0 && (
+                <li className=" mb-[25px] text-right">
+                  <span
+                    className="font-light hover:underline underline-offset-4 cursor-pointer"
+                    onClick={handleUncheckedCategory}
+                  >
+                    Bỏ các lựa chọn
+                  </span>
+                </li>
+              )}
             </ul>
           </div>
           <div className="w-full border-t border-gray-200 ">
@@ -649,12 +673,15 @@ function Products(props) {
             </div>
           )}
 
-          <div className="flex justify-center mt-[30px]">
-            {state.data?.totalPage > 0 && (
+          <div className="flex justify-center mt-[30px] ">
+            {state.loading ? (
+              "loading"
+            ) : (
               <Pagination
+                forcePage={currentPage}
                 setCurrentPage={setCurrentPage}
-                totalPage={state.data?.totalPage}
-                itemsPerPage={state.data?.products.length}
+                totalPage={state?.data?.totalPage}
+                itemsPerPage={state.data?.products?.length}
               />
             )}
           </div>

@@ -9,11 +9,12 @@ import api from "../../../apis/api";
 import Pagination from "../../../components/Pagination/Pagination";
 import RowTrash from "./RowTrash";
 
-
 function PageTrash(props) {
-    const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
+  const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/page/pagepagination`,
@@ -24,14 +25,19 @@ function PageTrash(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          data: res.data.data,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.data,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -90,8 +96,8 @@ function PageTrash(props) {
         })
       );
   };
-    return (
-        <div>
+  return (
+    <div>
       <div className="bg-white mb-[20px] shadow-admin rounded-[8px] overflow-hidden p-[20px]">
         <Table className="w-full">
           <Thead>
@@ -138,8 +144,11 @@ function PageTrash(props) {
               </p>
             </div>
             <div>
-              {data?.data.length > 0 && (
+              {loading ? (
+                "loading"
+              ) : (
                 <Pagination
+                  forcePage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPage={data?.totalPage}
                   itemsPerPage={data?.data.length}
@@ -150,7 +159,7 @@ function PageTrash(props) {
         </div>
       </div>
     </div>
-    );
+  );
 }
 
 export default PageTrash;

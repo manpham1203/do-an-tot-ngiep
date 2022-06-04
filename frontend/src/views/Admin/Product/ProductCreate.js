@@ -43,11 +43,8 @@ const schema = yup
       .array()
       .required("Thông tin này không được để trống")
       .nullable(),
-    shortDescription: yup
-      .string()
-      .required("Thông tin này không được để trống")
-      .trim(),
-    // fullDescription: yup
+   
+    // description: yup
     //   .string()
     //   .required("Thông tin này không được để trống")
     //   .trim(),
@@ -68,7 +65,7 @@ function ProductCreate(props) {
     mode: "onChange",
     defaultValues: {
       published: true,
-      fullDescription: "",
+      description: "",
       quantity: 1,
     },
   });
@@ -81,8 +78,7 @@ function ProductCreate(props) {
     }
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("FullDescription", values.fullDescription);
-    formData.append("ShortDescription", values.shortDescription);
+    formData.append("description", values.description);
     formData.append("published", values.published);
     formData.append("price", parseFloat(values.price));
     values.priceDiscount != null &&
@@ -113,7 +109,6 @@ function ProductCreate(props) {
           setValidImg(true);
           reset({
             name: "",
-            shortDescription: "",
             published: true,
           });
           setBrandSelected(null);
@@ -165,7 +160,6 @@ function ProductCreate(props) {
   const onClickResetForm = () => {
     reset({
       name: "",
-      shortDescription: "",
       published: true,
     });
     setImage([]);
@@ -181,7 +175,7 @@ function ProductCreate(props) {
   };
   const [richText, setRichText] = useState();
   useEffect(() => {
-    setValue("fullDescription", richText);
+    setValue("description", richText);
   }, [richText]);
   console.log(richText);
   console.log(errors);
@@ -264,7 +258,7 @@ function ProductCreate(props) {
         <div className="flex flex-row w-full gap-x-[25px]">
           <div className="w-full">
             <label
-              htmlFor="fullDescription"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
               Danh mục
@@ -304,7 +298,7 @@ function ProductCreate(props) {
           </div>
           <div className="w-full">
             <label
-              htmlFor="fullDescription"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
               Thương hiệu
@@ -359,33 +353,18 @@ function ProductCreate(props) {
           </p>
         </div>
         <div className="">
-          <AdminTextArea
-            control={control}
-            name="shortDescription"
-            label="Mô tả ngắn"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
-          </p>
-        </div>
-        <div className="">
           <AdminCheckbox control={control} name="published" label="Phát hành" />
         </div>
         <div>
           {/* <Controller
             control={control}
-            name="fullDescription"
+            name="description"
             defaultValue=""
             render={({ field }) => <RichText label="Mô tả đầy đủ" {...field} />}
           /> */}
           <div>
             <label
-              htmlFor="fullDescription"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
               Mô tả đầy đủ

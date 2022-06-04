@@ -584,11 +584,14 @@ function ProductTable(props) {
                 </p>
               </div>
               <div>
-                {currentPage > 0 && (
+                {state.loading ? (
+                  "loading"
+                ) : (
                   <Pagination
+                    forcePage={currentPage}
                     setCurrentPage={setCurrentPage}
-                    totalPage={state.data?.totalPage}
-                    itemsPerPage={state.data?.products.length}
+                    totalPage={state?.data?.totalPage}
+                    itemsPerPage={state.data?.products?.length}
                   />
                 )}
               </div>

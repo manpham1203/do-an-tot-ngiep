@@ -11,9 +11,11 @@ import Tr from "../../../components/Table/Tr";
 
 function UserTable(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, ids: [] });
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/user/userpagination`,
@@ -25,14 +27,19 @@ function UserTable(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          ids: res.data.ids,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            ids: res.data.ids,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -41,7 +48,7 @@ function UserTable(props) {
     await api({
       method: "PUT",
       url: `/user/deleted`,
-      params:{id:id}
+      params: { id: id },
     })
       .then((res) => {
         if (res.status === 200) {
@@ -100,15 +107,9 @@ function UserTable(props) {
         </Thead>
         <Tbody>
           {data?.ids?.length > 0 &&
-                data?.ids.map((item) => {
-                  return (
-                    <Row
-                      key={item}
-                      id={item}
-                      handleTrash={handleTrash}
-                    />
-                  );
-                })}
+            data?.ids.map((item) => {
+              return <Row key={item} id={item} handleTrash={handleTrash} />;
+            })}
         </Tbody>
       </Table>
 
@@ -124,8 +125,11 @@ function UserTable(props) {
             </p>
           </div>
           <div>
-            {currentPage > 0 && (
+            {loading ? (
+              "loading"
+            ) : (
               <Pagination
+                forcePage={currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPage={data?.totalPage}
                 itemsPerPage={data?.ids?.length}

@@ -85,7 +85,6 @@ function Home() {
     setShowBrand(brand[0]?.id);
   }, [brand]);
   document.title = "Trang chủ";
-  console.log("mb", mostBought);
   return (
     <div className="w-[100%]">
       <Carousel></Carousel>

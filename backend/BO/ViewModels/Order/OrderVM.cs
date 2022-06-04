@@ -15,7 +15,6 @@ namespace BO.ViewModels.Order
         public string LastName { get; set; }
         public decimal? Amount { get; set; }
         public int State { get; set; }
-        public float? Discount { get; set; }
         public string DeliveryAddress { get; set; }
         public string DeliveryPhone { get; set; }
         public string DeliveryEmail { get; set; }

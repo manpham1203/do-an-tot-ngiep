@@ -109,7 +109,7 @@ function ProductTable(props) {
       categorySlugs: arrCategory,
       pricefrom: debouncePrice[0],
       priceto: debouncePrice[1],
-      limit:10,
+      limit: 10,
     };
     dispatch(loading());
     await api({
@@ -475,7 +475,6 @@ function ProductTable(props) {
               className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          
         </div>
         <div className="w-full">
           {showTable && (
@@ -533,11 +532,16 @@ function ProductTable(props) {
                 </p>
               </div>
               <div>
-                <Pagination
-                  setCurrentPage={setCurrentPage}
-                  totalPage={state.data?.totalPage}
-                  itemsPerPage={state.data?.products.length}
-                />
+                {state.loading ? (
+                  "loading"
+                ) : (
+                  <Pagination
+                    forcePage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPage={state?.data?.totalPage}
+                    itemsPerPage={state.data?.products?.length}
+                  />
+                )}
               </div>
             </div>
           </div>

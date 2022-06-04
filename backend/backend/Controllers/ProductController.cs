@@ -326,6 +326,23 @@ namespace backend.Controllers
             }
             return Ok(resultFromBLL);
         }
+        [HttpGet("productdetailAdmin/{slug}")]
+        public async Task<IActionResult> ProductDetailAdmin(string slug)
+        {
+            var resultFromBLL = await productBLL.ProductDetailAdmin(slug);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.PictureVMs.Count > 0)
+            {
+                for (int i = 0; i < resultFromBLL.PictureVMs.Count; i++)
+                {
+                    resultFromBLL.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.PictureVMs[i].Name);
+                }
+            }
+            return Ok(resultFromBLL);
+        }
 
         [HttpPost("cartrows")]
         public async Task<IActionResult> CartRows(List<string> ids)

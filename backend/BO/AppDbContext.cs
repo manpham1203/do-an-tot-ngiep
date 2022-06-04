@@ -96,13 +96,8 @@ namespace BO
                     .HasColumnType("decimal")
                     .HasPrecision(18, 2)
                     .IsRequired(false);
-                entity.Property(e => e.FullDescription)
+                entity.Property(e => e.Description)
                     .HasColumnType("ntext")
-                    .IsRequired(true)
-                    .IsUnicode(true);
-                entity.Property(e => e.ShortDescription)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(1000)
                     .IsRequired(true)
                     .IsUnicode(true);
                 entity.Property(e => e.QuantityInStock)
@@ -464,9 +459,6 @@ namespace BO
                 entity.Property(e => e.State)
                     .HasColumnType("int")
                     .IsRequired(true);
-                entity.Property(e => e.Discount)
-                   .HasColumnType("float")
-                    .IsRequired(false);
                 entity.Property(e => e.DeliveryEmail)
                    .HasColumnType("varchar")
                    .HasMaxLength(100)
@@ -784,8 +776,7 @@ namespace BO
                     .IsRequired(true)
                     .IsUnicode(true);
                 entity.Property(e => e.Content)
-                    .HasColumnType("nvarchar")
-                    .HasMaxLength(250)
+                    .HasColumnType("ntext")
                     .IsRequired(true)
                     .IsUnicode(true);
                 entity.Property(e => e.Type)

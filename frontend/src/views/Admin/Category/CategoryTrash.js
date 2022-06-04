@@ -182,11 +182,16 @@ function CategoryTrash(props) {
               </p>
             </div>
             <div>
-              <Pagination
-                setCurrentPage={setCurrentPage}
-                totalPage={state.data?.totalPage}
-                itemsPerPage={state.data?.categories?.length}
-              />
+              {state.loading ? (
+                "loading"
+              ) : (
+                <Pagination
+                  forcePage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPage={state?.data?.totalPage}
+                  itemsPerPage={state.data?.categories?.length}
+                />
+              )}
             </div>
           </div>
         </div>

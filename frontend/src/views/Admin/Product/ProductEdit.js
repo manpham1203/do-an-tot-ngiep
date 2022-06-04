@@ -74,10 +74,7 @@ const schema = yup
   quantityInStock: yup.string().required("Thông tin này không được để trống").trim(),
   brandId: yup.object().required("Thông tin này không được để trống"),
   categoryIds: yup.array().required("Thông tin này không được để trống"),
-  shortDescription: yup
-    .string()
-    .required("Thông tin này không được để trống")
-    .trim(),
+
 })
 .required();
 function ProductEdit(props) {
@@ -110,8 +107,7 @@ console.log(state);
     }
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append("FullDescription", richText);
-    formData.append("ShortDescription", values.shortDescription);
+    formData.append("description", richText);
     formData.append("published", values.published);
     formData.append("price", parseFloat(values.price));
     if (values.priceDiscount !== "") {
@@ -166,7 +162,6 @@ console.log(state);
         dispatch(success(res.data));
         reset({
           name: res.data.name,
-          shortDescription: res.data.shortDescription,
           published: res.data.published,
           brandId: res.data.brandVM,
           categoryIds: res.data.categoryVMs,
@@ -175,7 +170,7 @@ console.log(state);
           quantityInStock: res.data.quantityInStock,
         });
         // setCategorySelected(res.data.categoryVMs)
-        setRichText(res.data.fullDescription);
+        setRichText(res.data.description);
       })
       .catch(dispatch(fail()));
   };
@@ -248,7 +243,7 @@ console.log(state);
       );
   };
   useEffect(() => {
-    setRichText(state.data.fullDescription);
+    setRichText(state.data.description);
   }, [state.data]);
   const [richText, setRichText] = useState();
   const fetchDataCategory = async () => {
@@ -329,7 +324,7 @@ console.log(state);
         <div className="flex flex-row w-full gap-x-[25px]">
           <div className="w-full">
             <label
-              htmlFor="fullDescription"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
               Mô tả đầy đủ
@@ -369,7 +364,7 @@ console.log(state);
           </div>
           <div className="w-full">
             <label
-              htmlFor="fullDescription"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 "
             >
               Mô tả đầy đủ
@@ -421,21 +416,6 @@ console.log(state);
             }`}
           >
             {errors?.quantityInStock?.message}
-          </p>
-        </div>
-        <div className="">
-          <AdminTextArea
-            control={control}
-            name="shortDescription"
-            label="Mô tả ngắn"
-            type="text"
-          />
-          <p
-            className={`text-red-500 text-sm h-[1.25rem] mt-[2px] ${
-              errors?.shortDescription ? null : "invisible"
-            }`}
-          >
-            {errors?.shortDescription?.message}
           </p>
         </div>
         <div className="">

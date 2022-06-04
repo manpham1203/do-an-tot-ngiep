@@ -249,44 +249,44 @@ namespace BLL.Order
                     return false;
                 }
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Admin", "datn.test1@gmail.com"));
+                message.From.Add(new MailboxAddress("Admin", "datn.quantri@gmail.com"));
                 message.To.Add(new MailboxAddress("Client", checkId.DeliveryEmail));
                 message.Subject = "Trạng thái đơn hàng thay đổi";
                 //message.Body = new TextPart("plain")
                 //{
                 //    Text="hello",                    
                 //};
-                message.Body = new TextPart();
+                message.Body = new TextPart("html");
                 switch (State)
                 {
                     case 0:
-                        message.Body = new TextPart()
+                        message.Body = new TextPart("html")
                         {
-                            Text = "Đơn hàng của bạn đã bị huỷ",
+                            Text = "<h1>Đơn hàng của bạn đã bị huỷ</h1>",
                         };
                         break;
                     case 1:
-                        message.Body = new TextPart()
+                        message.Body = new TextPart("html")
                         {
-                            Text = "Đơn hàng của bạn đang chờ xác nhận",
+                            Text = "<h1>Đơn hàng của bạn đang chờ xác nhận</h1>",
                         };
                         break;
                     case 2:
-                        message.Body = new TextPart()
+                        message.Body = new TextPart("html")
                         {
-                            Text = "Đơn hàng của bạn đã được xác nhận, đang chuẩn bị hàng",
+                            Text = "<h1>Đơn hàng của bạn đã được xác nhận, đang chuẩn bị hàng</h1>",
                         };
                         break;
                     case 3:
-                        message.Body = new TextPart()
+                        message.Body = new TextPart("html")
                         {
-                            Text = "Đơn hàng của bạn đã giao cho đơn vị vận chuyển",
+                            Text = "<h1>Đơn hàng của bạn đã giao cho đơn vị vận chuyển</h1>",
                         };
                         break;
                     case 4:
-                        message.Body = new TextPart()
+                        message.Body = new TextPart("html")
                         {
-                            Text = "Đơn hàng của bạn đã giao thành công",
+                            Text = "<h1>Đơn hàng của bạn đã giao thành công</h1>",
                         };
                         break;
                     default:
@@ -295,7 +295,7 @@ namespace BLL.Order
                 using (var client = new SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("datn.test1@gmail.com", "phamminhman");
+                    client.Authenticate("datn.quantri@gmail.com", "rhbjzoevzaxpfuje");
                     client.Send(message);
                     client.Disconnect(true);
                 }
@@ -303,7 +303,7 @@ namespace BLL.Order
             }
             catch
             {
-                return true;
+                return false;
             }
         }
 

@@ -12,8 +12,10 @@ import Tr from "../../../components/Table/Tr";
 function PostTable(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/Post/RowsAdminDeleted`,
@@ -25,14 +27,19 @@ function PostTable(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          data: res.data.posts,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.posts,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -270,8 +277,11 @@ function PostTable(props) {
               </p>
             </div>
             <div>
-              {currentPage > 0 && (
+              {loading ? (
+                "loading"
+              ) : (
                 <Pagination
+                  forcePage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPage={data?.totalPage}
                   itemsPerPage={data?.data.length}

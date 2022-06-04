@@ -16,8 +16,7 @@ namespace BO.ViewModels.Product
 
         public decimal Price { get; set; }
         public decimal? PriceDiscount { get; set; }
-        public string FullDescription { get; set; }
-        public string ShortDescription { get; set; }
+        public string Description { get; set; }
         public int QuantityInStock { get; set; }
         public bool Published { get; set; }
 

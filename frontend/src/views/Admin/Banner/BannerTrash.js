@@ -12,10 +12,12 @@ import RowTrash from "./RowTrash";
 
 function BannerTrash(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
+  const [loading, setLoading]=useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [query, setQuery] = useState("");
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/banner/pagination`,
@@ -27,14 +29,20 @@ function BannerTrash(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          data: res.data.bannerId,
-        });
+        if(res.status === 200){
+          setLoading(true);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.bannerId,
+          });
+        }
+       else{
+        setLoading(true);
+       }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -146,13 +154,14 @@ function BannerTrash(props) {
               </p>
             </div>
             <div>
-              {currentPage > 0 && (
-                <Pagination
-                  setCurrentPage={setCurrentPage}
-                  totalPage={data?.totalPage}
-                  itemsPerPage={data?.data.length}
-                />
-              )}
+            {loading? "loading" : (
+              <Pagination
+                forcePage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPage={data?.data?.totalPage}
+                itemsPerPage={data.data?.length}
+              />
+            )}
             </div>
           </div>
         </div>

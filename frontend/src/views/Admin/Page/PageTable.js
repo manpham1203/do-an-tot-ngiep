@@ -11,8 +11,10 @@ import Pagination from "../../../components/Pagination/Pagination";
 
 function PageTable(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/page/pagepagination`,
@@ -23,14 +25,19 @@ function PageTable(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          data: res.data.data,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.data,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -103,8 +110,11 @@ function PageTable(props) {
               </p>
             </div>
             <div>
-              {data?.data?.length > 0 && (
+              {loading ? (
+                "loading"
+              ) : (
                 <Pagination
+                  forcePage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPage={data?.totalPage}
                   itemsPerPage={data?.data.length}

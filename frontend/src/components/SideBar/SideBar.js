@@ -4,7 +4,10 @@ import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaRegCircle } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { GoSignOut } from "react-icons/go";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/user/userActions";
 
 function SideBar(props) {
   const [open, setOpen] = useState(true);
@@ -215,6 +218,12 @@ function SideBar(props) {
       return setTab(null);
     }
     setTab(i);
+  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/admin-login");
   };
   return (
     <div className="flex">
@@ -663,13 +672,20 @@ function SideBar(props) {
           open ? "ml-[300px]" : "ml-[80px]"
         } w-full  transition-all duration-200`}
       >
-        <div className="flex flex-row items-center gap-x-[25px] w-full h-[60px] bg-white shadow-admin">
-          <GiHamburgerMenu
-            className="text-[25px] ml-[25px] cursor-pointer"
-            src="./src/assets/control.png"
-            onClick={() => setOpen(!open)}
-          />
-          <h2>home</h2>
+        <div className="flex flex-row justify-between items-center px-[20px] w-full h-[60px] bg-white shadow-admin">
+          <div>
+            <GiHamburgerMenu
+              className="text-[25px] cursor-pointer"
+              src="./src/assets/control.png"
+              onClick={() => setOpen(!open)}
+            />
+          </div>
+          <div>
+            <GoSignOut
+              className="text-[25px] cursor-pointer"
+              onClick={handleLogout}
+            />
+          </div>
         </div>
         <div className="w-full p-[20px] " id="abc">
           <Outlet />

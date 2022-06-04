@@ -51,7 +51,7 @@ function NavBar(props) {
         <div className={`container mx-auto flex justify-between`}>
           {/* left */}
           <span
-            className={`w-[150px] flex flex-row items-center justify-start
+            className={`w-[150px] flex flex-row items-center justify-start text-[25px]
           ${
             navHome === false
               ? "text-black"
@@ -61,7 +61,7 @@ function NavBar(props) {
           }
           `}
           >
-            Logo
+            WatchStore
           </span>
           {/* center */}
           <Navigation navHome={navHome} scroll={scroll} />

@@ -199,13 +199,13 @@
     @apply border border-second rounded-md;
   }
   .pagination li a {
-    @apply min-w-[30px] h-[30px] flex justify-center items-center text-second font-light;
+    @apply min-w-[30px] h-[30px] flex justify-center items-center  font-light;
   }
   .pagination li.disabled {
-    @apply border-gray-500;
+    @apply border-gray-300;
   }
   .pagination li.disabled a {
-    @apply cursor-default text-gray-500;
+    @apply cursor-default text-gray-300;
   }
   .pagination .selected {
     @apply text-second;

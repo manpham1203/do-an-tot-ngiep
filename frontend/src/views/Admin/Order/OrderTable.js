@@ -10,7 +10,7 @@ import Thead from "../../../components/Table/Thead";
 import Th from "../../../components/Table/Th";
 import Tbody from "../../../components/Table/Tbody";
 import Tr from "../../../components/Table/Tr";
-import ExportExcel from '../../../components/ExportFile/ExportExcel'
+import ExportExcel from "../../../components/ExportFile/ExportExcel";
 
 const initState = {
   loading: false,
@@ -247,11 +247,16 @@ function OrderTable(props) {
                 </p>
               </div>
               <div>
-                <Pagination
-                  setCurrentPage={setCurrentPage}
-                  totalPage={state?.data?.totalPage}
-                  itemsPerPage={state?.data?.orders?.length}
-                />
+                {state.loading ? (
+                  "loading"
+                ) : (
+                  <Pagination
+                    forcePage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPage={state?.data?.totalPage}
+                    itemsPerPage={state.data?.orders?.length}
+                  />
+                )}
               </div>
             </div>
           </div>

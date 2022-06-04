@@ -213,6 +213,10 @@ namespace BLL.User
             var user = await GetByUsername(model.Username);
             if (user != null)
             {
+                if (user.Published==false || user.Deleted==true)
+                {
+                    return null;
+                }
                 var picBLL = new PictureBLL();
                 var pic = await picBLL.GetByObjectId(user.Id, "user");
                 if (pic != null && pic.Count > 0)

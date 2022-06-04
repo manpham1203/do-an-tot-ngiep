@@ -93,6 +93,8 @@ namespace DAL.User
                     CreatedAt = userFromDb.CreatedAt,
                     ImageName = null,
                     ImageSrc = null,
+                    Published=userFromDb.Published,
+                    Deleted=userFromDb.Deleted,
                 };
                 return result;
 

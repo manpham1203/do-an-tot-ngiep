@@ -37,8 +37,7 @@ namespace DAL.Product
                 Slug = x.Slug,
                 Price = x.Price,
                 PriceDiscount = x.PriceDiscount,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
+                Description = x.Description,
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
@@ -64,9 +63,8 @@ namespace DAL.Product
                 Slug = productFromDb.Slug,
                 Price = productFromDb.Price,
                 PriceDiscount = productFromDb.PriceDiscount,
-                FullDescription = productFromDb.FullDescription,
-                ShortDescription = productFromDb.ShortDescription,
                 QuantityInStock = productFromDb.QuantityInStock,
+                Description=productFromDb.Description,
                 Published = productFromDb.Published,
                 Deleted = productFromDb.Deleted,
                 View = productFromDb.View,
@@ -92,8 +90,7 @@ namespace DAL.Product
                 Slug = x.Slug,
                 Price = x.Price,
                 PriceDiscount = x.PriceDiscount,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
+                Description = x.Description,
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
@@ -114,8 +111,7 @@ namespace DAL.Product
                 Slug = productVM.Slug,
                 Price = productVM.Price,
                 PriceDiscount = productVM.PriceDiscount,
-                FullDescription = productVM.FullDescription,
-                ShortDescription = productVM.ShortDescription,
+                Description = productVM.Description,
                 QuantityInStock = productVM.QuantityInStock,
                 Published = productVM.Published,
                 Deleted = productVM.Deleted,
@@ -173,8 +169,7 @@ namespace DAL.Product
             productFromDb.Slug = productVM.Slug;
             productFromDb.Price = productVM.Price;
             productFromDb.PriceDiscount = productVM.PriceDiscount;
-            productFromDb.FullDescription = productVM.FullDescription;
-            productFromDb.ShortDescription = productVM.ShortDescription;
+            productFromDb.Description = productVM.Description;
             productFromDb.QuantityInStock = productVM.QuantityInStock;
             productFromDb.Published = productVM.Published;
             productFromDb.Deleted = productVM.Deleted;
@@ -284,8 +279,7 @@ namespace DAL.Product
                 Slug = x.Slug,
                 Price = x.Price,
                 PriceDiscount = x.PriceDiscount,
-                FullDescription = x.FullDescription,
-                ShortDescription = x.ShortDescription,
+                Description = x.Description,
                 QuantityInStock = x.QuantityInStock,
                 Published = x.Published,
                 Deleted = x.Deleted,
@@ -301,24 +295,31 @@ namespace DAL.Product
         {
             try
             {
-                var resultFromDb = await db.Products.Where(x => x.Published == true && x.Deleted == false).OrderByDescending(x=>x.CreatedAt).ToListAsync();
+                var resultFromDb = await db.Products
+                    .Where(x => x.Published == true && x.Deleted == false)
+                    .OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<ProductCardVM>();
                 }
-                var productCards = resultFromDb.Select(x => new ProductCardVM
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Slug = x.Slug,
-                    Price = x.Price,
-                    PriceDiscount = x.PriceDiscount,
-                    BrandNameVM = new BrandNameVM(),
-                    ImageName = null,
-                    ImageSrc = null,
-                    BrandId = x.BrandId,
-                }).ToList();
-                return productCards;
+                var result = resultFromDb.Join(db.Brands, p=>p.BrandId, b=>b.Id, (p,b) => new { p,b })
+                    .GroupBy(x => x.p.Id)
+                    .Where(x => x.First().b.Published==true && x.First().b.Deleted == false)
+                    .Select(x => new ProductCardVM
+                    {
+                        Id = x.Key,
+                        Name = x.First().p.Name,
+                        Slug = x.First().p.Slug,
+                        Price = x.First().p.Price,
+                        PriceDiscount = x.First().p.PriceDiscount,
+                        BrandNameVM = new BrandNameVM(),
+                        ImageName = null,
+                        ImageSrc = null,
+                        BrandId = x.First().p.BrandId,
+                    }).ToList();
+                
+                
+                return result;
             }
             catch
             {
@@ -356,6 +357,11 @@ namespace DAL.Product
             {
                 var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id && x.Published == true && x.Deleted == false);
                 if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var checkBrand = await db.Brands.Where(x => x.Deleted == false && x.Published == true).SingleOrDefaultAsync(x => x.Id == resultFromDb.BrandId);
+                if (checkBrand == null)
                 {
                     return null;
                 }
@@ -569,8 +575,15 @@ namespace DAL.Product
         {
             try
             {
-                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Slug == slug);
+                var resultFromDb = await db.Products
+                    .Where(x=>x.Deleted==false && x.Published==true)
+                    .SingleOrDefaultAsync(x => x.Slug == slug);
                 if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var checkBrand = await db.Brands.Where(x => x.Deleted == false && x.Published == true).SingleOrDefaultAsync(x => x.Id == resultFromDb.BrandId);
+                if (checkBrand == null)
                 {
                     return null;
                 }
@@ -581,8 +594,7 @@ namespace DAL.Product
                     Slug = resultFromDb.Slug,
                     Price = resultFromDb.Price,
                     PriceDiscount = resultFromDb.PriceDiscount,
-                    FullDescription = resultFromDb.FullDescription,
-                    ShortDescription = resultFromDb.ShortDescription,
+                    Description = resultFromDb.Description,
                     QuantityInStock = resultFromDb.QuantityInStock,
                     Published = resultFromDb.Published,
                     Deleted = resultFromDb.Deleted,
@@ -599,7 +611,40 @@ namespace DAL.Product
             {
                 return null;
             }
-
+        }
+        public async Task<ProductDetailVM> ProductDetailAdmin(string slug)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Slug == slug);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new ProductDetailVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    Price = resultFromDb.Price,
+                    PriceDiscount = resultFromDb.PriceDiscount,
+                    Description = resultFromDb.Description,
+                    QuantityInStock = resultFromDb.QuantityInStock,
+                    Published = resultFromDb.Published,
+                    Deleted = resultFromDb.Deleted,
+                    View = resultFromDb.View,
+                    BrandId = resultFromDb.BrandId,
+                    BrandNameVM = new BrandNameVM(),
+                    CategoryNameVMs = new List<CategoryNameVM>(),
+                    PictureVMs = new List<PictureVM>(),
+                    Star = null,
+                };
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<CartRowVM> CartRow(string id)
@@ -923,9 +968,9 @@ namespace DAL.Product
             try
             {
                 var resultFromDb = await db.OrderDetails.ToListAsync();
-                if (resultFromDb == null)
+                if (resultFromDb.Count==0)
                 {
-                    return null;
+                    return new List<ProductCardVM>();
                 }
                 var result = resultFromDb.Join(db.Products, d => d.ProductId, p => p.Id, (d, p) => new { d, p })
                     .GroupBy(x => x.d.ProductId)

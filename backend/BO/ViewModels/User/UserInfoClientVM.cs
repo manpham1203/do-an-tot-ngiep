@@ -20,5 +20,7 @@ namespace BO.ViewModels.User
         public DateTime CreatedAt { get; set; }
         public string ImageName { get; set; }
         public string ImageSrc { get; set; }
+        public bool Published { get; set; }
+        public bool Deleted { get; set; }
     }
 }

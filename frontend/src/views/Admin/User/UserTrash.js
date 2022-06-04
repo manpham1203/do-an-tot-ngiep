@@ -13,7 +13,9 @@ function UserTrash(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, ids: [] });
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/user/userpagination`,
@@ -25,14 +27,19 @@ function UserTrash(props) {
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          ids: res.data.ids,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            ids: res.data.ids,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -156,11 +163,14 @@ function UserTrash(props) {
               </p>
             </div>
             <div>
-              {currentPage > 0 && (
+              {loading ? (
+                "loading"
+              ) : (
                 <Pagination
+                  forcePage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPage={data?.totalPage}
-                  itemsPerPage={data?.ids.length}
+                  itemsPerPage={data?.ids?.length}
                 />
               )}
             </div>

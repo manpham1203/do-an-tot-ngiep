@@ -210,11 +210,16 @@ function BrandTrash(props) {
               </p>
             </div>
             <div>
-              <Pagination
-                setCurrentPage={setCurrentPage}
-                totalPage={state.data?.totalPage}
-                itemsPerPage={state.data?.brands.length}
-              />
+              {state.loading ? (
+                "loading"
+              ) : (
+                <Pagination
+                  forcePage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPage={state?.data?.totalPage}
+                  itemsPerPage={state.data?.brands?.length}
+                />
+              )}
             </div>
           </div>
         </div>

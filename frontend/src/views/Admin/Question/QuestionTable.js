@@ -15,32 +15,39 @@ function QuestionTable(props) {
     questionVMs: [],
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState({
     email: "",
     name: "",
     content: "",
   });
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/question/questionpagination`,
       params: {
         limit: 10,
         currentPage: currentPage,
-        email:query.email,
-        name:query.name,
-        content:query.content,
+        email: query.email,
+        name: query.name,
+        content: query.content,
       },
     })
       .then((res) => {
-        setData({
-          ...data,
-          totalPage: res.data.totalPage,
-          totalResult: res.data.totalResult,
-          questionVMs: res.data.questionVMs,
-        });
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            questionVMs: res.data.questionVMs,
+          });
+        } else {
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -127,8 +134,11 @@ function QuestionTable(props) {
             </p>
           </div>
           <div>
-            {currentPage > 0 && (
+            {loading ? (
+              "loading"
+            ) : (
               <Pagination
+                forcePage={currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPage={data?.totalPage}
                 itemsPerPage={data?.questionVMs?.length}
