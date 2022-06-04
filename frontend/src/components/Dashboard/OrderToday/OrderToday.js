@@ -71,10 +71,12 @@ const colourStyles = {
 };
 function ProductCmt(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
+  const [loading, setLoading] = useState(true);
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [orderStatus, setOrderStatus] = useState(null);
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/Order/OrderToday`,
@@ -93,8 +95,9 @@ function ProductCmt(props) {
             data: res.data.orderVMs,
           });
         }
+        setLoading(false);
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -108,7 +111,10 @@ function ProductCmt(props) {
         }`}
         onClick={() => setShow(!show)}
       >
-        <h2 className="text-[20px]">Đơn hàng hôm nay <span className="text-red-500">({data.totalResult})</span></h2>
+        <h2 className="text-[20px]">
+          Đơn hàng hôm nay{" "}
+          <span className="text-red-500">({data.totalResult})</span>
+        </h2>
         {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
       <div className={`w-full p-[20px] ${!show && "hidden"}`}>
@@ -143,11 +149,16 @@ function ProductCmt(props) {
           </Tbody>
         </Table>
         <div className="mt-[20px]">
-          <Pagination
-            setCurrentPage={setCurrentPage}
-            totalPage={data?.totalPage}
-            itemsPerPage={data?.orders?.length}
-          />
+          {loading ? (
+            "loading"
+          ) : (
+            <Pagination
+              forcePage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPage={data?.totalPage}
+              itemsPerPage={data?.orders?.length}
+            />
+          )}
         </div>
       </div>
     </div>

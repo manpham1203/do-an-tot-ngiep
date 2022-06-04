@@ -57,7 +57,7 @@ function Footer(props) {
   }, []);
   return (
     <div className="border-t border-t-[#161a2133] mt-[40px]">
-      <div className="mx-auto container">
+      <div className="mx-auto container px-[10px] sm:px-[20px]">
         <div className="flex flex-col items-center lg:items-start lg:flex-row mt-[40px] gap-x-[30px] gap-y-[30px]">
           <div className="w-[100%] lg:w-[300px]">
             <h2 className="text-[25px]">WatchStore</h2>
@@ -76,7 +76,7 @@ function Footer(props) {
             </div>
           </div>
 
-          <div className="flex flex-row flex-1 gap-x-[30px] w-full">
+          <div className="flex flex-col sm:flex-row flex-1 gap-x-[30px] w-full">
             <div className="flex-1">
               <div>
                 <h2 className="font-medium text-[18px]">Thông tin</h2>

@@ -37,7 +37,8 @@ function ProductCmt(props) {
 
   return (
     <div className="flex flex-col gap-y-[25px]">
-      {data.list.length > 0 &&
+  
+      {data.list.length > 0 ?
         data.list.map((item, index) => {
           return (
             <ProductCmtItem
@@ -50,7 +51,7 @@ function ProductCmt(props) {
               } `}
             />
           );
-        })}
+        }): "chưa có đánh giá"}
       {data.list.length > 0 && (
         <Pagination
           setCurrentPage={setCurrentPage}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo, useReducer } from "react";
 
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiMoon, FiSun } from "react-icons/fi";
 import { AiOutlineShopping } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FiHeart } from "react-icons/fi";
@@ -39,6 +39,8 @@ function NavBar(props) {
     };
   }, []);
 
+  const [sun, setSun] = useState(true);
+
   return (
     <>
       <div
@@ -48,10 +50,12 @@ function NavBar(props) {
       ${props.className}
       `}
       >
-        <div className={`container mx-auto flex justify-between`}>
+        <div
+          className={`container px-[10px] sm:px-[20px] mx-auto flex justify-between`}
+        >
           {/* left */}
           <span
-            className={`w-[150px] flex flex-row items-center justify-start text-[25px]
+            className={`w-fit lg:w-[150px] flex flex-row items-center justify-start text-[25px]
           ${
             navHome === false
               ? "text-black"
@@ -68,7 +72,7 @@ function NavBar(props) {
 
           {/* right */}
           <div
-            className={` w-[150px] flex flex-row items-center justify-end gap-x-[16px] md:gap-x-[25px] 
+            className={`w-fit lg:w-[150px] flex  flex-row items-center justify-end gap-x-[16px] md:gap-x-[25px] 
             transition-all duration-[0.3s]
             ${
               navHome === false
@@ -80,12 +84,18 @@ function NavBar(props) {
             `}
           >
             {user.id != null && (
-              <Link to="/danh-sach-yeu-thich" className="text-[25px]">
+              <Link
+                to="/danh-sach-yeu-thich"
+                className="text-[25px] hidden md:inline-block"
+              >
                 <FiHeart />
               </Link>
             )}
 
-            <div className="relative" onClick={() => navigate("/gio-hang")}>
+            <div
+              className="relative  hidden md:inline-block"
+              onClick={() => navigate("/gio-hang")}
+            >
               <AiOutlineShopping className="cursor-pointer text-[25px]" />
               {cart.length > 0 ? (
                 <span className="absolute top-[-12px] right-[-12px] bg-red-500 text-white rounded-[50px] w-[18px] h-[18px] flex justify-center items-center text-[13px]">
@@ -95,20 +105,34 @@ function NavBar(props) {
             </div>
             {typeof user.id === "string" ? (
               <button
-                className="text-[25px]"
+                className="text-[25px]  hidden md:inline-block"
                 onClick={() => navigate("/tai-khoan")}
               >
                 <FiUser />
               </button>
             ) : (
               <button
-                className="text-[25px]"
+                className="text-[25px]  hidden md:inline-block"
                 onClick={() => navigate("/dang-nhap")}
               >
                 <FiUser />
               </button>
             )}
 
+            <button className="text-[25px] " onClick={() => setSun(!sun)}>
+              <div className="relative h-[25px] w-[25px]">
+                <FiSun
+                  className={`transition-all duration-500 ${
+                    sun ? "visible opacity-[1]" : "invisible opacity-[0]"
+                  } absolute`}
+                />
+                <FiMoon
+                  className={`transition-all duration-500 ${
+                    sun ? "invisible opacity-[0]" : "visible opacity-[1]"
+                  } absolute`}
+                />
+              </div>
+            </button>
             <button
               type="button"
               className="lg:hidden"

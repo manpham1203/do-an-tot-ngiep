@@ -63,8 +63,10 @@ function CustomerBirthday(props) {
   const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
   const [currentPage, setCurrentPage] = useState(1);
   const [dateType, setDateType] = useState(null);
+  const [loading, setLoading] = useState();
 
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/user/GetListBirthday`,
@@ -81,9 +83,10 @@ function CustomerBirthday(props) {
             totalResult: res.data.totalResult,
             data: res.data.data,
           });
+          setLoading(false);
         }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -147,11 +150,16 @@ function CustomerBirthday(props) {
           </Tbody>
         </Table>
         <div className="mt-[20px]">
-          <Pagination
-            setCurrentPage={setCurrentPage}
-            totalPage={data?.totalPage}
-            itemsPerPage={data?.data?.length}
-          />
+          {loading ? (
+            "loading"
+          ) : (
+            <Pagination
+              forcePage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPage={data?.totalPage}
+              itemsPerPage={data?.data?.length}
+            />
+          )}
         </div>
       </div>
     </div>

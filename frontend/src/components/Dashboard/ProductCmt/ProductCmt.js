@@ -78,7 +78,9 @@ function ProductCmt(props) {
   const [data, setData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [star, setStar] = useState(null);
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/comment/CmtPagination`,
@@ -92,9 +94,10 @@ function ProductCmt(props) {
       .then((res) => {
         if (res.status === 200) {
           setData(res.data);
+          setLoading(false);
         }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -187,11 +190,16 @@ function ProductCmt(props) {
           </Tbody>
         </Table>
         <div className="mt-[20px]">
-          <Pagination
-            setCurrentPage={setCurrentPage}
-            totalPage={data?.totalPage}
-            itemsPerPage={data?.list?.length}
-          />
+          {loading ? (
+            "loading"
+          ) : (
+            <Pagination
+              forcePage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPage={data?.totalPage}
+              itemsPerPage={data?.list?.length}
+            />
+          )}
         </div>
       </div>
     </div>

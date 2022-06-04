@@ -15,6 +15,7 @@ function QuestionToday(props) {
     totalResult: 0,
     questionVMs: [],
   });
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState({
     email: "",
@@ -22,6 +23,7 @@ function QuestionToday(props) {
     content: "",
   });
   const fetchData = async () => {
+    setLoading(true);
     await api({
       method: "GET",
       url: `/question/questiontoday`,
@@ -40,8 +42,9 @@ function QuestionToday(props) {
           totalResult: res.data.totalResult,
           questionVMs: res.data.questionVMs,
         });
+        setLoading(false);
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
@@ -55,10 +58,13 @@ function QuestionToday(props) {
         }`}
         onClick={() => setShow(!show)}
       >
-        <h2 className="text-[20px]">Liên hệ hôm nay <span className="text-red-500">({data.totalResult})</span></h2>
+        <h2 className="text-[20px]">
+          Liên hệ hôm nay{" "}
+          <span className="text-red-500">({data.totalResult})</span>
+        </h2>
         {show ? <BsDashLg /> : <BsPlusLg />}
       </div>
-      <div className={`${!show&&"hidden"} p-[20px]`}>
+      <div className={`${!show && "hidden"} p-[20px]`}>
         <div className="flex flex-row gap-x-[20px]">
           <div className="inline-flex flex-col w-[250px] mb-[20px]">
             <label
@@ -142,8 +148,11 @@ function QuestionToday(props) {
               </p>
             </div>
             <div>
-              {currentPage > 0 && (
+              {loading ? (
+                "loading"
+              ) : (
                 <Pagination
+                  forcePage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPage={data?.totalPage}
                   itemsPerPage={data?.questionVMs?.length}

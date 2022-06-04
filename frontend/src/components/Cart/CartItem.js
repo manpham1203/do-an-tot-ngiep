@@ -20,23 +20,26 @@ function CartItem(props) {
     }
   };
   const handleBlurNumber = (e) => {
-    if (e.target.value==="") {
+    if (e.target.value === "") {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
     }
   };
   console.log(props.qty);
 
   return (
-    <div
-      className="flex items-center hover:bg-gray-100 px-6 py-5"
-      key="{props.id}"
-    >
-      <div className="flex w-2/5">
-        <div className="w-20">
-          <img className="h-24" src={props.cartItem.imageSrc} alt="" />
+    <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 mb-[30px]">
+      <div className="flex w-full md:w-2/5 mb-[10px] md:mb-0">
+        <div className="w-[100px] h-[100px] flex-none p-[10px]">
+          <img
+            className="w-full h-full object-cover object-center"
+            src={props.cartItem.imageSrc}
+            alt=""
+          />
         </div>
         <div className="flex flex-col justify-between ml-4 flex-grow">
-          <span className="font-bold text-sm">{props.cartItem.name}</span>
+          <span className="font-bold text-sm short-desc-postcard2">
+            {props.cartItem.name}
+          </span>
           <span className="text-second text-xs">
             {props.cartItem.brandNameVM.name}
           </span>
@@ -48,7 +51,14 @@ function CartItem(props) {
           </h2>
         </div>
       </div>
-      <div className="flex justify-center w-1/5 items-center">
+
+      <span className="text-center w-full md:w-1/5 font-semibold text-sm mb-[10px] md:mb-0">
+        {new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(props.cartItem.currentPrice)}
+      </span>
+      <div className="flex justify-center w-full md:w-1/5 items-center mb-[10px] md:mb-0">
         <div
           onClick={() => dispatch(decrementQTY(props.cartItem.id))}
           className="cursor-pointer"
@@ -72,11 +82,11 @@ function CartItem(props) {
           <BsPlusLg />
         </div>
       </div>
-      <span className="text-center w-1/5 font-semibold text-sm">
-        {props.cartItem.currentPrice}
-      </span>
-      <span className="text-center w-1/5 font-semibold text-sm">
-        {props.cartItem.currentPrice * props.qty}
+      <span className="text-center w-full md:w-1/5 font-semibold text-sm mb-[10px] md:mb-0">
+        {new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(props.cartItem.currentPrice * props.qty)}
       </span>
     </div>
   );

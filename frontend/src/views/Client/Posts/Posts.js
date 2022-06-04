@@ -36,7 +36,7 @@ function Posts(props) {
             );
           })}
         </div>
-        <div className="w-[350px] flex-none">widget</div>
+        <div className="w-[300px] hidden lg:block lg:flex-none">widget</div>
       </div>
     </div>
   );

@@ -208,7 +208,7 @@ namespace BLL.Contact
                         {
                             Id = x.Id,
                             Content = x.Content,
-                            Name = "Số điện thoại"
+                            Name = "Điện thoại"
                         }).ToList();
                         list.AddRange(temp);
                     }

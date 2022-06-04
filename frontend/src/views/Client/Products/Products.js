@@ -383,8 +383,8 @@ function Products(props) {
 
  
   return (
-    <div className="container mx-auto flex flex-col">
-      <div className="h-[60px] flex items-center gap-x-[20px]">
+    <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-col">
+      <div className="h-[60px] hidden lg:flex lg:items-center gap-x-[20px]">
         <div className="w-[280px] flex-none">Lọc sản phẩm</div>
         <div className=" w-full flex justify-between items-center">
           <div className="text-gray-500">
@@ -466,8 +466,8 @@ function Products(props) {
           </div>
         </div>
       </div>
-      <div className="flex flex-row gap-x-[20px]">
-        <div className="flex-none w-[280px]">
+      <div className="flex flex-col lg:flex-row gap-x-[20px]">
+        <div className="flex-none w-full lg:w-[280px]">
           <div className="flex flex-col">
             <div className="relative mb-[20px]">
               <div className="w-full relative">
@@ -649,7 +649,7 @@ function Products(props) {
           )}
           {grid !== 0 && (
             <div
-              className={`grid ${grid === 2 && "grid-cols-4"} ${
+              className={`hidden lg:grid ${grid === 2 && "grid-cols-4"} ${
                 grid === 1 && "grid-cols-3"
               }  gap-x-[25px] gap-y-[25px] w-full`}
             >
@@ -672,6 +672,27 @@ function Products(props) {
                 })}
             </div>
           )}
+          <div
+              className={`lg:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-[25px] gap-y-[25px] w-full`}
+            >
+              {state.data?.products &&
+                state.data.products.map((item) => {
+                  return (
+                    <ProductCard
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      slug={item.slug}
+                      brandName={item.brandNameVM.name}
+                      brandSlug={item.brandNameVM.slug}
+                      price={item.price}
+                      priceDiscount={item.priceDiscount}
+                      image={item.imageSrc}
+                      star={item.star}
+                    />
+                  );
+                })}
+            </div>
 
           <div className="flex justify-center mt-[30px] ">
             {state.loading ? (

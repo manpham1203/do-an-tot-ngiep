@@ -194,7 +194,7 @@ function ProductDetail() {
   }, [state?.data?.id]);
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-[10px] sm:px-[20px]">
       {state.loading ? (
         <>loading</>
       ) : state.fail ? (
@@ -248,7 +248,6 @@ function ProductDetail() {
                 {state.data.view}
               </div>
 
-              <div className="text-justify">{state.data.shortDescription}</div>
 
               <div className="mt-[10px]">
                 <div className="">
@@ -310,12 +309,12 @@ function ProductDetail() {
           <h2 className="text-[25px] mb-[25px]">Mô tả sản phẩm</h2>
           <div
             className="text-justify"
-            dangerouslySetInnerHTML={{ __html: state.data.fullDescription }}
+            dangerouslySetInnerHTML={{ __html: state.data.description }}
           ></div>
           <h2 className="text-[25px] mb-[25px] mt-[25px]">Đánh giá sản phẩm</h2>
           {state?.data?.id && <ProductCmt id={state.data.id} />}
         </div>
-        <div className="w-[350px]">
+        <div className="w-[300px] hidden lg:flex flex-none">
           <BrandWidget />
           <CategoryWidget />
           <NewProductWidget />
@@ -324,7 +323,7 @@ function ProductDetail() {
       <div>
         {state.data?.brandId && (
           <RelatedProducts brandId={state.data?.brandId} />
-        )}
+        ) }
       </div>
     </div>
   );

@@ -29,19 +29,18 @@ function Layout(props) {
     <>
       {top && (
         <div
-          className={`border-b border-b-[#161a2133]  bg-third w-[100%] z-[8] transition-all duration-[300ms] font-primary fixed font-medium 
-     
+          className={`border-b border-b-[#161a2133]  bg-third w-[100%] z-[7] transition-all duration-[300ms] font-primary fixed font-medium 
       `}
         >
-          <div className="container mx-auto flex flex-row justify-between items-center h-[30px] ">
+          <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-row justify-between items-center h-[60px] sm:h-[30px] ">
             <p>Trang web này được tạo ra với mục đích học tập và nghiên cứu.</p>
             <FaTimes onClick={()=>setTop(false)} className="hover:text-second cursor-pointer text-gray-400" />
           </div>
         </div>
       )}
 
-      <Header className={`${top && "mt-[30px]"}`} />
-      <div className={`${mt && top ? "pt-[100px]" : mt && "pt-[70px]"} `}>
+      <Header className={`${top && "mt-[60px] sm:mt-[30px]"}`} />
+      <div className={`${mt && top ? "pt-[150px] sm:pt-[120px]" : mt && "pt-[70px] sm:pt-[100px]"} `}>
         <Outlet></Outlet>
       </div>
 
