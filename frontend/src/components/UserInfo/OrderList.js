@@ -55,9 +55,9 @@ function OrderList(props) {
                 onClick={() => handlerOpenItemOrder(item.id)}
                 className="bg-white shadow-md w-full rounded-md flex flex-row items-center justify-between px-[20px] cursor-pointer"
               >
-                <div className="flex flex-row gap-x-[20px] rounded-md  py-[15px]">
+                <div className="flex flex-col md:flex-row gap-x-[20px] rounded-md  py-[15px]">
                   <div>Mã đơn hàng: {item.id}</div>
-                  <div>|</div>
+                  <div className="hidden md:block">|</div>
                   {/* <div>
                     Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
                   </div>
@@ -87,11 +87,11 @@ function OrderList(props) {
                   </div>
                   <div className="">
                     <h2 className="mb-[20px]">Sản phẩm đã mua:</h2>
-                    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[20px] gap-y-[20px]">
                       {item.orderDetailVMs.map((detail) => {
                         return (
-                          <div key={detail.id} className="flex flex-row  p-[10px] gap-x-[10px] rounded-md bg-third">
-                            <div className="w-[150px] h-[150px] flex-none rounded-md overflow-hidden">
+                          <div key={detail.id} className="flex flex-row  lg:p-[10px] gap-x-[10px] rounded-md bg-third">
+                            <div className="w-[80px] h-[80px] lg:w-[150px] lg:h-[150px] flex-none rounded-md overflow-hidden">
                               <img
                                 src={detail.productOrderVM.imageSrc}
                                 alt={detail.productOrderVM.imageName}

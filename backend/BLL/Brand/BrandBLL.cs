@@ -221,13 +221,13 @@ namespace BLL
             {
                 return new List<BrandNameVM>();
             }
-            resultFromDAL = resultFromDAL.Take(10).ToList();
             if (resultFromDAL.Count > 0)
             {
                 var productBLL = new ProductBLL();
                 for (int i = 0; i < resultFromDAL.Count(); i++)
                 {
                     var productCards = await productBLL.ListProductCardOfBrand(resultFromDAL[i].Id);
+                    productCards=productCards.Take(10).ToList();
                     if (productCards != null)
                     {
                         if (productCards.Count > 0)

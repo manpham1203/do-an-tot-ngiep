@@ -228,7 +228,6 @@ namespace BLL.Category
             {
                 return new List<CategoryNameVM>();
             }
-            resultFromDAL = resultFromDAL.Take(10).ToList();
             if (resultFromDAL.Count > 0)
             {
                 var productBLL = new ProductBLL();
@@ -236,6 +235,7 @@ namespace BLL.Category
                 for (int i = 0; i < resultFromDAL.Count; i++)
                 {
                     var listPC = await pcBLL.GetById(resultFromDAL[i].Id, "CategoryId");
+                    listPC=listPC.Take(10).ToList();
                     resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
                     if (listPC != null)
                     {

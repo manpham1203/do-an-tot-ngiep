@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Select, { StylesConfig } from "react-select";
 import { setOpenAdminViewOrder } from "../../../redux/adminViewOrder/adminViewOrderActions";
+import { cursorDefault, cursorWait } from "../../../redux/cursor/cursorActions";
 import { useDispatch } from "react-redux";
 import Tr from "../../../components/Table/Tr";
 import Td from "../../../components/Table/Td";
@@ -123,7 +124,7 @@ const colourStyles = {
 
 function Row(props) {
   const [state, dispatch] = useReducer(reducer, initState);
-  const dispatchQV = useDispatch();
+  const dispatchRedux = useDispatch();
   //   const statusOptions = [
   //       { value: 1, label: "Chờ xác nhận" },
   //       { value: 2, label: "Đang chuẩn bị hàng" },
@@ -159,6 +160,7 @@ function Row(props) {
   };
 
   const handleChangeStatus = async (e) => {
+    dispatchRedux(cursorWait());
     await api({
       method: "PUT",
       url: `/Order/changestate/${props.id}`,
@@ -173,16 +175,20 @@ function Row(props) {
           setOrderStatus(e);
           fetchData(props.id);
           props.fetchData();
+          dispatchRedux(cursorDefault());
         }
       })
-      .catch(() => dispatch(fail()));
+      .catch(() => {
+        dispatch(fail());
+        dispatchRedux(cursorDefault());
+      });
   };
   const handleQuickView = () => {
     const obj = {
       show: true,
       id: props.id,
     };
-    dispatchQV(setOpenAdminViewOrder(obj));
+    dispatchRedux(setOpenAdminViewOrder(obj));
   };
   return (
     <Tr>

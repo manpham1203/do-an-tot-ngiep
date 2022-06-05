@@ -96,7 +96,7 @@ function ProductCard(props) {
           {props.brandName}
         </h3>
         <h3
-          className="cursor-pointer font-primary font-normal text-[20px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center"
+          className="cursor-pointer font-primary font-normal text-[18px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center"
           onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
           {props.name}

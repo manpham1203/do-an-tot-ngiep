@@ -73,7 +73,7 @@ function RelatedProducts(props) {
   console.log(state);
   return (
     <div>
-      <h2 className="text-[25px] ">Sản phẩm liên quan</h2>
+      <h2 className="text-[20px]  md:text-[25px] ">Sản phẩm liên quan</h2>
       <div className="pt-[20px] pb-[20px]">
           {state.data?.productCardVMs?.length > 0 && (
         <ListProductCard products={state.data.productCardVMs} />

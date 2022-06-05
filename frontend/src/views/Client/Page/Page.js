@@ -5,6 +5,7 @@ import api from "../../../apis/api";
 function Page(props) {
   const { slug } = useParams();
   const [data, setData] = useState();
+  document.title = data?.title || "Trang";
   const fetchData = async (s) => {
     await api({
       method: "GET",
@@ -20,7 +21,7 @@ function Page(props) {
     fetchData(slug);
   }, [slug]);
   console.log(data);
-  return <div className="container mx-auto">
+  return <div className="container px-[10px] sm:px-[20px] mx-auto">
       <div dangerouslySetInnerHTML={{ __html: data?.content }}></div>
   </div>;
 }

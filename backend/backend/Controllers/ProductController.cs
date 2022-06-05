@@ -593,8 +593,44 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-    
-        
 
+        [HttpGet("MostBoughtWidget")]
+        public async Task<IActionResult> MostBoughtWidget()
+        {
+            var resultFromBLL = await productBLL.MostBoughtWidget();
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.Count == 0)
+            {
+                return Ok(new List<ProductWidgetVM>());
+            }
+            for (int i = 0; i < resultFromBLL.Count; i++)
+            {
+                resultFromBLL[i].ImgSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImgName);
+
+            }
+            return Ok(resultFromBLL);
+        }
+        [HttpGet("OnSaleWidget")]
+        public async Task<IActionResult> OnSaleWidget()
+        {
+            var resultFromBLL = await productBLL.OnSaleWidget();
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.Count == 0)
+            {
+                return Ok(new List<ProductWidgetVM>());
+            }
+            for (int i = 0; i < resultFromBLL.Count; i++)
+            {
+                resultFromBLL[i].ImgSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL[i].ImgName);
+
+            }
+            return Ok(resultFromBLL);
+        }
     }
 }

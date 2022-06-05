@@ -974,7 +974,8 @@ namespace DAL.Product
                 }
                 var result = resultFromDb.Join(db.Products, d => d.ProductId, p => p.Id, (d, p) => new { d, p })
                     .GroupBy(x => x.d.ProductId)
-                    .Where(x => x.Sum(m => m.d.Quantity) >= 10 && x.First().p.Deleted==false && x.First().p.Published == true)
+                    .Where(x => x.Sum(m => m.d.Quantity) >= 20 && x.First().p.Deleted==false && x.First().p.Published == true)
+                    .Take(8)
                     .Select(x => new ProductCardVM
                     {
                         Id = x.Key,
@@ -994,11 +995,41 @@ namespace DAL.Product
                 return null;
             }
         }
+        public async Task<List<ProductWidgetVM>> MostBoughtWidget()
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<ProductWidgetVM>();
+                }
+                var result = resultFromDb.Join(db.Products, d => d.ProductId, p => p.Id, (d, p) => new { d, p })
+                    .GroupBy(x => x.d.ProductId)
+                    .Where(x => x.Sum(m => m.d.Quantity) >= 20 && x.First().p.Deleted == false && x.First().p.Published == true)
+                    .Take(5)
+                    .Select(x => new ProductWidgetVM
+                    {
+                        Id = x.Key,
+                        Name = x.First().p.Name,
+                        Slug = x.First().p.Slug,
+                        Price = x.First().p.Price,
+                        PriceDiscount = x.First().p.PriceDiscount,
+                        ImgName = null,
+                        ImgSrc = null,
+                    }).ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async Task<List<ProductCardVM>> OnSale(int take)
         {
             try
             {
-                var resultFromDb = await db.Products.Take(take).Where(x => x.PriceDiscount !=null && x.Published == true && x.Deleted == false).OrderBy(x => x.PriceDiscount).ToListAsync();
+                var resultFromDb = await db.Products.Where(x => x.PriceDiscount !=null && x.Published == true && x.Deleted == false).Take(take).OrderBy(x => x.PriceDiscount).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<ProductCardVM>();
@@ -1014,6 +1045,32 @@ namespace DAL.Product
                     ImageName = null,
                     ImageSrc = null,
                     BrandId = x.BrandId,
+                }).ToList();
+                return productCards;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<List<ProductWidgetVM>> OnSaleWidget()
+        {
+            try
+            {
+                var resultFromDb = await db.Products.Where(x => x.PriceDiscount != null && x.Published == true && x.Deleted == false).OrderBy(x => x.PriceDiscount).Take(5).ToListAsync();
+                if (resultFromDb.Count == 0)
+                {
+                    return new List<ProductWidgetVM>();
+                }
+                var productCards = resultFromDb.Select(x => new ProductWidgetVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    Price = x.Price,
+                    PriceDiscount = x.PriceDiscount,
+                    ImgName = null,
+                    ImgSrc = null,
                 }).ToList();
                 return productCards;
             }

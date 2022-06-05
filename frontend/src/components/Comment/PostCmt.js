@@ -30,16 +30,16 @@ function ProductCmt(props) {
   useEffect(() => {
     fetchData(props.id);
   }, [props.id]);
-  useEffect(()=>{
-    fetchData(props.id)
-  }, [currentPage])
+  useEffect(() => {
+    fetchData(props.id);
+  }, [currentPage]);
 
   return (
     <div className="flex flex-col gap-y-[25px]">
       {data.list.length > 0 &&
         data.list.map((item, index) => {
           return (
-            <PostCmtItem          
+            <PostCmtItem
               key={index}
               id={item}
               index={index}
@@ -52,6 +52,7 @@ function ProductCmt(props) {
         })}
       {data.list.length > 0 && (
         <Pagination
+          forcePage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPage={data.totalPage}
           itemsPerPage={data.list.length}

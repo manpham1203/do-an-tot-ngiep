@@ -4,6 +4,7 @@ import api from "../../../apis/api";
 import ProductCard from "../../../components/Product/ProductCard";
 
 function Wishlist(props) {
+  document.title="Sản phẩm yêu thích";
   const { user } = useSelector((store) => store);
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -33,7 +34,7 @@ function Wishlist(props) {
           Bạn Chưa Thích Sản Phẩm Nào
         </h2>
       )}
-      <div className="grid grid-cols-4 gap-[25px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[25px]">
         {data.map((item) => {
           return (
             <ProductCard

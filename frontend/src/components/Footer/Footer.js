@@ -65,13 +65,13 @@ function Footer(props) {
           </div>
           <div className="flex flex-row flex-1 gap-x-[30px] w-full">
             <div className="flex-1">
-              <FooterListLink title="Thương Hiệu" data={brand} type="brand" />
+              <FooterListLink title="Thương Hiệu" data={brand} type="thuong-hieu" />
             </div>
             <div className="flex-1">
               <FooterListLink
                 title="Danh Mục"
                 data={category}
-                type="category"
+                type="danh-muc"
               />
             </div>
           </div>
@@ -88,7 +88,7 @@ function Footer(props) {
                           to={`/trang/${item.slug}`}
                           className="hover:underline hover:underline-offset-4 text-[#777]"
                         >
-                          {item.title}
+                          - {item.title}
                         </Link>
                       </li>
                     );
@@ -103,7 +103,7 @@ function Footer(props) {
                   {contact.map((item) => {
                     return (
                       <li key={item.id} className="text-[#777]">
-                        <span>{item.name}</span>: <span>{item.content}</span>
+                        - <span>{item.name}</span>: <span>{item.content}</span>
                       </li>
                     );
                   })}
@@ -112,7 +112,7 @@ function Footer(props) {
             </div>
           </div>
         </div>
-        <div className="border-t border-t-[#161a2133] h-[70px] flex flex-row items-center mt-[40px] gap-x-[40px] font-light">
+        <div className="border-t border-t-[#161a2133] h-[70px] flex flex-col sm:flex-row items-center justify-center mt-[40px] gap-x-[25px] font-light">
           <span>ĐỒ ÁN TỐT NGHIỆP</span>
           <span>Phạm Minh Mẫn</span>
         </div>

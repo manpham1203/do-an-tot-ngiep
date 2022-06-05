@@ -24,7 +24,7 @@ function PurchasedProduct(props) {
   }, [props.userId]);
   console.log(data);
   return (
-    <div className="grid grid-cols-2 gap-x-[20px] gap-y-[20px] w-full">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[20px] gap-y-[20px] w-full">
       {data.length > 0 &&
         data.map((item) => {
           return (

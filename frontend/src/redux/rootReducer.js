@@ -15,6 +15,7 @@ import { adminViewCmtReducer } from "./adminViewCmt/adminViewCmtReducer";
 import { adminViewPostReducer } from "./adminViewPost/adminViewPostReducer";
 import { adminViewUserReducer } from "./adminViewUser/adminViewUserReducer";
 import { menuReducer } from "./menu/menuReducer";
+import { cursorReducer } from "./cursor/cursorReducer";
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
   adminViewCmt: adminViewCmtReducer,
   adminViewPost: adminViewPostReducer,
   adminViewUser: adminViewUserReducer,
-  menu:menuReducer
+  menu: menuReducer,
+  cursor: cursorReducer,
 });
 
 export default rootReducer;

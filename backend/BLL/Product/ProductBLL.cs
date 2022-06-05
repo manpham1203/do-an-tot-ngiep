@@ -1431,6 +1431,7 @@ namespace BLL.Product
             try
             {
                 var resultFromDAL = await productDAL.OnSale(take);
+
                 if (resultFromDAL == null)
                 {
                     return null;
@@ -1477,7 +1478,50 @@ namespace BLL.Product
                 return null;
             }
         }
-
+        public async Task<List<ProductWidgetVM>> MostBoughtWidget()
+        {
+            var resultFromDAL = await productDAL.MostBoughtWidget();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return resultFromDAL;
+            }
+            var productImageBLL = new PictureBLL();
+            for (int i = 0; i < resultFromDAL.Count; i++)
+            {
+                var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                if (listImg.Count > 0)
+                {
+                    resultFromDAL[i].ImgName = listImg[0].Name;
+                }
+            }
+            return resultFromDAL;
+        }
+        public async Task<List<ProductWidgetVM>> OnSaleWidget()
+        {
+            var resultFromDAL = await productDAL.OnSaleWidget();
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            if (resultFromDAL.Count == 0)
+            {
+                return resultFromDAL;
+            }
+            var productImageBLL = new PictureBLL();
+            for (int i = 0; i < resultFromDAL.Count; i++)
+            {
+                var listImg = await productImageBLL.GetByObjectId(resultFromDAL[i].Id, objectType);
+                if (listImg.Count > 0)
+                {
+                    resultFromDAL[i].ImgName = listImg[0].Name;
+                }
+            }
+            return resultFromDAL;
+        }
     }
 
 }

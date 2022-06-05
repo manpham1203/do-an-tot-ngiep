@@ -123,7 +123,7 @@ function Register(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmitHandler)} autoComplete="off">
-      <div className="mt-[25px] flex flex-row gap-x-[20px]">
+      <div className="mt-[25px] flex flex-col md:flex-row gap-x-[20px]">
         {/* lastname */}
         <div className="w-full">
           <Input name="lastname" type="text" label="Họ" control={control} />
@@ -136,7 +136,7 @@ function Register(props) {
           </p>
         </div>
         {/* firstname */}
-        <div className="w-full">
+        <div className="w-full mt-[18px] md:mt-0">
           <Input name="firstname" type="text" label="Tên" control={control} />
           <p
             className={`text-red-500 text-sm min-h-[1.25rem] mt-[2px] ${

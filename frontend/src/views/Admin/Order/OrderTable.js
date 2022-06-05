@@ -11,6 +11,7 @@ import Th from "../../../components/Table/Th";
 import Tbody from "../../../components/Table/Tbody";
 import Tr from "../../../components/Table/Tr";
 import ExportExcel from "../../../components/ExportFile/ExportExcel";
+import { useDispatch, useSelector } from "react-redux";
 
 const initState = {
   loading: false,
@@ -135,6 +136,7 @@ function OrderTable(props) {
   const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [stateOrder, setStateOrder] = useState(null);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -158,7 +160,6 @@ function OrderTable(props) {
     };
     fetchData();
   }, [query, stateOrder, currentPage]);
-  console.log(state.data);
   return (
     <>
       <div className="bg-white rounded-[8px] p-[20px] shadow-admin">

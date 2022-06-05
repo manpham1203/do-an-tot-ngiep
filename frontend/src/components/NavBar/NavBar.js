@@ -55,7 +55,7 @@ function NavBar(props) {
         >
           {/* left */}
           <span
-            className={`w-fit lg:w-[150px] flex flex-row items-center justify-start text-[25px]
+            className={`w-fit lg:w-[150px] flex flex-row items-center justify-start text-[25px] cursor-pointer
           ${
             navHome === false
               ? "text-black"
@@ -64,6 +64,7 @@ function NavBar(props) {
               : "text-third"
           }
           `}
+          onClick={() => navigate("/")}
           >
             WatchStore
           </span>
@@ -120,18 +121,7 @@ function NavBar(props) {
             )}
 
             <button className="text-[25px] " onClick={() => setSun(!sun)}>
-              <div className="relative h-[25px] w-[25px]">
-                <FiSun
-                  className={`transition-all duration-500 ${
-                    sun ? "visible opacity-[1]" : "invisible opacity-[0]"
-                  } absolute`}
-                />
-                <FiMoon
-                  className={`transition-all duration-500 ${
-                    sun ? "invisible opacity-[0]" : "visible opacity-[1]"
-                  } absolute`}
-                />
-              </div>
+              {sun ? <FiSun /> : <FiMoon />}
             </button>
             <button
               type="button"

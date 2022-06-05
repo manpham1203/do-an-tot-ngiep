@@ -67,11 +67,11 @@ function ChangePassword(props) {
   };
   const { user } = useSelector((store) => store);
   return (
-    <div className="flex flex-col w-[100%]  items-center">
+    <div className="flex flex-col w-full items-center">
       <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
         ĐỔI MẬT KHẨU
       </h2>
-      <div className="w-[400px] gap-y-[20px] flex flex-col">
+      <div className="w-full lg:w-[400px] gap-y-[20px] flex flex-col">
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="mt-[25px]">
             <Input

@@ -10,7 +10,7 @@ function FooterListLink(props) {
           return (
             <li key={item.id}>
               <Link to={`san-pham?${props.type}=${item.slug}`} className="hover:underline hover:underline-offset-4 text-[#777]">
-                {item.name}
+                - {item.name}
               </Link>
             </li>
           );

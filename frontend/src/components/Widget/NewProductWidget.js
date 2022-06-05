@@ -72,8 +72,9 @@ function NewProductWidget(props) {
   }, []);
 
   return (
+    state.data.length>0?
     <div className="mb-[20px]">
-      <h2 className="text-[25px]">Sản phẩm mới</h2>
+      <h2 className="text-[22px]">Sản phẩm mới</h2>
       <div className="font-normal flex flex-col gap-y-[20px]">
         {state.data?.map((item) => {
           return (
@@ -117,6 +118,7 @@ function NewProductWidget(props) {
         })}
       </div>
     </div>
+    :""
   );
 }
 

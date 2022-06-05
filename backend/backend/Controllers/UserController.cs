@@ -253,7 +253,7 @@ namespace backend.Controllers
 
             try
             {
-                var resultFromBLL = await userBLL.Login(model);
+                var resultFromBLL = await userBLL.LoginAdmin(model);
                 if (resultFromBLL != null)
                 {
                     return Ok(resultFromBLL);

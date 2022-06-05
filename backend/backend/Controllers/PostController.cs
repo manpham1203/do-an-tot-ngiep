@@ -183,12 +183,34 @@ namespace backend.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet("postcards")]
-        public async Task<IActionResult> PostCards()
+        [HttpGet("PostPagination")]
+        public async Task<IActionResult> PostPagination(int limit=6, int currentPage=1)
         {
             try
             {
-                var resultFromBLL = await postBLL.PostCards();
+                var resultFromBLL = await postBLL.PostPagination(limit, currentPage);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                for (int i = 0; i < resultFromBLL.PostCardVMs.Count; i++)
+                {
+                    resultFromBLL.PostCardVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.PostCardVMs[i].Image);
+                }
+
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("postcards")]
+        public async Task<IActionResult> PostCards(int limit = 6, int currentPage = 1)
+        {
+            try
+            {
+                var resultFromBLL = await postBLL.PostCards(limit, currentPage);
                 if (resultFromBLL == null)
                 {
                     return BadRequest();

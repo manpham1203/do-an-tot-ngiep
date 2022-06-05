@@ -54,6 +54,7 @@ function ProductCmt(props) {
         }): "chưa có đánh giá"}
       {data.list.length > 0 && (
         <Pagination
+          forcePage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPage={data.totalPage}
           itemsPerPage={data.list.length}

@@ -7,6 +7,7 @@ import Select from "react-select";
 import { FaRegEdit, FaRegEye } from "react-icons/fa";
 import Tr from "../../Table/Tr";
 import Td from "../../Table/Td";
+import { cursorDefault, cursorWait } from "../../../redux/cursor/cursorActions";
 
 const orderOptions = [
   { value: 1, label: "Chờ xác nhận", color: "#2F4B60" },
@@ -72,7 +73,7 @@ const colourStyles = {
 
 function Row(props) {
   const [data, setData] = useState();
-  const dispatchQV = useDispatch();
+  const dispatchRedux = useDispatch();
   const [orderStatus, setOrderStatus] = useState({});
 
   const fetchData = async (id) => {
@@ -96,6 +97,7 @@ function Row(props) {
   }, [props.id]);
 
   const handleChangeStatus = async (e) => {
+    dispatchRedux(cursorWait());
     await api({
       method: "PUT",
       url: `/Order/changestate/${props.id}`,
@@ -103,6 +105,7 @@ function Row(props) {
     })
       .then((res) => {
         if (res.status === 200) {
+          dispatchRedux(cursorDefault());
           toast.success(`Thay đổi trạng thái đơn hàng thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
@@ -112,14 +115,17 @@ function Row(props) {
           props.fetchData();
         }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => {
+        console.log("fail");
+        dispatchRedux(cursorDefault());
+      });
   };
   const handleQuickView = () => {
     const obj = {
       show: true,
       id: props.id,
     };
-    dispatchQV(setOpenAdminViewOrder(obj));
+    dispatchRedux(setOpenAdminViewOrder(obj));
   };
   return (
     <Tr>
@@ -143,7 +149,7 @@ function Row(props) {
         </div>
       </Td>
       <Td>
-      <div className="flex flex-row justify-center text-[25px] gap-x-[20px] w-full">
+        <div className="flex flex-row justify-center text-[25px] gap-x-[20px] w-full">
           <FaRegEye
             onClick={() => handleQuickView()}
             className="cursor-pointer"

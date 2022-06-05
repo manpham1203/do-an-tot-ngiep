@@ -378,3 +378,10 @@ D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\wat
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\waterbury-traditional-automatic-39mm-leather-strap-watch220604150947684_2.jpg
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\waterbury-traditional-automatic-39mm-leather-strap-watch220604150947684_3.jpg
 D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\waterbury-traditional-automatic-39mm-leather-strap-watch220604150947684_4.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\bitcoin-tiep-nhan-nang-luong-vu-tru-tu-jacob-co-trong-mau-dong-ho-astronomia-moi-nhat220604204437334.webp
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\dau-la-thuong-hieu-dong-ho-duoc-nguoi-viet-san-tim-nhieu-nhat220604203735109.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\dong-ho-deo-tay-va-nhung-phat-minh-“dien-ro”-tu-cac-bo-oc-thien-tai220604204756298.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\dong-ho-emile-chouriet-–-khat-vong-nhung-ke-mong-mo-chinh-phuc-the-gioi-moi220604204137196.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\dong-ho-nu-day-da-phu-kien-khong-the-thieu-doi-voi-phu-nu-thanh-dat220604203905249.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\lich-su-phat-minh-dong-ho-omega-nhung-goc-nhin-thu-vi220604204544715.jpg
+D:\New folder\PhamMinhMan_2119110081\backend\backend\bin\Debug\net5.0\Photos\tim-hieu-ve-dong-ho-nu-hang-hieu-phan-khuc-tam-trung-dang-mua-nhat220604204253584.jpg

@@ -11,14 +11,16 @@ import { toast } from "react-toastify";
 import ProductImageSlider from "../../../components/ProductImageSlider/ProductImageSlider";
 import BrandWidget from "../../../components/Widget/BrandWidget";
 import CategoryWidget from "../../../components/Widget/CategoryWidget";
+import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
+import NewProductWidget from "../../../components/Widget/NewProductWidget";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
-import NewProductWidget from "../../../components/Widget/NewProductWidget";
 import RelatedProducts from "../../../components/Product/RelatedProducts";
 import ShowStarAvg from "../../../components/ShowStar/ShowStarAvg";
 import ProductCmt from "../../../components/Comment/ProductCmt";
+import OnSaleWidget from "../../../components/Widget/OnSaleWidget";
 
 const initState = {
   loading: false,
@@ -79,7 +81,7 @@ function ProductDetail() {
   const cart = store.cart;
   const dispatch = useDispatch();
   // const carts = store.cart;
-  document.title = `${state.data.name}`;
+  document.title = "Sản phẩm: " + state?.data?.name || "Chi tiết sản phẩm";
 
   const fetchProductDetail = async (slug) => {
     dispatchProduct(loading());
@@ -207,8 +209,12 @@ function ProductDetail() {
 
           <div className="w-full p-[20px]">
             <div className=" flex flex-col gap-y-[10px] items-center lg:items-start">
-              <h2 className="text-[20px]">{state.data.brandNameVM?.name}</h2>
-              <h2 className="text-[30px]">{state.data.name}</h2>
+              <h2 className="text-[18px] sm:text-[20px]">
+                {state.data.brandNameVM?.name}
+              </h2>
+              <h2 className="text-[20px] sm:text-[25px] lg:text-[30px]">
+                {state.data.name}
+              </h2>
               <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
                 <ShowStarAvg star={state.data.star} />
 
@@ -217,7 +223,7 @@ function ProductDetail() {
                 </span>
               </div>
               {state.data.priceDiscount === null ? (
-                <span className="text-[28px] mt-[10px]">
+                <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px]">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
@@ -225,13 +231,13 @@ function ProductDetail() {
                 </span>
               ) : (
                 <div className="flex flex-row gap-x-[20px]">
-                  <span className="text-[28px] mt-[10px] ">
+                  <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px] ">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
                     }).format(state.data.priceDiscount)}
                   </span>
-                  <span className="text-[28px] mt-[10px] line-through opacity-[0.5]">
+                  <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px] mt-[10px] line-through opacity-[0.5]">
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
@@ -248,17 +254,26 @@ function ProductDetail() {
                 {state.data.view}
               </div>
 
-
               <div className="mt-[10px]">
                 <div className="">
                   <span className="font-medium">Loại sản phẩm: </span>
-                  {state.data.categoryNameVMs?.map((item) => {
-                    return (
+                  {state.data.categoryNameVMs?.map((item, index) => {
+                    return index + 1 === state.data.categoryNameVMs.length ? (
                       <span
                         key={item.id}
                         className="cursor-pointer hover:underline underline-offset-4"
                         onClick={() =>
-                          navigate(`/san-pham?&category=${item.slug}`)
+                          navigate(`/san-pham?&danh-muc=${item.slug}`)
+                        }
+                      >
+                        {item.name}
+                      </span>
+                    ) : (
+                      <span
+                        key={item.id}
+                        className="cursor-pointer hover:underline underline-offset-4"
+                        onClick={() =>
+                          navigate(`/san-pham?&danh-muc=${item.slug}`)
                         }
                       >
                         {item.name},&nbsp;
@@ -306,24 +321,30 @@ function ProductDetail() {
       )}
       <div className="flex flex-row gap-x-[25px]">
         <div className="w-full">
-          <h2 className="text-[25px] mb-[25px]">Mô tả sản phẩm</h2>
+          <h2 className="text-[20px]  md:text-[25px] mb-[25px]">
+            Mô tả sản phẩm
+          </h2>
           <div
             className="text-justify"
             dangerouslySetInnerHTML={{ __html: state.data.description }}
           ></div>
-          <h2 className="text-[25px] mb-[25px] mt-[25px]">Đánh giá sản phẩm</h2>
+          <h2 className="text-[20px]  md:text-[25px]  mb-[25px] mt-[25px]">
+            Đánh giá sản phẩm
+          </h2>
           {state?.data?.id && <ProductCmt id={state.data.id} />}
         </div>
-        <div className="w-[300px] hidden lg:flex flex-none">
+        <div className="w-[300px] xl:w-[350px] hidden lg:block flex-none">
           <BrandWidget />
           <CategoryWidget />
-          <NewProductWidget />
+          {/* <NewProductWidget /> */}
+          <MostBoughtWidget />
+          <OnSaleWidget />
         </div>
       </div>
       <div>
         {state.data?.brandId && (
           <RelatedProducts brandId={state.data?.brandId} />
-        ) }
+        )}
       </div>
     </div>
   );

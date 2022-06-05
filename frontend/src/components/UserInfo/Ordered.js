@@ -86,13 +86,15 @@ function Ordered(props) {
                   onClick={() => handlerOpenItemOrder(item.id)}
                   className="bg-white shadow-md w-full rounded-md flex flex-row items-center justify-between px-[20px] cursor-pointer"
                 >
-                  <div className="flex flex-row gap-x-[20px] rounded-md  py-[15px]">
-                    <div>Mã đơn hàng: {item.id}</div>
-                    <div>|</div>
-                    <div>
-                      Trạng thái đơn hàng: {orderStatusText(item.state)}
-                    </div>
+                  <div className="flex flex-col md:flex-row gap-x-[20px] rounded-md  py-[15px]">
+                  <div>Mã đơn hàng: {item.id}</div>
+                  <div className="hidden md:block">|</div>
+                  {/* <div>
+                    Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
                   </div>
+                  <div>|</div> */}
+                  <div>Trạng thái đơn hàng: {orderStatusText(item.state)}</div>
+                </div>
                   {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
                 </div>
                 {itemOrder === item.id && (

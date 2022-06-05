@@ -77,8 +77,8 @@ function Question(props) {
   }, []);
 
   return (
-    <div className="mt-[50px] container mx-auto">
-      <div className="w-full flex flex-row gap-x-[25px]">
+    <div className="container px-[10px] sm:px-[20px] mx-auto">
+      <div className="w-full flex flex-col lg:flex-row gap-x-[25px] gap-y-[25px]">
         <div className="flex-[1]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1003449.6852539204!2d106.13469869341657!3d10.755639034903153!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529292e8d3dd1%3A0xf15f5aad773c112b!2zSOG7kyBDaMOtIE1pbmgsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1652457388181!5m2!1svi!2s"
@@ -93,7 +93,7 @@ function Question(props) {
             GỬI THẮC MẮC CỦA BẠN ĐẾN CHÚNG TÔI
           </h2>
           <form onSubmit={handleSubmit(onSubmitHandler)}>
-            <div className="flex flex-row gap-x-[25px]">
+            <div className="flex flex-col md:flex-row gap-x-[25px]">
               <div className="w-full">
                 <div className="w-full relative">
                   <input
@@ -116,7 +116,7 @@ function Question(props) {
                   {errors?.name?.message}
                 </p>
               </div>
-              <div className="w-full">
+              <div className="w-full mt-[25px] md:mt-0">
                 <div className="w-full relative">
                   <input
                     placeholder=" "

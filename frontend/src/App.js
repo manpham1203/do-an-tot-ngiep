@@ -85,7 +85,8 @@ function App() {
     adminViewCmt,
     adminViewBrand,
     adminViewPost,
-    adminViewUser
+    adminViewUser,
+    cursor
   } = useSelector((store) => store);
   useEffect(() => {
     if (adminViewUser.show) {
@@ -155,11 +156,11 @@ function App() {
   }, [user.role, location.pathname]);
 
   return (
-    <div className="w-[100%] min-h-screen">
+    <div className={`w-[100%] min-h-screen ${cursor.wait && "cursor-wait"}`}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
-          {/* <Route path="/gioi-thieu" element={<About />}></Route> */}
+          <Route path="/gioi-thieu" element={<About />}></Route>
           <Route path="/lien-he" element={<Question />}></Route>
           <Route path="/gio-hang" element={<Cart />}></Route>
           <Route path="/thanh-toan" element={<Checkout />}></Route>

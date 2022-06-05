@@ -98,7 +98,7 @@ namespace BLL.Post
                 return false;
             }
             var slug = Regex.Replace(model.Title, regex, string.Empty);
-            slug = Regex.Replace(cm.RemoveUnicode(model.Title).Trim().ToLower(), @"\s+", "-");
+            slug = Regex.Replace(cm.RemoveUnicode(slug).Trim().ToLower(), @"\s+", "-");
 
 
             if (model.File != null)
@@ -228,11 +228,45 @@ namespace BLL.Post
                 return false;
             }
         }
-        public async Task<List<PostCardVM>> PostCards()
+        public async Task<List<PostCardVM>> PostCards(int limit, int currentPage)
         {
             try
             {
                 return await postDAL.PostCards();
+                
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<PostPaginationClientVM> PostPagination(int limit, int currentPage)
+        {
+            try
+            {
+                var resultFromDAL = await postDAL.PostCards();
+                if (resultFromDAL == null)
+                {
+                    return null;
+                }
+                if (resultFromDAL.Count == 0)
+                {
+                    return new PostPaginationClientVM
+                    {
+                        TotalResult = 0,
+                        TotalPage = 0,
+                        PostCardVMs = new List<PostCardVM>(),
+                    };
+                }
+                var count = resultFromDAL.Count();
+                var totalPage = (int)Math.Ceiling(count / (double)limit);
+                resultFromDAL = resultFromDAL.Skip((currentPage - 1) * limit).Take(limit).ToList();
+                return new PostPaginationClientVM
+                {
+                    TotalResult = count,
+                    TotalPage = totalPage,
+                    PostCardVMs = resultFromDAL,
+                };
             }
             catch
             {

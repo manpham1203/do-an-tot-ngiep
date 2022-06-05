@@ -71,13 +71,13 @@ function BrandWidget(props) {
   }, []);
   return (
     <div className="mb-[20px]">
-      <h2 className="text-[25px]">Thương hiệu</h2>
+      <h2 className="text-[22px]">Thương hiệu</h2>
       <ul className="font-normal ml-[10px]">
         {state.data?.map((item) => {
           return (
             <li key={item.id}>
               &#8210;{" "}
-              <Link to={`/san-pham?brand=${item.slug}`} className="hover:underline underline-offset-4">
+              <Link to={`/san-pham?thuong-hieu=${item.slug}`} className="hover:underline underline-offset-4">
                 {item.name}
               </Link>
             </li>

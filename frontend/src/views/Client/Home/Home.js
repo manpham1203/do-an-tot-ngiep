@@ -8,6 +8,7 @@ import api from "../../../apis/api";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 
 function Home() {
+  document.title = "WatchStore | Nhà tôi 3 đời bán đồng hồ";
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [mostBought, setMostBought] = useState([]);
@@ -84,85 +85,117 @@ function Home() {
   useEffect(() => {
     setShowBrand(brand[0]?.id);
   }, [brand]);
-  document.title = "Trang chủ";
   return (
     <div className="w-[100%]">
       <Carousel></Carousel>
-      <ProductSlideShow>
-        <Heading title="Thương Hiệu" className="text-center" />
-        <div className="w-full">
-          <div className="mx-auto w-fit sm:w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] 2xl:w-[1436px] flex flex-wrap flex-row justify-center gap-x-[20px] font-primary text-[20px]">
-            {brand.length > 0 &&
-              brand.map((item) => {
-                return (
-                  <ListTab
-                    key={item?.id}
-                    name={item?.name}
-                    id={item?.id}
-                    show={showBrand}
-                    setShow={setShowBrand}
-                  />
-                );
-              })}
+      {brand.length > 0 && (
+        <ProductSlideShow>
+          <Heading
+            title="Thương Hiệu"
+            className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+          />
+          <div className="w-full">
+            <div className="mx-auto w-fit sm:w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] 2xl:w-[1436px] flex flex-wrap flex-row justify-center gap-x-[20px] font-primary text-[20px]">
+              {brand.length > 0 &&
+                brand.map((item) => {
+                  return (
+                    <ListTab
+                    className="text-[18px] sm:text-[20px] md:text-[22px] "
+                      key={item?.id}
+                      name={item?.name}
+                      id={item?.id}
+                      show={showBrand}
+                      setShow={setShowBrand}
+                    />
+                  );
+                })}
+            </div>
           </div>
-        </div>
 
-        {brand.length > 0 &&
-          brand.map((item) => {
-            return (
-              <ListProductCard
-                key={item?.id}
-                id={item?.id}
-                products={item.productCardVMs}
-                show={showBrand}
-              />
-            );
-          })}
-      </ProductSlideShow>
-      <ProductSlideShow>
-        <Heading title="Danh Mục" className="text-center" />
-        <div className="w-full">
-          <div className="mx-auto w-fit sm:w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] 2xl:w-[1436px] flex flex-wrap flex-row justify-center gap-x-[20px] font-primary text-[20px]">
-            {category.length > 0 &&
-              category.map((item) => {
-                return (
-                  <ListTab
-                    key={item?.id}
-                    name={item?.name}
-                    id={item?.id}
-                    show={showCategory}
-                    setShow={setShowCategory}
-                  />
-                );
-              })}
+          {brand.length > 0 &&
+            brand.map((item) => {
+              return (
+                <ListProductCard
+                  key={item?.id}
+                  id={item?.id}
+                  products={item.productCardVMs}
+                  show={showBrand}
+                />
+              );
+            })}
+        </ProductSlideShow>
+      )}
+      {category.length > 0 && (
+        <ProductSlideShow>
+          <Heading
+            title="Danh Mục"
+            className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+          />
+          <div className="w-full">
+            <div className="mx-auto w-fit sm:w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] 2xl:w-[1436px] flex flex-wrap flex-row justify-center gap-x-[20px] font-primary text-[20px]">
+              {category.length > 0 &&
+                category.map((item) => {
+                  return (
+                    <ListTab
+                    className="text-[18px] sm:text-[20px] md:text-[22px]"
+                      key={item?.id}
+                      name={item?.name}
+                      id={item?.id}
+                      show={showCategory}
+                      setShow={setShowCategory}
+                    />
+                  );
+                })}
+            </div>
           </div>
-        </div>
-        {category.length > 0 &&
-          category.map((item) => {
-            return (
-              <ListProductCard
-                key={item?.id}
-                id={item?.id}
-                products={item?.productCardVMs}
-                show={showCategory}
-              />
-            );
-          })}
-      </ProductSlideShow>
-      <ProductSlideShow>
-        <Heading title="Đang Giảm Giá" className="text-center" />
-        {onSale.length > 0 && <ListProductCard products={onSale} />}
-      </ProductSlideShow>
-      <ProductSlideShow>
-        <Heading title="Mua Nhiều Nhất" className="text-center" />
-        {mostBought.length > 0 && <ListProductCard products={mostBought} />}
-      </ProductSlideShow>
-      <ProductSlideShow>
-        <Heading title="Sản Phẩm Mới" className="text-center" />
-        {newProduct.length > 0 && <ListProductCard products={newProduct} />}
-      </ProductSlideShow>
+          {category.length > 0 &&
+            category.map((item) => {
+              return (
+                <ListProductCard
+                  key={item?.id}
+                  id={item?.id}
+                  products={item?.productCardVMs}
+                  show={showCategory}
+                />
+              );
+            })}
+        </ProductSlideShow>
+      )}
+
+      {onSale.length > 0 && (
+        <ProductSlideShow>
+          <Heading
+            title="Đang Giảm Giá"
+            className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+          />
+          {onSale.length > 0 && <ListProductCard products={onSale} />}
+        </ProductSlideShow>
+      )}
+
+      {mostBought.length > 0 && (
+        <ProductSlideShow>
+          <Heading
+            title="Mua Nhiều Nhất"
+            className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+          />
+          {mostBought.length > 0 && <ListProductCard products={mostBought} />}
+        </ProductSlideShow>
+      )}
+      {/* {newProduct.length > 0 && (
+        <ProductSlideShow>
+          <Heading
+            title="Sản Phẩm Mới"
+            className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+          />
+          {newProduct.length > 0 && <ListProductCard products={newProduct} />}
+        </ProductSlideShow>
+      )} */}
+
       <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1}>
-        <Heading title="Tin tức" className="text-center" />
+        <Heading
+          title="Tin tức"
+          className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+        />
       </PostSlideShow>
     </div>
   );

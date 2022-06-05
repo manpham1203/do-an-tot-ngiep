@@ -159,6 +159,7 @@ const colourStyles2 = {
   }),
 };
 function Products(props) {
+  document.title = "Sản phẩm";
   const [state, dispatchProduct] = useReducer(reducer, initState);
 
   const [searchParams, setSearchPrams] = useSearchParams();
@@ -622,6 +623,25 @@ function Products(props) {
                 styles={colourStyles2}
                 placeholder="Chọn khoảng giá"
               />
+            </div>
+          </div>
+          <div className="border-y border-gray-200 lg:hidden  py-[10px] mb-[20px]">
+            <div className="flex flex-row sm:flex-row items-center">
+              <div>Sắp xếp theo:</div>
+              <div>
+                <Select
+                  className="min-w-[150px] cursor-pointer"
+                  classNamePrefix="select"
+                  // defaultValue={orderOptions[0]}
+                  isClearable={false}
+                  isSearchable={false}
+                  name="orderBy"
+                  value={orderBy}
+                  onChange={(e) => setOrderBy(e)}
+                  options={orderOptions}
+                  styles={colourStyles}
+                />
+              </div>
             </div>
           </div>
         </div>

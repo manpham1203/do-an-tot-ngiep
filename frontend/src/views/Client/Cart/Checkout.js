@@ -98,6 +98,7 @@ const schema = yup
   })
   .required();
 function Checkout(props) {
+  document.title = "Thanh toán";
   const { cart, user } = useSelector((state) => state);
   const [cartData, setCartData] = useState([]);
   const [items, setItems] = useState([]);
@@ -373,7 +374,7 @@ function Checkout(props) {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[350px] mx-auto pt-[20px] px-[20px]">
+          <div className="w-full lg:w-[350px] mx-0 lg:mx-auto pt-[20px] px-[20px] lg:px-0">
             <h2 className="mb-[10px]">Phương thức thanh toán</h2>
             <div className="flex flex-col gap-y-[10px]">
               <Radio
@@ -389,6 +390,8 @@ function Checkout(props) {
                 control={control}
                 value="2"
                 checked={watchShip === "2"}
+                disabled
+                className="opacity-[0.5] cursor-default"
               />
             </div>
           </div>

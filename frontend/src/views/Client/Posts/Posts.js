@@ -1,28 +1,44 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../apis/api";
 import PostCard from "../../../components/Post/PostCard";
+import BrandWidget from "../../../components/Widget/BrandWidget";
+import CategoryWidget from "../../../components/Widget/CategoryWidget";
+import NewProductWidget from "../../../components/Widget/NewProductWidget";
+import Pagination from "../../../components/Pagination/Pagination";
+import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
+import OnSaleWidget from "../../../components/Widget/OnSaleWidget";
 
 function Posts(props) {
-  const [data, setData] = useState([]);
+  document.title = "Tin tức";
+  const [data, setData] = useState();
+  const [currentPage,setCurrentPage]=useState(1);
+  const [loading, setLoading]=useState(true);
   const fetchData = async (id) => {
+    setLoading(true);
     await api({
       method: "GET",
-      url: `/Post/postcards`,
-      params: { id: id },
+      url: `/Post/PostPagination`,
+      params: { limit:6,currentPage:currentPage, },
     })
       .then((res) => {
-        setData(res.data);
+        if(res.status===200){
+          setLoading(false);
+          setData(res.data);
+        }
+        else{
+          setLoading(true);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
   return (
     <div className="container mx-auto mt-[20px]">
       <div className="flex flex-row gap-x-[25px]">
         <div className="flex flex-col gap-y-[25px]">
-          {data.map((item) => {
+          {data?.postCardVMs.map((item) => {
             return (
               <PostCard
                 key={item.id}
@@ -35,8 +51,27 @@ function Posts(props) {
               />
             );
           })}
+          <div className="flex justify-center mt-[30px] ">
+            {loading ? (
+              "loading"
+            ) : (
+              <Pagination
+                forcePage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPage={data?.totalPage}
+                itemsPerPage={data?.postCardVMs?.length}
+              />
+            )}
+          </div>
         </div>
-        <div className="w-[300px] hidden lg:block lg:flex-none">widget</div>
+
+        <div className="w-[300px] xl:w-[350px] hidden lg:block flex-none">
+          <BrandWidget />
+          <CategoryWidget />
+          {/* <NewProductWidget /> */}
+          <MostBoughtWidget />
+          <OnSaleWidget />
+        </div>
       </div>
     </div>
   );

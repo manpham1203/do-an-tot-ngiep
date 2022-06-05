@@ -71,13 +71,13 @@ function CategoryWidget() {
   }, []);
   return (
     <div className="mb-[20px]">
-      <h2 className="text-[25px]">Danh mục</h2>
+      <h2 className="text-[22px]">Danh mục</h2>
       <ul className="font-normal ml-[10px]">
         {state.data?.map((item) => {
           return (
             <li key={item.id}>
               &#8210;{" "}
-              <Link to={`/san-pham?category=${item.slug}`} className="hover:underline underline-offset-4">
+              <Link to={`/san-pham?danh-muc=${item.slug}`} className="hover:underline underline-offset-4">
                 {item.name}
               </Link>
             </li>

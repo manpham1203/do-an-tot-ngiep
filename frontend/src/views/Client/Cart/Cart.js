@@ -80,12 +80,12 @@ function Abc() {
   );
 }
 function Cart() {
+  document.title = "Giỏ Hàng";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [cartData, setCartData] = useState([]);
   const [state, dispatchProduct] = useReducer(reducer, initState);
   const { cart, user } = useSelector((state) => state);
-  document.title = "Giỏ Hàng";
 
   const fetchProducts = async (arr) => {
     dispatchProduct(loading());

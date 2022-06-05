@@ -97,7 +97,9 @@ function ProductCmt(props) {
         }
         setLoading(false);
       })
-      .catch(() => setLoading(true));
+      .catch(() => {
+        setLoading(true);
+      });
   };
   useEffect(() => {
     fetchData();

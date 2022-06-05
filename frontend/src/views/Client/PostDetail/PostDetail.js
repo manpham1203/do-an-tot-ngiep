@@ -10,6 +10,8 @@ import PostCmt from "../../../components/Comment/PostCmt";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
+import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
+import OnSaleWidget from "../../../components/Widget/OnSaleWidget";
 
 function Abc() {
   const navigate = useNavigate();
@@ -27,10 +29,13 @@ function Abc() {
 }
 function PostDetail(props) {
   const [data, setData] = useState({});
+  document.title = "Tin tức: " + data?.title || "Tin tức";
   const [content, setContent] = useState("");
+  const [valid, setValid] = useState(false);
   const { user } = useSelector((state) => state);
   const [cmtCount, setCmtCount] = useState(0);
   const { slug } = useParams();
+  const [loadCmt, setLoadCmt] = useState(true);
   const fetchData = async (slug) => {
     await api({
       method: "GET",
@@ -46,7 +51,13 @@ function PostDetail(props) {
     fetchData(slug);
   }, [slug]);
   const handleComment = async () => {
-    if(user.id===null){
+    setLoadCmt(true);
+    if (content === "") {
+      setValid(true);
+      return;
+    }
+    setValid(false);
+    if (user.id === null) {
       toast.warn(<Abc />, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -65,11 +76,15 @@ function PostDetail(props) {
     })
       .then((res) => {
         if (res.status === 201) {
+          setValid(false);
           toast.success(`Gửi đánh giá thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000,
           });
+          setLoadCmt(false);
         } else {
+          setValid(false);
+          setLoadCmt(false);
           toast.error(`Gửi đánh giá thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 1000,
@@ -77,6 +92,8 @@ function PostDetail(props) {
         }
       })
       .catch(() => {
+        setValid(false);
+        setLoadCmt(false);
         toast.error(`Gửi đánh giá thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1000,
@@ -108,11 +125,16 @@ function PostDetail(props) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
+  useEffect(() => {
+    if (content !== "") {
+      setValid(false);
+    }
+  }, [content]);
   return (
-    <div className="container mx-auto mt-[20px]">
+    <div className="container px-[10px] sm:px-[20px] mx-auto mt-[20px]">
       <div className="flex flex-row gap-x-[25px]">
-        <div className="grow-[1] overflow-hidden">
-          <div className="w-full h-[420px]">
+        <div className="w-full overflow-hidden">
+          <div className="w-full h-[200px] sm:h-[300px] lg:h-[420px]">
             <img
               src={data?.imageSrc}
               alt=""
@@ -129,7 +151,9 @@ function PostDetail(props) {
             </span>
             |<span>{data?.view} lượt xem</span>|<span>{cmtCount} comment</span>
           </div>
-          <h2 className="font-bold text-[25px]">{data?.title}</h2>
+          <h2 className="font-bold text-[20px] md:text-[22px] lg:text-[25px]">
+            {data?.title}
+          </h2>
           <div
             className="text-justify flex flex-col gap-y-[25px] mt-[20px]"
             dangerouslySetInnerHTML={{ __html: data?.fullDescription }}
@@ -142,6 +166,7 @@ function PostDetail(props) {
               placeholder=" "
               className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
             />
+            {valid && "chuwa"}
             <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
               Gửi phản hồi
             </label>
@@ -152,13 +177,19 @@ function PostDetail(props) {
               Gửi
             </button>
           </div>
-          {data?.id && <PostCmt id={data.id} setCmtCount={setCmtCount} />}
+          {data?.id && loadCmt ? (
+            "loading"
+          ) : (
+            <PostCmt id={data.id} setCmtCount={setCmtCount} />
+          )}
           <PostSlideShow slideLg={3} slideMd={3} slideSm={1} slide={1} />
         </div>
-        <div className="w-[350px] flex-none">
+        <div className="w-[300px] xl:w-[350px] hidden lg:block flex-none">
           <BrandWidget />
           <CategoryWidget />
-          <NewProductWidget />
+          {/* <NewProductWidget /> */}
+          <MostBoughtWidget />
+          <OnSaleWidget />
         </div>
       </div>
     </div>

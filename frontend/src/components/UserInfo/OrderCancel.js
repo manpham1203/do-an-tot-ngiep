@@ -54,9 +54,9 @@ function OrderCancel(props) {
                 onClick={() => handlerOpenItemOrder(item.id)}
                 className="bg-white shadow-md w-full rounded-md flex flex-row items-center justify-between px-[20px] cursor-pointer"
               >
-                <div className="flex flex-row gap-x-[20px] rounded-md  py-[15px]">
+                <div className="flex flex-col md:flex-row gap-x-[20px] rounded-md  py-[15px]">
                   <div>Mã đơn hàng: {item.id}</div>
-                  <div>|</div>
+                  <div className="hidden md:block">|</div>
                   {/* <div>
                     Ngày tạo: {moment(item.createdAt).format("DD-MM-yyyy")}
                   </div>

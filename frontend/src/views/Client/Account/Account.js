@@ -20,6 +20,7 @@ const data = [
   "sản phẩm đã mua",
 ];
 function Account(props) {
+  document.title="Quản lý tài khoản";
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,15 +32,15 @@ function Account(props) {
   return (
     <>
       {user.id !== null && (
-        <div className="mt-[30px] container mx-auto flex flex-row gap-x-[20px]">
-          <div className="w-[400px]">
+        <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-col lg:flex-row gap-x-[20px]">
+          <div className="w-full lg:w-[350px] flex flex-row lg:flex-col flex-wrap mb-[25px] lg:mb-[0] gap-x-[20px]">
             {data.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={`${
-                    index === 0 ? "border-t border-t-[#ebebeb]" : null
-                  } border-b border-b-[#ebebeb] p-[15px] uppercase`}
+                    index === 0 ? "lg:border-t border-t-[#ebebeb]" : null
+                  } border-b border-b-[#ebebeb] p-[15px] uppercase `}
                 >
                   <h2
                     onClick={() => setTab(index)}
@@ -50,7 +51,7 @@ function Account(props) {
                 </div>
               );
             })}
-            <div className="w-[400px]">
+            <div className="lg:w-[350px]">
               <h2
                 onClick={handleLogout}
                 className="border-b border-b-[#ebebeb] p-[15px] hover:underline uppercase cursor-pointer"
@@ -59,7 +60,7 @@ function Account(props) {
               </h2>
             </div>
           </div>
-          <div className="w-full flex">
+          <div className="w-full">
             {/* {tab === 0 && <Info />} */}
             {tab === 0 && <EditInfo />}
             {tab === 1 && <ChangePassword />}

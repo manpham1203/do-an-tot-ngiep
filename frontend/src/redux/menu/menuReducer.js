@@ -9,7 +9,7 @@ const initialState = [
   {
     id: 5,
     title: "GIỚI THIỆU",
-    slug: "/trang/gioi-thieu",
+    slug: "/gioi-thieu",
   },
   {
     id: 6,

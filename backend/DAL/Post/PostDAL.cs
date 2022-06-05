@@ -90,15 +90,19 @@ namespace DAL.Post
             {
                 return false;
             }
-
-            var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == postFromDb.Id);
-            pictureFromDb.Name = pictureVM.Name;
-
-            var resultPicture = await db.SaveChangesAsync();
-            if (resultPicture == 0)
+            if (pictureVM.Id != null)
             {
-                return false;
+                var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == postFromDb.Id);
+                pictureFromDb.Name = pictureVM.Name;
+
+                var resultPicture = await db.SaveChangesAsync();
+                if (resultPicture == 0)
+                {
+                    return false;
+                }
             }
+
+
 
             return true;
         }
@@ -146,15 +150,18 @@ namespace DAL.Post
             try
             {
                 //var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
-                var resultFromDb = await (from post in db.Posts join pic in db.Pictures on post.Id equals pic.ObjectId into list from pic in list.DefaultIfEmpty()
-                                          where pic.ObjectType == "post" select new RowAdmin
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId into list
+                                          from pic in list.DefaultIfEmpty()
+                                          where pic.ObjectType == "post"
+                                          select new RowAdmin
                                           {
-                                              Id=post.Id,
-                                              Title=post.Title,
-                                              Published=post.Published,
-                                              ImageName=pic.Name,
-                                              ImageSrc=null,
-                                          }).Where(x=>x.Id==id).SingleOrDefaultAsync();
+                                              Id = post.Id,
+                                              Title = post.Title,
+                                              Published = post.Published,
+                                              ImageName = pic.Name,
+                                              ImageSrc = null,
+                                          }).Where(x => x.Id == id).SingleOrDefaultAsync();
                 //var result = new RowAdmin
                 //{
                 //    Id = resultFromDb.Id,
@@ -283,7 +290,7 @@ namespace DAL.Post
                                               View = post.View,
                                               Image = pic.Name,
                                               CreatedAt = post.CreatedAt,
-                                          }).ToListAsync();
+                                          }).OrderByDescending(x => x.CreatedAt).ToListAsync();
                 if (resultFromDb.Count == 0)
                 {
                     return new List<PostCardVM>();
@@ -361,16 +368,16 @@ namespace DAL.Post
                                               FullDescription = post.FullDescription,
                                               View = post.View,
                                               Image = pic.Name,
-                                              ImageSrc=null,
-                                              Published=post.Published,
+                                              ImageSrc = null,
+                                              Published = post.Published,
                                               CreatedAt = post.CreatedAt,
-                                              UpdatedAt= post.UpdatedAt,
+                                              UpdatedAt = post.UpdatedAt,
                                           }).SingleOrDefaultAsync();
                 if (resultFromDb == null)
                 {
                     return null;
                 }
-                
+
                 return resultFromDb;
             }
             catch
