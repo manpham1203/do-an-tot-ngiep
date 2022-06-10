@@ -27,7 +27,7 @@ function About(props) {
   return loading ? (
     <PageContent />
   ) : (
-    <div className="container px-[10px] sm:px-[20px] mx-auto">
+    <div className="container px-[10px] sm:px-[20px] mx-auto mt-[20px] text-second dark:text-third">
       <div dangerouslySetInnerHTML={{ __html: data?.content }}></div>
     </div>
   );

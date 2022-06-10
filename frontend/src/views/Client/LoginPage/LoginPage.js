@@ -14,15 +14,15 @@ function LoginPage(props) {
     <>
       {user.id === null && (
         <div className="mt-[40px] container px-[10px] sm:px-[20px] mx-auto">
-          <div className="w-full md:w-[575px] mx-auto px-[10px] sm:px-[20px] md:px-[50px] pb-[50px] pt-[40px] bg-third border border-second">
+          <div className="w-full md:w-[575px] mx-auto px-[10px] sm:px-[20px] md:px-[50px] pb-[50px] pt-[40px] bg-third dark:bg-darkMode border border-second dark:border-third">
             <div className="flex flex-row w-full border-b border-input-border">
               {tabs.map((item, index) => {
                 return (
                   <div
                     key={index}
                     onClick={() => setTab(index)}
-                    className={`w-full text-center p-[10px] cursor-pointer text-[18px] md:text-[22px]
-             ${tab === index && "border-b-2 border-second"}`}
+                    className={`w-full text-center p-[10px] cursor-pointer text-[18px] md:text-[22px] text-second dark:text-third
+             ${tab === index && "border-b-2 border-second dark:border-third"}`}
                   >
                     {item}
                   </div>

@@ -37,7 +37,7 @@ function Posts(props) {
   return loading ? (
     <PageContent />
   ) : (
-    <div className="container mx-auto mt-[20px] text-second dark:text-third">
+    <div className="container px-[10px] sm:px-[20px] mx-auto mt-[20px] text-second dark:text-third ">
       <div className="flex flex-row gap-x-[25px]">
         <div className="flex flex-col gap-y-[25px] w-full">
           {data?.postCardVMs.map((item) => {

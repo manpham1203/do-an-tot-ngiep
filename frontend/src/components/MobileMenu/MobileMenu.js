@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const MobileMenu = (props) => {
-  const { menu } = useSelector((s) => s);
+  const { menu, user } = useSelector((s) => s);
   return (
     <div
       className={`z-[10] fixed bg-third right-0 top-0 bottom-0 w-[100%] sm:w-[300px]  ${
@@ -32,6 +32,33 @@ const MobileMenu = (props) => {
               </li>
             );
           })}
+          {user.id != null && (
+            <li className="mt-[20px] md:hidden">
+              <Link
+                to="/danh-sach-yeu-thich"
+                onClick={() => props.setOpenMenu(false)}
+              >
+                SẢN PHẨM YÊU THÍCH
+              </Link>
+            </li>
+          )}
+
+          <li className="mt-[20px] md:hidden">
+            <Link to="/gio-hang" onClick={() => props.setOpenMenu(false)}>
+              GIỎ HÀNG
+            </Link>
+          </li>
+          <li className="mt-[20px] md:hidden">
+            {typeof user.id === "string" ? (
+              <Link to="/tai-khoan" onClick={() => props.setOpenMenu(false)}>
+                TÀI KHOẢN
+              </Link>
+            ) : (
+              <Link to="/dang-nhap" onClick={() => props.setOpenMenu(false)}>
+                ĐĂNG NHẬP/ĐĂNG KÝ
+              </Link>
+            )}
+          </li>
         </ul>
       </div>
     </div>

@@ -1,9 +1,0 @@
-git bash
-dotnet publish -c Release
-
-docker
-heroku container:login
-docker build -t "datn-manpham" "D:\\New folder\\PhamMinhMan_2119110081\\backend\\backend\\bin\\Release\net5.0\\publish"
-docker tag datn-manpham registry.heroku.com/datn-manpham/web
-docker push registry.heroku.com/datn-manpham/web
-heroku container:release web --app datn-manpham

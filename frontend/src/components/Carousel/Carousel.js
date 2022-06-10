@@ -55,11 +55,11 @@ function Carousel(props) {
           data.map((item) => {
             return (
               <SwiperSlide key={item.id} className={``}>
-                <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-y-[20px] lg:justify-evenly h-screen">
+                <div className="flex flex-col md:flex-row w-full items-center justify-center gap-y-[20px] md:justify-evenly h-screen">
                   <img
                     src={item.imageSrc}
                     alt=""
-                    className="w-[60%] lg:w-[400px] lg:h-[400px] object-cover object-center"
+                    className="w-[200px] sm:w-[200px] md:w-[40%] lg:w-[400px] lg:h-[400px] object-cover object-center"
                   />
                   <div className="text-third max-w-[400px] flex flex-col gap-y-[20px]">
                     <h2 className="text-[20px] lg:text-[45px] haha font-semibold">

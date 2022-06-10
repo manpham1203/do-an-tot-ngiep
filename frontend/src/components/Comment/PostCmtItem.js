@@ -44,19 +44,22 @@ function ProductCmtItem(props) {
   const [openRep, setOpenRep] = useState(null);
   const [content, setContent] = useState("");
   const [openRepList, setOpenRepList] = useState(null);
+  const [valid, setValid] = useState(false);
 
   const { user } = useSelector((state) => state);
   const handleRep = async () => {
-    if(user.id===null){
+    if (content === "") {
+      setValid(true);
+      return;
+    }
+    if (user.id === null) {
       toast.warn(<Abc />, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
       });
       return;
     }
-    if (content === "") {
-      return;
-    }
+    setValid(false);
     await api({
       method: "POST",
       url: `/comment/repcmtpost`,
@@ -64,6 +67,7 @@ function ProductCmtItem(props) {
     })
       .then((res) => {
         if (res.status === 201) {
+          setValid(false);
           toast.success(`Gửi phản hồi thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
@@ -73,20 +77,26 @@ function ProductCmtItem(props) {
           setOpenRepList(props.id);
           setContent("");
         } else {
+          setValid(false);
           toast.error(`Gửi phản hồi thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
         }
       })
-      .catch(() =>
+      .catch(() => {
+        setValid(false);
         toast.error(`Gửi phản hồi thất bại`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
-        })
-      );
+        });
+      });
   };
-  console.log("u", user.id);
+  useEffect(() => {
+    if (content !== "") {
+      setValid(false);
+    }
+  }, [content]);
   return (
     <div className={`flex flex-row gap-x-[20px] ${props.className} pb-[20px]`}>
       <div className="w-[150px] flex flex-col items-center gap-y-[10px]">
@@ -113,21 +123,28 @@ function ProductCmtItem(props) {
               <p>{data.content}</p>
             )}
           </div>
-          <div className="w-fit cursor-pointer" onClick={() => setOpenRep(props.id)}>
+          <div
+            className="w-fit cursor-pointer"
+            onClick={() => setOpenRep(props.id)}
+          >
             Trả lời
           </div>
         </div>
         {openRep === props.id && (
           <div className="w-full relative mt-[50px]">
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder=" "
-              className="h-[100px] py-[20px] form-input border border-third text-second font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] outline-none bg-third dark:bg-darkMode"
-            />
-            <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third">
-              Gửi phản hồi
-            </label>
+            <div className="w-full relative">
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder=" "
+                className="h-[100px] py-[20px] form-input border border-second dark:border-third font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] outline-none bg-third dark:bg-darkMode"
+              />
+              <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
+                Gửi phản hồi
+              </label>
+            </div>
+
+            {valid && <p className="text-red-500">Chưa nhập nội dung</p>}
             <button
               className="bg-second px-[30px] h-[40px] text-third dark:bg-third dark:text-second"
               onClick={handleRep}
@@ -137,10 +154,7 @@ function ProductCmtItem(props) {
           </div>
         )}
         {data?.children?.length > 0 && (
-          <PostCmtChildren
-            data={data.children}
-            id={props.id}
-          />
+          <PostCmtChildren data={data.children} id={props.id} />
         )}
       </div>
     </div>

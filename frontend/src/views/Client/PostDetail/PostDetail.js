@@ -48,9 +48,12 @@ function PostDetail(props) {
         if (res.status === 200) {
           setData(res.data);
           setLoading(false);
+          setLoadCmt(false)
         }
       })
-      .catch(() => setLoading(true));
+      .catch(() => {setLoading(true)
+        setLoadCmt(true)
+      });
   };
   useEffect(() => {
     fetchData(slug);
@@ -61,7 +64,6 @@ function PostDetail(props) {
       setValid(true);
       return;
     }
-    setValid(false);
     if (user.id === null) {
       toast.warn(<Abc />, {
         position: toast.POSITION.TOP_RIGHT,
@@ -69,6 +71,8 @@ function PostDetail(props) {
       });
       return;
     }
+
+    setValid(false);
     const cmt = {
       userId: user.id,
       ObjectId: data.id,
@@ -167,16 +171,19 @@ function PostDetail(props) {
           ></div>
           <h2 className="text-[25px] mb-[25px] mt-[25px]">Bình luận</h2>
           <div className="w-full relative mt-[50px] mb-[50px]">
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder=" "
-              className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
-            />
-            {valid && "chuwa"}
-            <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
-              Gửi phản hồi
-            </label>
+            <div className="w-full relative">
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder=" "
+                className="h-[100px] py-[20px] form-input border border-second dark:border-third text-second dark:text-third font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third dark:bg-darkMode"
+              />
+              <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
+                Gửi phản hồi
+              </label>
+            </div>
+
+            {valid && <p className="text-red-500">Chưa nhập nội dung</p>}
             <button
               className="bg-second px-[30px] h-[40px] text-third"
               onClick={handleComment}
@@ -185,7 +192,7 @@ function PostDetail(props) {
             </button>
           </div>
           {data?.id && loadCmt ? (
-            "loading"
+            ""
           ) : (
             <PostCmt id={data.id} setCmtCount={setCmtCount} />
           )}

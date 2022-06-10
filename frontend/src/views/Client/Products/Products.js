@@ -388,9 +388,9 @@ function Products(props) {
       <div className="h-[60px] hidden lg:flex lg:items-center gap-x-[20px]">
         <div className="w-[280px] flex-none">Lọc sản phẩm</div>
         <div className=" w-full flex justify-between items-center">
-          <div className="text-gray-500">
+          <div className="text-gray-500 dark:text-gray-200">
             Tìm thấy{" "}
-            <span className="text-second">{state.data.totalResult}</span> kết
+            <span className="text-second dark:text-third">{state.data.totalResult}</span> kết
             quả
           </div>
           <div className="flex flex-row gap-x-[20px] items-center">
