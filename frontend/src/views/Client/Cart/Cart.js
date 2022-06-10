@@ -149,23 +149,21 @@ function Cart() {
     }
     navigate("/thanh-toan");
   };
-
-  console.log(state);
   return (
     <>
       {cart.length === 0 ? (
-        <div className="pt-[30px] flex flex-col items-center container px-[10px] sm:px-[20px] mx-auto">
+        <div className="pt-[30px] flex flex-col items-center container px-[10px] sm:px-[20px] mx-auto text-second dark:text-third">
           <h2 className="text-center">Bạn chưa thêm sản phẩm vào giỏ hàng</h2>
           <button
             onClick={() => navigate("/san-pham")}
-            className=" px-[20px] h-[30px] border-2 border-second mt-[20px] flex flex-row items-center "
+            className=" px-[20px] h-[30px] border-2 border-second dark:border-third mt-[20px] flex flex-row items-center "
           >
             Tiếp tục mua hàng
             <HiOutlineArrowNarrowRight className="text-[20px]" />
           </button>
         </div>
       ) : (
-        <div className=" container px-[10px] sm:px-[20px] mx-auto">
+        <div className=" container px-[10px] sm:px-[20px] mx-auto text-second dark:text-third">
           <div className="flex flex-col lg:flex-row gap-x-[25px]">
             <div className="w-full lg:w-3/4">
               <div className="hidden md:flex justify-between border-b pb-8">
@@ -178,16 +176,16 @@ function Cart() {
                 Giỏ hàng
               </h1>
               <div className="hidden md:flex mt-10 mb-5">
-                <h3 className="font-semibold text-gray-600 text-xs uppercase w-2/5">
+                <h3 className="font-semibold  text-xs uppercase w-2/5">
                   Sản phẩm
                 </h3>
-                <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
+                <h3 className="font-semibold text-xs uppercase w-1/5 text-center">
                   Số lượng
                 </h3>
-                <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
+                <h3 className="font-semibold  text-xs uppercase w-1/5 text-center">
                   Đơn giá
                 </h3>
-                <h3 className="font-semibold text-gray-600 text-xs uppercase w-1/5 text-center">
+                <h3 className="font-semibold  text-xs uppercase w-1/5 text-center">
                   Thành tiền
                 </h3>
               </div>
@@ -210,7 +208,7 @@ function Cart() {
 
               <Link
                 to="/san-pham"
-                className="flex font-semibold text-second text-sm mt-10 w-fit mb-[30px]"
+                className="flex font-semiboldtext-sm mt-10 w-fit mb-[30px]"
               >
                 Tiếp tục mua hàng...
               </Link>

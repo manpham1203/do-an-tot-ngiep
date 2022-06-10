@@ -73,7 +73,7 @@ function MostBoughtWidget(props) {
 
   return (
     state.data.length>0?
-    <div className="mb-[20px]">
+    <div className="mb-[20px] text-second dark:text-third">
       <h2 className="text-[22px]">Sản phẩm mua nhiều</h2>
       <div className="font-normal flex flex-col gap-y-[20px]">
         {state.data?.map((item) => {
@@ -104,7 +104,7 @@ function MostBoughtWidget(props) {
                           currency: "VND",
                         }).format(item.priceDiscount)}
                       </span>
-                      <span className="line-through text-gray-500">
+                      <span className="line-through text-gray-500 dark:text-gray-300">
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",

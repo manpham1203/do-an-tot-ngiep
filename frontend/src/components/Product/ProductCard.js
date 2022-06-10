@@ -61,14 +61,14 @@ function ProductCard(props) {
   };
 
   return (
-    <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl">
-      <div className="w-full overflow-hidden relative">
+    <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl bg-third dark:bg-second">
+      <div className="w-full overflow-hidden relative p-[10px] bg-third rounded-[8px]">
         <img
           src={props.image || imgthumb}
           alt="alt"
           className="w-full object-center object-cover"
         />
-        <div className=" flex flex-col absolute top-[10px] right-[-44px] gap-[10px] group-hover:right-[10px] transition-all duration-[0.3s]">
+        <div className="hidden lg:flex flex-col absolute top-[10px] right-[-44px] gap-[10px] group-hover:right-[10px] transition-all duration-[0.3s] text-second ">
           <div
             onClick={() => addCart(props.id, props.name)}
             className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md "
@@ -88,15 +88,15 @@ function ProductCard(props) {
           />
         </div>
       </div>
-      <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px] bg-white bottom-[-44px]">
+      <div className="w-full flex flex-col items-center p-[10px] gap-y-[10px] bg-white dark:bg-second bottom-[-44px]">
         <h3
-          className="cursor-pointer text-second font-normal hover:underline underline-offset-4"
+          className="cursor-pointer text-second dark:text-third font-normal hover:underline underline-offset-4"
           onClick={() => navigate(`/san-pham?thuong-hieu=${props.brandSlug}`)}
         >
           {props.brandName}
         </h3>
         <h3
-          className="cursor-pointer font-primary font-normal text-[18px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center"
+          className="cursor-pointer font-primary font-normal text-[18px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center text-second dark:text-third"
           onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
           {props.name}
@@ -104,7 +104,7 @@ function ProductCard(props) {
         <div className="flex flex-row text-[#F7BF63]">
           <ShowStarAvg star={props.star} />
         </div>
-        <div className="flex flex-round gap-x-[20px] mt-[10px]">
+        <div className="flex flex-round gap-x-[20px] mt-[10px] text-second dark:text-third">
           {props.priceDiscount == null ? (
             <span>
               {new Intl.NumberFormat("vi-VN", {

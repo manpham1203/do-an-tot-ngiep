@@ -12,6 +12,8 @@ import Tbody from "../../../components/Table/Tbody";
 import Tr from "../../../components/Table/Tr";
 import ExportExcel from "../../../components/ExportFile/ExportExcel";
 import { useDispatch, useSelector } from "react-redux";
+import * as moment from "moment";
+import "moment/locale/nl";
 
 const initState = {
   loading: false,
@@ -73,11 +75,11 @@ const reducer = (state, action) => {
   }
 };
 const orderOptions = [
+  { value: 0, label: "Đã huỷ", color: "#ED553B" },
   { value: 1, label: "Chờ xác nhận", color: "#2F4B60" },
   { value: 2, label: "Đang chuẩn bị hàng", color: "#2DCCBF" },
   { value: 3, label: "Đang vận chuyển", color: "#1A9487" },
   { value: 4, label: "Đã nhận hàng", color: "#9EBC4B" },
-  { value: 0, label: "Đã huỷ", color: "#ED553B" },
 ];
 
 const colourStyles = {
@@ -136,32 +138,92 @@ function OrderTable(props) {
   const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [stateOrder, setStateOrder] = useState(null);
-  
 
+  const [limit, setLimit] = useState(10);
+  const fetchData = async () => {
+    dispatch(loading());
+    await api({
+      method: "GET",
+      url: `/Order/AdminGetByState`,
+      params: {
+        currentPage: currentPage,
+        limit: limit,
+        id: query,
+        state: stateOrder?.value,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(success(res.data));
+        }
+      })
+      .catch(() => dispatch(fail()));
+  };
   useEffect(() => {
+    fetchData();
+  }, [query, stateOrder, currentPage]);
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchData();
+  }, [limit]);
+  const handleExport = () => {
     const fetchData = async () => {
-      dispatch(loading());
       await api({
         method: "GET",
         url: `/Order/AdminGetByState`,
         params: {
           currentPage: currentPage,
-          limit: 10,
+          limit: limit,
           id: query,
           state: stateOrder?.value,
         },
       })
         .then((res) => {
           if (res.status === 200) {
-            dispatch(success(res.data));
+            var newArr = [];
+            for (var i = 0; i < res.data.orderVMs.length; i++) {
+              newArr.push({
+                Id: res.data.orderVMs[i].id,
+                "Mã khách hàng": res.data.orderVMs[i].userId,
+                Họ: res.data.orderVMs[i].lastName,
+                Tên: res.data.orderVMs[i].firstName,
+                "Trạng thái đơn hàng":
+                  res.data.orderVMs[i].state === 0
+                    ? orderOptions[0].label
+                    : res.data.orderVMs[i].state === 1
+                    ? orderOptions[1].label
+                    : res.data.orderVMs[i].state === 2
+                    ? orderOptions[2].label
+                    : res.data.orderVMs[i].state === 3
+                    ? orderOptions[3].label
+                    : orderOptions[4].label,
+                "Tổng hoá đơn": res.data.orderVMs[i].amount,
+                "Địa chỉ": res.data.orderVMs[i].deliveryAddress,
+                "Số điện thoại": res.data.orderVMs[i].deliveryPhone,
+                Email: res.data.orderVMs[i].deliveryEmail,
+                "Ngày tạo": moment().format("DD-MM-yyyy H:m:s"),
+                "Ghi chú": res.data.orderVMs[i].note,
+              });
+            }
+            ExportExcel({ data: newArr, fileName: "DonHang" });
           }
         })
-        .catch(() => dispatch(fail()));
+        .catch(() => {});
     };
     fetchData();
-  }, [query, stateOrder, currentPage]);
+  };
   return (
     <>
+
+    <div className="py-[10px] shadow-admin rounded-[8px] flex flex-row items-center justify-end gap-x-[20px] px-[20px] mb-[20px]">
+        <button
+          onClick={handleExport}
+          className="bg-success rounded-[8px] h-[40px] px-[20px] text-third"
+        >
+          Xuất File Excel
+        </button>
+       
+      </div>
       <div className="bg-white rounded-[8px] p-[20px] shadow-admin">
         <div className="p-[10px] gap-x-[25px] flex">
           <div className="flex flex-row justify-between w-full items-center">
@@ -180,7 +242,25 @@ function OrderTable(props) {
                   className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-
+              <div className="flex flex-col">
+                <label
+                  htmlFor="limit"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
+                  Số dòng
+                </label>
+                <div className="flex flex-row items-center">
+                  <input
+                    id="limit"
+                    type="text"
+                    // value={state.data.products.length}
+                    value={limit}
+                    onChange={(e) => setLimit(e.target.value)}
+                    className="w-[50px] bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  <span>/{state.data?.totalResult}</span>
+                </div>
+              </div>
               <div className="flex-col">
                 <label
                   htmlFor="search"
@@ -263,7 +343,7 @@ function OrderTable(props) {
           </div>
         </div>
       </div>
-      <ExportExcel data={state.data.orders} fileName="DonHang" />
+      
     </>
   );
 }

@@ -93,6 +93,7 @@ namespace DAL.Picture
                     Name = resultFromDb.Name,
                     ObjectId = resultFromDb.ObjectId,
                     Published = resultFromDb.Published,
+                    Order=resultFromDb.Order,
                 };
             }
             catch
@@ -116,6 +117,7 @@ namespace DAL.Picture
                     Name = x.Name,
                     Published = x.Published,
                     ObjectId = x.ObjectId,
+                    Order=x.Order,
                 }).ToList();
                 return result;
             }

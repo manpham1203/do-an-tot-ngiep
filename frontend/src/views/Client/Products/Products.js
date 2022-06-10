@@ -10,6 +10,7 @@ import "rc-slider/assets/index.css";
 import { FaTimesCircle, FaSquareFull } from "react-icons/fa";
 import Select from "react-select";
 import ProductCard2 from "../../../components/Product/ProductCard2";
+import ProductRow from "../../../components/Skeleton/ProductRow";
 
 const initState = {
   loading: false,
@@ -63,7 +64,7 @@ const reducer = (state, action) => {
     case FAIL:
       return {
         ...state,
-        loading: false,
+        loading: true,
         fail: true,
       };
     default:
@@ -119,7 +120,7 @@ const colourStyles2 = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles) => ({
     ...styles,
-    color: '"#202121"',
+    color: 'black',
     left: "0%",
     lineHeight: "1.3rem",
     paddingLeft: "0.5rem",
@@ -381,10 +382,9 @@ function Products(props) {
       });
     }
   };
-
- 
+  console.log(state)
   return (
-    <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-col">
+    <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-col text-second dark:text-third">
       <div className="h-[60px] hidden lg:flex lg:items-center gap-x-[20px]">
         <div className="w-[280px] flex-none">Lọc sản phẩm</div>
         <div className=" w-full flex justify-between items-center">
@@ -476,13 +476,13 @@ function Products(props) {
                   placeholder=" "
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+                  className="form-input border border-second dark:border-third text-second dark:text-third font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s]  outline-none bg-third dark:bg-darkMode"
                 />
-                <label className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+                <label className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
                   Tìm kiếm
                 </label>
                 <span
-                  className="absolute right-[8px] top-[50%] translate-y-[-50%] cursor-pointer text-second"
+                  className="absolute right-[8px] top-[50%] translate-y-[-50%] cursor-pointer text-second dark:text-third"
                   onClick={() => setQuery("")}
                 >
                   <FaTimesCircle />
@@ -515,7 +515,7 @@ function Products(props) {
                           onChange={handleBrandChange}
                           checked={arrBrand.some((x) => x === item.slug)}
                         />
-                        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+                        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second dark:border-third flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
                           {item.name}
                         </span>
@@ -559,7 +559,7 @@ function Products(props) {
                           onChange={handleCategoryChange}
                           checked={arrCategory.some((x) => x === item.slug)}
                         />
-                        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second flex items-center justify-center mr-[10px] rounded-[3px]"></div>
+                        <div className="checkbox-box bg-white box-content w-[18px] h-[18px] p-[1px] border border-second dark:border-third flex items-center justify-center mr-[10px] rounded-[3px]"></div>
                         <span className="block text-sm font-medium text-gray-900 dark:text-gray-300">
                           {item.name}
                         </span>
@@ -608,10 +608,10 @@ function Products(props) {
             <div
               className={`${
                 tabFilter.priceRange === false && "hidden"
-              } mb-[25px]`}
+              } mb-[25px] text-second dark:text-third`}
             >
               <Select
-                className="min-w-[150px] cursor-pointer"
+                className="min-w-[150px] cursor-pointer text-second dark:text-third"
                 classNamePrefix="select"
                 // defaultValue={orderOptions[0]}
                 isClearable={true}
@@ -646,77 +646,83 @@ function Products(props) {
           </div>
         </div>
         <div className="w-full">
-          {grid === 0 && (
-            <div className="grid grid-cols-2 gap-y-[25px] gap-x-[25px]">
-              {state.data?.products &&
-                state.data.products.map((item) => {
-                  return (
-                    <ProductCard2
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      slug={item.slug}
-                      brandName={item.brandNameVM.name}
-                      brandSlug={item.brandNameVM.slug}
-                      price={item.price}
-                      priceDiscount={item.priceDiscount}
-                      image={item.imageSrc}
-                      star={item.star}
-                    />
-                  );
-                })}
+          {state.loading ? (
+            <ProductRow />
+          ) : (
+            <div>
+              {grid === 0 && (
+                <div className="grid grid-cols-2 gap-y-[25px] gap-x-[25px]">
+                  {state.data?.products &&
+                    state.data.products.map((item) => {
+                      return (
+                        <ProductCard2
+                          key={item.id}
+                          id={item.id}
+                          name={item.name}
+                          slug={item.slug}
+                          brandName={item.brandNameVM.name}
+                          brandSlug={item.brandNameVM.slug}
+                          price={item.price}
+                          priceDiscount={item.priceDiscount}
+                          image={item.imageSrc}
+                          star={item.star}
+                        />
+                      );
+                    })}
+                </div>
+              )}
+              {grid !== 0 && (
+                <div
+                  className={`hidden lg:grid ${grid === 2 && "grid-cols-4"} ${
+                    grid === 1 && "grid-cols-3"
+                  }  gap-x-[25px] gap-y-[25px] w-full`}
+                >
+                  {state.data?.products &&
+                    state.data.products.map((item) => {
+                      return (
+                        <ProductCard
+                          key={item.id}
+                          id={item.id}
+                          name={item.name}
+                          slug={item.slug}
+                          brandName={item.brandNameVM.name}
+                          brandSlug={item.brandNameVM.slug}
+                          price={item.price}
+                          priceDiscount={item.priceDiscount}
+                          image={item.imageSrc}
+                          star={item.star}
+                        />
+                      );
+                    })}
+                </div>
+              )}
+              <div
+                className={`lg:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-[25px] gap-y-[25px] w-full`}
+              >
+                {state.data?.products &&
+                  state.data.products.map((item) => {
+                    return (
+                      <ProductCard
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        slug={item.slug}
+                        brandName={item.brandNameVM.name}
+                        brandSlug={item.brandNameVM.slug}
+                        price={item.price}
+                        priceDiscount={item.priceDiscount}
+                        image={item.imageSrc}
+                        star={item.star}
+                      />
+                    );
+                  })}
+              </div>
             </div>
           )}
-          {grid !== 0 && (
-            <div
-              className={`hidden lg:grid ${grid === 2 && "grid-cols-4"} ${
-                grid === 1 && "grid-cols-3"
-              }  gap-x-[25px] gap-y-[25px] w-full`}
-            >
-              {state.data?.products &&
-                state.data.products.map((item) => {
-                  return (
-                    <ProductCard
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      slug={item.slug}
-                      brandName={item.brandNameVM.name}
-                      brandSlug={item.brandNameVM.slug}
-                      price={item.price}
-                      priceDiscount={item.priceDiscount}
-                      image={item.imageSrc}
-                      star={item.star}
-                    />
-                  );
-                })}
-            </div>
-          )}
-          <div
-              className={`lg:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-[25px] gap-y-[25px] w-full`}
-            >
-              {state.data?.products &&
-                state.data.products.map((item) => {
-                  return (
-                    <ProductCard
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      slug={item.slug}
-                      brandName={item.brandNameVM.name}
-                      brandSlug={item.brandNameVM.slug}
-                      price={item.price}
-                      priceDiscount={item.priceDiscount}
-                      image={item.imageSrc}
-                      star={item.star}
-                    />
-                  );
-                })}
-            </div>
 
           <div className="flex justify-center mt-[30px] ">
             {state.loading ? (
-              "loading"
+              ""
             ) : (
               <Pagination
                 forcePage={currentPage}

@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: 'class',
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   plugins: [],
   important: false,
@@ -16,7 +17,8 @@ module.exports = {
         danger: "#DC3545",
         warning: "#FFC107",
         "second":"#202121",
-        "third":"#fcfcfc"
+        "third":"#fcfcfc",
+        'darkMode':'#3A3B3C'
       },
       colors: {
         "dark-purple": "#081A51",
@@ -30,7 +32,8 @@ module.exports = {
         cancel: "##6C757D",
         submit:"#1A56DB",
         "second":"#202121",
-        "third":"#fcfcfc"
+        "third":"#fcfcfc",
+        'darkMode':'#3A3B3C'
       },
       borderColor: {
         "input-border": "#DADCE0",
@@ -39,7 +42,8 @@ module.exports = {
         danger: "#DC3545",
         warning: "#FFC107",
         "second":"#202121",
-        "third":"#fcfcfc"
+        "third":"#fcfcfc",
+        'darkMode':'#3A3B3C'
       },
       boxShadow: {
         admin: "rgba(0, 0, 0, 0.24) 0px 3px 8px",

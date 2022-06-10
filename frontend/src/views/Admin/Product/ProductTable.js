@@ -100,11 +100,11 @@ function ProductTable(props) {
   const [loadingP, setLoadingP] = useState(false);
   const [arrBrand, setArrBrand] = useState([]);
   const [arrCategory, setArrCategory] = useState([]);
+  const [limit, setLimit]=useState(10);
   const fetchData = async () => {
-    console.log("vo day");
     const data = {
       currentPage: currentPage,
-      limit: 10,
+      limit: limit,
       search: query,
       brandSlugs: arrBrand,
       categorySlugs: arrCategory,
@@ -122,10 +122,13 @@ function ProductTable(props) {
     })
       .then((res) => {
         dispatch(success(res.data));
-        // setLimit(res.data.products.length);
       })
       .catch(() => dispatch(fail()));
   };
+  useEffect(()=>{
+    setCurrentPage(1);
+    fetchData();
+  },[limit])
 
   const fetchDataBrand = async () => {
     await api({
@@ -243,7 +246,6 @@ function ProductTable(props) {
       setProductSelect([]);
     }
   };
-  console.log(productSelect);
   const handlePublishedTrueList = async () => {
     await api({
       method: "PUT",
@@ -524,6 +526,25 @@ function ProductTable(props) {
               onChange={(e) => setQuery(e.target.value)}
               className="bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
             />
+          </div>
+          <div className="flex flex-col">
+            <label
+              htmlFor="limit"
+              className="block mb-2 text-sm font-medium text-gray-900 "
+            >
+              Số dòng
+            </label>
+            <div className="flex flex-row items-center">
+              <input
+                id="limit"
+                type="text"
+                // value={state.data.products.length}
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
+                className="w-[50px] bg-gray-50 block p-2.5 border focus:ring-1 outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              />
+              <span>/{state.data?.totalResult}</span>
+            </div>
           </div>
         </div>
         <div className="w-full">

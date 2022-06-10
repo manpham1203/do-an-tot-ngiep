@@ -27,8 +27,15 @@ namespace BLL.Order
             {
                 cm = new CommonBLL();
                 var detailBLL = new OrderDetailBLL();
-
                 var orderId = cm.RandomString(12);
+                var checkId = await GetbyId(orderId);
+
+                if (checkId != null)
+                {
+                    orderId = cm.RandomString(12);
+                    checkId = await GetbyId(orderId);
+                }
+
 
                 var amount = model.OrderDetailVMs.Sum(x => x.UnitPrice * x.Quantity);
                 var orderObj = new OrderVM
@@ -52,7 +59,28 @@ namespace BLL.Order
                 }
                 var detailObj = model.OrderDetailVMs;
 
-                return await detailBLL.Create(detailObj, orderId);
+                var result = await detailBLL.Create(detailObj, orderId);
+                if (result == false)
+                {
+                    return false;
+                }
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Admin", "datn.quantri@gmail.com"));
+                message.To.Add(new MailboxAddress("Client", model.DeliveryEmail));
+                message.Subject = "Tạo đơn hàng";
+                message.Body = new TextPart("html")
+                {
+                    Text = "<h1>Đơn hàng của bạn đã tạo thành công</h1>",
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, false);
+                    client.Authenticate("datn.quantri@gmail.com", "rhbjzoevzaxpfuje");
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+                return true;
             }
             catch
             {
@@ -251,7 +279,7 @@ namespace BLL.Order
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Admin", "datn.quantri@gmail.com"));
                 message.To.Add(new MailboxAddress("Client", checkId.DeliveryEmail));
-                message.Subject = "Trạng thái đơn hàng thay đổi";
+                message.Subject = "Thông báo đơn hàng";
                 //message.Body = new TextPart("plain")
                 //{
                 //    Text="hello",                    

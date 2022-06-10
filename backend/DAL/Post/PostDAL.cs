@@ -90,7 +90,7 @@ namespace DAL.Post
             {
                 return false;
             }
-            if (pictureVM.Id != null)
+            if (pictureVM.Name != null)
             {
                 var pictureFromDb = await db.Pictures.SingleOrDefaultAsync(x => x.ObjectId == postFromDb.Id);
                 pictureFromDb.Name = pictureVM.Name;
@@ -225,18 +225,24 @@ namespace DAL.Post
         {
             try
             {
-                var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.ShortDescription, x.FullDescription, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
+                //var resultFromDb = await db.Posts.Select(x => new { x.Id, x.Title, x.ShortDescription, x.FullDescription, x.Published }).SingleOrDefaultAsync(x => x.Id == id);
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId
+                                          where post.Id==id && pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          select new SetDataUpdateVM
+                                          {
+                                              Title = post.Title,
+                                              ShortDescription = post.ShortDescription,
+                                              FullDescription = post.FullDescription,
+                                              ImageName = pic.Name,
+                                              ImageSrc = null,
+                                              Published=post.Published,
+                                          }).SingleOrDefaultAsync();
                 if (resultFromDb == null)
                 {
                     return null;
                 }
-                return new SetDataUpdateVM
-                {
-                    Title = resultFromDb.Title,
-                    ShortDescription = resultFromDb.ShortDescription,
-                    FullDescription = resultFromDb.FullDescription,
-                    Published = resultFromDb.Published,
-                };
+                return resultFromDb;
             }
             catch
             {

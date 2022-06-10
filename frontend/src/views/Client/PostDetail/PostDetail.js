@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
 import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
 import OnSaleWidget from "../../../components/Widget/OnSaleWidget";
+import PageContent from "../../../components/Skeleton/PageContent";
 
 function Abc() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ function PostDetail(props) {
   const [cmtCount, setCmtCount] = useState(0);
   const { slug } = useParams();
   const [loadCmt, setLoadCmt] = useState(true);
+  const [loading, setLoading] = useState(true);
   const fetchData = async (slug) => {
     await api({
       method: "GET",
@@ -43,9 +45,12 @@ function PostDetail(props) {
       params: { slug: slug },
     })
       .then((res) => {
-        setData(res.data);
+        if (res.status === 200) {
+          setData(res.data);
+          setLoading(false);
+        }
       })
-      .catch(() => console.log("fail"));
+      .catch(() => setLoading(true));
   };
   useEffect(() => {
     fetchData(slug);
@@ -130,8 +135,10 @@ function PostDetail(props) {
       setValid(false);
     }
   }, [content]);
-  return (
-    <div className="container px-[10px] sm:px-[20px] mx-auto mt-[20px]">
+  return loading ? (
+    <PageContent />
+  ) : (
+    <div className="container px-[10px] sm:px-[20px] mx-auto mt-[20px] text-second dark:text-third">
       <div className="flex flex-row gap-x-[25px]">
         <div className="w-full overflow-hidden">
           <div className="w-full h-[200px] sm:h-[300px] lg:h-[420px]">

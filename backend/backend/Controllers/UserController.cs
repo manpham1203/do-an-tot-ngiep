@@ -287,6 +287,44 @@ namespace backend.Controllers
             }
 
         }
+        [HttpPost("findEmail")]
+        public async Task<IActionResult> FindEmail(string email)
+        {
+
+            try
+            {
+                var user = await userBLL.FindEmail(email);
+                if (user)
+                {
+                    return Ok(user);
+                }
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+        [HttpPost("findPhone")]
+        public async Task<IActionResult> FindPhone(string phone)
+        {
+
+            try
+            {
+                var user = await userBLL.FindPhone(phone);
+                if (user)
+                {
+                    return Ok(user);
+                }
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
         [HttpGet("getbyusername")]
         public async Task<IActionResult> GetByUserName(string username)
         {

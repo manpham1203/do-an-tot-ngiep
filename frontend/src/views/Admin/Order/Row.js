@@ -198,6 +198,7 @@ function Row(props) {
             className="w-5 h-5 border-gray-200 rounded"
             type="checkbox"
             id="row_1"
+            disabled
           />
         </div>
       </Td>

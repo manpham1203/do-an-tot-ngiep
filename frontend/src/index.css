@@ -17,7 +17,6 @@
     /* font-family: 'Montserrat', sans-serif; */
     font-family: "Lexend Deca", sans-serif;
     /* font-family: 'League Spartan', sans-serif; */
-    @apply text-second bg-third;
     /* user-select: none; */
   }
   .haha{
@@ -103,10 +102,10 @@
   /* input */
   .form-input:not(:placeholder-shown) + .form-label,
   .form-input:focus + .form-label {
-    @apply top-0 left-[10px] px-[10px] block bg-third text-input-label;
+    @apply top-0 left-[10px] px-[10px] block  ;
   }
   .form-input:focus + .form-label {
-    @apply top-0 left-[10px] px-[10px] block bg-third text-second;
+    @apply top-0 left-[10px] px-[10px] block  ;
   }
 
   /* radio */
@@ -116,9 +115,10 @@
     height: 100%;
     border-radius: 10000px;
     display: block;
-    @apply bg-second;
+    @apply bg-second dark:bg-third;
     transform: scale(0);
     transition: 0.2s ease;
+  
   }
   .radio-input:checked + .radio-circle::after {
     transform: scale(1);
@@ -196,22 +196,22 @@
   }
 
   .pagination li {
-    @apply border border-second rounded-md;
+    @apply border border-second dark:border-third rounded-md;
   }
   .pagination li a {
-    @apply min-w-[30px] h-[30px] flex justify-center items-center  font-light;
+    @apply min-w-[30px] h-[30px] flex justify-center items-center  font-light text-second dark:text-third;
   }
   .pagination li.disabled {
     @apply border-gray-300;
   }
   .pagination li.disabled a {
-    @apply cursor-default text-gray-300;
+    @apply cursor-default text-gray-300 ;
   }
   .pagination .selected {
-    @apply text-second;
+    @apply text-second dark:text-third;
   }
   .pagination li.selected a {
-    @apply text-second font-normal;
+    @apply text-second dark:text-third font-normal;
   }
   .pagination li.selected {
     @apply border-2;
@@ -221,7 +221,7 @@
     @apply bg-second;
   }
   .filter .rc-slider-handle {
-    @apply bg-second border-second opacity-[1] hover:border-none w-[20px] h-[20px] top-[2px];
+    @apply bg-second border-second  opacity-[1] hover:border-none w-[20px] h-[20px] top-[2px];
   }
   .filter
     .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
@@ -248,5 +248,24 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     text-align: justify;
+  }
+  .skeleton {
+    background-color: #e2e5e7;
+    background-image: linear-gradient(
+      90deg,
+      rgba(#fff, 0),
+      rgba(#fff, 0.5),
+      rgba(#fff, 0)
+    );
+    background-size: 40px 100%;
+    background-repeat: no-repeat;
+    background-position: left -40px top 0;
+    animation: shine 1s ease infinite;
+  }
+  
+  @keyframes shine {
+    to {
+      background-position: right -40px top 0;
+    }
   }
 }

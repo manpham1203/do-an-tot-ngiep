@@ -154,7 +154,7 @@ function EditInfo(props) {
   console.log(watch('birthday'));
   return (
     <div className="w-full flex flex-col">
-      <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
+      <h2 className="text-lg font-semibold text-second dark:text-third text-center mb-[40px]">
         CẬP NHẬT THÔNG TIN
       </h2>
       <div className="flex justify-center">

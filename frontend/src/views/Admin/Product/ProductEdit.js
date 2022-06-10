@@ -266,7 +266,7 @@ console.log(state);
   };
   const [brandSelected, setBrandSelected] = useState(null);
   const [categorySelected, setCategorySelected] = useState([]);
-  console.log(errors);
+  console.log(state.data);
   return (
     <div className="">
       <form
@@ -456,7 +456,7 @@ console.log(state);
                     <th scope="col" className="px-6 py-3">
                       Hình
                     </th>
-                    <th scope="col" className="px-6 py-3 hidden lg:block">
+                    <th scope="col" className="px-6 py-3 ">
                       Link
                     </th>
                     <th scope="col" className="px-6 py-3">
@@ -496,7 +496,7 @@ console.log(state);
                             className="w-[100px] h-[100px]"
                           />
                         </td>
-                        <td className="px-6 py-4 hidden lg:block">
+                        <td className="px-6 py-4 ">
                           {item.imageSrc}
                         </td>
                         <td className="px-6 py-4">

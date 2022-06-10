@@ -14,7 +14,7 @@ function CartItem(props) {
   const { cart } = useSelector((state) => state);
 
   const handleNumber = (e) => {
-    const re = /^[1-9\b]+$/;
+    const re = /^[0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: e.target.value }));
     }
@@ -23,11 +23,13 @@ function CartItem(props) {
     if (e.target.value === "") {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
     }
+    if(parseInt(e.target.value)<1){
+      dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
+    }
   };
-  console.log(props.qty);
 
   return (
-    <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 mb-[30px]">
+    <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 dark:hover:bg-second mb-[30px]">
       <div className="flex w-full md:w-2/5 mb-[10px] md:mb-0">
         <div className="w-[100px] h-[100px] flex-none p-[10px]">
           <img
@@ -40,11 +42,11 @@ function CartItem(props) {
           <span className="font-bold text-sm short-desc-postcard2">
             {props.cartItem.name}
           </span>
-          <span className="text-second text-xs">
+          <span className=" text-xs">
             {props.cartItem.brandNameVM.name}
           </span>
           <h2
-            className="font-semibold hover:text-red-500 text-gray-500 text-xs cursor-pointer"
+            className="font-semibold hover:text-red-500 text-gray-500 dark:text-gray-200 dark:hover:text-red-500 text-xs cursor-pointer"
             onClick={() => dispatch(removeFromCart(props.cartItem.id))}
           >
             Xoá khỏi giỏ hàng
@@ -67,7 +69,7 @@ function CartItem(props) {
         </div>
 
         <input
-          className="number_cart-item mx-2 border text-center w-8"
+          className="number_cart-item mx-2 border text-center w-8 text-second"
           type="number"
           max="10"
           min="1"

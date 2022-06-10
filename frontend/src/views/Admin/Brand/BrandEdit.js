@@ -162,8 +162,6 @@ function BrandEdit(props) {
     setImage(state.data.pictureVM.imageSrc);
     setFile(undefined);
   };
-  
-  console.log(state);
   return (
     <div className="">
       <form

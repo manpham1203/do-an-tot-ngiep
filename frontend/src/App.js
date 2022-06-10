@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Home from "./views/Client/Home/Home";
 import About from "./views/Client/About/About";
@@ -27,7 +28,6 @@ import CategoryTrash from "./views/Admin/Category/CategoryTrash";
 import CategoryCreate from "./views/Admin/Category/CategoryCreate";
 import ProductEdit from "./views/Admin/Product/ProductEdit";
 import ProductTrash from "./views/Admin/Product/ProductTrash";
-import { useEffect } from "react";
 import Products from "./views/Client/Products/Products";
 import Checkout from "./views/Client/Cart/Checkout";
 import OrderTable from "./views/Admin/Order/OrderTable";
@@ -59,10 +59,10 @@ import AdminViewCmt from "./components/Modal/AdminViewCmt";
 import AdminViewBrand from "./components/Modal/AdminViewBrand";
 import AdminViewPost from "./components/Modal/AdminViewPost";
 import AdminViewUser from "./components/Modal/AdminViewUser";
-import UserTable from './views/Admin/User/UserTable'
-import UserEdit from './views/Admin/User/UserEdit'
-import UserTrash from './views/Admin/User/UserTrash'
-import QuestionTable from './views/Admin/Question/QuestionTable'
+import UserTable from "./views/Admin/User/UserTable";
+import UserEdit from "./views/Admin/User/UserEdit";
+import UserTrash from "./views/Admin/User/UserTrash";
+import QuestionTable from "./views/Admin/Question/QuestionTable";
 import LoginAdmin from "./views/Admin/Login/LoginAdmin";
 import Question from "./views/Client/Question/Question";
 import ContactCreate from "./views/Admin/Contact/ContactCreate";
@@ -74,7 +74,7 @@ import PageTable from "./views/Admin/Page/PageTable";
 import PageEdit from "./views/Admin/Page/PageEdit";
 import PageTrash from "./views/Admin/Page/PageTrash";
 import Page from "./views/Client/Page/Page";
-
+import { BsFillArrowUpSquareFill } from "react-icons/bs";
 
 function App() {
   const {
@@ -86,7 +86,7 @@ function App() {
     adminViewBrand,
     adminViewPost,
     adminViewUser,
-    cursor
+    cursor,
   } = useSelector((store) => store);
   useEffect(() => {
     if (adminViewUser.show) {
@@ -154,9 +154,23 @@ function App() {
       navigate("/admin-login");
     }
   }, [user.role, location.pathname]);
-
+  const [scroll, setScroll] = useState();
+  useEffect(() => {
+    const setNav = () => {
+      setScroll(window.scrollY > 200);
+    };
+    window.addEventListener("scroll", setNav);
+    return () => {
+      window.removeEventListener("scroll", setNav);
+    };
+  }, []);
+  const handleBackTop = () => {
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
   return (
-    <div className={`w-[100%] min-h-screen ${cursor.wait && "cursor-wait"}`}>
+    <div
+      className={`w-full min-h-screen ${cursor.wait && "cursor-wait"} relative dark:bg-darkMode bg-third`}
+    >
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
@@ -260,13 +274,22 @@ function App() {
             <Route path="/admin/banner/da-xoa" element={<BannerTrash />} />
             <Route path="/admin/banner/tao-moi" element={<BannerCreate />} />
             <Route path="/admin/nguoi-dung/danh-sach" element={<UserTable />} />
-            <Route path="/admin/nguoi-dung/chinh-sua/:id" element={<UserEdit />} />
+            <Route
+              path="/admin/nguoi-dung/chinh-sua/:id"
+              element={<UserEdit />}
+            />
             <Route path="/admin/nguoi-dung/da-xoa" element={<UserTrash />} />
-            <Route path="/admin/cau-hoi/danh-sach" element={<QuestionTable />} />
+            <Route
+              path="/admin/cau-hoi/danh-sach"
+              element={<QuestionTable />}
+            />
             <Route path="/admin/lien-he/tao-moi" element={<ContactCreate />} />
             <Route path="/admin/lien-he/danh-sach" element={<ContactTable />} />
             <Route path="/admin/lien-he/da-xoa" element={<ContactTrash />} />
-            <Route path="/admin/lien-he/chinh-sua/:id" element={<ContactEdit />} />
+            <Route
+              path="/admin/lien-he/chinh-sua/:id"
+              element={<ContactEdit />}
+            />
             <Route path="/admin/trang/tao-moi" element={<PageCreate />} />
             <Route path="/admin/trang/danh-sach" element={<PageTable />} />
             <Route path="/admin/trang/chinh-sua/:id" element={<PageEdit />} />
@@ -322,6 +345,12 @@ function App() {
           <OverlayAdminViewUser />
           <AdminViewUser />
         </>
+      )}
+      {scroll && (
+        <BsFillArrowUpSquareFill
+          onClick={() => handleBackTop()}
+          className="fixed bottom-[20px] right-[20px] z-[10000] text-[50px] text-second bg-third dark:text-third dark:bg-second rounded-lg cursor-pointer"
+        />
       )}
     </div>
   );

@@ -39,14 +39,24 @@ function NavBar(props) {
     };
   }, []);
 
-  const [sun, setSun] = useState(true);
-
+  const [darkMode, setDarkMode] = useState(
+    () => (localStorage.theme === "dark")
+  );
+  useEffect(() => {
+    const html = window.document.documentElement;
+    const prev = darkMode ? "light" : "dark";
+    html.classList.remove(prev);
+    const next = darkMode ? "dark" : "light";
+    html.classList.add(next);
+    localStorage.setItem("theme", next);
+  }, [darkMode]);
+  console.log(darkMode)
   return (
     <>
       <div
         className={`w-[100%] h-[50px] lg:h-[70px] z-[6] transition-all duration-[300ms] font-primary fixed font-medium flex items-center
-      ${navHome && scroll ? "bg-third border-b border-b-[#161a2133] " : ""}
-      ${navHome === false ? "border-b border-b-[#161a2133] bg-third" : ""}
+      ${navHome && scroll ? "bg-third border-b border-b-[#161a2133] dark:border-third dark:bg-darkMode" : ""}
+      ${navHome === false ? "border-b border-b-[#161a2133 bg-third dark:bg-darkMode dark:border-b-third" : ""}
       ${props.className}
       `}
       >
@@ -58,13 +68,13 @@ function NavBar(props) {
             className={`w-fit lg:w-[150px] flex flex-row items-center justify-start text-[25px] cursor-pointer
           ${
             navHome === false
-              ? "text-black"
+              ? "text-second dark:text-third"
               : navHome && scroll
-              ? "text-second"
+              ? "text-second dark:text-third"
               : "text-third"
           }
           `}
-          onClick={() => navigate("/")}
+            onClick={() => navigate("/")}
           >
             WatchStore
           </span>
@@ -77,9 +87,9 @@ function NavBar(props) {
             transition-all duration-[0.3s]
             ${
               navHome === false
-                ? "text-black"
+                ? "text-second dark:text-third"
                 : navHome && scroll
-                ? "text-black"
+                ? "text-second dark:text-third"
                 : "text-white"
             }
             `}
@@ -120,9 +130,23 @@ function NavBar(props) {
               </button>
             )}
 
-            <button className="text-[25px] " onClick={() => setSun(!sun)}>
-              {sun ? <FiSun /> : <FiMoon />}
-            </button>
+            {darkMode ? (
+              <button
+                className="text-[25px] "
+                onClick={() => setDarkMode(!darkMode)}
+              >
+                <FiMoon />
+              </button>
+            ) : (
+              <button
+                className="text-[25px] "
+                onClick={() => setDarkMode(!darkMode)}
+              >
+                
+                <FiSun />
+              </button>
+            )}
+
             <button
               type="button"
               className="lg:hidden"

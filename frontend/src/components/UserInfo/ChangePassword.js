@@ -68,7 +68,7 @@ function ChangePassword(props) {
   const { user } = useSelector((store) => store);
   return (
     <div className="flex flex-col w-full items-center">
-      <h2 className="text-lg font-semibold text-gray-700 text-center mb-[40px]">
+      <h2 className="text-lg font-semibold text-second dark:text-third text-center mb-[40px]">
         ĐỔI MẬT KHẨU
       </h2>
       <div className="w-full lg:w-[400px] gap-y-[20px] flex flex-col">

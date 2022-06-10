@@ -111,6 +111,18 @@ namespace BLL.User
         {
             return await userDAL.GetByUsername(username);
         }
+        public async Task<bool> CheckUsername(string username)
+        {
+            return await userDAL.CheckUsername(username);
+        }
+        public async Task<bool> CheckEmail(string email)
+        {
+            return await userDAL.CheckEmail(email);
+        }
+        public async Task<bool> CheckPhone(string phone)
+        {
+            return await userDAL.CheckPhone(phone);
+        }
         public async Task<UserInfoClientVM> GetById(string id)
         {
             var user = await userDAL.GetById(id);
@@ -139,8 +151,26 @@ namespace BLL.User
         }
         public async Task<bool> FindUsername(string username)
         {
-            var checkUsername = await GetByUsername(username);
-            if (checkUsername != null)
+            var checkUsername = await CheckUsername(username);
+            if (checkUsername == true)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> FindEmail(string email)
+        {
+            var checkUsername = await CheckEmail(email);
+            if (checkUsername == true)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> FindPhone(string phone)
+        {
+            var checkUsername = await CheckPhone(phone);
+            if (checkUsername == true)
             {
                 return true;
             }

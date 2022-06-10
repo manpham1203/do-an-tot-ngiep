@@ -75,7 +75,7 @@ function PostCmt(props) {
           <Tbody>
             {data?.list?.map((item) => {
               return (
-                <Tr>
+                <Tr key={item.id}>
                   <Td className="py-[10px]">
                     <div className="w-full flex justify-center">
                       <div className="w-[60px] h-[60px]">

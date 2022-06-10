@@ -158,6 +158,11 @@ namespace backend.Controllers
                 {
                     return BadRequest();
                 }
+                if (resultFromBLL.ImageName != null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.ImageName);
+
+                }
                 return Ok(resultFromBLL);
             }
             catch
@@ -184,7 +189,7 @@ namespace backend.Controllers
             }
         }
         [HttpGet("PostPagination")]
-        public async Task<IActionResult> PostPagination(int limit=6, int currentPage=1)
+        public async Task<IActionResult> PostPagination(int limit = 6, int currentPage = 1)
         {
             try
             {

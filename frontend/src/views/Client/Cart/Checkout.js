@@ -105,6 +105,7 @@ function Checkout(props) {
   const [state, dispatchProduct] = useReducer(reducer, initState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [submitSpin, setSubmitSpin] = useState(false);
 
   const {
     handleSubmit,
@@ -197,6 +198,7 @@ function Checkout(props) {
   const watchLastName = watch("lastName");
   const watchNote = watch("note");
   const onSubmitHandler = async () => {
+    setSubmitSpin(true);
     var item = items;
     const data = {
       userId: user.id,
@@ -221,6 +223,7 @@ function Checkout(props) {
           });
           dispatch(setCartEmpty());
           navigate("/");
+          setSubmitSpin(false);
         } else {
           toast.error("Thanh toán thất bại", {
             position: toast.POSITION.TOP_RIGHT,
@@ -228,12 +231,13 @@ function Checkout(props) {
           });
         }
       })
-      .catch(() =>
+      .catch(() => {
         toast.error("Thanh toán thất bại", {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
-        })
-      );
+        });
+        setSubmitSpin(false);
+      });
   };
   console.log(errors);
   return (
@@ -321,15 +325,15 @@ function Checkout(props) {
               <textarea
                 placeholder=" "
                 {...register("note")}
-                className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+                className="h-[100px] py-[20px] form-input border border-input-border text-input-color dark:text-third font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second dark:focus:border-third outline-none bg-third dark:bg-darkMode"
               />
-              <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+              <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
                 Ghi chú
               </label>
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-[400px] flex-none h-fit bg-[#F9F9F9] border border-dashed border-[#D7D7D7] rounded">
+        <div className="w-full lg:w-[400px] flex-none h-fit bg-[#F9F9F9] dark:bg-darkMode dark:text-third text-second border border-dashed border-[#D7D7D7] rounded">
           <h2 className="my-[20px] text-[20px] text-center">
             Đơn hàng của bạn
           </h2>
@@ -397,10 +401,19 @@ function Checkout(props) {
           </div>
           <div className="flex justify-center my-[30px]">
             <button
-              className="border-2 border-second px-[20px] h-[40px] text-[20px]"
+              className={`border-2  px-[20px] h-[40px] text-[20px] w-[150px] ${
+                submitSpin
+                  ? "bg-second"
+                  : "bg-second dark:bg-third text-third dark:text-second"
+              }`}
               type="submit"
+              disabled={submitSpin}
             >
-              THANH TOÁN
+              {submitSpin ? (
+                <div className="mx-auto w-5 h-5 border-4 border-third border-t-4 border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                "Đặt Hàng"
+              )}
             </button>
           </div>
         </div>

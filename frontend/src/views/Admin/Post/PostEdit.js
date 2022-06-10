@@ -10,6 +10,8 @@ import AdminCheckbox from "../../../components/Form/Checkbox/AdminCheckbox";
 import AdminTextArea from "../../../components/Form/Textarea/AdminTextArea";
 import postthumb from "../../../assets/postthumb.jpg";
 import { useParams } from "react-router-dom";
+import { FiCamera } from "react-icons/fi";
+import { MdClose } from "react-icons/md";
 
 const schema = yup
   .object({
@@ -25,8 +27,6 @@ const schema = yup
   })
   .required();
 function PostEdit(props) {
-  const [image, setImage] = useState();
-  const [file, setFile] = useState();
   const [richText, setRichText] = useState();
   const { id } = useParams();
   const {
@@ -44,6 +44,7 @@ function PostEdit(props) {
       fullDescription: "",
     },
   });
+  const [data,setData]=useState();
   const fetchData = async (id) => {
     await api({
       method: "GET",
@@ -56,7 +57,9 @@ function PostEdit(props) {
           shortDescription: res.data.shortDescription,
           published: res.data.published,
         });
+        setData(res.data)
         setRichText(res.data.fullDescription);
+        setImage(res.data.imageSrc);
       })
       .catch(() => console.log("fail"));
   };
@@ -65,7 +68,6 @@ function PostEdit(props) {
   }, [id]);
   const onSubmitHandler = async (values) => {
     const formData = new FormData();
-
     formData.append("title", values.title);
     formData.append("shortDescription", values.shortDescription);
     formData.append("fullDescription", values.fullDescription);
@@ -97,6 +99,8 @@ function PostEdit(props) {
       );
   };
 
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
   const handlePreviewImage = (e) => {
     const tempfile = e.target.files[0];
     setFile(tempfile);
@@ -107,10 +111,14 @@ function PostEdit(props) {
       image && URL.revokeObjectURL(image);
     };
   }, [image]);
+  const handleResetImage = () => {
+    setImage(data?.imageSrc);
+    setFile(undefined);
+  };
   useEffect(() => {
     setValue("fullDescription", richText);
   }, [richText]);
-  console.log(errors);
+  console.log(data);
   return (
     <div>
       <form
@@ -181,30 +189,39 @@ function PostEdit(props) {
         </div>
 
         <div className="flex flex-col">
+          <div className="relative w-fit">
+            <div className="w-[200px] h-[200px] block border border-second overflow-hidden">
+              <img
+                src={image}
+                alt=""
+                className="w-full h-full object-cover object-center"
+              />
+              <label
+                htmlFor="image"
+                className="cursor-pointer absolute top-0 right-[-20px] w-[40px] h-[40px] bg-third rounded-full border border-second flex justify-center items-center text-[20px]"
+              >
+                <FiCamera />
+              </label>
+              <span
+                onClick={() => handleResetImage()}
+                className="cursor-pointer absolute top-[50px] right-[-20px] w-[40px] h-[40px] bg-third rounded-full border border-second flex justify-center items-center text-[20px]"
+              >
+                <MdClose />
+              </span>
+            </div>
+          </div>
           <label
             htmlFor="image"
             className="block mb-2 text-sm font-medium text-gray-900 "
           >
             Chọn ảnh
           </label>
-          <label
-            className="w-[370px] h-[246px] overflow-hidden rounded-md bg-[url('assets/postthumb.jpg')] bg-center bg-cover cursor-pointer"
-            htmlFor="image"
-          >
-            <input
-              type="file"
-              onChange={handlePreviewImage}
-              className="hidden"
-              id="image"
-            />
-            {image && (
-              <img
-                src={image}
-                alt=""
-                className="w-full h-full object-cover object-center"
-              />
-            )}
-          </label>
+          <input
+            type="file"
+            onChange={handlePreviewImage}
+            className="hidden"
+            id="image"
+          />
         </div>
 
         <div className="flex justify-center gap-x-[25px]">

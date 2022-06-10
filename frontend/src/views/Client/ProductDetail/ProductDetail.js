@@ -13,6 +13,7 @@ import BrandWidget from "../../../components/Widget/BrandWidget";
 import CategoryWidget from "../../../components/Widget/CategoryWidget";
 import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
+import PageContent from '../../../components/Skeleton/PageContent'
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -158,7 +159,7 @@ function ProductDetail() {
   };
 
   const handleNumber = (e) => {
-    const re = /^[1-9\b]+$/;
+    const re = /^[0-9\b]+$/;
     if (e.target.value === "" || re.test(e.target.value)) {
       setNumber(e.target.value);
     }
@@ -195,130 +196,128 @@ function ProductDetail() {
     }
   }, [state?.data?.id]);
 
-  return (
-    <div className="container mx-auto px-[10px] sm:px-[20px]">
-      {state.loading ? (
-        <>loading</>
-      ) : state.fail ? (
-        <>fail</>
-      ) : (
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-x-[20px] ">
-          <div className="w-full p-[20px] flex flex-col-reverse lg:flex-row h-fit gap-x-[20px] lg:items-start items-center justify-center">
-            <ProductImageSlider images={state.data?.pictureVMs} />
-          </div>
+  return state.loading ? (
+    <PageContent />
+  ) : state.fail ? (
+    <PageContent />
+  ) : (
+    <div className="container mx-auto px-[10px] sm:px-[20px] text-second dark:text-third">
+      <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-x-[20px] ">
+        <div className="w-full p-[20px] flex flex-col-reverse lg:flex-row h-fit gap-x-[20px] lg:items-start items-center justify-center">
+          <ProductImageSlider images={state.data?.pictureVMs} />
+        </div>
 
-          <div className="w-full p-[20px]">
-            <div className=" flex flex-col gap-y-[10px] items-center lg:items-start">
-              <h2 className="text-[18px] sm:text-[20px]">
-                {state.data.brandNameVM?.name}
-              </h2>
-              <h2 className="text-[20px] sm:text-[25px] lg:text-[30px]">
-                {state.data.name}
-              </h2>
-              <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
-                <ShowStarAvg star={state.data.star} />
+        <div className="w-full p-[20px]">
+          <div className=" flex flex-col gap-y-[10px] items-center lg:items-start">
+            <h2 className="text-[18px] sm:text-[20px]">
+              {state.data.brandNameVM?.name}
+            </h2>
+            <h2 className="text-[20px] sm:text-[25px] lg:text-[30px]">
+              {state.data.name}
+            </h2>
+            <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
+              <ShowStarAvg star={state.data.star} />
 
-                <span className="ml-[10px] text-[#3f3d4f]">
-                  ({state.data.starCount} lượt đánh giá)
+              <span className="ml-[10px] text-second dark:text-third">
+                ({state.data.starCount} lượt đánh giá)
+              </span>
+            </div>
+            {state.data.priceDiscount === null ? (
+              <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px]">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(state.data.price)}
+              </span>
+            ) : (
+              <div className="flex flex-row gap-x-[20px]">
+                <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px] ">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(state.data.priceDiscount)}
                 </span>
-              </div>
-              {state.data.priceDiscount === null ? (
-                <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px]">
+                <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px] mt-[10px] line-through opacity-[0.5]">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(state.data.price)}
                 </span>
-              ) : (
-                <div className="flex flex-row gap-x-[20px]">
-                  <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px]  mt-[10px] ">
-                    {new Intl.NumberFormat("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    }).format(state.data.priceDiscount)}
-                  </span>
-                  <span className="text-[20px] md:text-[23px] sm:text-[25px] lg:text-[28px] mt-[10px] line-through opacity-[0.5]">
-                    {new Intl.NumberFormat("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    }).format(state.data.price)}
-                  </span>
-                </div>
-              )}
-              <div className="mt-[10px]">
-                <span className="font-medium">Lượt thích: </span>
-                {state.data.like}
               </div>
-              <div className="mt-[10px]">
-                <span className="font-medium">Lượt xem: </span>
-                {state.data.view}
-              </div>
-
-              <div className="mt-[10px]">
-                <div className="">
-                  <span className="font-medium">Loại sản phẩm: </span>
-                  {state.data.categoryNameVMs?.map((item, index) => {
-                    return index + 1 === state.data.categoryNameVMs.length ? (
-                      <span
-                        key={item.id}
-                        className="cursor-pointer hover:underline underline-offset-4"
-                        onClick={() =>
-                          navigate(`/san-pham?&danh-muc=${item.slug}`)
-                        }
-                      >
-                        {item.name}
-                      </span>
-                    ) : (
-                      <span
-                        key={item.id}
-                        className="cursor-pointer hover:underline underline-offset-4"
-                        onClick={() =>
-                          navigate(`/san-pham?&danh-muc=${item.slug}`)
-                        }
-                      >
-                        {item.name},&nbsp;
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex flex-row items-center mt-[20px] border border-gray-400">
-                <div
-                  className="cursor-pointer px-[10px] border-r border-gray-400 h-[40px] flex items-center"
-                  onClick={() =>
-                    setNumber((number) => (number <= 1 ? 1 : number - 1))
-                  }
-                >
-                  <BsDashLg />
-                </div>
-                <input
-                  className="number_cart-item w-[100px] text-center h-[40px] "
-                  type="number"
-                  value={number}
-                  onChange={(e) => handleNumber(e)}
-                  onBlur={(e) => handleBlurNumber(e)}
-                  min="1"
-                />
-                <div
-                  className="cursor-pointer px-[10px] border-l border-gray-400 h-[40px] flex items-center"
-                  onClick={() =>
-                    setNumber((number) => (number >= 9 ? 9 : number + 1))
-                  }
-                >
-                  <BsPlusLg />
-                </div>
-              </div>
-              <button
-                className="mt-[20px] p-[10px] bg-second text-third font-medium flex flex-row items-center"
-                onClick={() => addCart(state.data.id, number)}
-              >
-                THÊM VÀO GIỎ HÀNG
-              </button>
+            )}
+            <div className="mt-[10px]">
+              <span className="font-medium">Lượt thích: </span>
+              {state.data.like}
             </div>
+            <div className="mt-[10px]">
+              <span className="font-medium">Lượt xem: </span>
+              {state.data.view}
+            </div>
+
+            <div className="mt-[10px]">
+              <div className="">
+                <span className="font-medium">Loại sản phẩm: </span>
+                {state.data.categoryNameVMs?.map((item, index) => {
+                  return index + 1 === state.data.categoryNameVMs.length ? (
+                    <span
+                      key={item.id}
+                      className="cursor-pointer hover:underline underline-offset-4"
+                      onClick={() =>
+                        navigate(`/san-pham?&danh-muc=${item.slug}`)
+                      }
+                    >
+                      {item.name}
+                    </span>
+                  ) : (
+                    <span
+                      key={item.id}
+                      className="cursor-pointer hover:underline underline-offset-4"
+                      onClick={() =>
+                        navigate(`/san-pham?&danh-muc=${item.slug}`)
+                      }
+                    >
+                      {item.name},&nbsp;
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center mt-[20px] border border-gray-400">
+              <div
+                className="cursor-pointer px-[10px] border-r border-gray-400 h-[40px] flex items-center"
+                onClick={() =>
+                  setNumber((number) => (number <= 1 ? 1 : number - 1))
+                }
+              >
+                <BsDashLg />
+              </div>
+              <input
+                className="number_cart-item w-[100px] text-center h-[40px] text-second"
+                type="number"
+                value={number}
+                onChange={(e) => handleNumber(e)}
+                onBlur={(e) => handleBlurNumber(e)}
+                min="1"
+              />
+              <div
+                className="cursor-pointer px-[10px] border-l border-gray-400 h-[40px] flex items-center"
+                onClick={() =>
+                  setNumber((number) => (number >= 9 ? 9 : number + 1))
+                }
+              >
+                <BsPlusLg />
+              </div>
+            </div>
+            <button
+              className="mt-[20px] p-[10px] bg-second text-third font-medium flex flex-row items-center"
+              onClick={() => addCart(state.data.id, number)}
+            >
+              THÊM VÀO GIỎ HÀNG
+            </button>
           </div>
         </div>
-      )}
+      </div>
       <div className="flex flex-row gap-x-[25px]">
         <div className="w-full">
           <h2 className="text-[20px]  md:text-[25px] mb-[25px]">

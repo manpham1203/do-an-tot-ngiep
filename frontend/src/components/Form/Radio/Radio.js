@@ -19,7 +19,7 @@ function Radio({ control, ...props }) {
           className={`radio-input w-[20px] h-[20px] hidden `}
         />
         <div
-          className="mr-[10px] radio-circle w-[20px] h-[20px] border-[0.5px] border-second rounded-full p-[2px] flex justify-center items-center
+          className="mr-[10px] radio-circle w-[20px] h-[20px] border-[0.5px] border-second dark:border-third rounded-full p-[2px] flex justify-center items-center
         "
         >
           {/* after:content-[' '] after:w-full after:h-full after:rounded-full after:block after:bg-blue-500 after:scale-0 after:transition-transform after:duration-[1s] */}

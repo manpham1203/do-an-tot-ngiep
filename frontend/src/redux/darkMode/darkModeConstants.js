@@ -1,0 +1,2 @@
+export const CURSOR_DEFAULT="CURSOR_DEFAULT"
+export const CURSOR_WAIT="CURSOR_WAIT"

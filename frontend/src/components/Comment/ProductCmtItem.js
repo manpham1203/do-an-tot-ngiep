@@ -46,7 +46,7 @@ function ProductCmtItem(props) {
   const [openRepList, setOpenRepList] = useState(null);
   const { user } = useSelector((state) => state);
   const handleRep = async () => {
-    if(user.id===null){
+    if (user.id === null) {
       toast.warn(<Abc />, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -112,7 +112,10 @@ function ProductCmtItem(props) {
               <p>{data.content}</p>
             )}
           </div>
-          <div className="w-fit" onClick={() => setOpenRep(props.id)}>
+          <div
+            className="w-fit cursor-pointer"
+            onClick={() => setOpenRep(props.id)}
+          >
             Trả lời
           </div>
         </div>
@@ -122,13 +125,13 @@ function ProductCmtItem(props) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder=" "
-              className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+              className="h-[100px] py-[20px] form-input border border-second dark:border-third font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] outline-none bg-third dark:bg-darkMode"
             />
-            <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+            <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
               Gửi phản hồi
             </label>
             <button
-              className="bg-second px-[30px] h-[40px] text-third"
+              className="bg-second px-[30px] h-[40px] text-third dark:bg-third dark:text-second"
               onClick={handleRep}
             >
               Gửi

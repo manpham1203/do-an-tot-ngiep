@@ -41,9 +41,33 @@ function OrderList(props) {
   const orderStatusText = (status) =>
     orderOptions.map((s) =>
       s.value === status ? (
-        <span key={s.value} style={{ color: `${s.color}` }}>{s.label}</span>
+        <span key={s.value} style={{ color: `${s.color}` }}>
+          {s.label}
+        </span>
       ) : null
     );
+  const handleCancelOrder = async (id) => {
+    await api({
+      method: "PUT",
+      url: `/Order/changestate/${id}`,
+      params: { state: 0 },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Huỷ đơn hàng thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData(props.id)
+        }
+      })
+      .catch(() => {
+        toast.fail(`Huỷ đơn hàng thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+      });
+  };
 
   return (
     <div className="flex flex-col gap-y-[20px] w-full">
@@ -67,13 +91,18 @@ function OrderList(props) {
                 {itemOrder === item.id ? <BsDashLg /> : <BsPlusLg />}
               </div>
               {itemOrder === item.id && (
-                <div className="py-[20px] px-[20px]">
+                <div className="py-[20px] px-[20px] relative">
+                  <div
+                    className="absolute text-red-600 w-fit right-[20px] top-[20px] cursor-pointer"
+                    onClick={() => handleCancelOrder(item.id)}
+                  >
+                    HUỶ ĐƠN HÀNG
+                  </div>
                   <div>
                     <div>
                       Tên người nhận: {item.lastName + " " + item.firstName}
                     </div>
                     <div>Địa chỉ nhận hàng: {item.deliveryAddress}</div>
-                    <div>Chiết khấu: {item.discount}</div>
                     <div>
                       Tổng hoá đơn:{" "}
                       {new Intl.NumberFormat("vi-VN", {
@@ -90,7 +119,10 @@ function OrderList(props) {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[20px] gap-y-[20px]">
                       {item.orderDetailVMs.map((detail) => {
                         return (
-                          <div key={detail.id} className="flex flex-row  lg:p-[10px] gap-x-[10px] rounded-md bg-third">
+                          <div
+                            key={detail.id}
+                            className="flex flex-row  lg:p-[10px] gap-x-[10px] rounded-md bg-third"
+                          >
                             <div className="w-[80px] h-[80px] lg:w-[150px] lg:h-[150px] flex-none rounded-md overflow-hidden">
                               <img
                                 src={detail.productOrderVM.imageSrc}

@@ -8,6 +8,7 @@ import api from "../../apis/api";
 import Heading from "../../components/Heading/Heading";
 import * as moment from "moment";
 import "moment/locale/vi";
+import PostRow from "../Skeleton/PostRow";
 
 function PostSlideShow(props) {
   const [data, setData] = useState([]);
@@ -25,9 +26,12 @@ function PostSlideShow(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  return (
+  return data.length > 0 ? (
     <div className="container mx-auto pt-[80px] ">
-      {props.children}
+      <Heading
+        title="Tin tức"
+        className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
+      />
       <Swiper
         slidesPerView={props.slide}
         // spaceBetween={30}
@@ -54,8 +58,6 @@ function PostSlideShow(props) {
             <SwiperSlide
               key={item?.slug}
               className="rounded-[8px]  list-product-card flex"
-              
-              
             >
               <PostCard2
                 key={item?.id}
@@ -72,6 +74,8 @@ function PostSlideShow(props) {
         })}
       </Swiper>
     </div>
+  ) : (
+    <PostRow />
   );
 }
 

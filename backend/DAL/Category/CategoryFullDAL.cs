@@ -1,5 +1,6 @@
 ﻿using BO;
 using BO.ViewModels.Category;
+using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace DAL.Category
                 Deleted = resultFromDb.Deleted,
                 CreatedAt = resultFromDb.CreatedAt,
                 UpdatedAt = resultFromDb.UpdatedAt,
-                ProductVMs = null,
+                ProductVMs = new List<ProductVM>(),
             };
             return brandFullVM;
         }

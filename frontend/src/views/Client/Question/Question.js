@@ -83,13 +83,13 @@ function Question(props) {
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1003449.6852539204!2d106.13469869341657!3d10.755639034903153!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529292e8d3dd1%3A0xf15f5aad773c112b!2zSOG7kyBDaMOtIE1pbmgsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1652457388181!5m2!1svi!2s"
             width="100%"
-            height="500px"
+            height="370px"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
         <div className="flex-[1]">
-          <h2 className="text-[20px] text-center mb-[50px]">
+          <h2 className="text-[20px] text-center mb-[50px] text-second dark:text-third">
             GỬI THẮC MẮC CỦA BẠN ĐẾN CHÚNG TÔI
           </h2>
           <form onSubmit={handleSubmit(onSubmitHandler)}>
@@ -99,11 +99,11 @@ function Question(props) {
                   <input
                     placeholder=" "
                     {...register("name")}
-                    className={`form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-white`}
+                    className={`form-input border border-second dark:border-third text-second font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second dark:focus:border-third outline-none bg-white dark:bg-darkMode`}
                   />
                   <label
                     htmlFor="name"
-                    className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label"
+                    className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode"
                   >
                     Họ và Tên
                   </label>
@@ -121,11 +121,11 @@ function Question(props) {
                   <input
                     placeholder=" "
                     {...register("email")}
-                    className={`form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-white`}
+                    className={`form-input border border-second dark:border-third text-second font-normal rounded-[4px] w-[100%] h-[50px] px-[20px] transition-all duration-[0.25s] focus:border-second dark:focus:border-third outline-none bg-white dark:bg-darkMode`}
                   />
                   <label
                     htmlFor="email"
-                    className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label"
+                    className="form-label absolute left-[20px] top-[50%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode"
                   >
                     Email
                   </label>
@@ -144,9 +144,9 @@ function Question(props) {
                 <textarea
                   placeholder=" "
                   {...register("content")}
-                  className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
+                  className="h-[100px] py-[20px] form-input border border-second dark:border-third text-second dark:text-third font-normal  rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second dark:focus:border-third outline-none bg-third dark:bg-darkMode"
                 />
-                <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
+                <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-second dark:text-third bg-third dark:bg-darkMode">
                   Đặt câu hỏi
                 </label>
               </div>
@@ -160,7 +160,7 @@ function Question(props) {
             </div>
             <button
               type="submit"
-              className="bg-second text-third px-[20px] h-[40px] mt-[25px]"
+              className="bg-second text-third dark:bg-third dark:text-second px-[20px] h-[40px] mt-[25px]"
             >
               GỬI
             </button>

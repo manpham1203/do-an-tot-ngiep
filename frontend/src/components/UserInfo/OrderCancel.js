@@ -72,7 +72,6 @@ function OrderCancel(props) {
                       Tên người nhận: {item.lastName + " " + item.firstName}
                     </div>
                     <div>Địa chỉ nhận hàng: {item.deliveryAddress}</div>
-                    <div>Chiết khấu: {item.discount}</div>
                     <div>
                       Tổng hoá đơn:{" "}
                       {new Intl.NumberFormat("vi-VN", {

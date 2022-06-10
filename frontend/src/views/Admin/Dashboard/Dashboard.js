@@ -11,7 +11,6 @@ import QuestionToday from "../../../components/Dashboard/QuestionToday/QuestionT
 function Dashboard(props) {
   return (
     <div className=" flex flex-col gap-y-[25px]">
-      {/* <ChartTest /> */}
       <OrderChart />
       <OrderToday />
       <CustomerBirthday />

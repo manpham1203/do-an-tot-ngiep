@@ -41,7 +41,6 @@ function AdminViewOrder() {
           <div>
             <div>Tên người nhận: {data?.lastName + " " + data?.firstName}</div>
             <div>Địa chỉ nhận hàng: {data?.deliveryAddress}</div>
-            <div>Chiết khấu: {data?.discount}</div>
             <div>
               Tổng hoá đơn:{" "}
               {new Intl.NumberFormat("vi-VN", {

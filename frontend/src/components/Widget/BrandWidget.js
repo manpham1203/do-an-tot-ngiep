@@ -70,7 +70,7 @@ function BrandWidget(props) {
     fetch();
   }, []);
   return (
-    <div className="mb-[20px]">
+    <div className="mb-[20px] text-second dark:text-third">
       <h2 className="text-[22px]">Thương hiệu</h2>
       <ul className="font-normal ml-[10px]">
         {state.data?.map((item) => {

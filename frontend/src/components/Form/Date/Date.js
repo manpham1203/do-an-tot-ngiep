@@ -14,9 +14,9 @@ function Date({ control, ...props }) {
         {...field}
         {...props}
         type="date"
-        className={`w-full h-[50px] border border-input-border outline-none rounded-[4px] px-[20px]`}
+        className={`w-full h-[50px] border border-input-border dark:border-third bg-third dark:bg-darkMode text-second dark:text-third outline-none rounded-[4px] px-[20px]`}
       />
-      <label htmlFor="" className="absolute  left-[12px] top-[-12px] bg-white px-[10px] text-input-label">{props.label}</label>
+      <label htmlFor="" className="absolute  left-[12px] top-[-12px] bg-third dark:bg-darkMode px-[10px] text-input-label dark:text-third">{props.label}</label>
     </div>
   );
 }

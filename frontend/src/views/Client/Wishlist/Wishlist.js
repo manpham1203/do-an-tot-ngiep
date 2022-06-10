@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import api from "../../../apis/api";
 import ProductCard from "../../../components/Product/ProductCard";
+import ProductRow from '../../../components/Skeleton/ProductRow'
 
 function Wishlist(props) {
   document.title="Sản phẩm yêu thích";
@@ -25,7 +26,7 @@ function Wishlist(props) {
   }, []);
   console.log(data);
   return (
-    <div className="mt-[40px] container mx-auto">
+    data.length>0?<div className="mt-[40px] container mx-auto">
       {data.length > 0 && (
         <h2 className="text-center text-[30px] mb-[30px]">Sản Phẩm Đã Thích</h2>
       )}
@@ -51,7 +52,8 @@ function Wishlist(props) {
           );
         })}
       </div>
-    </div>
+    </div>:<ProductRow />
+    
   );
 }
 

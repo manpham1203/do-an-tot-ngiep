@@ -70,7 +70,7 @@ function CategoryWidget() {
     fetch();
   }, []);
   return (
-    <div className="mb-[20px]">
+    <div className="mb-[20px] text-second dark:text-third">
       <h2 className="text-[22px]">Danh mục</h2>
       <ul className="font-normal ml-[10px]">
         {state.data?.map((item) => {

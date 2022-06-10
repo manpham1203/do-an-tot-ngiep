@@ -6,6 +6,8 @@ import ListTab from "../../../components/ProductSlideShow/ListTab";
 import ProductSlideShow from "../../../components/ProductSlideShow/ProductSlideShow";
 import api from "../../../apis/api";
 import PostSlideShow from "../../../components/PostSlideShow/PostSlideShow";
+import ProductRow from "../../../components/Skeleton/ProductRow";
+import PostRow from "../../../components/Skeleton/PostRow";
 
 function Home() {
   document.title = "WatchStore | Nhà tôi 3 đời bán đồng hồ";
@@ -86,9 +88,9 @@ function Home() {
     setShowBrand(brand[0]?.id);
   }, [brand]);
   return (
-    <div className="w-[100%]">
+    <div className="w-full">
       <Carousel></Carousel>
-      {brand.length > 0 && (
+      {brand.length > 0 ? (
         <ProductSlideShow>
           <Heading
             title="Thương Hiệu"
@@ -124,8 +126,8 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      )}
-      {category.length > 0 && (
+      ): <ProductRow />}
+      {category.length > 0 ? (
         <ProductSlideShow>
           <Heading
             title="Danh Mục"
@@ -160,9 +162,9 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      )}
+      ): <ProductRow />}
 
-      {onSale.length > 0 && (
+      {onSale.length > 0 ? (
         <ProductSlideShow>
           <Heading
             title="Đang Giảm Giá"
@@ -170,9 +172,9 @@ function Home() {
           />
           {onSale.length > 0 && <ListProductCard products={onSale} />}
         </ProductSlideShow>
-      )}
+      ) :<ProductRow />}
 
-      {mostBought.length > 0 && (
+      {mostBought.length > 0 ? (
         <ProductSlideShow>
           <Heading
             title="Mua Nhiều Nhất"
@@ -180,7 +182,7 @@ function Home() {
           />
           {mostBought.length > 0 && <ListProductCard products={mostBought} />}
         </ProductSlideShow>
-      )}
+      ): <ProductRow />}
       {/* {newProduct.length > 0 && (
         <ProductSlideShow>
           <Heading
@@ -191,11 +193,9 @@ function Home() {
         </ProductSlideShow>
       )} */}
 
+
       <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1}>
-        <Heading
-          title="Tin tức"
-          className="text-center text-[22px] sm:text-[25px] md:text-[28px]"
-        />
+        
       </PostSlideShow>
     </div>
   );

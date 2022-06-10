@@ -102,6 +102,35 @@ namespace DAL.User
 
 
         }
+        public async Task<bool> CheckUsername(string username)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Username == username);
+            if (userFromDb == null)
+            {
+                return false;
+            }
+            return true;
+
+        }
+        public async Task<bool> CheckEmail(string email)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Email == email);
+            if (userFromDb == null)
+            {
+                return false;
+            }
+            return true;
+
+        }
+        public async Task<bool> CheckPhone(string phone)
+        {
+            var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.PhoneNumber == phone);
+            if (userFromDb == null)
+            {
+                return false;
+            }
+            return true;
+        }
         public async Task<UserInfoClientVM> GetById(string id)
         {
             //var userFromDb = await db.Users.SingleOrDefaultAsync(x => x.Id == id);

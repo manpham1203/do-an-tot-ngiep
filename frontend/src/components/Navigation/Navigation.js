@@ -13,9 +13,9 @@ function Navigation(props) {
               to={item.slug}
               className={`nav-link flex-row items-center p-[10px] ${
                 props.navHome === false
-                  ? "text-second"
+                  ? "text-second dark:text-third"
                   : props.navHome && props.scroll
-                  ? "text-second"
+                  ? "text-second dark:text-third"
                   : "text-third"
               }`}
               style={({ isActive }) =>
