@@ -120,7 +120,7 @@ const colourStyles2 = {
   dropdownIndicator: (styles) => ({ ...styles, color: "#202121" }),
   placeholder: (styles) => ({
     ...styles,
-    color: 'black',
+    color: "black",
     left: "0%",
     lineHeight: "1.3rem",
     paddingLeft: "0.5rem",
@@ -382,7 +382,9 @@ function Products(props) {
       });
     }
   };
-  console.log(state)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="container px-[10px] sm:px-[20px] mx-auto flex flex-col text-second dark:text-third">
       <div className="h-[60px] hidden lg:flex lg:items-center gap-x-[20px]">
@@ -390,8 +392,10 @@ function Products(props) {
         <div className=" w-full flex justify-between items-center">
           <div className="text-gray-500 dark:text-gray-200">
             Tìm thấy{" "}
-            <span className="text-second dark:text-third">{state.data.totalResult}</span> kết
-            quả
+            <span className="text-second dark:text-third">
+              {state.data.totalResult}
+            </span>{" "}
+            kết quả
           </div>
           <div className="flex flex-row gap-x-[20px] items-center">
             <div className="flex flex-row items-center">

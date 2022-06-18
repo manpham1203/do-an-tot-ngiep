@@ -149,6 +149,9 @@ function Cart() {
     }
     navigate("/thanh-toan");
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       {cart.length === 0 ? (

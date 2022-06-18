@@ -6,7 +6,7 @@ import Login from "../../../components/Login/Login";
 import Register from "../../../components/Register/Register";
 const tabs = ["Đăng Nhập", "Đăng Ký"];
 function LoginPage(props) {
-  document.title="Đăng Nhập";
+  document.title = "Đăng Nhập";
   const [tab, setTab] = useState(0);
   const { user } = useSelector((store) => store);
 

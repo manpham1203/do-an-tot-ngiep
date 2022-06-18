@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ChangePassword from "../../../components/UserInfo/ChangePassword";
@@ -6,7 +6,7 @@ import EditInfo from "../../../components/UserInfo/EditInfo";
 import Info from "../../../components/UserInfo/Info";
 import OrderList from "../../../components/UserInfo/OrderList";
 import { logout } from "../../../redux/user/userActions";
-import OrderCancel from '../../../components/UserInfo/OrderCancel';
+import OrderCancel from "../../../components/UserInfo/OrderCancel";
 import Ordered from "../../../components/UserInfo/Ordered";
 import PurchasedProduct from "../../../components/UserInfo/PurchasedProduct";
 
@@ -20,7 +20,7 @@ const data = [
   "sản phẩm đã mua",
 ];
 function Account(props) {
-  document.title="Quản lý tài khoản";
+  document.title = "Quản lý tài khoản";
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,6 +29,9 @@ function Account(props) {
     navigate("/dang-nhap");
   };
   const { user } = useSelector((store) => store);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       {user.id !== null && (

@@ -13,7 +13,7 @@ import BrandWidget from "../../../components/Widget/BrandWidget";
 import CategoryWidget from "../../../components/Widget/CategoryWidget";
 import MostBoughtWidget from "../../../components/Widget/MostBoughtWidget";
 import NewProductWidget from "../../../components/Widget/NewProductWidget";
-import PageContent from '../../../components/Skeleton/PageContent'
+import PageContent from "../../../components/Skeleton/PageContent";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -22,6 +22,7 @@ import RelatedProducts from "../../../components/Product/RelatedProducts";
 import ShowStarAvg from "../../../components/ShowStar/ShowStarAvg";
 import ProductCmt from "../../../components/Comment/ProductCmt";
 import OnSaleWidget from "../../../components/Widget/OnSaleWidget";
+import Heart from "../../../components/Wishlist/Heart";
 
 const initState = {
   loading: false,
@@ -99,9 +100,6 @@ function ProductDetail() {
   useEffect(() => {
     setNumber(1);
     fetchProductDetail(slug);
-  }, [slug]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
 
@@ -315,6 +313,13 @@ function ProductDetail() {
             >
               THÊM VÀO GIỎ HÀNG
             </button>
+            <Heart
+              id={state.data.id}
+              titleDislike="Xoá khỏi danh sách yêu thích"
+              titleLike="Thêm vào danh sách yêu thích"
+              dislikeStyles="text-red-600 cursor-pointer flex flex-row hover:underline underline-offset-4 items-center gap-x-[10px]"
+              likeStyles="text-gray-400 cursor-pointer flex flex-row hover:underline underline-offset-4 items-center gap-x-[10px]"
+            />
           </div>
         </div>
       </div>

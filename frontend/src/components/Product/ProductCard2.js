@@ -61,12 +61,12 @@ function ProductCard2(props) {
     dispatch(setOpen(obj));
   };
   return (
-    <div className="flex flex-row rounded-[8px] gap-x-[25px] shadow-md bg-white">
-      <div className="w-[200px] h-[200px] flex-none">
+    <div className="flex flex-row rounded-[8px] gap-x-[25px] shadow-md bg-white dark:bg-second text-second dark:text-third">
+      <div className="w-[200px] h-[200px] flex-none p-[10px]">
         <img
           src={props.image}
           alt=""
-          className="w-full h-full object-cover object-center"
+          className="w-full h-full object-cover object-center rounded-[8px]"
         />
       </div>
       <div className=" w-full">

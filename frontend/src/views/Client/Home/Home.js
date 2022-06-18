@@ -87,6 +87,9 @@ function Home() {
   useEffect(() => {
     setShowBrand(brand[0]?.id);
   }, [brand]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="w-full">
       <Carousel></Carousel>
@@ -102,7 +105,7 @@ function Home() {
                 brand.map((item) => {
                   return (
                     <ListTab
-                    className="text-[18px] sm:text-[20px] md:text-[22px] "
+                      className="text-[18px] sm:text-[20px] md:text-[22px] "
                       key={item?.id}
                       name={item?.name}
                       id={item?.id}
@@ -126,7 +129,9 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      ): <ProductRow />}
+      ) : (
+        <ProductRow />
+      )}
       {category.length > 0 ? (
         <ProductSlideShow>
           <Heading
@@ -139,7 +144,7 @@ function Home() {
                 category.map((item) => {
                   return (
                     <ListTab
-                    className="text-[18px] sm:text-[20px] md:text-[22px]"
+                      className="text-[18px] sm:text-[20px] md:text-[22px]"
                       key={item?.id}
                       name={item?.name}
                       id={item?.id}
@@ -162,7 +167,9 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      ): <ProductRow />}
+      ) : (
+        <ProductRow />
+      )}
 
       {onSale.length > 0 ? (
         <ProductSlideShow>
@@ -172,7 +179,9 @@ function Home() {
           />
           {onSale.length > 0 && <ListProductCard products={onSale} />}
         </ProductSlideShow>
-      ) :<ProductRow />}
+      ) : (
+        <ProductRow />
+      )}
 
       {mostBought.length > 0 ? (
         <ProductSlideShow>
@@ -182,7 +191,9 @@ function Home() {
           />
           {mostBought.length > 0 && <ListProductCard products={mostBought} />}
         </ProductSlideShow>
-      ): <ProductRow />}
+      ) : (
+        <ProductRow />
+      )}
       {/* {newProduct.length > 0 && (
         <ProductSlideShow>
           <Heading
@@ -193,10 +204,12 @@ function Home() {
         </ProductSlideShow>
       )} */}
 
-
-      <PostSlideShow slideLg={4} slideMd={3} slideSm={2} slide={1}>
-        
-      </PostSlideShow>
+      <PostSlideShow
+        slideLg={4}
+        slideMd={3}
+        slideSm={2}
+        slide={1}
+      ></PostSlideShow>
     </div>
   );
 }

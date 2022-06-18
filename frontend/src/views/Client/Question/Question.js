@@ -54,10 +54,10 @@ function Question(props) {
             autoClose: 1000,
           });
           reset({
-            name:"",
-            email:"",
-            content:"",
-          })
+            name: "",
+            email: "",
+            content: "",
+          });
         } else {
           toast.error(`Thao tác thất bại`, {
             position: toast.POSITION.TOP_RIGHT,

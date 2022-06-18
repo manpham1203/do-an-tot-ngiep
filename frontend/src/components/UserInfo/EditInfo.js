@@ -46,7 +46,7 @@ const schema = yup
       .required("Thông tin này không được để trống")
       .matches(/^\d+$/, "Chỉ được phép nhật số")
       .nullable()
-      .length(10)
+      .length(10,"Số điện thoại 10 kí tự")
       .trim(),
     address: yup
       .string()

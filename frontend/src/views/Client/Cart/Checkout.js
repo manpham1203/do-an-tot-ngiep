@@ -239,7 +239,9 @@ function Checkout(props) {
         setSubmitSpin(false);
       });
   };
-  console.log(errors);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className=" container px-[10px] sm:px-[20px] mx-auto">
       <form

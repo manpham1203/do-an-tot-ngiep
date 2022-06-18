@@ -69,7 +69,12 @@ function Carousel(props) {
                       {item.subContent}
                     </p>
                     {item.linkTo !== null && (
-                      <Link to={item.linkTo} className="border-2 border-third text-third transition-all duration-200 px-[30px] py-[10px] w-fit text-[20px] hover:bg-third hover:text-second">ĐI ĐẾN</Link>
+                      <Link
+                        to={item.linkTo}
+                        className="border-2 border-third text-third transition-all duration-200 px-[30px] py-[10px] w-fit text-[20px] hover:bg-third hover:text-second"
+                      >
+                        ĐI ĐẾN
+                      </Link>
                     )}
                   </div>
                 </div>

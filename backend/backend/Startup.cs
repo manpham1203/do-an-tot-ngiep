@@ -44,7 +44,7 @@ namespace backend
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000/")
+                        builder.WithOrigins("https://datn-manpham.netlify.app/")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });

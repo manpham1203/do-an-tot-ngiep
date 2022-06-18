@@ -13,7 +13,7 @@ function PostCard2(props) {
           className="w-full h-full object-cover object-center rounded-xl"
         />
       </Link>
-      <div className="flex flex-row font-light gap-x-[10px] text-[15px text-second dark:text-third">
+      <div className="flex flex-row font-light gap-x-[10px] text-[15px] text-second dark:text-third">
         <span>{props.createdAt}</span>|
         <span>{props.view} lượt xem</span>
       </div>

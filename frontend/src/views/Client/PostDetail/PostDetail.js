@@ -48,11 +48,12 @@ function PostDetail(props) {
         if (res.status === 200) {
           setData(res.data);
           setLoading(false);
-          setLoadCmt(false)
+          setLoadCmt(false);
         }
       })
-      .catch(() => {setLoading(true)
-        setLoadCmt(true)
+      .catch(() => {
+        setLoading(true);
+        setLoadCmt(true);
       });
   };
   useEffect(() => {

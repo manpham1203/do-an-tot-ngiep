@@ -6,16 +6,16 @@ import "moment/locale/nl";
 
 function PostCard(props) {
   return (
-    <div className="flex flex-col md:flex-row items-center gap-x-[40px] ">
-      <Link to={`/tin-tuc/${props.slug}`} className="flex-none w-[376px] h-[235px] block">
+    <div className="flex flex-col lg:flex-row items-center lg:items-start gap-x-[40px] ">
+      <Link to={`/tin-tuc/${props.slug}`} className="flex-none w-full lg:w-[376px] h-[200px] sm:h-[300px] lg:h-[235px] block">
         <img
           src={props.image}
           alt=""
           className="w-full h-full object-cover object-center"
         />
       </Link>
-      <div className="grow-[1]">
-        <div className="flex flex-row font-light gap-x-[20px]">
+      <div className="w-full">
+        <div className="flex flex-row font-light justify-between sm:justify-start gap-x-[20px] ">
           <span>
             {moment(props.createdAt).format("DD") +
               "-" +
@@ -23,7 +23,7 @@ function PostCard(props) {
               "-" +
               moment(props.createdAt).format("yyyy")}
           </span>
-          |<span>{props.view} lượt xem</span>|<span>2 comment</span>
+          |<span>{props.view} lượt xem</span>
         </div>
         <Link to={`/tin-tuc/${props.slug}`} className="font-bold text-[20px] hover:underline hover:underline-offset-4">
           {props.title}

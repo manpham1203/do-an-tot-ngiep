@@ -34,6 +34,10 @@ function Posts(props) {
   useEffect(() => {
     fetchData();
   }, [currentPage]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  console.log(data)
   return loading ? (
     <PageContent />
   ) : (

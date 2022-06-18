@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import api from "../../../apis/api";
 import ProductCard from "../../../components/Product/ProductCard";
-import ProductRow from '../../../components/Skeleton/ProductRow'
+import ProductRow from "../../../components/Skeleton/ProductRow";
 
 function Wishlist(props) {
-  document.title="Sản phẩm yêu thích";
+  document.title = "Sản phẩm yêu thích";
   const { user } = useSelector((store) => store);
   const [data, setData] = useState([]);
   const fetchData = async () => {
@@ -24,9 +24,11 @@ function Wishlist(props) {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(data);
-  return (
-    data.length>0?<div className="mt-[40px] container mx-auto">
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  return data.length > 0 ? (
+    <div className="mt-[40px] container mx-auto">
       {data.length > 0 && (
         <h2 className="text-center text-[30px] mb-[30px]">Sản Phẩm Đã Thích</h2>
       )}
@@ -52,8 +54,9 @@ function Wishlist(props) {
           );
         })}
       </div>
-    </div>:<ProductRow />
-    
+    </div>
+  ) : (
+    <ProductRow />
   );
 }
 

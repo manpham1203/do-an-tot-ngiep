@@ -24,6 +24,7 @@ function Page(props) {
   };
   useEffect(() => {
     fetchData(slug);
+    window.scrollTo(0, 0);
   }, [slug]);
   return loading ? (
     <PageContent />
