@@ -1,0 +1,34 @@
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.deps.json
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.pdb
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.AssemblyReference.cache
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.AssemblyInfoInputs.cache
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.AssemblyInfo.cs
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.CoreCompileInputs.cache
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\refint\BLL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.pdb
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\ref\BLL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BOL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\DAL.dll
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BOL.pdb
+D:\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\DAL.pdb
+D:\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.CopyComplete
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.deps.json
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BLL.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\DAL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\DAL.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.AssemblyReference.cache
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.AssemblyInfoInputs.cache
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.AssemblyInfo.cs
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.CoreCompileInputs.cache
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.csproj.CopyComplete
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\refint\BLL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\BLL.pdb
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Debug\net5.0\ref\BLL.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BO.dll
+D:\New folder\PhamMinhMan_2119110081\backend\BLL\bin\Debug\net5.0\BO.pdb
