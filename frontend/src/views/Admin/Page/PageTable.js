@@ -1,0 +1,131 @@
+import React, { useEffect, useState } from "react";
+import Table from "../../../components/Table/Table";
+import Thead from "../../../components/Table/Thead";
+import Th from "../../../components/Table/Th";
+import Tbody from "../../../components/Table/Tbody";
+import Tr from "../../../components/Table/Tr";
+import { toast } from "react-toastify";
+import api from "../../../apis/api";
+import Row from "./Row";
+import Pagination from "../../../components/Pagination/Pagination";
+
+function PageTable(props) {
+  const [data, setData] = useState({ totalPage: 0, totalResult: 0, data: [] });
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const fetchData = async () => {
+    setLoading(true);
+    await api({
+      method: "GET",
+      url: `/page/pagepagination`,
+      params: {
+        deleted: false,
+        limit: 10,
+        currentPage: currentPage,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setLoading(false);
+          setData({
+            ...data,
+            totalPage: res.data.totalPage,
+            totalResult: res.data.totalResult,
+            data: res.data.data,
+          });
+        } else {
+          setLoading(true);
+        }
+      })
+      .catch(() => setLoading(true));
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const handleTrash = async (id) => {
+    await api({
+      method: "PUT",
+      url: `/page/deleted`,
+      params: { id: id },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.warn(`Chuyển vào thùng rác thành công`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          fetchData();
+        } else {
+          toast.error(`Thao tác thất bại`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+      })
+      .catch(() =>
+        toast.error(`Thao tác thất bại`, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        })
+      );
+  };
+  return (
+    <div>
+      <div className="bg-white mb-[20px] shadow-admin rounded-[8px] overflow-hidden p-[20px]">
+        <Table className="w-full">
+          <Thead>
+            <Tr>
+              <Th className="w-[50px]">
+                <div className="flex justify-center">
+                  <input
+                    className="w-5 h-5 border-gray-200 rounded"
+                    type="checkbox"
+                    id="row_1"
+                    disabled
+                  />
+                </div>
+              </Th>
+              <Th>Tên trang</Th>
+              <Th className="w-[150px]">Phát hành</Th>
+              <Th className="w-[200px]">Hành động</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data?.data?.length > 0 &&
+              data?.data.map((item) => {
+                return <Row key={item} id={item} handleTrash={handleTrash} />;
+              })}
+          </Tbody>
+        </Table>
+
+        <div className="bg-white px-4 py-3 flex items-center justify-betweensm:px-6">
+          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm text-gray-700">
+                Hiển thị{" "}
+                <span className="font-medium"> {data?.data?.length} </span>
+                trong
+                <span className="font-medium"> {data?.totalResult} </span>
+                kết quả
+              </p>
+            </div>
+            <div>
+              {loading ? (
+                "loading"
+              ) : (
+                <Pagination
+                  forcePage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPage={data?.totalPage}
+                  itemsPerPage={data?.data.length}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default PageTable;

@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAE7fz66jN4EqUzzubi4GVUgAAAAACAAAAAAAQZgAAAAEAACAAAADaOwuWy2Nx8vqTODM58kL3+J6qr6FyRNVGkZCSbhv41wAAAAAOgAAAAAIAACAAAAA9QSVz17pUj/vXwGQbiHkQcEfKS18MwsUMWtSbbOzY3yAAAAAJi3qG49ATefYJSyrsIOfl7sjVI7t5KWx+xdoiUKRdM0AAAAAx0O6u/Au7TTjmmaH2hZImAi0X0vo3s2hgfQBm6gLJloWNgdqu8oep3COnubeqG5ny5Qr0MLRBSF9uKiiiQQBD</EncryptedPassword>
+    <_PublishTargetUrl>ftp://win8020.site4now.net/manpham</_PublishTargetUrl>
+    <History>False|2022-05-19T13:23:05.2074014Z;True|2022-05-11T02:16:58.9129236+07:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="MyDB">
+      <Value>"Data Source=SQL8003.site4now.net%3bInitial Catalog=db_a86b73_khoaluantotnghiejp%3bUser Id=db_a86b73_khoaluantotnghiejp_admin%3bPassword=m1232001"</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>03/17/2022 22:35:49</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>05/19/2022 20:00:50</publishTime>
+    </File>
+    <File Include="appsettings.production.json">
+      <publishTime>05/19/2022 20:03:02</publishTime>
+    </File>
+    <File Include="AutoMapper.dll">
+      <publishTime>02/04/2022 22:28:52</publishTime>
+    </File>
+    <File Include="backend.deps.json">
+      <publishTime>05/19/2022 20:03:01</publishTime>
+    </File>
+    <File Include="backend.dll">
+      <publishTime>05/19/2022 20:02:51</publishTime>
+    </File>
+    <File Include="backend.exe">
+      <publishTime>05/19/2022 20:02:51</publishTime>
+    </File>
+    <File Include="backend.pdb">
+      <publishTime>05/19/2022 20:02:51</publishTime>
+    </File>
+    <File Include="backend.runtimeconfig.json">
+      <publishTime>05/19/2022 20:02:53</publishTime>
+    </File>
+    <File Include="BLL.dll">
+      <publishTime>05/19/2022 20:02:45</publishTime>
+    </File>
+    <File Include="BLL.pdb">
+      <publishTime>05/19/2022 20:02:45</publishTime>
+    </File>
+    <File Include="BO.dll">
+      <publishTime>05/19/2022 20:02:32</publishTime>
+    </File>
+    <File Include="BO.pdb">
+      <publishTime>05/19/2022 20:02:31</publishTime>
+    </File>
+    <File Include="BouncyCastle.Crypto.dll">
+      <publishTime>10/19/2021 18:53:34</publishTime>
+    </File>
+    <File Include="cs/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="cs/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:40</publishTime>
+    </File>
+    <File Include="cs/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="DAL.dll">
+      <publishTime>05/19/2022 20:02:44</publishTime>
+    </File>
+    <File Include="DAL.pdb">
+      <publishTime>05/19/2022 20:02:44</publishTime>
+    </File>
+    <File Include="de/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="de/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="de/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="dotnet-aspnet-codegenerator-design.dll">
+      <publishTime>02/09/2021 08:32:20</publishTime>
+    </File>
+    <File Include="es/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="es/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="es/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="fr/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="fr/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="fr/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="Humanizer.dll">
+      <publishTime>06/02/2020 20:07:58</publishTime>
+    </File>
+    <File Include="it/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="it/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="it/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="ja/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="ja/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="ja/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="ko/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="ko/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="ko/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="MailKit.dll">
+      <publishTime>03/26/2022 22:44:18</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Authentication.JwtBearer.dll">
+      <publishTime>10/25/2021 01:44:52</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Http.Features.dll">
+      <publishTime>02/17/2022 10:13:38</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Razor.Language.dll">
+      <publishTime>10/27/2020 05:58:46</publishTime>
+    </File>
+    <File Include="Microsoft.Bcl.AsyncInterfaces.dll">
+      <publishTime>04/15/2020 05:39:12</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>11/12/2020 07:15:12</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.CSharp.Workspaces.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.dll">
+      <publishTime>11/12/2020 07:14:40</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.Razor.dll">
+      <publishTime>10/27/2020 05:59:10</publishTime>
+    </File>
+    <File Include="Microsoft.CodeAnalysis.Workspaces.dll">
+      <publishTime>11/12/2020 07:16:26</publishTime>
+    </File>
+    <File Include="Microsoft.Data.SqlClient.dll">
+      <publishTime>08/26/2020 06:24:48</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.Abstractions.dll">
+      <publishTime>10/14/2021 01:48:08</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.dll">
+      <publishTime>10/14/2021 01:48:20</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.Relational.dll">
+      <publishTime>10/14/2021 01:48:28</publishTime>
+    </File>
+    <File Include="Microsoft.EntityFrameworkCore.SqlServer.dll">
+      <publishTime>10/14/2021 01:48:32</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.DependencyInjection.dll">
+      <publishTime>06/16/2021 02:12:46</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.Primitives.dll">
+      <publishTime>03/17/2021 05:42:46</publishTime>
+    </File>
+    <File Include="Microsoft.Identity.Client.dll">
+      <publishTime>05/19/2020 03:11:54</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.JsonWebTokens.dll">
+      <publishTime>11/04/2021 02:55:48</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Logging.dll">
+      <publishTime>11/04/2021 02:56:56</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Protocols.dll">
+      <publishTime>06/30/2020 08:06:48</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll">
+      <publishTime>06/30/2020 08:13:54</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Tokens.dll">
+      <publishTime>11/04/2021 03:02:24</publishTime>
+    </File>
+    <File Include="Microsoft.OpenApi.dll">
+      <publishTime>08/30/2020 03:14:12</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll">
+      <publishTime>02/09/2021 08:32:08</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Core.dll">
+      <publishTime>02/09/2021 08:32:16</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.dll">
+      <publishTime>02/09/2021 08:32:18</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll">
+      <publishTime>02/09/2021 08:32:18</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll">
+      <publishTime>02/09/2021 08:32:14</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll">
+      <publishTime>02/09/2021 08:32:12</publishTime>
+    </File>
+    <File Include="Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll">
+      <publishTime>02/09/2021 08:32:18</publishTime>
+    </File>
+    <File Include="MimeKit.dll">
+      <publishTime>03/26/2022 22:01:08</publishTime>
+    </File>
+    <File Include="Newtonsoft.Json.dll">
+      <publishTime>03/25/2018 00:44:14</publishTime>
+    </File>
+    <File Include="Photos/0l9vcck9vasd220514073626314.jpg">
+      <publishTime>05/14/2022 07:36:26</publishTime>
+    </File>
+    <File Include="Photos/12312220508235741110.jpg">
+      <publishTime>05/08/2022 23:57:42</publishTime>
+    </File>
+    <File Include="Photos/12312220508235741323.jpg">
+      <publishTime>05/08/2022 23:57:42</publishTime>
+    </File>
+    <File Include="Photos/12312220508235741538.jpeg">
+      <publishTime>05/08/2022 23:57:42</publishTime>
+    </File>
+    <File Include="Photos/12312220508235741739.jpg">
+      <publishTime>05/08/2022 23:57:42</publishTime>
+    </File>
+    <File Include="Photos/12312220508235741941.jpg">
+      <publishTime>05/08/2022 23:57:42</publishTime>
+    </File>
+    <File Include="Photos/12312220516123709610.jpeg">
+      <publishTime>05/16/2022 12:37:10</publishTime>
+    </File>
+    <File Include="Photos/2ohw5s0ga9kk220514072849521.jpg">
+      <publishTime>05/14/2022 07:28:49</publishTime>
+    </File>
+    <File Include="Photos/79fwohuilt6b220514072355663.jpg">
+      <publishTime>05/14/2022 07:23:55</publishTime>
+    </File>
+    <File Include="Photos/8kggs88el8dl220514072050521.jpg">
+      <publishTime>05/14/2022 07:20:50</publishTime>
+    </File>
+    <File Include="Photos/9oyc2ponajnf220514073144544.jpg">
+      <publishTime>05/14/2022 07:31:44</publishTime>
+    </File>
+    <File Include="Photos/adadadada220516122816299.jpeg">
+      <publishTime>05/16/2022 12:28:17</publishTime>
+    </File>
+    <File Include="Photos/adssds220514103315457.jpg">
+      <publishTime>05/14/2022 10:33:15</publishTime>
+    </File>
+    <File Include="Photos/apple-watch-series-7-lte-41mm-day-thep220514070203506.jpg">
+      <publishTime>05/14/2022 07:02:03</publishTime>
+    </File>
+    <File Include="Photos/apple-watch-series-7-lte-41mm-day-thep220514070203716.jpg">
+      <publishTime>05/14/2022 07:02:03</publishTime>
+    </File>
+    <File Include="Photos/apple220508213234643.png">
+      <publishTime>05/08/2022 21:32:35</publishTime>
+    </File>
+    <File Include="Photos/apple220514055453080.png">
+      <publishTime>05/14/2022 05:54:53</publishTime>
+    </File>
+    <File Include="Photos/applewatchseries7220508145651724.png">
+      <publishTime>05/08/2022 14:56:52</publishTime>
+    </File>
+    <File Include="Photos/applewatchseries7220514065355255.png">
+      <publishTime>05/14/2022 06:53:55</publishTime>
+    </File>
+    <File Include="Photos/day-silicon220514065815569.jpg">
+      <publishTime>05/14/2022 06:58:15</publishTime>
+    </File>
+    <File Include="Photos/day-thep220514065651017.jpg">
+      <publishTime>05/14/2022 06:56:51</publishTime>
+    </File>
+    <File Include="Photos/diem-sang-noi-bat-tai-mua-dau-gia-dong-ho-mua-xuan-2022220514065229351.jpg">
+      <publishTime>05/14/2022 06:52:29</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-co220508213331330.jpg">
+      <publishTime>05/08/2022 21:33:31</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-day-vai220508213355499.jpg">
+      <publishTime>05/08/2022 21:33:55</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-dien-tu220508213501386.jpeg">
+      <publishTime>05/08/2022 21:35:01</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-dien-tu220514055703489.jpg">
+      <publishTime>05/14/2022 05:57:03</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-sang-trong220514065518635.png">
+      <publishTime>05/14/2022 06:55:18</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-sport-hien-dai-nha-patek-philippe-co-dang-tro-ve-gia-tri-ban-dau220514065141331.jpg">
+      <publishTime>05/14/2022 06:51:41</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-thanh-lich220514055613450.png">
+      <publishTime>05/14/2022 05:56:13</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-thong-minh220508213441108.jpg">
+      <publishTime>05/08/2022 21:34:41</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-thong-minh220514055555401.jpg">
+      <publishTime>05/14/2022 05:55:55</publishTime>
+    </File>
+    <File Include="Photos/dong-ho-thong-thuong220514055643938.jpg">
+      <publishTime>05/14/2022 05:56:43</publishTime>
+    </File>
+    <File Include="Photos/ewg220508215637008.jpg">
+      <publishTime>05/08/2022 21:56:40</publishTime>
+    </File>
+    <File Include="Photos/ffasfas220508145713935.jpeg">
+      <publishTime>05/08/2022 14:57:13</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064519280.jpg">
+      <publishTime>05/14/2022 06:45:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064519689.jpg">
+      <publishTime>05/14/2022 06:45:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064608228.jpg">
+      <publishTime>05/14/2022 06:46:09</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064608441.jpg">
+      <publishTime>05/14/2022 06:46:09</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064608645.jpg">
+      <publishTime>05/14/2022 06:46:09</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064608846.jpg">
+      <publishTime>05/14/2022 06:46:09</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064655843.jpg">
+      <publishTime>05/14/2022 06:46:56</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064656051.jpg">
+      <publishTime>05/14/2022 06:46:56</publishTime>
+    </File>
+    <File Include="Photos/kaoru001h220514064656267.jpg">
+      <publishTime>05/14/2022 06:46:56</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fh220514064435835.jpg">
+      <publishTime>05/14/2022 06:44:39</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fh220514064436102.jpg">
+      <publishTime>05/14/2022 06:44:39</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fh220514064436310.jpg">
+      <publishTime>05/14/2022 06:44:40</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fh220514064436524.jpg">
+      <publishTime>05/14/2022 06:44:40</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fh220514064543651.jpg">
+      <publishTime>05/14/2022 06:45:44</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fj220514063843394.jpg">
+      <publishTime>05/14/2022 06:38:45</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fj220514063843716.jpg">
+      <publishTime>05/14/2022 06:38:45</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fj220514063843923.jpg">
+      <publishTime>05/14/2022 06:38:45</publishTime>
+    </File>
+    <File Include="Photos/kaoru002fj220514063844134.jpg">
+      <publishTime>05/14/2022 06:38:45</publishTime>
+    </File>
+    <File Include="Photos/kaoru002oh220514064910372.jpg">
+      <publishTime>05/14/2022 06:49:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru002oh220514064910578.jpg">
+      <publishTime>05/14/2022 06:49:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru002oh220514064910779.jpg">
+      <publishTime>05/14/2022 06:49:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru002oh220514064910983.jpg">
+      <publishTime>05/14/2022 06:49:19</publishTime>
+    </File>
+    <File Include="Photos/kaoru220514055520721.png">
+      <publishTime>05/14/2022 05:55:20</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-nam-vestibulum-pretium-fermentum220509220520679.webp">
+      <publishTime>05/09/2022 22:05:20</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003813255.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003813567.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003813768.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003813971.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003814186.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet,-consectetur-adipiscing-elit.-vivamus-sagittis-dui-leo,-ac-placerat-augue-aliquet-eu.220510003814387.jpg">
+      <publishTime>05/10/2022 00:38:15</publishTime>
+    </File>
+    <File Include="Photos/lorem-ipsum-dolor-sit-amet220509220113625.jpg">
+      <publishTime>05/09/2022 22:01:13</publishTime>
+    </File>
+    <File Include="Photos/nhatoi3doibandongho220508142403514.png">
+      <publishTime>05/08/2022 14:24:22</publishTime>
+    </File>
+    <File Include="Photos/nhatoi3doibandongho220508153347994.png">
+      <publishTime>05/08/2022 15:33:48</publishTime>
+    </File>
+    <File Include="Photos/nhatoi3doibandongho220514065318655.png">
+      <publishTime>05/14/2022 06:53:18</publishTime>
+    </File>
+    <File Include="Photos/py3shm3j3g8i220514070924116.jpg">
+      <publishTime>05/14/2022 07:09:24</publishTime>
+    </File>
+    <File Include="Photos/sdfdsf220508221417099.jpg">
+      <publishTime>05/08/2022 22:14:17</publishTime>
+    </File>
+    <File Include="Photos/sdfsd220508221352396.jpg">
+      <publishTime>05/08/2022 22:13:52</publishTime>
+    </File>
+    <File Include="Photos/sdfsdfsd220508221124724.jpg">
+      <publishTime>05/08/2022 22:11:24</publishTime>
+    </File>
+    <File Include="Photos/suxyl5x3t2id220513215258986.jpg">
+      <publishTime>05/13/2022 21:52:59</publishTime>
+    </File>
+    <File Include="Photos/suxyl5x3t2id220513222830223.png">
+      <publishTime>05/13/2022 22:28:30</publishTime>
+    </File>
+    <File Include="Photos/suxyl5x3t2id220513222843320.jpg">
+      <publishTime>05/13/2022 22:28:43</publishTime>
+    </File>
+    <File Include="Photos/suxyl5x3t2id220514071029290.jpg">
+      <publishTime>05/14/2022 07:10:29</publishTime>
+    </File>
+    <File Include="Photos/timex220508213257849.png">
+      <publishTime>05/08/2022 21:32:57</publishTime>
+    </File>
+    <File Include="Photos/timex220514055434883.png">
+      <publishTime>05/14/2022 05:54:35</publishTime>
+    </File>
+    <File Include="Photos/vyxld2rr0tus220514073936065.jpg">
+      <publishTime>05/14/2022 07:39:36</publishTime>
+    </File>
+    <File Include="Photos/vz1iinfao2sk220509092144584.webp">
+      <publishTime>05/09/2022 09:21:44</publishTime>
+    </File>
+    <File Include="Photos/wqwqwe220508215324674.jpg">
+      <publishTime>05/08/2022 21:54:10</publishTime>
+    </File>
+    <File Include="Photos/ydw4w3vaw6es220514071622705.jpg">
+      <publishTime>05/14/2022 07:16:22</publishTime>
+    </File>
+    <File Include="pl/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="pl/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="pl/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="pt-BR/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="ru/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="ru/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="ru/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="runtimes/unix/lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll">
+      <publishTime>08/26/2020 06:25:12</publishTime>
+    </File>
+    <File Include="runtimes/win-arm/lib/net5.0/dotnet-aspnet-codegenerator-design.exe">
+      <publishTime>02/09/2021 08:32:20</publishTime>
+    </File>
+    <File Include="runtimes/win-arm/native/Microsoft.Data.SqlClient.SNI.dll">
+      <publishTime>08/26/2020 03:34:56</publishTime>
+    </File>
+    <File Include="runtimes/win-arm/native/Microsoft.Data.SqlClient.SNI.pdb">
+      <publishTime>08/26/2020 03:31:56</publishTime>
+    </File>
+    <File Include="runtimes/win-arm64/lib/net5.0/dotnet-aspnet-codegenerator-design.exe">
+      <publishTime>02/09/2021 08:32:20</publishTime>
+    </File>
+    <File Include="runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll">
+      <publishTime>08/26/2020 03:35:06</publishTime>
+    </File>
+    <File Include="runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.pdb">
+      <publishTime>08/26/2020 03:31:56</publishTime>
+    </File>
+    <File Include="runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll">
+      <publishTime>08/26/2020 03:34:56</publishTime>
+    </File>
+    <File Include="runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.pdb">
+      <publishTime>08/26/2020 03:31:56</publishTime>
+    </File>
+    <File Include="runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll">
+      <publishTime>08/26/2020 03:34:56</publishTime>
+    </File>
+    <File Include="runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.pdb">
+      <publishTime>08/26/2020 03:31:56</publishTime>
+    </File>
+    <File Include="runtimes/win/lib/netcoreapp3.1/Microsoft.Data.SqlClient.dll">
+      <publishTime>08/26/2020 06:24:48</publishTime>
+    </File>
+    <File Include="runtimes/win/lib/netstandard2.0/System.Runtime.Caching.dll">
+      <publishTime>11/15/2019 15:53:44</publishTime>
+    </File>
+    <File Include="runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll">
+      <publishTime>11/15/2019 15:53:46</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.Swagger.dll">
+      <publishTime>09/23/2020 19:47:20</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerGen.dll">
+      <publishTime>09/23/2020 19:47:22</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerUI.dll">
+      <publishTime>09/23/2020 19:47:24</publishTime>
+    </File>
+    <File Include="System.Composition.AttributedModel.dll">
+      <publishTime>11/05/2016 11:55:42</publishTime>
+    </File>
+    <File Include="System.Composition.Convention.dll">
+      <publishTime>11/05/2016 11:55:42</publishTime>
+    </File>
+    <File Include="System.Composition.Hosting.dll">
+      <publishTime>11/05/2016 11:55:42</publishTime>
+    </File>
+    <File Include="System.Composition.Runtime.dll">
+      <publishTime>11/05/2016 11:55:44</publishTime>
+    </File>
+    <File Include="System.Composition.TypedParts.dll">
+      <publishTime>11/05/2016 11:55:46</publishTime>
+    </File>
+    <File Include="System.Configuration.ConfigurationManager.dll">
+      <publishTime>11/15/2019 15:37:04</publishTime>
+    </File>
+    <File Include="System.Diagnostics.DiagnosticSource.dll">
+      <publishTime>12/12/2020 09:40:42</publishTime>
+    </File>
+    <File Include="System.IdentityModel.Tokens.Jwt.dll">
+      <publishTime>11/04/2021 02:53:52</publishTime>
+    </File>
+    <File Include="System.IO.Pipelines.dll">
+      <publishTime>02/16/2022 00:11:52</publishTime>
+    </File>
+    <File Include="System.Runtime.Caching.dll">
+      <publishTime>11/15/2019 15:37:36</publishTime>
+    </File>
+    <File Include="System.Security.Cryptography.ProtectedData.dll">
+      <publishTime>11/15/2019 15:37:42</publishTime>
+    </File>
+    <File Include="tr/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="tr/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="tr/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>05/19/2022 20:03:02</publishTime>
+    </File>
+    <File Include="zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="zh-Hans/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+    <File Include="zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll">
+      <publishTime>11/12/2020 07:15:14</publishTime>
+    </File>
+    <File Include="zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:20:06</publishTime>
+    </File>
+    <File Include="zh-Hant/Microsoft.CodeAnalysis.resources.dll">
+      <publishTime>11/12/2020 07:14:42</publishTime>
+    </File>
+    <File Include="zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll">
+      <publishTime>11/12/2020 07:16:28</publishTime>
+    </File>
+  </ItemGroup>
+</Project>
