@@ -34,7 +34,7 @@ const schema = yup
       .required("Thông tin này không được để trống")
       .transform((currentValue, originalValue) => {
         return originalValue === "" ? null : currentValue;
-      }),
+      }).nullable(),
     brandId: yup
       .object()
       .required("Thông tin này không được để trống")

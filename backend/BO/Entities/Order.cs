@@ -21,5 +21,6 @@ namespace BO.Entities
         public string Note { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
         public User User { get; set; }
+        public DateTime? ReceivedAt { get; set; }
     }
 }

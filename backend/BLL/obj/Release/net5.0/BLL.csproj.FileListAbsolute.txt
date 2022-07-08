@@ -15,3 +15,20 @@ D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Release\net5.0\BLL.dll
 D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Release\net5.0\refint\BLL.dll
 D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Release\net5.0\BLL.pdb
 D:\New folder\PhamMinhMan_2119110081\backend\BLL\obj\Release\net5.0\ref\BLL.dll
+D:\datn\backend\BLL\bin\Release\net5.0\BLL.deps.json
+D:\datn\backend\BLL\bin\Release\net5.0\BLL.dll
+D:\datn\backend\BLL\bin\Release\net5.0\BLL.pdb
+D:\datn\backend\BLL\bin\Release\net5.0\BO.dll
+D:\datn\backend\BLL\bin\Release\net5.0\DAL.dll
+D:\datn\backend\BLL\bin\Release\net5.0\BO.pdb
+D:\datn\backend\BLL\bin\Release\net5.0\DAL.pdb
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.csproj.AssemblyReference.cache
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.AssemblyInfoInputs.cache
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.AssemblyInfo.cs
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.csproj.CoreCompileInputs.cache
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.csproj.CopyComplete
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.dll
+D:\datn\backend\BLL\obj\Release\net5.0\refint\BLL.dll
+D:\datn\backend\BLL\obj\Release\net5.0\BLL.pdb
+D:\datn\backend\BLL\obj\Release\net5.0\ref\BLL.dll

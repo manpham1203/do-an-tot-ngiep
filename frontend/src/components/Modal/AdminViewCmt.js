@@ -8,6 +8,8 @@ import ShowStarCmt from "../ShowStar/ShowStarCmt";
 import * as moment from "moment";
 import "moment/locale/nl";
 import { toast } from "react-toastify";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Thumbs } from "swiper";
 
 function AdminViewCmt(props) {
   const [content, setContent] = useState("");
@@ -15,6 +17,7 @@ function AdminViewCmt(props) {
   const { adminViewCmt, user } = useSelector((s) => s);
   const [data, setData] = useState();
   const [visible, setVisible] = useState(1);
+  const [dataProd, setDataProd]=useState();
   const showMore = () => {
     setVisible((prev) => prev + 3);
   };
@@ -65,6 +68,20 @@ function AdminViewCmt(props) {
   useEffect(() => {
     fetchData(adminViewCmt.id);
   }, [adminViewCmt.id]);
+  const fetchDataProduct = async (id) => {
+    await api({
+      method: "GET",
+      url: `/comment/productCmtAdmin/${id}`,
+      data: null,
+    })
+      .then((res) => {
+        setDataProd(res.data);
+      })
+      .catch(() => console.log("fail"));
+  };
+  useEffect(() => {
+    fetchDataProduct(adminViewCmt.id);
+  }, [adminViewCmt.id]);
   return (
     <div className="flex  p-[30px] bg-third fixed w-[80%] h-[500px] rounded-xl top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[2000]">
       <div className="w-fit absolute right-0 top-0">
@@ -73,8 +90,107 @@ function AdminViewCmt(props) {
           className="inline-block text-[30px] text-second cursor-pointer"
         />
       </div>
-      <div className=" w-full h-full">
-        <div className="overflow-auto w-full h-full flex flex-row gap-x-[20px] bg-white rounded-[8px] shadow-admin p-[10px]">
+      <div className=" w-full h-full overflow-auto">
+        <div className="grid grid-cols-2 p-[25px] gap-x-[25px]">
+          <Swiper
+            loop={false}
+            spaceBetween={10}
+            navigation={true}
+            modules={[Navigation]}
+            grabCursor={true}
+            style={{
+              "--swiper-navigation-color": "#bg-color-second",
+              "--swiper-pagination-color": "#bg-color-second",
+            }}
+            className="shadow-admin rounded-xl h-[450px] w-full"
+          >
+            {dataProd?.pictureVMs?.map((item, index) => {
+              return (
+                <SwiperSlide autoHeight={true} key={index}>
+                  <img
+                    src={item.imageSrc}
+                    alt="product images"
+                    className=" object-cover object-center w-full h-full"
+                  />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+          <div className="w-full flex flex-col p-[20px] h-[450px] overflow-hidden">
+            <h2 className="text-[16px]">{dataProd?.brandNameVM?.name}</h2>
+            <h2 className="text-[25px] productCard2Name">{dataProd?.name}</h2>
+            <div className="flex flex-row items-center text-[#F7BF63] gap-x-[5px]">
+              {/* <ShowStarAvg star={data?.star} /> */}
+
+              <span className="ml-[10px] text-[#3f3d4f]">
+                ( lượt đánh giá)
+              </span>
+            </div>
+            {dataProd?.priceDiscount === null ? (
+              <span className="text-[25px] mt-[10px]">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(dataProd?.price)}
+              </span>
+            ) : (
+              <div className="flex flex-row gap-x-[20px]">
+                <span className="text-[25px] mt-[10px] ">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(dataProd?.priceDiscount)}
+                </span>
+                <span className="text-[25px] mt-[10px] line-through opacity-[0.5]">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(dataProd?.price)}
+                </span>
+              </div>
+            )}
+            <div className="mt-[10px]">
+              <span className="font-medium">Lượt thích: </span>
+              {dataProd?.like}
+            </div>
+            <div className="mt-[10px]">
+              <span className="font-medium">Lượt xem: </span>
+              {dataProd?.view}
+            </div>
+
+            <div className="mt-[10px]">
+            <div className="">
+              <span className="font-medium">Loại sản phẩm: </span>
+              {dataProd?.categoryNameVMs?.map((item, index) => {
+                return (index =
+                  1 === dataProd?.categoryNameVMs.length ? (
+                    <span
+                      key={item.id}
+                     
+                      // onClick={() =>
+                      //   navigate(`/san-pham?&category=${item.slug}`)
+                      // }
+                    >
+                      {item.name}
+                    </span>
+                  ) : (
+                    <span
+                      key={item.id}
+                     
+                      // onClick={() =>
+                      //   navigate(`/san-pham?&category=${item.slug}`)
+                      // }
+                    >
+                      {item.name},&nbsp;
+                    </span>
+                  ));
+              })}
+            </div>
+          </div>
+
+          </div>
+        </div>
+        <div className="overflow-auto w-full flex flex-row gap-x-[20px] bg-white rounded-[8px] shadow-admin p-[10px]">
           <div className="w-[110px] h-fit flex flex-col">
             <img
               src={data?.imageSrc || defaultuser}
@@ -93,12 +209,10 @@ function AdminViewCmt(props) {
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder=" "
+                placeholder="Viết phản hồi"
                 className="h-[100px] py-[20px] form-input border border-input-border text-input-color font-normal rounded-[4px] w-[100%] px-[20px] transition-all duration-[0.25s] focus:border-second outline-none bg-third"
               />
-              <label className="form-label absolute left-[20px] top-[20%] translate-y-[-50%] pointer-events-none select-none transition-all duration-[0.25s] text-input-label">
-                Gửi phản hồi
-              </label>
+             
               <button
                 className="bg-second px-[30px] h-[40px] text-third"
                 onClick={handleRep}
@@ -130,7 +244,7 @@ function AdminViewCmt(props) {
                   </div>
                 );
               })}
-              {data?.children?.length < 3 ? null : visible >=
+              {data?.children?.length < 2 ? null : visible >=
                 data?.children?.length ? null : (
                 <span
                   className="hover:underline underline-offset-4 cursor-pointer w-fit"

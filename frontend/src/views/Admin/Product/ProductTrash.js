@@ -172,11 +172,21 @@ function ProductTable(props) {
     })
       .then((res) => {
         if (res.status === 200) {
-          toast.warn(`Xoá thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData(id);
+          if(res.data===1){
+            toast.warn(`Không thể xóa sản phẩm này`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          }
+          if(res.data===2){
+            toast.success(`Xoá thành công`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+            fetchData(id);
+          }
+          
+          
         } else {
           toast.error(`Xoá thất bại`, {
             position: toast.POSITION.TOP_RIGHT,
@@ -305,7 +315,8 @@ function ProductTable(props) {
       <div className="py-[10px] shadow-admin rounded-[8px] flex flex-row items-center justify-end gap-x-[20px] px-[20px] mb-[20px]">
         <button
           onClick={handleDeletedFalseList}
-          className="bg-blue-600 rounded-[8px] h-[40px] px-[20px] text-third"
+          disabled={productSelect.length===0}
+          className={` rounded-[8px] h-[40px] px-[20px] text-third ${productSelect.length===0?"bg-gray-400":"bg-blue-600"}`}
         >
           Khôi phục
         </button>

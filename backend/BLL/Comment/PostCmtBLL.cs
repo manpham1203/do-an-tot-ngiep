@@ -1,4 +1,5 @@
 ﻿using BO.ViewModels.Comment;
+using BO.ViewModels.Post;
 using DAL.Comment;
 using System;
 using System.Collections.Generic;
@@ -125,6 +126,29 @@ namespace BLL.Comment
             catch
             {
                 return false;
+            }
+        }
+        public async Task<string> GetPostId(string cmtId)
+        {
+            try
+            {
+                return await postCmtDAL.GetPostId(cmtId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<PostCardVM> GetPost(string id)
+        {
+            try
+            {
+                var postId = await GetPostId(id);
+                return await postCmtDAL.GetPost(postId);
+            }
+            catch
+            {
+                return null;
             }
         }
     }

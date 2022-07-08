@@ -46,7 +46,9 @@ function OrderList(props) {
         </span>
       ) : null
     );
+    const [loading, setLoading]=useState(false);
   const handleCancelOrder = async (id) => {
+    setLoading(true);
     await api({
       method: "PUT",
       url: `/Order/changestate/${id}`,
@@ -58,7 +60,8 @@ function OrderList(props) {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
-          fetchData(props.id)
+          setLoading(false);
+          fetchData(props.userId)
         }
       })
       .catch(() => {
@@ -66,6 +69,7 @@ function OrderList(props) {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
+        setLoading(false);
       });
   };
 
@@ -92,12 +96,17 @@ function OrderList(props) {
               </div>
               {itemOrder === item.id && (
                 <div className="py-[20px] px-[20px] relative">
-                  <div
+                  {item.state===1&&(
+                  loading?
+                  <div className="absolute right-[20px] top-[20px] mx-auto w-5 h-5 border-4 border-blue-600 border-t-4 border-t-transparent rounded-full animate-spin"></div>
+                  :
+                  <button
                     className="absolute text-red-600 w-fit right-[20px] top-[20px] cursor-pointer"
                     onClick={() => handleCancelOrder(item.id)}
                   >
                     HUỶ ĐƠN HÀNG
-                  </div>
+                  </button>)}
+                  
                   <div>
                     <div>
                       Tên người nhận: {item.lastName + " " + item.firstName}

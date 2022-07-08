@@ -139,11 +139,19 @@ namespace backend.Controllers
             try
             {
                 var result = await brandBLL.Delete(id);
-                if (result == false)
+                if (result == 0)
                 {
                     return BadRequest();
                 }
-                return Ok();
+                if (result == 1)
+                {
+                    return Ok(1);
+                }
+                if(result == 2)
+                {
+                    return Ok(2);
+                }
+                return BadRequest();
             }
             catch
             {

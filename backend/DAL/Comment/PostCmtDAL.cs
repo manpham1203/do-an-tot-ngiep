@@ -1,5 +1,6 @@
 ﻿using BO;
 using BO.ViewModels.Comment;
+using BO.ViewModels.Post;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace DAL.Comment
                     OrderDetailId = null,
                     CreatedAt = model.CreatedAt,
                     ParentId = model.ParentId,
-                    Published=model.Published,
+                    Published = model.Published,
                 };
                 await db.Comments.AddAsync(obj);
                 var result = await db.SaveChangesAsync();
@@ -85,8 +86,8 @@ namespace DAL.Comment
                                               ImageName = pic.Name,
                                               ImageSrc = null,
                                               FullName = u.LastName + " " + u.FirstName,
-                                              Children = null,
-                                              Published=cmt.Published
+                                              Children = new List<PostCmtVM>(),
+                                              Published = cmt.Published
                                           }).SingleOrDefaultAsync();
                 return resultFromDb;
             }
@@ -134,9 +135,54 @@ namespace DAL.Comment
                                   ImageSrc = null,
                                   FullName = u.LastName + " " + u.FirstName,
                                   Children = null,
-                                  Published=cmt.Published
+                                  Published = cmt.Published
                               }).OrderByDescending(x => x.CreatedAt).ToListAsync();
 
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<string> GetPostId(string cmtId)
+        {
+            try
+            {
+                var resultFromDb = await db.Comments.Where(x => x.ObjectType == "post").SingleOrDefaultAsync(x => x.Id == cmtId);
+
+                if (resultFromDb != null)
+                {
+                    return resultFromDb.ObjectId;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<PostCardVM> GetPost(string id)
+        {
+            try
+            {
+                var resultFromDb = await (from post in db.Posts
+                                          join pic in db.Pictures on post.Id equals pic.ObjectId
+                                          where pic.ObjectId == post.Id && pic.ObjectType == "post"
+                                          select new PostCardVM
+                                          {
+                                              Id = post.Id,
+                                              Title = post.Title,
+                                              Slug = post.Slug,
+                                              ShortDescription = post.ShortDescription,
+                                              View = post.View,
+                                              Image = pic.Name,
+                                              CreatedAt = post.CreatedAt,
+                                          }).OrderByDescending(x => x.CreatedAt).SingleOrDefaultAsync(x=>x.Id==id);
+                if (resultFromDb != null)
+                {
+                    return resultFromDb;
+                }
+                return null;
             }
             catch
             {

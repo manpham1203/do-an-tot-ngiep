@@ -108,14 +108,14 @@ function Row(props) {
             onClick={() => handleQuickView()}
             className="cursor-pointer"
           />
-          <FaRegEdit
+          {/* <FaRegEdit
             onClick={() => navigate(`/admin/nguoi-dung/chinh-sua/${data.id}`)}
             className="cursor-pointer"
-          />
-          <FaRegTrashAlt
+          /> */}
+          {/* <FaRegTrashAlt
             onClick={() => props.handleTrash(data.id)}
             className="cursor-pointer"
-          />
+          /> */}
         </div>
       </Td>
     </Tr>

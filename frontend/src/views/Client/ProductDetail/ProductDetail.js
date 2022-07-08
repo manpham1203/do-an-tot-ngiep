@@ -115,9 +115,9 @@ function ProductDetail() {
     const check2 = cart.find((x) => x.cartId === objCart.cartId);
     if (cart.length <= 8) {
       if (check) {
-        if (check2.qty <= 8) {
-          if (check2.qty + number > 9) {
-            dispatch(adjustQty({ cartId: check2.cartId, qty: 9 }));
+        if (check2.qty < state.data.quantityInStock) {
+          if (check2.qty + number > state.data.quantityInStock) {
+            dispatch(adjustQty({ cartId: check2.cartId, qty: state.data.quantityInStock }));
             toast.warn(`sản phẩm đã đạt số lượng tối đa`, {
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 3000,
@@ -158,16 +158,16 @@ function ProductDetail() {
 
   const handleNumber = (e) => {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === "" || re.test(e.target.value)) {
-      setNumber(e.target.value);
+    if (e.target.value === "" || re.test(parseInt(e.target.value))) {
+      setNumber(parseInt(e.target.value));
     }
   };
   const handleBlurNumber = (e) => {
     if (e.target.value === "" || e.target.value < 1) {
       setNumber(1);
     }
-    if (e.target.value > 9) {
-      setNumber(9);
+    if (e.target.value > state.data.quantityInStock) {
+      setNumber(state.data.quantityInStock);
     }
   };
 
@@ -194,6 +194,7 @@ function ProductDetail() {
     }
   }, [state?.data?.id]);
 
+  console.log(number);
   return state.loading ? (
     <PageContent />
   ) : state.fail ? (
@@ -281,7 +282,14 @@ function ProductDetail() {
               </div>
             </div>
 
-            <div className="flex flex-row items-center mt-[20px] border border-gray-400">
+            <div className="mt-[10px]">
+              <div className="">
+                <span className="font-medium">Số lượng còn lại: {state.data.quantityInStock}</span>
+                
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center  border border-gray-400">
               <div
                 className="cursor-pointer px-[10px] border-r border-gray-400 h-[40px] flex items-center"
                 onClick={() =>
@@ -300,19 +308,30 @@ function ProductDetail() {
               />
               <div
                 className="cursor-pointer px-[10px] border-l border-gray-400 h-[40px] flex items-center"
+
                 onClick={() =>
-                  setNumber((number) => (number >= 9 ? 9 : number + 1))
+                  setNumber((number) => (number >= state.data.quantityInStock ? state.data.quantityInStock : number + 1))
                 }
               >
                 <BsPlusLg />
               </div>
             </div>
+            {state.data.quantityInStock>0?
             <button
               className="mt-[20px] p-[10px] bg-second text-third font-medium flex flex-row items-center"
               onClick={() => addCart(state.data.id, number)}
             >
               THÊM VÀO GIỎ HÀNG
             </button>
+            :
+            <div
+              className="mt-[20px] p-[10px] bg-gray-400 text-third font-medium flex flex-row items-center"
+      
+            >
+              SẢN PHẨM ĐÃ HẾT
+            </div>
+            }
+            
             <Heart
               id={state.data.id}
               titleDislike="Xoá khỏi danh sách yêu thích"

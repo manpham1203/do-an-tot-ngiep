@@ -38,15 +38,11 @@ export const cartReducer = (state = initialState, action) => {
         item.cartId === action.payload.cartId
           ? {
               ...item,
-              qty: action.payload.qty >= 9 ? 9 : action.payload.qty,
+              qty: action.payload.qty,
             }
           : item
       );
     case DECREMENT_QTY:
-      const cart = state.find((x) => x.cartId === action.payload);
-      if (cart.qty === 1) {
-        return state.filter((x) => x.cartId !== cart.cartId);
-      }
       return state.map((item) => {
         return item.cartId === action.payload
           ? { ...item, qty: item.qty <= 1 ? 1 : item.qty - 1 }
@@ -54,10 +50,6 @@ export const cartReducer = (state = initialState, action) => {
       });
 
     case INCREMENT_QTY:
-      const cart2 = state.find((x) => x.cartId === action.payload);
-      if (cart2.qty === 9) {
-        return state;
-      }
       return state.map((item) =>
         item.cartId === action.payload ? { ...item, qty: item.qty + 1 } : item
       );

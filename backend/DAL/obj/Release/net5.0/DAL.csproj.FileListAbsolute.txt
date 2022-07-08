@@ -13,3 +13,18 @@ D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Release\net5.0\DAL.dll
 D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Release\net5.0\refint\DAL.dll
 D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Release\net5.0\DAL.pdb
 D:\New folder\PhamMinhMan_2119110081\backend\DAL\obj\Release\net5.0\ref\DAL.dll
+D:\datn\backend\DAL\bin\Release\net5.0\DAL.deps.json
+D:\datn\backend\DAL\bin\Release\net5.0\DAL.dll
+D:\datn\backend\DAL\bin\Release\net5.0\DAL.pdb
+D:\datn\backend\DAL\bin\Release\net5.0\BO.dll
+D:\datn\backend\DAL\bin\Release\net5.0\BO.pdb
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.csproj.AssemblyReference.cache
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.AssemblyInfoInputs.cache
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.AssemblyInfo.cs
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.csproj.CoreCompileInputs.cache
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.csproj.CopyComplete
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.dll
+D:\datn\backend\DAL\obj\Release\net5.0\refint\DAL.dll
+D:\datn\backend\DAL\obj\Release\net5.0\DAL.pdb
+D:\datn\backend\DAL\obj\Release\net5.0\ref\DAL.dll

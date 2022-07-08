@@ -146,7 +146,7 @@ function ProductCmt(props) {
               <Th className="w-[80px]">Avatar</Th>
               <Th className="full">Bình luận</Th>
               <Th className="w-[120px]">Đánh giá</Th>
-              {/* <Th className="w-[150px]">Hành động</Th> */}
+              <Th className="w-[150px]">Hành động</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -172,18 +172,15 @@ function ProductCmt(props) {
                   <Td>
                     <ShowStarCmt star={item?.star} />
                   </Td>
-                  {/* <Td>
+                  <Td>
                     <div className="flex flex-row justify-center text-[25px] gap-x-[20px] w-full">
                       <FaRegEye
-                        // onClick={() => handleQuickView(item?.id)}
+                        onClick={() => handleQuickView(item?.id)}
                         className="cursor-pointer"
                       />
-                      <FaRegEdit
-                        // onClick={() => handleEdit(state.data.id)}
-                        className="cursor-pointer"
-                      />
+                      
                     </div>
-                  </Td> */}
+                  </Td>
                 </Tr>
               );
             })}

@@ -1,5 +1,9 @@
 ﻿using BO;
+using BO.ViewModels.Brand;
+using BO.ViewModels.Category;
 using BO.ViewModels.Comment;
+using BO.ViewModels.Picture;
+using BO.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -246,6 +250,72 @@ namespace DAL.Comment
                     return null;
                 }
                 return resultFromDb.Star;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<string> GetOrderDetailId(string cmtId)
+        {
+            try
+            {
+                var resultFromDb = await db.Comments.SingleOrDefaultAsync(x => x.Id == cmtId);
+                if (resultFromDb != null)
+                {
+                    return resultFromDb.OrderDetailId;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<string> GetProductId(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb != null)
+                {
+                    return resultFromDb.ProductId;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<ProductDetailVM> ProductDetailAdmin(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.Products.SingleOrDefaultAsync(x => x.Id == id);
+                if (resultFromDb == null)
+                {
+                    return null;
+                }
+                var result = new ProductDetailVM
+                {
+                    Id = resultFromDb.Id,
+                    Name = resultFromDb.Name,
+                    Slug = resultFromDb.Slug,
+                    Price = resultFromDb.Price,
+                    PriceDiscount = resultFromDb.PriceDiscount,
+                    Description = resultFromDb.Description,
+                    QuantityInStock = resultFromDb.QuantityInStock,
+                    Published = resultFromDb.Published,
+                    Deleted = resultFromDb.Deleted,
+                    View = resultFromDb.View,
+                    BrandId = resultFromDb.BrandId,
+                    BrandNameVM = new BrandNameVM(),
+                    CategoryNameVMs = new List<CategoryNameVM>(),
+                    PictureVMs = new List<PictureVM>(),
+                    Star = null,
+                };
+                return result;
             }
             catch
             {

@@ -100,11 +100,21 @@ function BrandTrash(props) {
     })
       .then((res) => {
         if (res.status === 200) {
-          toast.warn(`Xoá thành công`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-          fetchData();
+          if(res.data===1){
+            toast.warn(`Không thể xóa thương hiệu này`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          }
+          if(res.data===2){
+            toast.success(`Xoá thành công`, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+            fetchData();
+          }
+          
+          
         } else {
           toast.error(`Xoá thất bại`, {
             position: toast.POSITION.TOP_RIGHT,

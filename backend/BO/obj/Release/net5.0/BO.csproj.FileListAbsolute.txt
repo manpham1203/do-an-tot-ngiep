@@ -13,3 +13,18 @@ D:\New folder\PhamMinhMan_2119110081\backend\BO\obj\Release\net5.0\refint\BO.dll
 D:\New folder\PhamMinhMan_2119110081\backend\BO\obj\Release\net5.0\BO.pdb
 D:\New folder\PhamMinhMan_2119110081\backend\BO\obj\Release\net5.0\BO.genruntimeconfig.cache
 D:\New folder\PhamMinhMan_2119110081\backend\BO\obj\Release\net5.0\ref\BO.dll
+D:\datn\backend\BO\bin\Release\net5.0\BO.deps.json
+D:\datn\backend\BO\bin\Release\net5.0\BO.runtimeconfig.json
+D:\datn\backend\BO\bin\Release\net5.0\BO.runtimeconfig.dev.json
+D:\datn\backend\BO\bin\Release\net5.0\BO.dll
+D:\datn\backend\BO\bin\Release\net5.0\BO.pdb
+D:\datn\backend\BO\obj\Release\net5.0\BO.csproj.AssemblyReference.cache
+D:\datn\backend\BO\obj\Release\net5.0\BO.GeneratedMSBuildEditorConfig.editorconfig
+D:\datn\backend\BO\obj\Release\net5.0\BO.AssemblyInfoInputs.cache
+D:\datn\backend\BO\obj\Release\net5.0\BO.AssemblyInfo.cs
+D:\datn\backend\BO\obj\Release\net5.0\BO.csproj.CoreCompileInputs.cache
+D:\datn\backend\BO\obj\Release\net5.0\BO.dll
+D:\datn\backend\BO\obj\Release\net5.0\refint\BO.dll
+D:\datn\backend\BO\obj\Release\net5.0\BO.pdb
+D:\datn\backend\BO\obj\Release\net5.0\BO.genruntimeconfig.cache
+D:\datn\backend\BO\obj\Release\net5.0\ref\BO.dll

@@ -1,6 +1,7 @@
 import React, { useState, memo, useEffect } from "react";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import imgthumb from "../../assets/imgthumb.jpg";
 import {
   decrementQTY,
@@ -15,7 +16,7 @@ function CartItem(props) {
 
   const handleNumber = (e) => {
     const re = /^[0-9\b]+$/;
-    if (e.target.value === "" || re.test(e.target.value)) {
+    if (e.target.value === "" || re.test(parseInt(e.target.value))) {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: e.target.value }));
     }
   };
@@ -23,10 +24,32 @@ function CartItem(props) {
     if (e.target.value === "") {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
     }
-    if(parseInt(e.target.value)<1){
+    if (parseInt(e.target.value) < 1) {
       dispatch(adjustQty({ cartId: props.cartItem.id, qty: 1 }));
     }
+    if (parseInt(e.target.value) >= props.cartItem.quantityInStock) {
+      dispatch(adjustQty({ cartId: props.cartItem.id, qty: props.cartItem.quantityInStock }));
+    }
   };
+
+  console.log(props.qty)
+  const tang = (a) => {
+    if (props.cartItem.quantityInStock > props.qty) {
+      dispatch(incrementQTY(a))
+
+    }
+  }
+  const giam = (a) => {
+    if(props.qty>0){
+
+      dispatch(decrementQTY(a))
+    }
+    if(props.qty==1){
+      dispatch(removeFromCart(props.cartItem.id));
+    }
+    
+  }
+ 
 
   return (
     <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 dark:hover:bg-second mb-[30px]">
@@ -62,14 +85,14 @@ function CartItem(props) {
       </span>
       <div className="flex justify-center w-full md:w-1/5 items-center mb-[10px] md:mb-0">
         <div
-          onClick={() => dispatch(decrementQTY(props.cartItem.id))}
+          onClick={() => giam(props.cartItem.id)}
           className="cursor-pointer"
         >
           <BsDashLg />
         </div>
 
         <input
-          className="number_cart-item mx-2 border text-center w-8 text-second"
+          className="number_cart-item mx-2 border text-center w-[60px] text-second"
           type="number"
           max="10"
           min="1"
@@ -78,7 +101,7 @@ function CartItem(props) {
           onBlur={(e) => handleBlurNumber(e)}
         />
         <div
-          onClick={() => dispatch(incrementQTY(props.cartItem.id))}
+          onClick={() => tang(props.cartItem.id)}
           className="cursor-pointer"
         >
           <BsPlusLg />

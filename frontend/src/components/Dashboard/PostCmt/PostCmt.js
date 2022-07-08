@@ -11,7 +11,7 @@ import { FaRegEdit, FaRegEye } from "react-icons/fa";
 import Td from "../../Table/Td";
 import defaultuser from "../../../assets/defaultuser.png";
 import { BsPlusLg, BsDashLg } from "react-icons/bs";
-import { setOpenadminViewCmt } from "../../../redux/adminViewCmt/adminViewCmtActions";
+import { setOpenadminViewPostCmt } from "../../../redux/adminViewPostCmt/adminViewPostCmtActions";
 import { useDispatch } from "react-redux";
 
 function PostCmt(props) {
@@ -47,7 +47,7 @@ function PostCmt(props) {
       show: true,
       id: id,
     };
-    dispatchQV(setOpenadminViewCmt(obj));
+    dispatchQV(setOpenadminViewPostCmt(obj));
   };
   const [show, setShow] = useState(true);
   return (
@@ -69,7 +69,7 @@ function PostCmt(props) {
               <Th className="w-[80px]">Avatar</Th>
               <Th className="full">Bình luận</Th>
 
-              {/* <Th className="w-[150px]">Hành động</Th> */}
+              <Th className="w-[150px]">Hành động</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -93,18 +93,15 @@ function PostCmt(props) {
                     </div>
                   </Td>
 
-                  {/* <Td>
+                  <Td>
                     <div className="flex flex-row justify-center text-[25px] gap-x-[20px] w-full">
                       <FaRegEye
-                        // onClick={() => handleQuickView(item?.id)}
+                        onClick={() => handleQuickView(item?.id)}
                         className="cursor-pointer"
                       />
-                      <FaRegEdit
-                        // onClick={() => handleEdit(state.data.id)}
-                        className="cursor-pointer"
-                      />
+                      
                     </div>
-                  </Td> */}
+                  </Td>
                 </Tr>
               );
             })}

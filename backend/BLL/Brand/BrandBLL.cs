@@ -168,14 +168,32 @@ namespace BLL
 
             return true;
         }
-        public async Task<bool> Delete(string id)
+        public async Task<int> Delete(string id)
         {
-            var brandVM = await CheckExistsId(id);
-            if (brandVM == false)
+            var productBLL = new ProductBLL();
+            var listBrand = await productBLL.GetByBrandId(id);
+            if(listBrand != null)
             {
-                return false;
+                if (listBrand.Count > 0)
+                {
+                    return 1;
+                }
+                var brandVM = await CheckExistsId(id);
+                if (brandVM == false)
+                {
+                    return 0;
+                }
+                var result= await brandDAL.Delete(id);
+                if (result == true)
+                {
+                    return 2;
+                }
+                return 0;
             }
-            return await brandDAL.Delete(id);
+            else
+            {
+                return 0;
+            }
         }
         public async Task<bool> Published(string id)
         {

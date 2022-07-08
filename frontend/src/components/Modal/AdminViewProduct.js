@@ -12,7 +12,7 @@ function AdminViewProduct(props) {
   const fetchData = async (slug) => {
     await api({
       method: "GET",
-      url: `/Product/productdetail/${slug}`,
+      url: `/Product/ProductDetailAdmin/${slug}`,
       data: null,
     })
       .then((res) => {
@@ -144,22 +144,15 @@ function AdminViewProduct(props) {
           </tr>
           <tr>
             <th className="text-left border border-slate-300 w-[200px]">
-              Mô tả ngắn
+              Mô tả
             </th>
             <td className="border border-slate-300 w-[70%]">
-              {data?.shortDescription}
+              <div dangerouslySetInnerHTML={{__html:data?.description}}>
+
+              </div>
             </td>
           </tr>
-          <tr>
-            <th className="text-left border border-slate-300 w-[200px]">
-              Mô tả đầy đủ
-            </th>
-            <td className="border border-slate-300 w-[70%]">
-              <div
-                dangerouslySetInnerHTML={{ __html: data?.fullDescription }}
-              ></div>
-            </td>
-          </tr>
+          
           <tr>
             <th className="text-left border border-slate-300 w-[200px]">
               Hình

@@ -299,6 +299,10 @@ namespace BO.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<DateTime?>("ReceivedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
 

@@ -90,10 +90,11 @@ function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  console.log(brand)
   return (
     <div className="w-full">
       <Carousel></Carousel>
-      {brand.length > 0 ? (
+      {brand.length > 0 && (
         <ProductSlideShow>
           <Heading
             title="Thương Hiệu"
@@ -129,10 +130,8 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      ) : (
-        <ProductRow />
-      )}
-      {category.length > 0 ? (
+      ) }
+      {category.length > 0 && (
         <ProductSlideShow>
           <Heading
             title="Danh Mục"
@@ -167,11 +166,9 @@ function Home() {
               );
             })}
         </ProductSlideShow>
-      ) : (
-        <ProductRow />
-      )}
+      ) }
 
-      {onSale.length > 0 ? (
+      {onSale.length > 0 && (
         <ProductSlideShow>
           <Heading
             title="Đang Giảm Giá"
@@ -179,11 +176,9 @@ function Home() {
           />
           {onSale.length > 0 && <ListProductCard products={onSale} />}
         </ProductSlideShow>
-      ) : (
-        <ProductRow />
-      )}
+      ) }
 
-      {mostBought.length > 0 ? (
+      {mostBought.length > 0 && (
         <ProductSlideShow>
           <Heading
             title="Mua Nhiều Nhất"
@@ -191,9 +186,7 @@ function Home() {
           />
           {mostBought.length > 0 && <ListProductCard products={mostBought} />}
         </ProductSlideShow>
-      ) : (
-        <ProductRow />
-      )}
+      ) }
       {/* {newProduct.length > 0 && (
         <ProductSlideShow>
           <Heading

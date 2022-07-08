@@ -127,11 +127,15 @@ namespace backend.Controllers
             try
             {
                 var result = await productBLL.Delete(id);
-                if (result == false)
+                if (result == 1)
                 {
-                    return BadRequest();
+                    return Ok(1);
                 }
-                return Ok();
+                if (result == 2)
+                {
+                    return Ok(2);
+                }
+                return BadRequest();
             }
             catch
             {
