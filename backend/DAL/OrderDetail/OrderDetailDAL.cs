@@ -108,5 +108,21 @@ namespace DAL.OrderDetail
                 return null;
             }
         }
+        public async Task<int> CheckProduct(string id)
+        {
+            try
+            {
+                var resultFromDb = await db.OrderDetails.FirstOrDefaultAsync(x => x.ProductId == id);
+                if (resultFromDb != null)
+                {
+                    return 1;
+                }
+                return 2;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }

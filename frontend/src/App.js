@@ -52,10 +52,12 @@ import AdminViewOrder from "./components/Modal/AdminViewOrder";
 import OrderPending from "./views/Admin/Order/OrderPending";
 import OrderCancel from "./views/Admin/Order/OrderCancel";
 import OverlayAdminViewCmt from "./components/Overlay/OverlayAdminViewCmt";
+import OverlayAdminViewPostCmt from "./components/Overlay/OverlayAdminViewPostCmt";
 import OverlayAdminViewBrand from "./components/Overlay/OverlayAdminViewBrand";
 import OverlayAdminViewPost from "./components/Overlay/OverlayAdminViewPost";
 import OverlayAdminViewUser from "./components/Overlay/OverlayAdminViewUser";
 import AdminViewCmt from "./components/Modal/AdminViewCmt";
+import AdminViewPostCmt from "./components/Modal/AdminViewPostCmt";
 import AdminViewBrand from "./components/Modal/AdminViewBrand";
 import AdminViewPost from "./components/Modal/AdminViewPost";
 import AdminViewUser from "./components/Modal/AdminViewUser";
@@ -85,6 +87,7 @@ function App() {
     adminViewProduct,
     adminViewOrder,
     adminViewCmt,
+    adminViewPostCmt,
     adminViewBrand,
     adminViewPost,
     adminViewUser,
@@ -98,6 +101,7 @@ function App() {
       document.body.style.overflowY = "scroll";
     }
   }, [adminViewUser.show]);
+  
   useEffect(() => {
     if (adminRepQuestion.show) {
       document.body.style.overflowY = "hidden";
@@ -147,6 +151,13 @@ function App() {
       document.body.style.overflowY = "scroll";
     }
   }, [adminViewCmt.show]);
+  useEffect(() => {
+    if (adminViewPostCmt.show) {
+      document.body.style.overflowY = "hidden";
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+  }, [adminViewPostCmt.show]);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
@@ -336,6 +347,12 @@ function App() {
         <>
           <OverlayAdminViewCmt />
           <AdminViewCmt />
+        </>
+      )}
+      {adminViewPostCmt.show && (
+        <>
+          <OverlayAdminViewPostCmt />
+          <AdminViewPostCmt />
         </>
       )}
       {adminViewBrand.show && (

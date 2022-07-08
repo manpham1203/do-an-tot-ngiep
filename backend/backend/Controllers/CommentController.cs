@@ -287,5 +287,44 @@ namespace backend.Controllers
                 return null;
             }
         }
+        [HttpGet("productCmtAdmin/{id}")]
+        public async Task<IActionResult> ProductDetailAdmin(string id)
+        {
+            var resultFromBLL = await productCmtBLL.ProductDetailAdmin(id);
+            if (resultFromBLL == null)
+            {
+                return BadRequest();
+            }
+            if (resultFromBLL.PictureVMs.Count > 0)
+            {
+                for (int i = 0; i < resultFromBLL.PictureVMs.Count; i++)
+                {
+                    resultFromBLL.PictureVMs[i].ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.PictureVMs[i].Name);
+                }
+            }
+            return Ok(resultFromBLL);
+        }
+        [HttpGet("getpost")]
+        public async Task<IActionResult> GetPost(string id)
+        {
+            try
+            {
+                var resultFromBLL = await postCmtBLL.GetPost(id);
+                if (resultFromBLL == null)
+                {
+                    return BadRequest();
+                }
+                if (resultFromBLL.Image!=null)
+                {
+                    resultFromBLL.ImageSrc = String.Format("{0}://{1}{2}/Photos/{3}", Request.Scheme, Request.Host, Request.PathBase, resultFromBLL.Image);
+                }
+
+                return Ok(resultFromBLL);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

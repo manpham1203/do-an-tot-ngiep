@@ -66,6 +66,8 @@ namespace BLL.Order
                 template = template.Replace("{phone}", order.DeliveryPhone);
                 template = template.Replace("{total}", order.Amount.Value.ToString("c2", CultureInfo.CreateSpecificCulture("vi-VN")));
                 template = template.Replace("{note}", order.Note);
+                template = template.Replace("{create}", order.CreatedAt.ToString());
+                template = template.Replace("{receive}", state == 4 ? DateTime.Now.ToString() : "Chưa có");
                 template = template.Replace("{table}", row);
                 template = template.Replace("{total}", listDetail.Sum(x => x.Quantity * x.UnitPrice).ToString("c2", CultureInfo.CreateSpecificCulture("vi-VN")));
 
@@ -75,32 +77,16 @@ namespace BLL.Order
                         template = template.Replace("{title}", "Đơn hàng đã hủy");
                         break;
                     case 1:
-                        //message.Body = new TextPart("html")
-                        //{
-                        //    //Text = "<h1>Đơn hàng của bạn đang chờ xác nhận</h1>",
-                        //};
                         template = template.Replace("{title}", "Đơn hàng của bạn đang chờ xác nhận");
                         break;
                     case 2:
-                        //message.Body = new TextPart("html")
-                        //{
-                        //    //Text = "<h1>Đơn hàng của bạn đã được xác nhận, đang chuẩn bị hàng</h1>",
-                        //};
                         template = template.Replace("{title}", "Đơn hàng của bạn đã được xác nhận, đang chuẩn bị hàng");
                         break;
                     case 3:
-                        //message.Body = new TextPart("html")
-                        //{
-                        //    Text = "<h1>Đơn hàng của bạn đã giao cho đơn vị vận chuyển</h1>",
-                        //};
                         template = template.Replace("{title}", "Đơn hàng của bạn đã giao cho đơn vị vận chuyển");
 
                         break;
                     case 4:
-                        //message.Body = new TextPart("html")
-                        //{
-                        //    Text = "<h1>Đơn hàng của bạn đã giao thành công</h1>",
-                        //};
                         template = template.Replace("{title}", "Đơn hàng của bạn đã giao thành công");
 
                         break;
@@ -170,17 +156,22 @@ namespace BLL.Order
                 {
                     return false;
                 }
-                for(int i=0;i< detailObj.Count; i++)
+                var productBLL = new ProductBLL();
+                for (int i = 0; i < model.OrderDetailVMs.Count; i++)
                 {
-                    var productBLL = new ProductBLL();
+                    var reduceNumber = await productBLL.ReduceNumber(model.OrderDetailVMs[i].ProductId, model.OrderDetailVMs[i].Quantity);
+                }
+
+                for (int i = 0; i < detailObj.Count; i++)
+                {
                     var name = await productBLL.GetById(detailObj[i].ProductId);
                     detailObj[i].ProductName = name.Name;
                 }
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Admin", "datn.quantri@gmail.com"));
                 message.To.Add(new MailboxAddress("Client", model.DeliveryEmail));
-                message.Subject = "Tạo đơn hàng thành công | Mã đơn hàng: "+ orderId;
-               
+                message.Subject = "Tạo đơn hàng thành công | Mã đơn hàng: " + orderId;
+
                 string template = string.Empty;
                 using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "OrderEmail.html")))
                 {
@@ -210,6 +201,8 @@ namespace BLL.Order
                 template = template.Replace("{phone}", orderObj.DeliveryPhone);
                 template = template.Replace("{total}", orderObj.Amount.Value.ToString("c2", CultureInfo.CreateSpecificCulture("vi-VN")));
                 template = template.Replace("{note}", orderObj.Note);
+                template = template.Replace("{create}", orderObj.CreatedAt.ToString());
+                template = template.Replace("{receive}", "Chưa có");
                 template = template.Replace("{table}", row);
                 template = template.Replace("{total}", detailObj.Sum(x => x.Quantity * x.UnitPrice).ToString("c2", CultureInfo.CreateSpecificCulture("vi-VN")));
                 message.Body = new TextPart("html")
@@ -409,7 +402,7 @@ namespace BLL.Order
             try
             {
                 var order = await GetbyId(id);
-                
+
                 if (order == null)
                 {
                     return false;
@@ -417,10 +410,13 @@ namespace BLL.Order
                 var detailBLL = new OrderDetailBLL();
                 var listDetail = await detailBLL.GetListDetailByOrderId(id);
                 var result = await orderDAL.ChangeState(id, state);
+
                 if (result == false)
                 {
                     return false;
                 }
+
+
                 Email(order, listDetail, state);
                 return true;
             }
@@ -618,7 +614,7 @@ namespace BLL.Order
                 return null;
             }
         }
-    
+
         public async Task<List<CompareOrderChartVM>> CompareOrderChart(List<int> years)
         {
             try
@@ -627,14 +623,14 @@ namespace BLL.Order
                 {
                     var tempList = years.Distinct().ToList();
                     tempList = tempList.OrderBy(x => x).ToList();
-                    var list=new List<CompareOrderChartVM>();
-                    for(int i=0; i < tempList.Count(); i++)
+                    var list = new List<CompareOrderChartVM>();
+                    for (int i = 0; i < tempList.Count(); i++)
                     {
                         var data = await OrderChart(tempList[i]);
                         var name = tempList[i].ToString();
                         list.Add(new CompareOrderChartVM
                         {
-                            Id=i,
+                            Id = i,
                             Year = name,
                             Data = data,
                         });
@@ -648,5 +644,7 @@ namespace BLL.Order
                 return null;
             }
         }
+
+
     }
 }

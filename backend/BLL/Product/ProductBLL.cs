@@ -17,6 +17,7 @@ using BLL.Picture;
 using BO.ViewModels.Picture;
 using BLL.Comment;
 using BLL.Wishlist;
+using BLL.OrderDetail;
 
 namespace BLL.Product
 {
@@ -332,32 +333,50 @@ namespace BLL.Product
 
             return true;
         }
-        public async Task<bool> Delete(string id)
+        public async Task<int> Delete(string id)
         {
-            var productFullBLL = new ProductFullBLL();
-            var productFullVM = await productFullBLL.GetById(id);
-            if (productFullVM == null)
+            var detailBLL = new OrderDetailBLL();
+            var checkProduct = await detailBLL.CheckProduct(id);
+            if (checkProduct == 1)
             {
-                return false;
+                return 1;
             }
-
-            if (productFullVM.CategoryVMs != null)
+            if (checkProduct == 2)
             {
-                var pcmBLL = new ProductCategoryBLL();
-                var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
-                if (listProCatMapping != null)
+                var productFullBLL = new ProductFullBLL();
+                var productFullVM = await productFullBLL.GetById(id);
+                if (productFullVM == null)
                 {
-                    var delete = await pcmBLL.Delete(id, "ProductId");
-                    if (delete == false)
-                    {
-                        return false;
-                    }
+                    return 0;
                 }
 
+                if (productFullVM.CategoryVMs != null)
+                {
+                    var pcmBLL = new ProductCategoryBLL();
+                    var listProCatMapping = await pcmBLL.GetById(id, "ProductId");
+                    if (listProCatMapping != null)
+                    {
+                        var delete = await pcmBLL.Delete(id, "ProductId");
+                        if (delete == false)
+                        {
+                            return 0;
+                        }
+                    }
+
+                }
+
+
+                var result = await productDAL.Delete(id);
+                if (result == true)
+                {
+                    return 2;
+                }
+                return 0;
             }
-
-
-            return await productDAL.Delete(id);
+            else
+            {
+                return 0;
+            }
         }
         public async Task<bool> Published(string id)
         {
@@ -1296,7 +1315,6 @@ namespace BLL.Product
             }
         }
 
-
         public async Task<bool> PublishedTrueList(List<string> ids)
         {
             try
@@ -1521,6 +1539,17 @@ namespace BLL.Product
                 }
             }
             return resultFromDAL;
+        }
+        public async Task<bool> ReduceNumber(string id, int num)
+        {
+            try
+            {
+                return await productDAL.ReduceNumber(id, num);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 

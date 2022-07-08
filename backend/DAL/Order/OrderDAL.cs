@@ -218,6 +218,10 @@ namespace DAL.Order
                     return false;
                 }
                 resultFromDb.State = status;
+                if (status == 4)
+                {
+                    resultFromDb.ReceivedAt = DateTime.Now;
+                }
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {

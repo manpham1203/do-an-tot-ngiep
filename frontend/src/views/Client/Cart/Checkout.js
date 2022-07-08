@@ -390,15 +390,7 @@ function Checkout(props) {
                 value="1"
                 checked={watchShip === "1"}
               />
-              <Radio
-                name="paymentMethod"
-                label="Chuyển khoản"
-                control={control}
-                value="2"
-                checked={watchShip === "2"}
-                disabled
-                className="opacity-[0.5] cursor-default"
-              />
+              
             </div>
           </div>
           <div className="flex justify-center my-[30px]">

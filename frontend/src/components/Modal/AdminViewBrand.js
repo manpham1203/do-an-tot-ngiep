@@ -69,18 +69,7 @@ function AdminViewBrand(props) {
               {moment(data?.createdAt).format("DD-MM-yyyy, h:mm:ss")}
             </Td>
           </Tr>
-          <Tr>
-            <Th className="text-left px-[20px] w-[300px]">Mô tả ngắn</Th>
-            <Td className=" px-[20px]">{data?.shortDescription}</Td>
-          </Tr>
-          <Tr>
-            <Th className="text-left px-[20px] w-[300px]">Mô tả đầy đủ</Th>
-            <Td className=" px-[20px]">
-              <div
-                dangerouslySetInnerHTML={{ __html: data?.fullDescription }}
-              ></div>
-            </Td>
-          </Tr>
+          
           <Tr>
             <Th className="text-left px-[20px] w-[300px]">Hình</Th>
             <Td className=" px-[20px]">

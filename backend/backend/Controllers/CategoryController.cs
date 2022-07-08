@@ -119,11 +119,19 @@ namespace backend.Controllers
             try
             {
                 var categoryDelete = await categoryBLL.Delete(id);
-                if (categoryDelete == false)
+                if (categoryDelete == 0)
                 {
                     return BadRequest();
                 }
-                return Ok();
+                if(categoryDelete == 1)
+                {
+                    return Ok(1);
+                }
+                if (categoryDelete == 2)
+                {
+                    return Ok(2);
+                }
+                return BadRequest();
             }
             catch
             {

@@ -92,6 +92,7 @@ function PostDetail(props) {
             autoClose: 1000,
           });
           setLoadCmt(false);
+          setContent("")
         } else {
           setValid(false);
           setLoadCmt(false);

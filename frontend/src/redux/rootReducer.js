@@ -12,6 +12,7 @@ import { adminViewProductReducer } from "./adminViewProduct/adminViewProductRedu
 import { adminViewBrandReducer } from "./adminViewBrand/adminViewBrandReducer";
 import { adminViewOrderReducer } from "./adminViewOrder/adminViewOrderReducer";
 import { adminViewCmtReducer } from "./adminViewCmt/adminViewCmtReducer";
+import { adminViewPostCmtReducer } from "./adminViewPostCmt/adminViewPostCmtReducer";
 import { adminViewPostReducer } from "./adminViewPost/adminViewPostReducer";
 import { adminViewUserReducer } from "./adminViewUser/adminViewUserReducer";
 import { menuReducer } from "./menu/menuReducer";
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   adminViewBrand: adminViewBrandReducer,
   adminViewOrder: adminViewOrderReducer,
   adminViewCmt: adminViewCmtReducer,
+  adminViewPostCmt: adminViewPostCmtReducer,
   adminViewPost: adminViewPostReducer,
   adminViewUser: adminViewUserReducer,
   menu: menuReducer,

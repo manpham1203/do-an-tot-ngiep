@@ -152,6 +152,7 @@ function Cart() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  console.log(state);
   return (
     <>
       {cart.length === 0 ? (

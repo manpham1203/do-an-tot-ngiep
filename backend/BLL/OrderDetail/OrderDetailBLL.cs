@@ -154,6 +154,17 @@ namespace BLL.OrderDetail
                 return true;
             }
         }
+        public async Task<int> CheckProduct(string id)
+        {
+            try
+            {
+                return await detailDAL.CheckProduct(id);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
 
     }
 }

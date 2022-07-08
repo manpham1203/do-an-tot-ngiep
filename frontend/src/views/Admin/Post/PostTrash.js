@@ -161,7 +161,8 @@ function PostTrash(props) {
       <div className="py-[10px] shadow-admin rounded-[8px] flex flex-row items-center justify-end gap-x-[20px] px-[20px] mb-[20px]">
         <button
           onClick={handleDeletedFalseList}
-          className="bg-yellow-400 rounded-[8px] h-[40px] px-[20px] text-third"
+          disabled={productSelect.length===0}
+          className={` rounded-[8px] h-[40px] px-[20px] text-third ${productSelect.length===0?"bg-gray-400":"bg-blue-600"}`}
         >
           Khôi phục
         </button>

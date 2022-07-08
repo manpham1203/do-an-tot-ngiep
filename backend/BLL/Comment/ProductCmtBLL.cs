@@ -1,4 +1,9 @@
-﻿using BO.ViewModels.Comment;
+﻿using BLL.Category;
+using BLL.Picture;
+using BLL.ProductCategory;
+using BLL.Wishlist;
+using BO.ViewModels.Comment;
+using BO.ViewModels.Product;
 using DAL.Comment;
 using System;
 using System.Collections.Generic;
@@ -199,6 +204,88 @@ namespace BLL.Comment
             {
                 return null;
             }
+        }
+        public async Task<string> GetOrderDetailId(string cmtId)
+        {
+            try
+            {
+                return await productCmtDAL.GetOrderDetailId(cmtId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<string> GetProductId(string id)
+        {
+            try
+            {
+                return await productCmtDAL.GetProductId(id);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public async Task<ProductDetailVM> ProductDetailAdmin(string cmtId)
+        {
+            var orderDetaiId = await GetOrderDetailId(cmtId);
+            var productId = await GetProductId(orderDetaiId);
+            var resultFromDAL = await productCmtDAL.ProductDetailAdmin(productId);
+            if (resultFromDAL == null)
+            {
+                return null;
+            }
+            var brandBLL = new BrandBLL();
+            var brand = await brandBLL.GetById(resultFromDAL.BrandId);
+            if (brand != null)
+            {
+                resultFromDAL.BrandNameVM.Id = brand.Id;
+                resultFromDAL.BrandNameVM.Name = brand.Name;
+                resultFromDAL.BrandNameVM.Slug = brand.Slug;
+            }
+
+            var pcBLL = new ProductCategoryBLL();
+            var listCategoryProduct = await pcBLL.GetById(resultFromDAL.Id, "ProductId");
+            if (listCategoryProduct.Count > 0)
+            {
+                for (int j = 0; j < listCategoryProduct.Count(); j++)
+                {
+                    var categoryBLL = new CategoryBLL();
+                    var category = await categoryBLL.CategoryNameById(listCategoryProduct[j].CategoryId);
+                    if (category == null)
+                    {
+                        continue;
+                    }
+                    resultFromDAL.CategoryNameVMs.Add(category);
+                }
+            }
+
+            var productImageBLL = new PictureBLL();
+            var listImg = await productImageBLL.GetByObjectId(resultFromDAL.Id, "product");
+            resultFromDAL.PictureVMs = listImg;
+
+            var cmtBLL = new ProductCmtBLL();
+
+            var star = await cmtBLL.Star(resultFromDAL.Id);
+
+            if (star.Count() == 0)
+            {
+                resultFromDAL.Star = 0;
+                resultFromDAL.StarCount = 0;
+            }
+            else
+            {
+                resultFromDAL.Star = star.Sum(x => x.Value) / (float)star.Count();
+                resultFromDAL.StarCount = star.Count();
+            }
+
+            var wishlistBLL = new WishlistBLL();
+            var wishlist = await wishlistBLL.Count(resultFromDAL.Id);
+
+            resultFromDAL.Like = wishlist;
+
+            return resultFromDAL;
         }
     }
 }

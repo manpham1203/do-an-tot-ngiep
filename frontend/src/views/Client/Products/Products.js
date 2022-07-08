@@ -673,6 +673,7 @@ function Products(props) {
                           priceDiscount={item.priceDiscount}
                           image={item.imageSrc}
                           star={item.star}
+                          quantityInStock={item.quantityInStock}
                         />
                       );
                     })}
@@ -694,6 +695,7 @@ function Products(props) {
                         priceDiscount={item.priceDiscount}
                         image={item.imageSrc}
                         star={item.star}
+                        quantityInStock={item.quantityInStock}
                       />
                     );
                   })}

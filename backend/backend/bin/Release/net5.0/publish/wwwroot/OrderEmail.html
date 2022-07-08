@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="telephone=no" name="format-detection">
+    <title></title>
+</head>
+
+<body>
+    <div>
+        <h2 style="text-align:center">{title}</h2>
+        <p>Mã đơn hàng: {id}</p>
+        <p>Tên người nhận: {name}</p>
+        <p>Địa chỉ nhận hàng: {address}</p>
+        <p>Email: {email}</p>
+        <p>Số điện thoại: {phone}</p>
+        <p>Tổng tiền: {total}</p>
+        <p>Ghi chú: {note}</p>
+        <h2 style="text-align:center">Sản phẩm đã mua</h2>
+        <table style="width:100%" border="1" cellpadding="10" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="text-align: left">Sản phẩm</th>
+                    <th style="width:20%; text-align:center">Đơn giá</th>
+                    <th style="width: 15%; text-align: center">Số lượng</th>
+                    <th style="width: 20%; text-align: center">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                {table}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

@@ -478,6 +478,10 @@ namespace BO
                     .HasColumnType("datetime2")
                     .IsRequired(true)
                     .HasPrecision(3);
+                entity.Property(e => e.ReceivedAt)
+                    .HasColumnType("datetime2")
+                    .IsRequired(false)
+                    .HasPrecision(3);
                 entity.Property(e => e.FirstName)
                     .HasColumnType("nvarchar")
                     .HasMaxLength(50)

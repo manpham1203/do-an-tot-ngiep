@@ -13,7 +13,7 @@ function Dashboard(props) {
     <div className=" flex flex-col gap-y-[25px]">
       <OrderChart />
       <OrderToday />
-      <CustomerBirthday />
+      {/* <CustomerBirthday /> */}
       <QuestionToday />
       <ProductCmt />
       <PostCmt />

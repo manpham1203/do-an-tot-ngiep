@@ -15,6 +15,13 @@ function ProductCard(props) {
   const { cart } = useSelector((store) => store);
   const dispatch = useDispatch();
   const addCart = (id, name) => {
+    if(props.quantityInStock<1){
+      toast.info(`Sản phẩm đã hết`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+      return
+    }
     var objCart = {
       cartId: id,
       qty: 1,
@@ -26,21 +33,21 @@ function ProductCard(props) {
     const check2 = cart.find((x) => x.cartId === objCart.cartId);
     if (cart.length <= 8) {
       if (check) {
-        if (check2.qty <= 8) {
+        if (check2.qty < props.quantityInStock) {
           dispatch(addToCart(objCart));
-          toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
+          toast.success(`hêm vào giỏ hàng thành công`, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
         } else {
-          toast.warn("Sản phẩm đã đạt số lượng tối đa !", {
+          toast.warn("Sản phẩm đã đạt số lượng tối đa!", {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,
           });
         }
       } else {
         dispatch(addToCart(objCart));
-        toast.success(`sản phẩm "${name}" thêm vào giỏ hàng thành công`, {
+        toast.success(`hêm vào giỏ hàng thành công`, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 3000,
         });
@@ -62,7 +69,7 @@ function ProductCard(props) {
 
   return (
     <div className="w-full h-fit relative group  rounded-[8px] overflow-hidden shadow-md hover:shadow-xl bg-third dark:bg-second">
-      <div className="w-full overflow-hidden relative p-[10px] bg-third rounded-[8px] bg-white">
+      <div className="w-full overflow-hidden relative p-[10px] rounded-[8px] bg-white">
         <img
           src={props.image || imgthumb}
           alt="alt"
@@ -71,7 +78,7 @@ function ProductCard(props) {
         <div className="hidden lg:flex flex-col absolute top-[10px] right-[-44px] gap-[10px] group-hover:right-[10px] transition-all duration-[0.3s] text-second ">
           <div
             onClick={() => addCart(props.id, props.name)}
-            className="flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md "
+            className={`flex justify-center items-center w-[40px] h-[40px] hover:bg-white bg-gray-50 rounded-[500px] cursor-pointer shadow-md `}
           >
             <BsFillBagFill />
           </div>
@@ -99,7 +106,7 @@ function ProductCard(props) {
           className="cursor-pointer font-primary font-normal text-[18px] hover:underline underline-offset-4 mb-[5px] truncate w-full text-center text-second dark:text-third"
           onClick={() => navigate(`/san-pham/${props.slug}`)}
         >
-          {props.name}
+        {props.name}
         </h3>
         <div className="flex flex-row text-[#F7BF63]">
           <ShowStarAvg star={props.star} />

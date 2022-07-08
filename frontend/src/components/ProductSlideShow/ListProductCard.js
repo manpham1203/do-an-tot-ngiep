@@ -48,6 +48,7 @@ function ListProductCard(props) {
                 priceDiscount={prod.priceDiscount}
                 image={prod.imageSrc}
                 star={prod.star}
+                quantityInStock={prod.quantityInStock}
               />
             </SwiperSlide>
           );

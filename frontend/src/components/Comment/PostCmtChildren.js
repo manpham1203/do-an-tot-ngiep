@@ -33,7 +33,7 @@ function ProductCmtChildren(props) {
             </div>
           );
         })}
-        {props.data.length < 3 ? null : visible >= props.data.length ? null : (
+        {props.data.length < 2 ? null : visible >= props.data.length ? null : (
           <span
             className="hover:underline underline-offset-4 cursor-pointer w-fit"
             onClick={showMore}

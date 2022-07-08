@@ -27,7 +27,7 @@ function Wishlist(props) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  return data.length > 0 ? (
+  return  (
     <div className="mt-[40px] container mx-auto">
       {data.length > 0 && (
         <h2 className="text-center text-[30px] mb-[30px]">Sản Phẩm Đã Thích</h2>
@@ -55,9 +55,7 @@ function Wishlist(props) {
         })}
       </div>
     </div>
-  ) : (
-    <ProductRow />
-  );
+  ) 
 }
 
 export default Wishlist;

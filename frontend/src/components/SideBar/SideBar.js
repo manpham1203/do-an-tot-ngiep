@@ -166,11 +166,11 @@ function SideBar(props) {
       path: "nguoi-dung/danh-sach",
       icon: iconchild,
     },
-    {
-      title: "Thùng Rác",
-      path: "nguoi-dung/da-xoa",
-      icon: iconchild,
-    },
+    // {
+    //   title: "Thùng Rác",
+    //   path: "nguoi-dung/da-xoa",
+    //   icon: iconchild,
+    // },
   ];
   const QuestionTab = [
     {

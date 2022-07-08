@@ -160,29 +160,30 @@ namespace BLL.Category
             return true;
 
         }
-        public async Task<bool> Delete(string id)
+        public async Task<int> Delete(string id)
         {
-            var categoryFullBLL = new CategoryFullBLL();
-            var categoryFullVM = await categoryFullBLL.GetById(id);
-            if (categoryFullVM == null)
+            var pcmBLL = new ProductCategoryBLL();
+            var listProCatMapping = await pcmBLL.GetById(id, "CategoryId");
+            if (listProCatMapping != null)
             {
-                return false;
-            }
-            if (categoryFullVM.ProductVMs != null)
-            {
-                var pcmBLL = new ProductCategoryBLL();
-                var listProCatMapping = await pcmBLL.GetById(id, "CategoryId");
-                if (listProCatMapping != null)
+                if (listProCatMapping.Count > 0)
                 {
-                    var delete = await pcmBLL.Delete(id, "CategoryId");
-                    if (delete == false)
-                    {
-                        return false;
-                    }
+                    return 1;
+                }
+                var resultFromDAL = await categoryDAL.Delete(id);
+                if (resultFromDAL == false)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 2;
                 }
             }
-
-            return await categoryDAL.Delete(id);
+            else
+            {
+                return 0;
+            }
         }
         public async Task<bool> Published(string id)
         {
@@ -235,7 +236,7 @@ namespace BLL.Category
                 for (int i = 0; i < resultFromDAL.Count; i++)
                 {
                     var listPC = await pcBLL.GetById(resultFromDAL[i].Id, "CategoryId");
-                    listPC=listPC.Take(10).ToList();
+                    listPC = listPC.Take(10).ToList();
                     resultFromDAL[i].ProductCardVMs = new List<ProductCardVM>();
                     if (listPC != null)
                     {
